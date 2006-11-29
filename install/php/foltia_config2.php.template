@@ -1,0 +1,30 @@
+<?php
+/*
+ Anime recording system foltia
+ http://www.dcc-jpl.com/soft/foltia/
+
+foltia_config2.php
+
+目的
+初期設定ファイルの2つめです。
+
+
+ DCC-JPL Japan/foltia project
+
+*/
+
+        $toolpath = "/home/foltia" ; //「php」ディレクトリがあるパス
+		$recfolderpath = '/home/foltia/php/tv';	//録画ファイルの保存先のパス。
+		$httpmediamappath = '/tv'; //ブラウザから見える録画ファイルのある位置。
+		$protectmode = 1; //未使用:(ブラウザからの予約削除を禁止するなどの保護モードで動作します)
+		$demomode = 0; //未使用:(ユーザインターフェイスだけ動作するデモモードで動作します)
+
+// データベース接続設定
+        define("DATABASE_NAME", "foltia");
+        define("DBHOST", "localhost");
+        define("USER_NAME"    , "foltia"    );
+        define("USER_PASSWORD", "passwd"    );
+
+//        $mylocalip = "192.168.0.177" ; //動いている機械のIPアドレス
+
+?>

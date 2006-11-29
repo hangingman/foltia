@@ -1,0 +1,216 @@
+drop table  foltia_program ;
+
+create table foltia_program (
+tid int8 PRIMARY KEY, 
+title text ,
+startweektype text,
+starttime text,
+lengthmin int8,
+firstlight text,
+officialuri text , 
+aspect int8 , 
+psp int8 , 
+transfer text,
+PSPdirname text 
+);
+create unique index foltia_program_tid_index on foltia_program (tid);
+
+REVOKE ALL on "foltia_program" from PUBLIC;
+GRANT UPDATE,SELECT,INSERT on "foltia_program" to "foltia";
+
+drop table  foltia_subtitle ;
+
+create table foltia_subtitle (
+pid int8  PRIMARY KEY,
+tid int8, 
+stationid int8,
+countno int8,
+subtitle text,
+startdatetime int8,
+enddatetime int8,
+startoffset int8,
+lengthmin int8,
+m2pfilename text ,
+PSPfilename text 
+);
+create unique index foltia_subtitle_pid_index on foltia_subtitle (pid);
+create  index foltia_subtitle_tid_index on foltia_subtitle (tid);
+create  index foltia_subtitle_stationid_index on foltia_subtitle (stationid);
+create  index foltia_subtitle_enddatetime_index on foltia_subtitle (enddatetime);
+create  index foltia_subtitle_startdatetime_index on foltia_subtitle (startdatetime);
+
+REVOKE ALL on "foltia_subtitle" from PUBLIC;
+GRANT UPDATE,SELECT,INSERT on "foltia_subtitle" to "foltia";
+
+drop table foltia_tvrecord;
+create table foltia_tvrecord (
+tid int8,
+stationid int8,
+bitrate int8
+);
+create  index foltia_tvrecord_tid_index on foltia_tvrecord (tid);
+
+REVOKE ALL on "foltia_tvrecord" from PUBLIC;
+GRANT ALL on "foltia_tvrecord" to "foltia";
+
+
+drop table foltia_epg;
+create table foltia_epg (
+epgid int8,
+startdatetime int8,
+enddatetime int8,
+lengthmin int8 ,
+ontvchannel text,
+epgtitle text,
+epgdesc text,
+epgcategory text 
+);
+create  index foltia_epg_startdatetime_index on foltia_epg (startdatetime);
+create  index foltia_epg_enddatetime_index on foltia_epg (enddatetime);
+create  index foltia_epg_ontvchannel_index on foltia_epg (ontvchannel);
+
+REVOKE ALL on "foltia_epg" from PUBLIC;
+GRANT ALL on "foltia_epg" to "foltia";
+
+drop table foltia_m2pfiles;
+create table foltia_m2pfiles (
+m2pfilename text 
+);
+REVOKE ALL on "foltia_m2pfiles" from PUBLIC;
+GRANT ALL on "foltia_m2pfiles" to "foltia";
+
+drop table foltia_mp4files;
+create table foltia_mp4files (
+tid int8,
+mp4filename text 
+);
+REVOKE ALL on "foltia_mp4files" from PUBLIC;
+GRANT ALL on "foltia_mp4files" to "foltia";
+
+drop table foltia_station;
+CREATE TABLE foltia_station (
+    stationid bigint NOT NULL,
+    stationname text,
+    stationrecch bigint,
+    stationcallsign text,
+    stationuri text,
+    tunertype text,
+    tunerch text,
+    device text,
+    ontvcode text
+);
+REVOKE ALL on "foltia_station" from PUBLIC;
+GRANT ALL on "foltia_station" to "foltia";
+
+--
+-- PostgreSQL database dump
+--
+
+SET client_encoding = 'EUC_JP';
+SET check_function_bodies = false;
+
+SET SESSION AUTHORIZATION 'foltia';
+
+SET search_path = public, pg_catalog;
+
+--
+-- TOC entry 3 (OID 17158)
+-- Name: foltia_station; Type: TABLE; Schema: public; Owner: foltia
+--
+
+--
+-- TOC entry 4 (OID 17158)
+-- Name: foltia_station; Type: ACL; Schema: public; Owner: foltia
+--
+
+
+SET SESSION AUTHORIZATION 'foltia';
+
+--
+-- Data for TOC entry 6 (OID 17158)
+-- Name: foltia_station; Type: TABLE DATA; Schema: public; Owner: foltia
+--
+INSERT INTO foltia_program VALUES (0, 'EPG録画', '', '', NULL, '', '', 3, 1, '', '');
+INSERT INTO foltia_tvrecord VALUES (0,0,5);
+
+INSERT INTO foltia_station VALUES (1, 'NHK総合', 1, 'NHK', '', NULL, NULL, NULL, '0031.ontvjapan.com');
+INSERT INTO foltia_station VALUES (3, 'NHK教育', 3, 'ETV', '', NULL, NULL, NULL, '0041.ontvjapan.com');
+INSERT INTO foltia_station VALUES (4, '日本テレビ', 4, 'NTV', '', NULL, NULL, NULL, '0004.ontvjapan.com');
+INSERT INTO foltia_station VALUES (6, 'TBS', 6, 'TBS', '', NULL, NULL, NULL, '0005.ontvjapan.com');
+INSERT INTO foltia_station VALUES (8, 'フジテレビ', 8, 'CX', '', NULL, NULL, NULL, '0006.ontvjapan.com');
+INSERT INTO foltia_station VALUES (10, 'テレビ朝日', 10, 'EX', '', NULL, NULL, NULL, '0007.ontvjapan.com');
+INSERT INTO foltia_station VALUES (12, 'テレビ東京', 12, 'TX', '', NULL, NULL, NULL, '0008.ontvjapan.com');
+INSERT INTO foltia_station VALUES (422, '東海テレビ', -10, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (42, 'tvk', 5, 'TVK', '', NULL, NULL, NULL, '0009.ontvjapan.com');
+INSERT INTO foltia_station VALUES (423, 'ShowTime', -10, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (424, 'メ〜テレ', -10, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (409, 'BS日テレ', 0, '', '', 'b', 'X141', NULL, '3004.ontvjapan.com');
+INSERT INTO foltia_station VALUES (384, 'BS朝日', 0, '', '', 'b', 'X151', NULL, '3005.ontvjapan.com');
+INSERT INTO foltia_station VALUES (425, '三重テレビ', -10, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (426, '中京テレビ', -10, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (293, 'AT-X', 0, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (161, 'BS-i', 0, '', '', 'b', 'X161', NULL, '3006.ontvjapan.com');
+INSERT INTO foltia_station VALUES (382, 'BSジャパン', 0, '', '', 'b', 'X171', NULL, '3007.ontvjapan.com');
+INSERT INTO foltia_station VALUES (295, 'フジ721', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (380, 'スカパー180ch', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (427, '岐阜放送', -10, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (428, 'テレビ新広島', -10, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (383, 'サンテレビ', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (429, 'CBCテレビ', -10, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (385, 'TBSチャンネル', 0, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (386, 'テレ朝チャンネル', 0, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (387, 'ＴＶＫテレビ', 5, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (388, 'テレビ神奈川', 5, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (389, 'BS Japan', 0, '', '', 'b', 'X171', NULL, NULL);
+INSERT INTO foltia_station VALUES (390, 'サンテレビジョン', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (0, '[全局]', 0, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (392, 'スカパー183ch', 0, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (393, 'BSQR 489', -10, '', '', 'b', 'X489', NULL, NULL);
+INSERT INTO foltia_station VALUES (394, 'スカパー160ch', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (396, 'KBS京都', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (398, 'テレビ大阪', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (399, 'ABCテレビ', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (400, 'なし', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (402, '関西テレビ', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (406, 'MBS毎日放送', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (407, 'animate.tv', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (410, 'テレビ愛知', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (411, 'インターネット', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (381, 'BSフジ', 0, '', '', 'b', 'X181', NULL, '3008.ontvjapan.com');
+INSERT INTO foltia_station VALUES (413, 'よみうりテレビ', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (414, 'LFX488', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (415, 'LFX', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (416, 'LFX BB', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (191, 'WOWOW', 0, 'BS5', '', 'b', 'X191', NULL, '3009.ontvjapan.com');
+INSERT INTO foltia_station VALUES (419, 'GyaO', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (418, '放送大学', 0, 'UAIR', '', NULL, NULL, NULL, '0013.ontvjapan.com');
+INSERT INTO foltia_station VALUES (420, 'WOWOW2', 0, NULL, NULL, 'b', 'X192', NULL, '3010.ontvjapan.com');
+INSERT INTO foltia_station VALUES (417, 'とちぎテレビ', -10, 'TTV', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (412, '群馬テレビ', -10, 'GTV', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (46, '千葉テレビ', -10, 'CTC', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (38, 'テレビ埼玉', -10, 'TVS', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (14, '東京MXテレビ', 0, 'MX', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (421, 'WOWOW3', 0, NULL, NULL, 'b', 'X193', NULL, '3011.ontvjapan.com');
+INSERT INTO foltia_station VALUES (401, 'チャンネルNECO', 0, '', '', 'c', 'X242', NULL, '1008.ontvjapan.com');
+INSERT INTO foltia_station VALUES (395, 'カミングスーンTV', 0, '', '', 'c', 'X245', NULL, '1012.ontvjapan.com');
+INSERT INTO foltia_station VALUES (408, 'ファミリー劇場', 0, '', '', 'c', 'X254', NULL, '1015.ontvjapan.com');
+INSERT INTO foltia_station VALUES (397, 'カートゥーンネットワーク', 0, '', '', 'c', 'X262', NULL, '1046.ontvjapan.com');
+INSERT INTO foltia_station VALUES (103, 'NHK-BShi', 0, '', '', 'b', 'X103', '', '3003.ontvjapan.com');
+INSERT INTO foltia_station VALUES (101, 'NHK-BS1', 0, 'BS7', '', 'b', 'X101',NULL,  '3001.ontvjapan.com');
+INSERT INTO foltia_station VALUES (102, 'NHK-BS2', 0, 'BS11', '',  'b', 'X102',NULL,  '3002.ontvjapan.com');
+INSERT INTO foltia_station VALUES (261, 'キッズステーション', 0, '', '', 'c', 'X264', '', '1045.ontvjapan.com');
+INSERT INTO foltia_station VALUES (263, 'アニマックス', 0, '', '', 'c', 'X263', '', '1047.ontvjapan.com');
+
+
+
+
+--
+-- TOC entry 5 (OID 17163)
+-- Name: foltia_station_pkey; Type: CONSTRAINT; Schema: public; Owner: foltia
+--
+
+ALTER TABLE ONLY foltia_station
+    ADD CONSTRAINT foltia_station_pkey PRIMARY KEY (stationid);
+
+
+

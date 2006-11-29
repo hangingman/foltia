@@ -1,0 +1,198 @@
+foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
+
+06.11.20
+index.php:
+　EPG録画の場合の存在しないしょぼいカレンダーへのリンクを廃止。
+
+listreserve.php:
+　EPG予約を削除出来ないように。
+
+delepgp.php:(新設)
+　EPG番組予約の削除画面。
+
+reserveepg.php:
+　EPG予約で、ホントは予約してない番組でもプログラムがその時間にあるだけで予約済みといってくるバグ修正。
+
+06.11.18
+reserveepg.php:
+　既に予約がある番組かどうかの判定を追加
+
+06.11.11
+recwrap.pl:
+tvrecording.pl:
+　同じ番組の二重録りを発生しないように修正。
+
+06.11.3
+index.php:
+　定刻からのずれ時間を表示するように変更。
+
+selectcaptureimage.php:
+　MP4ムービーへのリンクを追加
+
+singletranscode.pl:
+　新MP4ファイル形式に対応
+
+06.10.29
+recwrap.pl:
+　録画可能チャンネルのみ録画、判定機能がリモコンつないでないと機能してなかったのを修正。
+
+06.10.27
+showlibc.php:
+　指定されたTIDがデータベースになかったときのエラー処理追加。
+
+getxml2db.pl:
+　XML解析の引き数を「"」から「'」へ変更。
+
+mktable.txt:
+　foltia_epgテーブルにインデックスを付加した。
+
+06.10.26
+showlib.php:
+　foltia_mp4filesテーブル対応にして高速化
+showlibc.php:
+　foltia_mp4filesテーブル対応にして高速化
+recwrap.pl:
+　foltia_mp4filesテーブル対応
+
+06.10.25
+mktable.txt:
+　foltia_mp4filesテーブル新設
+
+06.10.4
+showplaylist.php:
+　「全」モードで表示したときにキャプフィールドを正しくない引き数出だしていたのを修正。
+
+06.8.9
+recwrap.pl:
+foltia_conf1.pl:
+　MPEG4をPSP新ファイル名形式に対応
+　増設:$mp4filenamestyle = 1 ;#0:PSP ファームウェアver.2.80より前と互換性を持つファイル名 1;よりわかりやすいファイル名
+
+06.8.6
+mktable.txt:
+recwrap.pl:
+foltialib.pl:getstationid();
+　非受信チャンネルを録画しない機能を追加。
+　stationrecchが-10に設定されてると録画しない。
+　新規自動追加チャンネルはデフォルトで録画しない局に設定される。
+
+addatq.pl:
+　同じ番組を複数局で予約したときの動作を改良。
+
+06.7.7
+selectcaptureimage.php:
+　画像表示パスを取得失敗する場合がある対策。
+
+06.7.4
+recwrap.pl:
+　トラコンファイル名決定部分のバグ修正。
+
+06.6.29
+reserveprogram.php:
+　EPG録画予約を破壊してしまうことがあったのを回避。
+
+06.6.26
+showplaylist.php:
+　ディスク空き容量表示箇所変更。
+foltialib.php:
+　printdiskusage();追加。
+
+06.6.14
+foltialib.php:
+　[iTunesにFolcastを登録]が正しいパスを表示しないことがあったのを修正。
+
+06.6.12
+recwrap.pl:
+　トラコンファイル名決定モジュールで話数が0の場合に連番名になるように変更。
+
+06.6.10
+cron_foltia_dayly.sh:
+　updatem2pfiletable.plを起動するパスが間違っていたのを修正
+
+06.5.26
+viewepg.php:
+　最終ページの局表示でエラーがでていたのを修正。
+
+06.5.23
+showlibc.php:
+　QuickTime Javascriptをつかって録画ライブラリの録画ファイル一覧の項目に「QuickTimePlayerで開く」を追加。
+
+06.5.22
+deletemovie.php:
+　register_globals がonじゃないとファイル名取得出来ていなかったのを修正。
+showplaylist.php:
+　使ってもない変数が出て来ていたのを削除。
+showlibc.php:
+　使ってもない変数が出て来ていたのを削除。
+showplaylist.php:
+　register_globals がonじゃないと動作していなかったのを修正。
+
+
+06.5.17
+メニューに[iTunesにFolcastを登録]項目を追加。
+
+06.4.27
+changestbch.pl:
+　transfer.plに渡す形式を、複数回呼び出す形式からまとめて引き数渡す形式に変更。
+
+06.4.16
+showlibc.php:
+　ブログツール「Starlight Breaker」向け拡張機能のバグ修正
+
+06.4.14
+showlib.php:
+　録画ライブラリ表示を変更してタイトルを内容詳細表示へのリンクへ。
+
+06.4.10
+showplaylist.php:
+　タイトル表示時に「未読タイトル」表示機能追加。
+
+06.4.6
+singletranscode.pl:
+　サムネール作成のパラメータ修正
+　
+06.4.5
+showlibc.php:
+　ブログツール「Starlight Breaker」向け拡張機能。
+　冒頭の誤字修正。
+
+showplaylist.php:
+　ブログツール「Starlight Breaker」向け拡張機能。
+
+index.php:
+　予約入ってないときの表示を改良。
+
+recwrap.pl:
+　重複ファイル名で.THMが正常に出来てないのを修正。
+
+06.3.28
+index.php:
+　番組予約表示で、予約番組と同じものが他局で放送される場合青色で識別表示した。
+　データがないとき404を返すようにした。
+　新番組表示モードで「新番組放映予定」と表記するように変更した。
+　
+graytable.css:
+　録画予約と他局同タイトルの定義を追加
+
+06.3.25
+showlibc.php:
+　番組個別Folcast向けRSS Auto Discovery対応タグ追加
+　TID未指定のときにステータスコード404を返すように変更
+
+folcast.php:
+　表記整理
+
+06.2.26
+getxml2db.pl:
+　番組名を更新する機能を追加。
+　いままでは、一度追加された番組名は変更があっても変更されなかった。
+
+06.2.15
+foltialib.php:m_connect():
+　pg_connectからpg_pconnectに変更
+
+06.2.12
+getxml2db.pl:
+　ショボかるXMLのSubTitleに&lt;と&gt;をfoltia DBに書き込むときに<,>に置換。
+
+これ以前の履歴は残されていません。

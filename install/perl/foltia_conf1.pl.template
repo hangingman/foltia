@@ -1,0 +1,39 @@
+# Anime recording system foltia
+# http://www.dcc-jpl.com/soft/foltia/
+#
+# 初期設定ファイル1
+#
+# DCC-JPL Japan/foltia project
+#
+#
+
+
+#config section
+$toolpath = '/home/foltia'; #「perl」ディレクトリがあるPATH
+$recunits = '4';					#搭載エンコーダの数
+$recfolderpath = '/home/foltia/php/tv';		#録画ファイルを置くPATH
+$uhfbandtype = 1; # CATVなら1 UHF帯なら0 : 0=ntsc-bcast-jp 1=ntsc-cable-jp
+$rapidfiledelete =  1;#1なら削除ファイルは「mita」ディレクトリに移動。0なら即時削除
+$tunerinputnum = 6; #IO-DATA DV-MVP/RX,RX2,RX2W
+$svideoinputnum = 7;#IO-DATA DV-MVP/RX,RX2,RX2W
+$comvideoinputnum = 8;#IO-DATA DV-MVP/RX,RX2,RX2W
+$haveirdaunit = 1;#Tira-2<http://www.home-electro.com/tira2.php>をつないでいるときに1,なければ0
+$mp4filenamestyle = 1 ;#0:PSP ファームウェアver.2.80より前と互換性を持つファイル名 1;よりわかりやすいファイル名
+
+#デフォルトでインストールしてればいじらなくてもいい
+$main::DBDriv="Pg";
+$main::DBHost="localhost";
+$main::DBPort="5432";
+$main::DBName="foltia";
+$main::DBUser="foltia";
+$main::DBPass="";
+
+#デバッグログを「~/debug.txt」に残すかどうか
+$debugmode = 1;#write debug log
+
+
+
+
+
+1;
+
