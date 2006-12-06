@@ -10,16 +10,17 @@
 
 <div class="menu">
 <ol>
-<li><A HREF="foltiastart.html" title="フォルティアとは">フォルティアとは</A>
-<li><A HREF="fcinstall.html" title="Fedora Core 5 インストール">Fedora Core 5 インストール</A>
-<li><A HREF="foltiaivtv.html" title="おまかせ!! フォルティア! ivtvドライバインストール">おまかせ!! フォルティア! ivtvドライバインストール</A>
-<li><A HREF="foltiainstall.html" title="おまかせ!! フォルティア! インストール">おまかせ!! フォルティア! インストール</A>
+<li><A HREF="start.html" title="フォルティアとは">フォルティアとは</A>
+<li><A HREF="fcinstall.html" title="Fedora Core 5 インストール編">Fedora Core 5 インストール編</A>
+<li><A HREF="ivtv.html" title="おまかせ!! フォルティア! ivtvドライバインストール編">おまかせ!! フォルティア! ivtvドライバインストール編</A>
+<li><A HREF="install.html" title="おまかせ!! フォルティア! インストール編">おまかせ!! フォルティア! インストール編</A>
+<li><A HREF="operation.html" title="おまかせ!! フォルティア! 操作編">おまかせ!! フォルティア! 操作編</A>
 </ol>
 </div>
 
 <div class="main">
 
-<h2>Fedora Core 5 セットアップ</h2>
+<h2>Fedora Core 5 インストール編</h2>
 
 <h3>Fedora Core 5 のインストールを行う</h3>
 
@@ -37,19 +38,36 @@ OSのインストール関しては、下記の注意点以外は特に行う事はないので自由にインストー
 <h4>システム更新</h4>
 <p>
 最新の状態にするため、アップデートを行う
+</p>
 <div class="command">
 # yum update
 </div>
-</p>
 
 <h4>foltiaユーザ作成</h4>
 <p>
 foltiaを動かす為のユーザを作成し、パスワードの設定を行う
+</p>
 <div class="command">
 # useradd foltia<br>
 # passwd foltia
 </div>
+
+<h4>yumレポジトリ追加</h4>
+<p>
+後でいろいろとお世話になるyumレポジトリの追加を行う。
 </p>
+<div class="command">
+# vi /etc/yum.repos.d/atrpms.repo<br>
+<br>
+　----------------------------<br>
+　[atrpms]<br>
+　name=Fedora Core $releasever - $basearch - ATrpms<br>
+　baseurl=http://dl.atrpms.net/fc$releasever-$basearch/atrpms/stable<br>
+　gpgkey=http://ATrpms.net/RPM-GPG-KEY.atrpms<br>
+　gpgcheck=1<br>
+　enabled=0<br>
+　-----------------------------
+</div>
 
 </div>
 </html>
