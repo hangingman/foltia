@@ -28,7 +28,7 @@ require "foltialib.pl";
 #引き数がアルか?
 $recch = $ARGV[0] ;
 if ($recch eq "" ){
-	#引き数なし出実行されたら、終了
+	#引き数なしで実行されたら、終了
 	print "usage recwrap.pl  ch length(sec) [bitrate(5)] [TID] [NO] [PID]\n";
 	exit;
 }
@@ -78,6 +78,7 @@ $oserr = system("$toolpath/perl/tvrecording.pl $recch $reclength 0 $outputfilena
 $oserr = $oserr / 256;
 if ($oserr == 1){
 	&writelog("recwrap ABORT recfile exist. [$outputfilename] $recch $reclength 0 0 $bitrate $tid $countno $pid");
+	exit;
 }else{
 	&writelog("recwrap RECEND [$outputfilename] $recch $reclength 0 0 $bitrate $tid $countno $pid");
 }
@@ -242,29 +243,41 @@ my $newestmp4filename = `cd $pspdirname ; ls -t *.MP4 | head -1`;
 my $pspfilname = $pspfilnamehd.$pspfilnameft  ;
 # print "$pspfilname($pspfilnamehd/$pspfilnameft)\n";
 }# endif MP4ファイル名が新styleなら
+#2006/12/03_10:30:24 recwrap TRCNSTART vfr4psp.sh /home/foltia/php/tv/591-87-20061203-1000.m2p -591-87-20061203-1000 /home/foltia/php/tv/591.localized/mp4/ 3
 
-&writelog("recwrap TRCNSTART vfr4psp.sh $recfolderpath/$outputfilename $pspfilname $pspdirname $psptrcn[1]");
-#トラコン開始
-system("$toolpath/perl/transcode/vfr4psp.sh $recfolderpath/$outputfilename $pspfilname $pspdirname $psptrcn[1]");
+if (($trconqty eq "")||($trconqty == 0 )){
+	&writelog("recwrap TRCNSTART vfr4psp.sh $recfolderpath/$outputfilename $pspfilname $pspdirname $psptrcn[1]");
+	system("$toolpath/perl/transcode/vfr4psp.sh $recfolderpath/$outputfilename $pspfilname $pspdirname $psptrcn[1]");
+	&writelog("recwrap TRCNEND  vfr4psp.sh $recfolderpath/$outputfilename $pspfilname $pspdirname $psptrcn[1]");
+	#最適化
+	$DBQuery =  "SELECT subtitle  FROM  foltia_subtitle WHERE tid = '$tid' AND countno = '$countno' ";
+		 $sth = $dbh->prepare($DBQuery);
+		$sth->execute();
+	 @programtitle = $sth->fetchrow_array;
+	if ( $countno == "0" ){
+		$pspcountno = "";
+	}else{
+		$pspcountno = $countno ;
+	}
+	&writelog("recwrap OPTIMIZE  mp4psp -p $pspdirname/M4V$pspfilname.MP4   -t  '$psptrcn[2] $pspcountno $programtitle[0]' ");
+	Jcode::convert(\$programtitle[0],'euc');
+	system ("/usr/local/bin/mp4psp -p $pspdirname/M4V$pspfilname.MP4   -t  '$psptrcn[2] $pspcountno $programtitle[0]'") ;
+$mp4filename = "M4V${pspfilname}.MP4";
+$thmfilename = "M4V${pspfilname}.THM";
+}else{# #2006/12/6 新エンコーダ
 
-&writelog("recwrap TRCNEND  vfr4psp.sh $recfolderpath/$outputfilename $pspfilname $pspdirname $psptrcn[1]");
+	&writelog("recwrap TRCNSTART ipodtranscode.pl $recfolderpath/$outputfilename $pspfilname $pspdirname $pid $psptrcn[1]");
+	system("$toolpath/perl/ipodtranscode.pl $recfolderpath/$outputfilename $pspfilname $pspdirname $pid $psptrcn[1]");
+	&writelog("recwrap TRCNEND  ipodtranscode.pl $recfolderpath/$outputfilename $pspfilname $pspdirname $psptrcn[1]");
 
-#最適化
-
-$DBQuery =  "SELECT subtitle  FROM  foltia_subtitle WHERE tid = '$tid' AND countno = '$countno' ";
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
- @programtitle = $sth->fetchrow_array;
-
-if ( $countno == "0" ){
-	$pspcountno = "";
-}else{
-	$pspcountno = $countno ;
+	if($trconqty >= 2){#H.264/AVCなら
+	$mp4filename = "MAQ${pspfilname}.MP4";
+	$thmfilename = "MAQ${pspfilname}.THM";
+	}else{
+	$mp4filename = "M4V${pspfilname}.MP4";
+	$thmfilename = "M4V${pspfilname}.THM";
+	}
 }
-&writelog("recwrap OPTIMIZE  mp4psp -p $pspdirname/M4V$pspfilname.MP4   -t  '$psptrcn[2] $pspcountno $programtitle[0]' ");
-Jcode::convert(\$programtitle[0],'euc');
-system ("/usr/local/bin/mp4psp -p $pspdirname/M4V$pspfilname.MP4   -t  '$psptrcn[2] $pspcountno $programtitle[0]'") ;
-
 
 #サムネール
 
@@ -274,13 +287,13 @@ system ("/usr/local/bin/mp4psp -p $pspdirname/M4V$pspfilname.MP4   -t  '$psptrcn
 system ("mplayer -ss 00:01:20 -vo jpeg:outdir=$pspdirname -ao null -sstep 1 -frames 3  -v 3 $recfolderpath/$outputfilename");
 &writelog("recwrap THAMI  convert -crop 160x120+1+3 -resize 165x126\! $pspdirname/00000002.jpg $pspdirname/M4V$pspdirname.THM ");
 
-if (-e "$pspdirname/M4V".$pspfilname.".THM"){
+if (-e "$pspdirname/$thmfilename"){
 $timestamp =`date "+%Y%m%d-%H%M%S"`;
 chomp $timestamp;
-	system("convert -crop 160x120+1+3 -resize 165x126\! $pspdirname/00000002.jpg $pspdirname/M4V".$pspfilname.".THM.".$timestamp.".THM");
+	system("convert -crop 160x120+1+3 -resize 165x126\! $pspdirname/00000002.jpg $pspdirname/$thmfilename".$timestamp.".THM");
 
 }else{
-	system("convert -crop 160x120+1+3 -resize 165x126\! $pspdirname/00000002.jpg $pspdirname/M4V".$pspfilname.".THM");
+	system("convert -crop 160x120+1+3 -resize 165x126\! $pspdirname/00000002.jpg $pspdirname/$thmfilename");
 }
 # rm -rf 00000001.jpg      
 # convert -resize 160x120\! 00000002.jpg M4V44307.THM
@@ -292,14 +305,14 @@ system("rm -rf $pspdirname/0000000*.jpg ");
 
 # MP4ファイル名をPIDレコードに書き込み
 	$DBQuery =  "UPDATE  foltia_subtitle  SET 
-	PSPfilename 	 = 'M4V$pspfilname.MP4' 
+	PSPfilename 	 = '$mp4filename' 
 	WHERE pid =  '$pid' ";
 	 $sth = $dbh->prepare($DBQuery);
 	$sth->execute();
 &writelog("recwrap UPDATEsubtitleDB  $DBQuery");
 
 # MP4ファイル名をfoltia_mp4files挿入
-	$DBQuery =  "insert into  foltia_mp4files values ('$tid','M4V$pspfilname.MP4') ";
+	$DBQuery =  "insert into  foltia_mp4files values ('$tid','$mp4filename') ";
 	 $sth = $dbh->prepare($DBQuery);
 	$sth->execute();
 &writelog("recwrap UPDATEmp4DB  $DBQuery");

@@ -39,7 +39,7 @@ if (($tid >= 0 ) && ($tid != "")){
 
 $query = "
 SELECT  foltia_program.tid,foltia_program.title,
-foltia_subtitle.countno , foltia_subtitle.subtitle , foltia_subtitle.startdatetime, foltia_subtitle.pspfilename,foltia_subtitle.lengthmin,foltia_subtitle.enddatetime   FROM foltia_subtitle , foltia_program   WHERE \"pspfilename\" ~~ 'M4V%%'  AND foltia_program.tid = foltia_subtitle.tid AND foltia_program.tid = $tid   
+foltia_subtitle.countno , foltia_subtitle.subtitle , foltia_subtitle.startdatetime, foltia_subtitle.pspfilename,foltia_subtitle.lengthmin,foltia_subtitle.enddatetime   FROM foltia_subtitle , foltia_program   WHERE \"pspfilename\" ~~ 'M%%'  AND foltia_program.tid = foltia_subtitle.tid AND foltia_program.tid = $tid   
 ORDER BY \"enddatetime\" DESC 
 offset 0 limit  $max 
 	";
@@ -56,7 +56,7 @@ WHERE foltia_program.tid = $tid
 
 $query = "
 SELECT  foltia_program.tid,foltia_program.title,
-foltia_subtitle.countno , foltia_subtitle.subtitle , foltia_subtitle.startdatetime, foltia_subtitle.pspfilename,foltia_subtitle.lengthmin,foltia_subtitle.enddatetime   FROM foltia_subtitle , foltia_program   WHERE \"pspfilename\" ~~ 'M4V%%'  AND foltia_program.tid = foltia_subtitle.tid ORDER BY \"enddatetime\" DESC 
+foltia_subtitle.countno , foltia_subtitle.subtitle , foltia_subtitle.startdatetime, foltia_subtitle.pspfilename,foltia_subtitle.lengthmin,foltia_subtitle.enddatetime   FROM foltia_subtitle , foltia_program   WHERE \"pspfilename\" ~~ 'M%%'  AND foltia_program.tid = foltia_subtitle.tid ORDER BY \"enddatetime\" DESC 
 offset 0 limit  $max 
 	";
 	$rsstitle = "¿·µ¬Ï¿²è";
@@ -118,8 +118,13 @@ $mp4uri = "http://". getserverfqdn()  .$httpmediamappath ."/$tid.localized/mp4/$
 $mp4thmname = $rowdata[5];
 $mp4thmname = ereg_replace(".MP4", ".THM", $mp4thmname);
 $mp4thmnameuri = "http://". getserverfqdn() . $httpmediamappath ."/$tid.localized/mp4/$mp4thmname";
-$mp4filestat = stat("$recfolderpath/$tid.localized/mp4/$mp4filename");
-$mp4filesize = $mp4filestat[7];
+
+if (file_exists("$recfolderpath/$tid.localized/mp4/$mp4filename")) {
+	$mp4filestat = stat("$recfolderpath/$tid.localized/mp4/$mp4filename");
+	$mp4filesize = $mp4filestat[7];
+} else {
+	$mp4filesize = 0;
+}
 
 if ($rowdata[0] == 0 ){//EPGÏ¿²è
 	$showntitle = "$title $subtitle";

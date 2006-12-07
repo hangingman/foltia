@@ -23,7 +23,7 @@
 #
 
 
-use Time::HiRes qw(usleep);
+#use Time::HiRes qw(usleep);
 
 
 $path = $0;
@@ -249,17 +249,22 @@ if (($recch eq "" )|| ($reclengthsec eq "")){
 	exit;
 }
 #1分前にプロセス起動するから指定時間スリープ
-srand(time ^ ($$ + ($$ << 15)));
-my $useconds  = int(rand(12000000));
-my $intval = int ($useconds  / 1000000);
-my $startupsleeptimemicro = ($startupsleeptime * 1000000) - $useconds;
-$reclengthsec = $reclengthsec + $intval + 1;
+#srand(time ^ ($$ + ($$ << 15)));
+#my $useconds  = int(rand(12000000));
+#my $intval = int ($useconds  / 1000000);
+#my $startupsleeptimemicro = ($startupsleeptime * 1000000) - $useconds;
+#$reclengthsec = $reclengthsec + $intval + 1;
+#&writelog("tvrecording:  DEBUG SLEEP $startupsleeptime:$useconds:$intval:$startupsleeptimemicro");
+#	usleep ( $startupsleeptimemicro );
+
 # $recch でウェイト調整入れましょう
+my $intval = $recch % 50; # 0〜49
+my $startupsleep = $startupsleeptime - $intval; #  3〜52 (VHF 40-51)
+$reclengthsec = $reclengthsec + $intval + 1; #
 
+&writelog("tvrecording:  DEBUG SLEEP $startupsleeptime:$intval:$startupsleep");
 
-&writelog("tvrecording:  DEBUG SLEEP $startupsleeptime:$useconds:$intval:$startupsleeptimemicro");
-
-	usleep ( $startupsleeptimemicro );
+sleep ( $startupsleep);
 
 if ($recunits > 1){
 my $deviceno = $recunits - 1;#3枚差しのとき/dev/video2から使う

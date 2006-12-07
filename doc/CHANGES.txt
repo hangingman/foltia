@@ -1,5 +1,23 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 
+06.12.7
+tvrecording.pl:
+　同時刻に複数番組録画したときの信頼性を向上した。
+
+06.12.6
+folcast.php:
+　MP4ファイルが存在しない場合にもstatしていたのを修正。
+recwrap.pl:
+　二重でおんなじ番組を録ろうとしてしまったときの対策を修正。
+
+06.12.5
+recwrap.pl:
+ipodtranscode.pl:
+foltia_conf1.pl.template:
+folcast.php:
+　iPod用H.264トラコンに対応。
+　トラコン品質可変に変更。
+
 06.11.20
 index.php:
 　EPG録画の場合の存在しないしょぼいカレンダーへのリンクを廃止。
