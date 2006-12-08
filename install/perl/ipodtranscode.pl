@@ -83,7 +83,7 @@ $programtitle[2] =~ s/\"/\\"/gi;
 }
 # アスペクト比
 if ($aspect == 16){
-$cropopt = " -croptop 70 -cropbottom 60 -cropleft  8 -cropright 14 -aspect aspect 1.7777 ";
+$cropopt = " -croptop 70 -cropbottom 60 -cropleft  8 -cropright 14 -aspect 1.7777 ";
 }else{
 $cropopt = " -croptop 8 -cropbottom 8 -cropleft  8 -cropright 14 ";
 }
