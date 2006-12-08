@@ -102,3 +102,16 @@ div.command {
 	color: #fff;
 	background-color: #000;
 }
+
+dl {
+	margin-left: 3em;
+}
+
+dt {
+	margin-bottom: 0.2em;
+	font-weight: bold;
+}
+
+dd {
+	margin: 0em 3em 0.5em 1em;
+}
