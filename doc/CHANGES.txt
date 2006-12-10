@@ -1,5 +1,11 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 
+06.12.10
+showplaylist.php:
+　EPG録画のときにもしょぼいカレンダーへリンクしていたのを修正
+deletemovie.php:
+　しょぼいカレンダーへのリンクが旧スタイルだったのを修正
+
 06.12.8
 ipodtranscode.pl:
 　16:9素材のエンコード時のオプション指定間違い修正

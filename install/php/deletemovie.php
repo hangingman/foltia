@@ -106,7 +106,7 @@ $subtitle = htmlspecialchars($subtitle);
 print "
 <tr>
 <td>$fName<br></td>
-<td><a href=\"http://cal.syoboi.jp/progedit.php?TID=$tid\" target=\"_blank\">$title</a></td>
+<td><a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a></td>
 <td>$count<br></td>
 <td>$subtitle<br></td>
 </tr>\n

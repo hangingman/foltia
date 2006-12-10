@@ -192,17 +192,18 @@ $pid  = htmlspecialchars($rowdata[5]);
 print "
 <tr>
 <td><INPUT TYPE='checkbox' NAME='delete[]' VALUE='$fName'><br></td>
-<td><A HREF=\"$httpmediamappath/$fName\">$fName</A><br></td>
-<td><a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a></td>
+<td><A HREF=\"$httpmediamappath/$fName\">$fName</A><br></td>";
+if ($tid > 0){
+print"<td><a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a></td>
 <td>$count<br></td>
 <td><a href = \"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$subtitle</a><br></td>";
+}else{
+print"<td>$title</td>
+<td>$count<br></td>
+<td>$subtitle<br></td>";
+}
 	if (file_exists("./selectcaptureimage.php") ) {
 	$capimgpath = preg_replace("/.m2p/", "", $fName);
-//	list($citid,$cicountno,$cidate,$citime) = split("-", $capimgpath); 
-//		if($cicountno == ""){
-//			$cicountno = "x";
-//		}
-//		$capimgpath = "$citid"."-"."$cicountno"."-"."$cidate"."-"."$citime";
 	print "			<td align=\"left\"><a href=\"./selectcaptureimage.php?pid=$pid\">¥­¥ã¥×</a></td>\n";
 	}
 print "</tr>\n
