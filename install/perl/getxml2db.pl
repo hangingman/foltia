@@ -67,6 +67,7 @@ if (/^<ProgItem /){
 s/<ProgItem //i;
 s/\"\/>/\" /i;
 s/\"[\s]/\";\n/gio;
+s/\'/\\'/gio;
 s/\"/\'/gio;
 s/[\w]*=/\$item{$&}=/gio;
 s/\=}=/}=/gio;
