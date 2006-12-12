@@ -196,16 +196,20 @@ $ crontab -e<br>
 トラコン機能を使う為にffmpegのインストールを行います。
 </p>
 <div class="command">
-# yum install --enablerepo=atrpms faad2 faad2-devel faac faac-devel lame lame-devel xvidcore xvidcore-devel<br>
+# yum install --enablerepo=atrpms faad2 faad2-devel faac faac-devel lame lame-devel xvidcore xvidcore-devel x264 x264-devel<br>
 # cd foltia_tool<br>
-# tar zxvf ffmpeg-20050714.tar.gz<br>
+# tar zxvf ffmpeg.tar.gz<br>
+# unzip 26204-600.zip
+# unzip 26204-600_ANSI-C_source_code.zip
+# mv c-code ffmpeg/libavcodec/amrwb_float
+# unzip 26104-610.zip
+# unzip 26104-610_ANSI_C_source_code.zip
+# mv c-code ffmpeg/libavcodec/amr_float
 # cd ffmpeg<br>
-# make clean<br>
-# ./configure --enable-mp3lame --enable-gpl --enable-ffplay --enable-a52 --enable-xvid --enable-faac --enable-faad --enable-amr_nb --enable-amr_wb --enable-pthreads<br>
+# ./configure --enable-mp3lame --enable-x264 --enable-gpl --enable-a52 --enable-xvid --enable-faac --enable-faad --enable-amr_nb --enable-amr_wb --enable-pthreads<br>
 # make<br>
 # make install
 </div>
-
 
 <h4>mp4pspインストール</h4>
 <p>
