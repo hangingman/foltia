@@ -39,9 +39,11 @@ exit;
 
 if ($ARGV[0]  eq "long"){
 	$uri="http://cal.syoboi.jp/cal_chk.php";
+	#$uri="http://syobocal.orz.hm/cal_chk.php";
 	&writelog("getxml2db  use long mode.");
 }else{
 	$uri="http://cal.syoboi.jp/cal_chk.xml";
+	#$uri="http://syobocal.orz.hm/cal_chk.xml";
 }
 
 

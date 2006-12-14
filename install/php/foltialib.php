@@ -413,8 +413,8 @@ global $recfolderpath,$recfolderpath;
 	exec ( "df -h  $recfolderpath | grep $recfolderpath", $hdfreearea);
 	$freearea = preg_split ("/[\s,]+/", $hdfreearea[0]);
 
-	exec ( "ps ax | grep ffmpeg", $encoding);
-	exec ( "ps ax | grep faac", $processlock);
+//	exec ( "ps ax | grep ffmpeg", $encoding);
+//	exec ( "ps ax | grep faac", $processlock);
 
 print "
 <div style=\"width:100%;border:1px solid black;text-align:left;\"><span style=\"float:right;\">$freearea[3]</span>
@@ -422,14 +422,15 @@ print "
 </div>
 ";
 
-//	print "$freearea[1]<br>$freearea[2]<br>$freearea[3]<br>$freearea[4]<br>$hdfreearea[0]<br>$encoding[0]<br>$processlock[0]</p>\n";
-	print "$encoding[0]<br>$processlock[0]</p>\n";
+//exec('ps ax | grep ffmpeg |grep MP4 ' ,$ffmpegprocesses);
+$ffmpegprocesses = `ps ax | grep ffmpeg | grep -v grep |  wc -l `;
 
-/*
-<div style="width:100%;border:1px solid black;text-align:left;"><span style="float:right;">170GB</span>
-<div style="width:86%;border:1px solid black;background:white;">1.1TB/1.3TB(87%)</div>
-</div>
-*/
+$uptime = exec('uptime');
+
+print "<div style=\"text-align:left;\">";
+print "$uptime<br>\n";
+print "トラコン稼働数:$ffmpegprocesses<br>\n";
+print "</div>";
 
 }//end sub
 
