@@ -4,6 +4,8 @@ foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 showlibc.php:
 　サブタイトルへのリンク追加。
 　ページタイトルに番組名表示。
+folcast.php:
+　出力にContent-Disposition:ヘッダ追加
 
 06.12.14
 foltialib.php:printdiskusage

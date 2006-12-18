@@ -19,7 +19,7 @@ max:表示上限
 */
 
 header('Content-Type: application/rss+xml');
-
+header('Content-Disposition: attachment; filename="folcast.xml"');
 
   include("./foltialib.php");
 $con = m_connect();
