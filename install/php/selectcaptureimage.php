@@ -12,10 +12,6 @@ pid:PID
 
 mplayer -ss 00:00:10 -vo jpeg:outdir=/home/foltia/php/tv/691.localized/img/6/ -vf crop=702:468:6:6,scale=160:120,pp=lb  -ao null -sstep 14  -v 3 /home/foltia/php/tv/691-6-20060216-0130.m2p
 
-旧仕様
-mplayer -ss 00:0:10 -vo jpeg:outdir=./ -ao null -sstep 14  -v 3 ../665-13-20051230-0145.m2p 
-convert -verbose  -crop 160x120+1+3 -resize 165x126\!  ../*.jpg 
-
  DCC-JPL Japan/foltia project
 
 */
@@ -79,13 +75,18 @@ print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">キャプチャ画像</fo
 print "<a href = \"http://cal.syoboi.jp/tid/$rowdata[0]/time#$pid\" target=\"_blank\">";
 print htmlspecialchars($rowdata[2]) . "</a> " ;
 print htmlspecialchars($rowdata[3]) . " ";
+$tid = $rowdata[0];
+if ($tid > 0){
+print "<a href = \"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">";
+print htmlspecialchars($rowdata[4]) . "</a> ";
+}else{
 print htmlspecialchars($rowdata[4]) . " ";
+}
 print htmlspecialchars($rowdata[1]) . " ";
 print htmlspecialchars($rowdata[6]) . "分 ";
 print htmlspecialchars(foldate2print($rowdata[5]));
 
 $mp4filename = $rowdata[9];
-$tid = $rowdata[0];
 $serverfqdn = getserverfqdn();
 
 print "　　再生:<A HREF=\"$httpmediamappath/$tid.localized/mp4/$mp4filename\" target=\"_blank\">$mp4filename</A> / <script language=\"JavaScript\" type=\"text/javascript\">QT_WriteOBJECT_XHTML('http://g.hatena.ne.jp/images/podcasting.gif','16','16','','controller','FALSE','href','http://$serverfqdn/$httpmediamappath/$tid.localized/mp4/$mp4filename','target','QuickTimePlayer','type','video/mp4');</script><br>";

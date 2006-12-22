@@ -1,5 +1,9 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 
+06.12.22
+selectcaptureimage.php:
+　サブタイトルのしょぼいカレンダーへのリンク追加。
+
 06.12.18
 showlibc.php:
 　サブタイトルへのリンク追加。
