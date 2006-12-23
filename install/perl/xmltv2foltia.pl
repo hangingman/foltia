@@ -5,10 +5,13 @@
 #
 #xmltv2foltia.pl 
 #XMLTV日本語版の出力するXMLを受け取り、EPGデータベースに挿入します。
+#
+#↓本家に取り込まれたっぽい(未確認)
+#
 #XMLTVは
 # http://www.systemcreate-inc.com/gsxr/pc/mythtv.html#patches
 #のパッチをあてたものを想定しています。オリジナルと比較して、サブタイトルや内容など
-#より秀才な内容を取得できます。
+#より詳細な内容を取得できます。
 #
 # usage;perl  /usr/bin/tv_grab_jp | ./xmltv2foltia.pl 
 #
