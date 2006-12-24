@@ -265,9 +265,9 @@ if (($recch eq "" )|| ($reclengthsec eq "")){
 #37
 my $intval = $recch % 35; # 0¡Á34
 my $startupsleep = $startupsleeptime - $intval; #  3-37 (VHF 25-36,tvk 30)
-$reclengthsec = $reclengthsec + $intval + 1; #
+$reclengthsec = $reclengthsec + (60 - $startupsleep) + 1; #
 
-&writelog("tvrecording:  DEBUG SLEEP $startupsleeptime:$intval:$startupsleep");
+&writelog("tvrecording:  DEBUG SLEEP $startupsleeptime:$intval:$startupsleep:$reclengthsec");
 
 sleep ( $startupsleep);
 
