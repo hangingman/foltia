@@ -41,7 +41,8 @@ push( @INC, "$path");
 
 #tvConfig.pl -------------------------------
 $extendrecendsec = 10;							#recording end second. 
-$startupsleeptime = 52;					#process wait(MAX60sec)
+#$startupsleeptime = 52;					#process wait(MAX60sec)
+$startupsleeptime = 37;					#process wait(MAX60sec)
 #$startupsleeptime = 1;					#process wait(MAX60sec)
 
 #-------------------------------
@@ -258,8 +259,12 @@ if (($recch eq "" )|| ($reclengthsec eq "")){
 #	usleep ( $startupsleeptimemicro );
 
 # $recch ¤Ç¥¦¥§¥¤¥ÈÄ´À°Æþ¤ì¤Þ¤·¤ç¤¦
-my $intval = $recch % 50; # 0¡Á49
-my $startupsleep = $startupsleeptime - $intval; #  3¡Á52 (VHF 40-51)
+#52
+#my $intval = $recch % 50; # 0¡Á49
+#my $startupsleep = $startupsleeptime - $intval; #  3¡Á52 (VHF 40-51)
+#37
+my $intval = $recch % 35; # 0¡Á34
+my $startupsleep = $startupsleeptime - $intval; #  3-37 (VHF 25-36,tvk 30)
 $reclengthsec = $reclengthsec + $intval + 1; #
 
 &writelog("tvrecording:  DEBUG SLEEP $startupsleeptime:$intval:$startupsleep");
