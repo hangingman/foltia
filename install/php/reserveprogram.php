@@ -182,7 +182,11 @@ ORDER BY foltia_subtitle.startdatetime  ASC
 				$rowdata = pg_fetch_row($rs, $row);
 
 				for ($col = 0; $col < $maxcols; $col++) { /* Îó¤ËÂÐ±þ */
+					if ($col == 3){
+					echo("<td>".htmlspecialchars(foldate2print($rowdata[$col]))."<br></td>\n");
+					}else{
 					echo("<td>".htmlspecialchars($rowdata[$col])."<br></td>\n");
+					}
 				}
 				echo("</tr>\n");
 			}
