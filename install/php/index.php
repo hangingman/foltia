@@ -32,8 +32,10 @@ print "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/T
 <head>
 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=EUC-JP\">
 <meta http-equiv=\"Content-Style-Type\" content=\"text/css\">
-<link rel=\"stylesheet\" type=\"text/css\" href=\"graytable.css\"> 
-<title>foltia:放映予定</title>
+<link rel=\"stylesheet\" type=\"text/css\" href=\"graytable.css\"> ";
+//ディスク空き容量によって背景色表示変更
+warndiskfreearea();
+print "<title>foltia:放映予定</title>
 </head>";
 
 

@@ -26,13 +26,16 @@ list:
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="stylesheet" type="text/css" href="graytable.css"> 
 <?php
+include("./foltialib.php");
+
+//ディスク空き容量によって背景色表示変更
+warndiskfreearea();
+
 print "<title>foltia:recorded file list</title>
 </head>";
 
-  include("./foltialib.php");
 $con = m_connect();
 $now = date("YmdHi");   
-
 ?>
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
 <div align="center">
@@ -46,6 +49,7 @@ $now = date("YmdHi");
 if ($demomode){
 }else{
 	printdiskusage();
+	printtrcnprocesses();
 }
 ?>
 <form name="deletemovie" method="POST" action="./deletemovie.php"> 

@@ -407,24 +407,32 @@ return ($serveruri );
 
 
 function printdiskusage(){//戻り値　なし
+list (, $all, $use , $free, $usepercent) =  getdiskusage();
+
+print "
+<div style=\"width:100%;border:1px solid black;text-align:left;\"><span style=\"float:right;\">$free</span>
+<div style=\"width:$usepercent;border:1px solid black;background:white;\">$use/$all($usepercent)</div>
+</div>
+";
+//exec('ps ax | grep ffmpeg |grep MP4 ' ,$ffmpegprocesses);
+}//end sub
+
+
+function getdiskusage(){//戻り値　配列　[,全体容量, 使用容量 , 空き容量, 利用割合]
 
 global $recfolderpath,$recfolderpath;
 
 	exec ( "df -h  $recfolderpath | grep $recfolderpath", $hdfreearea);
 	$freearea = preg_split ("/[\s,]+/", $hdfreearea[0]);
 
-//	exec ( "ps ax | grep ffmpeg", $encoding);
-//	exec ( "ps ax | grep faac", $processlock);
+    return $freearea;
+	
+}//endsub
 
-print "
-<div style=\"width:100%;border:1px solid black;text-align:left;\"><span style=\"float:right;\">$freearea[3]</span>
-<div style=\"width:$freearea[4];border:1px solid black;background:white;\">$freearea[2]/$freearea[1]($freearea[4])</div>
-</div>
-";
 
-//exec('ps ax | grep ffmpeg |grep MP4 ' ,$ffmpegprocesses);
+function printtrcnprocesses(){
+
 $ffmpegprocesses = `ps ax | grep ffmpeg | grep -v grep |  wc -l `;
-
 $uptime = exec('uptime');
 
 print "<div style=\"text-align:left;\">";
@@ -432,30 +440,59 @@ print "$uptime<br>\n";
 print "トラコン稼働数:$ffmpegprocesses<br>\n";
 print "</div>";
 
-}//end sub
+}//endsub
 
 
+function warndiskfreearea(){
+
+if ($demomode){
+print "<!-- demo mode -->";
+}else{
+
+global $recfolderpath,$recfolderpath;
+
+	exec ( "df   $recfolderpath | grep $recfolderpath", $hdfreearea);
+	$freearea = preg_split ("/[\s,]+/", $hdfreearea[0]);
+$freebytes = $freearea[3];
+if ($freebytes == "" ){
+//
+print "<!-- err:\$freebytes is null -->";
+}elseif($freebytes > 1024*1024*100 ){// 100GB以上あいてれば
+//なにもしない
+print "<style type=\"text/css\"><!-- --></style>";
+}elseif($freebytes > 1024*1024*50 ){// 100GB以下
+print "<style type=\"text/css\"><!--
+	body {
+	background-color: #CCCC99;
+ 	}
+-->
+</style>
+";
+}elseif($freebytes > 1024*1024*30 ){// 50GB以下
+print "<style type=\"text/css\"><!--
+	body {
+	background-color:#CC6666;
+ 	}
+-->
+</style>
+";
+}elseif($freebytes > 0 ){// 30GB以下
+print "<style type=\"text/css\"><!--
+	body {
+	background-color:#FF0000;
+ 	}
+-->
+</style>
+";
+}else{
+print "<!-- no much : $freebytes -->";
 
 
+}//endif freebytess
 
+}//endif demomode
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}//endsub
 
 
 

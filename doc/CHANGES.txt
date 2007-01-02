@@ -1,5 +1,14 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 
+07.1.2
+showplaylist.php:
+foltialib.php:
+index.php:
+　録画ディスクの空き容量が少なくなってくると一部ページの背景を色変えて警告する機能追加。
+　100GB以下:黄灰
+　50GB以下:赤灰
+　30GB以下:赤
+
 06.12.28
 reserveprogram.php:
 　日付表示形式をより見やすいスタイルに変更。
