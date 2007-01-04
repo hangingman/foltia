@@ -113,6 +113,6 @@ system ("/usr/local/bin/ffmpeg  $encodeoption ");
 &writelog("ipodtranscode FFEND $inputmpeg2");
 
 &writelog("ipodtranscode mp4psp -p $mp4file $movietitleeuc");
-system("mp4psp  -p $mp4file $movietitleeuc");
+system("/usr/local/bin/mp4psp -p $mp4file '$movietitleeuc' ");
 &writelog("ipodtranscode mp4psp COMPLETE  $mp4file ");
 
