@@ -1,6 +1,9 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 
 07.1.8
+selectcaptureimage.php:
+　ショボかるへのリンクを修正。
+
 viewepg.php:
 graytable.css:
 　EPG番組表の表示スタイルを、横軸がそろうように改良。
