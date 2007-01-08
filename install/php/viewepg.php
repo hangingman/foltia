@@ -3,7 +3,7 @@
  Anime recording system foltia
  http://www.dcc-jpl.com/soft/foltia/
 
-reserveprogram.php
+viewepg.php
 
 目的
 番組録画予約ページを表示します。
@@ -24,12 +24,10 @@ start:表示タイムスタンプ(Ex.200512281558)
 <link rel="stylesheet" type="text/css" href="graytable.css"> 
 <title>foltia:EPG</title>
 </head>
-
 <?php
-  include("./foltialib.php");
+include("./foltialib.php");
   
 $con = m_connect();
-
 $start = getgetnumform(start);
 
 if ($start == ""){
@@ -37,17 +35,15 @@ if ($start == ""){
 }else{
   $start = ereg_replace( "[^0-9]", "", $start); 
 }
-
 ?>
-
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
 <div align="center">
 <?php 
 printhtmlpageheader();
 ?>
-  <p align="left"><font color="#494949" size="6">番組表</font></p>
+  <p align="left"><font color="#494949" size="6">EPG番組表</font></p>
   <hr size="4">
-<p align="left">番組表を表示します。
+<p align="left">EPG番組表を表示します。
 <?php 
 
 $startyear =   substr($start,0,4);
@@ -110,7 +106,6 @@ if (($page == "")|| ($page <= 0) ){
 print "←<A HREF=\"./viewepg.php?p=$page&start=$yesterday\">前の日</A>　<A HREF=\"./viewepg.php\">現在</A>　当日(<A HREF=\"./viewepg.php?p=$page&start=$today0400\">4:00</A>　<A HREF=\"./viewepg.php?p=$page&start=$today1200\">12:00</A>　<A HREF=\"./viewepg.php?p=$page&start=$today2000\">20:00</A>)　<A HREF=\"./viewepg.php?p=$page&start=$day1after\">次の日</A>　<A HREF=\"./viewepg.php?p=$page&start=$day2after\">$day2</A>　<A HREF=\"./viewepg.php?p=$page&start=$day3after\">$day3</A>　<A HREF=\"./viewepg.php?p=$page&start=$day4after\">$day4</A>　<A HREF=\"./viewepg.php?p=$page&start=$day5after\">$day5</A>　<A HREF=\"./viewepg.php?p=$page&start=$day6after\">$day6</A>　<A HREF=\"./viewepg.php?p=$page&start=$day7after\">$day7</A>→<BR>\n";
 
 
-
 if ($maxrows > $maxdisplay){
 //複数ページ
 //$pages = ceil($maxrows / $maxdisplay) ;
@@ -126,45 +121,153 @@ if ($page < $pages){
 	print "<a href = \"./viewepg.php?p=$nextpage&start=$start\">→</A>";
 }
 }
+//ココから新コード
+//・局リスト
+$query = "SELECT stationid, stationname, stationrecch, ontvcode 
+FROM foltia_station 
+WHERE \"ontvcode\" ~~ '%ontvjapan%'  
+ORDER BY stationid ASC , stationrecch 
+OFFSET $offset LIMIT $maxdisplay 
+";
+$slistrs = m_query($con, $query, "DBクエリに失敗しました");
+$stations =  pg_num_rows($slistrs);
+for ($i=0 ; $i < $stations ; $i++){
+	$rowdata = pg_fetch_row($slistrs, $i);
+	$stationhash[$i] = $rowdata[3] ;
+}
 
+//・時間と全順番のハッシュ作る
+$epgstart = $start ;
+$epgend = calcendtime($start , (8*60));
 
-	$query = "SELECT stationid, stationname, stationrecch, ontvcode FROM foltia_station WHERE \"ontvcode\" ~~ '%ontvjapan%'  ORDER BY stationid ASC , stationrecch OFFSET $offset LIMIT $maxdisplay 
+$query = "SELECT DISTINCT startdatetime   
+FROM foltia_epg
+WHERE foltia_epg.ontvchannel in (
+	SELECT ontvcode 
+	FROM foltia_station 
+	WHERE \"ontvcode\" ~~ '%ontvjapan%'  
+	ORDER BY stationid ASC , stationrecch 
+	OFFSET $offset LIMIT $maxdisplay
+	)
+AND startdatetime  >= $start  
+AND startdatetime  < $epgend  
+ORDER BY foltia_epg.startdatetime  ASC	";
+
+$rs = m_query($con, $query, "DBクエリに失敗しました");
+$colmnums =  pg_num_rows($rs);
+if ($colmnums == 0){
+//番組データがない
+$colmnums = 2;
+}else{
+	for ($i=0 ; $i < $colmnums ; $i++){
+		$rowdata = pg_fetch_row($rs, $i);
+		$timetablehash["$rowdata[0]"] = $i;
+	}
+}
+//・局ごとに縦に配列入れていく
+for ($j=0 ; $j < $stations ; $j++){
+	$rowdata = pg_fetch_row($slistrs, $j);
+	$stationname = $rowdata[3];
+
+$epgstart = $start ;
+$epgend = calcendtime($start , (8*60));
+$query = "
+SELECT startdatetime , enddatetime , lengthmin , epgtitle , epgdesc , epgcategory  ,ontvchannel  ,epgid 
+FROM foltia_epg 
+WHERE foltia_epg.ontvchannel = '$stationname' AND 
+enddatetime  > $epgstart  AND 
+startdatetime  < $epgend  
+ORDER BY foltia_epg.startdatetime  ASC
 	";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
+	$statiodh = m_query($con, $query, "DBクエリに失敗しました");
+	$maxrowsstation = pg_num_rows($statiodh);
+if ($maxrowsstation == 0) {
+		//print("番組データがありません<BR>");
+		$item[0]["$stationname"] =  "番組データがありません";
+}else{
 
-//print "<!--$query  -->";
-$viewstations = pg_num_rows($rs);
-print "</p>
- <table width=\"100%\"  border=\"0\">
-  <tbody>
-   <tr class=\"kyoku\">
-";
-for ($i=0 ; $i < $viewstations ; $i++){
-	$rowdata = pg_fetch_row($rs, $i);
-	if ($rowdata[1] != ""){
-	print "    <th scope=\"col\">$rowdata[1]</th>\n";
-	}
+for ($srow = 0; $srow < $maxrowsstation ; $srow++) { 
+	 
+$stationrowdata = pg_fetch_row($statiodh, $srow);
+
+$printstarttime = substr($stationrowdata[0],8,2) . ":" .  substr($stationrowdata[0],10,2);
+$tdclass = "t".substr($stationrowdata[0],8,2) .  substr($stationrowdata[0],10,2);
+$title = $stationrowdata[3];
+$title = htmlspecialchars(z2h($title));
+$desc = $stationrowdata[4];
+$desc = htmlspecialchars(z2h($desc));
+$height =  htmlspecialchars($stationrowdata[2]) * 3;
+$epgid =  htmlspecialchars($stationrowdata[7]);
+
+if (isset($timetablehash["$stationrowdata[0]"])){
+	$number = $timetablehash["$stationrowdata[0]"];
+}else{
+	$number = 0;
 }
+$item["$number"]["$stationname"] =  "$printstarttime <A HREF=\"./reserveepg.php?epgid=$epgid\">$title</A> $desc";
+}//for
+}//if
 
-print "  </tr>
+//・局ごとに間隔決定
+//$item[$i][NHK] はヌルかどうか判定
+$dataplace = 0 ; //初期化
+$rowspan = 0;
 
- <tr  valign = top>
-";
-for ($i=0 ; $i < $viewstations ; $i++){
-	$rowdata = pg_fetch_row($rs, $i);
-	if ($rowdata[3] != ""){
-	print "<td>";
-		renderepgstation($con,$rowdata[3],$start);
-	print "</td>\n";
+for ($i=1; $i <= $colmnums ; $i++){
+	if ($i === ($colmnums - 1)){//最終行
+		$rowspan = $i - $dataplace + 1;
+		//そして自分自身にタグを
+			if ($item[$i][$stationname] == ""){
+			$item[$i][$stationname]  = "";
+			}else{
+			$item[$i][$stationname]  = "<td>". $item[$i][$stationname] . "</td>";
+			$rowspan--;
+			}
+			//ROWSPAN
+			if ($rowspan === 1 ){
+			$item[$dataplace][$stationname]  = "<td>". $item[$dataplace][$stationname] . "</td>";
+			}else{
+			$item[$dataplace][$stationname]  = "<td  rowspan = $rowspan>". $item[$dataplace][$stationname] . "</td>";
+			}
+
+	}elseif ($item[$i][$stationname] == ""){
+	//ヌルなら
+		$item[$i][$stationname]  =  $item[$i][$stationname] ;
+	}else{
+	//なんか入ってるなら
+		$rowspan = $i - $dataplace;
+			if ($rowspan === 1 ){
+			$item[$dataplace][$stationname]  = "<td>". $item[$dataplace][$stationname] . "</td>";
+			}else{
+			$item[$dataplace][$stationname]  = "<td rowspan = $rowspan>". $item[$dataplace][$stationname] . "</td>";
+			}
+		$dataplace = $i;
+		
 	}
+}//for
+}// end of for://・局ごとに縦に配列入れていく
+
+//・テーブルレンダリング
+print "<table>\n<tr>";
+
+//ヘッダ
+for ($i=0;$i<$stations;$i++){
+	$rowdata = pg_fetch_row($slistrs, $i);
+	print "<th>".htmlspecialchars($rowdata[1])."</th>" ;
 }
-
-print " </tr>
-  	</tbody>
-</table>
-";
-
+//本体
+for ($l = 0 ;$l <  $colmnums; $l++){
+	print "<tr>";
+	for ($m = 0 ; $m < $stations ; $m++ ){
+		$stationname = $stationhash[$m];
+		print_r($item[$l]["$stationname"]);
+	}
+	print "</tr>\n";
+}
+print "</table>\n";
  ?>
 
 </body>
 </html>
+
+
