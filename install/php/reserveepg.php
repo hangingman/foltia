@@ -80,8 +80,38 @@ $progname = htmlspecialchars($rowdata[5]);
 $progname = z2h($progname);
 $progdesc = htmlspecialchars($rowdata[6]);
 $progdesc =  z2h($progdesc);
-$progcat = htmlspecialchars($rowdata[7]);
-$progcat =  z2h($progcat);
+$progcat = htmlspecialchars(z2h($rowdata[7]));
+
+if ($progcat == "information"){
+$progcat =  '情報';
+}elseif ($progcat == "anime"){
+$progcat =  'アニメ・特撮';
+}elseif ($progcat == "news"){
+$progcat =  'ニュース・報道';
+}elseif ($progcat == "drama"){
+$progcat =  'ドラマ';
+}elseif ($progcat == "variety"){
+$progcat =  'バラエティ';
+}elseif ($progcat == "documentary"){
+$progcat =  'ドキュメンタリー・教養';
+}elseif ($progcat == "education"){
+$progcat =  '教育';
+}elseif ($progcat == "music"){
+$progcat =  '音楽';
+}elseif ($progcat == "cinema"){
+$progcat =  '映画';
+}elseif ($progcat == "hobby"){
+$progcat =  '趣味・実用';
+}elseif ($progcat == "kids"){
+$progcat =  'キッズ';
+}elseif ($progcat == "sports"){
+$progcat =  'スポーツ';
+}elseif ($progcat == "etc"){
+$progcat =  'その他';
+}elseif ($progcat == "stage"){
+$progcat =  '演劇';
+}
+
 $epgid = $epgid ;
 $stationid = htmlspecialchars($rowdata[10]);
 

@@ -1,4 +1,9 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
+07.1.14
+reserveepg.php:
+graytable.css:
+viewepg.php:
+　EPG番組表をジャンルごとにカラー塗り分け
 
 07.1.8
 selectcaptureimage.php:

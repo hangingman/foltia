@@ -149,6 +149,37 @@ if(/<channel/){
 	s/^[\s]*//gio;
 	chomp();
 	$item{category} = &removetag($_);
+	
+	if ($item{category} =~ /情報/){
+	$item{category} = "information";
+	}elsif ($item{category} =~ /趣味・実用/){
+	$item{category} = "hobby";
+	}elsif ($item{category} =~ /教育/){
+	$item{category} = "education";
+	}elsif ($item{category} =~ /音楽/){
+	$item{category} = "music";
+	}elsif ($item{category} =~ /演劇/){
+	$item{category} = "stage";
+	}elsif ($item{category} =~ /映画/){
+	$item{category} = "cinema";
+	}elsif ($item{category} =~ /バラエティ/){
+	$item{category} = "variety";
+	}elsif ($item{category} =~ /ニュース・報道/){
+	$item{category} = "news";
+	}elsif ($item{category} =~ /ドラマ/){
+	$item{category} = "drama";
+	}elsif ($item{category} =~ /ドキュメンタリー・教養/){
+	$item{category} = "documentary";
+	}elsif ($item{category} =~ /スポーツ/){
+	$item{category} = "sports";
+	}elsif ($item{category} =~ /キッズ/){
+	$item{category} = "kids";
+	}elsif ($item{category} =~ /アニメ・特撮/){
+	$item{category} = "anime";
+	}elsif ($item{category} =~ /その他/){
+	$item{category} = "etc";
+	}
+	
 	#print Dumper($_) ;
 	#print "$result  \n";
 

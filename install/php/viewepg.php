@@ -172,7 +172,7 @@ for ($j=0 ; $j < $stations ; $j++){
 $epgstart = $start ;
 $epgend = calcendtime($start , (8*60));
 $query = "
-SELECT startdatetime , enddatetime , lengthmin , epgtitle , epgdesc , epgcategory  ,ontvchannel  ,epgid 
+SELECT startdatetime , enddatetime , lengthmin , epgtitle , epgdesc , epgcategory  ,ontvchannel  ,epgid ,	epgcategory 
 FROM foltia_epg 
 WHERE foltia_epg.ontvchannel = '$stationname' AND 
 enddatetime  > $epgstart  AND 
@@ -183,7 +183,7 @@ ORDER BY foltia_epg.startdatetime  ASC
 	$maxrowsstation = pg_num_rows($statiodh);
 if ($maxrowsstation == 0) {
 		//print("番組データがありません<BR>");
-		$item[0]["$stationname"] =  "番組データがありません";
+		$item[0]["$stationname"] =  ">番組データがありません";
 }else{
 
 for ($srow = 0; $srow < $maxrowsstation ; $srow++) { 
@@ -198,13 +198,19 @@ $desc = $stationrowdata[4];
 $desc = htmlspecialchars(z2h($desc));
 $height =  htmlspecialchars($stationrowdata[2]) * 3;
 $epgid =  htmlspecialchars($stationrowdata[7]);
+$epgcategory = htmlspecialchars($stationrowdata[8]);
 
 if (isset($timetablehash["$stationrowdata[0]"])){
 	$number = $timetablehash["$stationrowdata[0]"];
 }else{
 	$number = 0;
 }
-$item["$number"]["$stationname"] =  "$printstarttime <A HREF=\"./reserveepg.php?epgid=$epgid\">$title</A> $desc";
+if ($epgcategory == ""){
+$item["$number"]["$stationname"] =  "><span id=\"epgstarttime\">$printstarttime</span> <A HREF=\"./reserveepg.php?epgid=$epgid\"><span id=\"epgtitle\">$title</span></A> <span id=\"epgdesc\">$desc</span>";
+}else{
+$item["$number"]["$stationname"] =  " id=\"$epgcategory\"><span id=\"epgstarttime\">$printstarttime</span> <A HREF=\"./reserveepg.php?epgid=$epgid\"><span id=\"epgtitle\">$title</span></A> <span id=\"epgdesc\">$desc</span></span>";
+}//if
+
 }//for
 }//if
 
@@ -220,14 +226,14 @@ for ($i=1; $i <= $colmnums ; $i++){
 			if ($item[$i][$stationname] == ""){
 			$item[$i][$stationname]  = "";
 			}else{
-			$item[$i][$stationname]  = "<td>". $item[$i][$stationname] . "</td>";
+			$item[$i][$stationname]  = "<td ". $item[$i][$stationname] . "</td>";
 			$rowspan--;
 			}
 			//ROWSPAN
 			if ($rowspan === 1 ){
-			$item[$dataplace][$stationname]  = "<td>". $item[$dataplace][$stationname] . "</td>";
+			$item[$dataplace][$stationname]  = "<td ". $item[$dataplace][$stationname] . "</td>";
 			}else{
-			$item[$dataplace][$stationname]  = "<td  rowspan = $rowspan>". $item[$dataplace][$stationname] . "</td>";
+			$item[$dataplace][$stationname]  = "<td  rowspan = $rowspan ". $item[$dataplace][$stationname] . "</td>";
 			}
 
 	}elseif ($item[$i][$stationname] == ""){
@@ -237,9 +243,9 @@ for ($i=1; $i <= $colmnums ; $i++){
 	//なんか入ってるなら
 		$rowspan = $i - $dataplace;
 			if ($rowspan === 1 ){
-			$item[$dataplace][$stationname]  = "<td>". $item[$dataplace][$stationname] . "</td>";
+			$item[$dataplace][$stationname]  = "<td ". $item[$dataplace][$stationname] . "</td>";
 			}else{
-			$item[$dataplace][$stationname]  = "<td rowspan = $rowspan>". $item[$dataplace][$stationname] . "</td>";
+			$item[$dataplace][$stationname]  = "<td rowspan = $rowspan ". $item[$dataplace][$stationname] . "</td>";
 			}
 		$dataplace = $i;
 		
@@ -267,6 +273,27 @@ for ($l = 0 ;$l <  $colmnums; $l++){
 print "</table>\n";
  ?>
 
+<hr>
+凡例
+<table>
+<tr>
+<td id="information">情報</td>
+<td id="anime">アニメ・特撮</td>
+<td id="news">ニュース・報道</td>
+<td id="drama">ドラマ</td>
+<td id="variety">バラエティ</td>
+<td id="documentary">ドキュメンタリー・教養</td>
+<td id="education">教育</td>
+<td id="music">音楽</td>
+<td id="cinema">映画</td>
+<td id="hobby">趣味・実用</td>
+<td id="kids">キッズ</td>
+<td id="sports">スポーツ</td>
+<td id="etc">その他</td>
+<td id="stage">演劇</td>
+
+</tr>
+</table>
 </body>
 </html>
 
