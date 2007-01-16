@@ -75,7 +75,8 @@ td#drama {background:#FFD0FF;} /* ¥É¥é¥Þ */
  {
  	background-color: #FFFA4D;
 	padding-right: 1px; padding-bottom:1px;
-	border-right: 3px solid #aaa; border-bottom: 3px solid #666; }
- 
+	border-right: 3px solid #aaa; border-bottom: 3px solid #666; 
+ 	cursor:pointer; 
+ }
  
  
