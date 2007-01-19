@@ -1,4 +1,10 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
+07.1.19
+reserveepg.php:
+　予約の際に、既に予約があるかの検出を既存予約が[全局録画]の場合検出出来ていなかったのを修正。
+　selectcaptureimage.php:
+　不正PIDのときのエラー処理の追加。
+
 07.1.16
 graytable.css:
 viewepg.php:

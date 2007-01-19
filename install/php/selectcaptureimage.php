@@ -65,7 +65,16 @@ WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = fo
  
 	";
 	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$rowdata = pg_fetch_row($rs, 0);
+$rows = pg_num_rows($rs);
+if ($rows == 0){
+	print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">キャプチャ画像</font></p>
+  <hr size=\"4\">
+<p align=\"left\">
+録画記録がありません。<br>
+";
+
+}else{
+$rowdata = pg_fetch_row($rs, 0);
 
 print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">キャプチャ画像</font></p>
   <hr size=\"4\">
@@ -104,12 +113,9 @@ print "<IMG SRC='http://$serveruri$httpmediamappath/$tid.localized/img/$path/$fi
 
 }//foreach
 // タイトル一覧　ここまで
+}//if rowdata == 0
 
-// ファイル一覧　ここから
 ?>
-
-
-
 
 </body>
 </html>
