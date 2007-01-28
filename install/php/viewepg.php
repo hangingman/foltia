@@ -154,6 +154,9 @@ AND startdatetime  < $epgend
 ORDER BY foltia_epg.startdatetime  ASC	";
 
 $rs = m_query($con, $query, "DBクエリに失敗しました");
+
+//print "$query<br>\n";
+
 $colmnums =  pg_num_rows($rs);
 if ($colmnums == 0){
 //番組データがない
@@ -161,9 +164,12 @@ $colmnums = 2;
 }else{
 	for ($i=0 ; $i < $colmnums ; $i++){
 		$rowdata = pg_fetch_row($rs, $i);
-		$timetablehash["$rowdata[0]"] = $i;
+		$timetablehash["$rowdata[0]"] = ($i + 1);
+//		print "$rowdata[0]:$i+1 <br>\n";
 	}
 }
+//print "colmnums $colmnums <br>\n";
+
 //・局ごとに縦に配列入れていく
 for ($j=0 ; $j < $stations ; $j++){
 	$rowdata = pg_fetch_row($slistrs, $j);
@@ -181,6 +187,9 @@ ORDER BY foltia_epg.startdatetime  ASC
 	";
 	$statiodh = m_query($con, $query, "DBクエリに失敗しました");
 	$maxrowsstation = pg_num_rows($statiodh);
+
+//print "maxrowsstation $maxrowsstation  stationname $stationname<br>\n";
+
 if ($maxrowsstation == 0) {
 		//print("番組データがありません<BR>");
 		$item[0]["$stationname"] =  ">番組データがありません";
@@ -202,8 +211,10 @@ $epgcategory = htmlspecialchars($stationrowdata[8]);
 
 if (isset($timetablehash["$stationrowdata[0]"])){
 	$number = $timetablehash["$stationrowdata[0]"];
+//print "$stationname $stationrowdata[0] [$number] $printstarttime $title $desc<br>\n";
 }else{
 	$number = 0;
+//print "$stationname $stationrowdata[0] 現在番組 $printstarttime $title $desc<br>\n";
 }
 if ($epgcategory == ""){
 $item["$number"]["$stationname"] =  " onClick=\"location = './reserveepg.php?epgid=$epgid'\"><span id=\"epgstarttime\">$printstarttime</span> <A HREF=\"./reserveepg.php?epgid=$epgid\"><span id=\"epgtitle\">$title</span></A> <span id=\"epgdesc\">$desc</span>";
@@ -220,8 +231,8 @@ $dataplace = 0 ; //初期化
 $rowspan = 0;
 
 for ($i=1; $i <= $colmnums ; $i++){
-	if ($i === ($colmnums - 1)){//最終行
-		$rowspan = $i - $dataplace + 1;
+	if ($i === ($colmnums )){//最終行
+		$rowspan = $i - $dataplace ;
 		//そして自分自身にタグを
 			if ($item[$i][$stationname] == ""){
 			$item[$i][$stationname]  = "";
@@ -234,11 +245,13 @@ for ($i=1; $i <= $colmnums ; $i++){
 			$item[$dataplace][$stationname]  = "<td ". $item[$dataplace][$stationname] . "</td>";
 			}else{
 			$item[$dataplace][$stationname]  = "<td  rowspan = $rowspan ". $item[$dataplace][$stationname] . "</td>";
+//			$item[$dataplace][$stationname]  = "<td ". $item[$dataplace][$stationname] . "$rowspan </td>";
 			}
 
 	}elseif ($item[$i][$stationname] == ""){
 	//ヌルなら
 		$item[$i][$stationname]  =  $item[$i][$stationname] ;
+//		$item[$i][$stationname]  =  "<td><br></td>" ;
 	}else{
 	//なんか入ってるなら
 		$rowspan = $i - $dataplace;
@@ -246,6 +259,7 @@ for ($i=1; $i <= $colmnums ; $i++){
 			$item[$dataplace][$stationname]  = "<td ". $item[$dataplace][$stationname] . "</td>";
 			}else{
 			$item[$dataplace][$stationname]  = "<td rowspan = $rowspan ". $item[$dataplace][$stationname] . "</td>";
+//			$item[$dataplace][$stationname]  = "<td ". $item[$dataplace][$stationname] . "$rowspan </td>";
 			}
 		$dataplace = $i;
 		
