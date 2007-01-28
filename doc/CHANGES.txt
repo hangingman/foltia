@@ -4,6 +4,10 @@ foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 viewepg.php:
 　現在時刻の番組が正しく表示出来てない場合があるのを修正。
 
+recwrap.pl:
+tvrecording.pl:
+　デバイスビジーで録画デバイスをつかめなかった場合のリカバリ機構搭載(まだ検証が甘い)
+
 07.1.19
 reserveepg.php:
 　予約の際に、既に予約があるかの検出を既存予約が[全局録画]の場合検出出来ていなかったのを修正。

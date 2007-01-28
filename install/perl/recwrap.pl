@@ -74,14 +74,33 @@ if($recch == -10){
 &writelog("recwrap RECSTART $recch $reclength 0 $outputfilename $bitrate $tid $countno $pid");
 #録画
 #system("$toolpath/perl/tvrecording.pl $recch $reclength 0 $outputfile $bitrate $tid $countno");
+$starttime = (`date +%s`);
+
 $oserr = system("$toolpath/perl/tvrecording.pl $recch $reclength 0 $outputfilename $bitrate $tid $countno");
 $oserr = $oserr / 256;
 if ($oserr == 1){
 	&writelog("recwrap ABORT recfile exist. [$outputfilename] $recch $reclength 0 0 $bitrate $tid $countno $pid");
 	exit;
-}else{
-	&writelog("recwrap RECEND [$outputfilename] $recch $reclength 0 0 $bitrate $tid $countno $pid");
 }
+#デバイスビジーで即死してないか検出
+$now = (`date +%s`);
+	if ($now < $starttime + 100){ #録画プロセス起動してから100秒以内に戻ってきてたら
+		while($now < $starttime + 100){
+		&writelog("recwrap retry recording $now $starttime");
+$starttime = (`date +%s`);
+$oserr = system("$toolpath/perl/tvrecording.pl $recch $reclength 0 $outputfilename $bitrate $tid $countno");
+$now = (`date +%s`);
+$oserr = $oserr / 256;
+			if ($oserr == 1){
+				&writelog("recwrap ABORT recfile exist. in resume process.[$outputfilename] $recch $reclength 0 0 $bitrate $tid $countno $pid");
+				exit;
+			}# if
+		}# while
+	} # if 
+
+
+	&writelog("recwrap RECEND [$outputfilename] $recch $reclength 0 0 $bitrate $tid $countno $pid");
+
 #DB初期化
 	my $data_source = sprintf("dbi:%s:dbname=%s;host=%s;port=%d",
 		$DBDriv,$DBName,$DBHost,$DBPort);

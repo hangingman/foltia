@@ -267,10 +267,13 @@ my $intval = $recch % 35; # 0〜34
 my $startupsleep = $startupsleeptime - $intval; #  3-37 (VHF 25-36,tvk 30)
 $reclengthsec = $reclengthsec + (60 - $startupsleep) + 1; #
 
-&writelog("tvrecording:  DEBUG SLEEP $startupsleeptime:$intval:$startupsleep:$reclengthsec");
+if ( $ARGV[2] ne "N"){
+	&writelog("tvrecording: DEBUG SLEEP $startupsleeptime:$intval:$startupsleep:$reclengthsec");
+	sleep ( $startupsleep);
+}else{
+	&writelog("tvrecording: DEBUG RAPID START");
 
-sleep ( $startupsleep);
-
+}
 if ($recunits > 1){
 my $deviceno = $recunits - 1;#3枚差しのとき/dev/video2から使う
 	$recdevice = "/dev/video$deviceno";
@@ -320,8 +323,10 @@ $cmd="";
 
 #二重録りなど既に同名ファイルがあったら中断
 if ( -e "$outputfile" ){
-&writelog("tvrecording :ABORT :recfile $outputfile exist.");
-exit 1;
+	if ( -s "$outputfile" ){
+	&writelog("tvrecording :ABORT :recfile $outputfile exist.");
+	exit 1;
+	}
 }
 
 }#end prepare
