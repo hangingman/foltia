@@ -88,7 +88,7 @@ $now = (`date +%s`);
 		while($now < $starttime + 100){
 		&writelog("recwrap retry recording $now $starttime");
 $starttime = (`date +%s`);
-$oserr = system("$toolpath/perl/tvrecording.pl $recch $reclength 0 $outputfilename $bitrate $tid $countno");
+$oserr = system("$toolpath/perl/tvrecording.pl $recch $reclength N $outputfilename $bitrate $tid $countno");
 $now = (`date +%s`);
 $oserr = $oserr / 256;
 			if ($oserr == 1){
