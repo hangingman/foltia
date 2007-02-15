@@ -224,7 +224,7 @@ ORDER BY foltia_program.tid  DESC
 				     //Êü±Ç¶É
 				     echo("<td>".htmlspecialchars($rowdata[1])."<br></td>\n");
 				     //¥¿¥¤¥È¥ë
-				     echo("<td><a href=\"http://cal.syoboi.jp/progedit.php?TID=$tid\" target=\"_blank\">" .
+				     echo("<td><a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">" .
 				     htmlspecialchars($rowdata[2]) . "</a></td>\n");
 
 					//MP4
