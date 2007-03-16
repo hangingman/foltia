@@ -159,8 +159,6 @@ INSERT INTO foltia_station VALUES (383, 'サンテレビ', -10, '', '', NULL, NULL, N
 INSERT INTO foltia_station VALUES (429, 'CBCテレビ', -10, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO foltia_station VALUES (385, 'TBSチャンネル', 0, '', '', NULL, NULL, NULL, NULL);
 INSERT INTO foltia_station VALUES (386, 'テレ朝チャンネル', 0, '', '', NULL, NULL, NULL, NULL);
-INSERT INTO foltia_station VALUES (387, 'ＴＶＫテレビ', 5, '', '', NULL, NULL, NULL, NULL);
-INSERT INTO foltia_station VALUES (388, 'テレビ神奈川', 5, '', '', NULL, NULL, NULL, NULL);
 INSERT INTO foltia_station VALUES (389, 'BS Japan', 0, '', '', 'b', 'X171', NULL, NULL);
 INSERT INTO foltia_station VALUES (390, 'サンテレビジョン', -10, '', '', NULL, NULL, NULL, NULL);
 INSERT INTO foltia_station VALUES (0, '[全局]', 0, NULL, NULL, NULL, NULL, NULL, NULL);

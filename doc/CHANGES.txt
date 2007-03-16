@@ -1,5 +1,11 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 
+07.3.16
+m.php:新設
+viewepg.php:
+foltialib.php:
+　開始時刻、録画時間、録画局を個別に指定する手動番組予約機能追加。
+
 07.2.11
 recwrap.pl:
 　デバイスビジーで録画デバイスをつかめなかった場合のリカバリ機構で二重にプロセス起動時にスリープしてたのを修正

@@ -456,7 +456,7 @@ global $recfolderpath,$recfolderpath;
 $freebytes = $freearea[3];
 if ($freebytes == "" ){
 //
-print "<!-- err:\$freebytes is null -->";
+//print "<!-- err:\$freebytes is null -->";
 }elseif($freebytes > 1024*1024*100 ){// 100GB以上あいてれば
 //なにもしない
 print "<style type=\"text/css\"><!-- --></style>";
@@ -485,7 +485,7 @@ print "<style type=\"text/css\"><!--
 </style>
 ";
 }else{
-print "<!-- no much : $freebytes -->";
+//print "<!-- no much : $freebytes -->";
 
 
 }//endif freebytess
@@ -496,7 +496,29 @@ print "<!-- no much : $freebytes -->";
 
 
 
+function foldatevalidation($foldate){
 
+if (strlen($foldate) == 12 ){
+
+	$startyear =   substr($foldate,0,4);
+	$startmonth =   substr($foldate,4,2);
+	$startday =   substr($foldate,6,2);
+	$starthour =   substr($foldate,8,2);
+	$startmin =   substr($foldate,10,2);
+
+	$startepoch = date ("U",mktime($starthour  , $startmin , 0, $startmonth  , $startday, $startyear));	
+	$nowe = time();
+	if ($startepoch > $nowe){
+	//print "$foldate:$startepoch:$nowe";
+		return TRUE;
+	}else{
+		return FALSE;
+	}	//end if $startepoch > $nowe
+}else{
+	return FALSE;
+}//end if ($foldate) == 12 
+
+}//end function
 
 
 

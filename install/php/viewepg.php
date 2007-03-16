@@ -22,7 +22,7 @@ start:表示タイムスタンプ(Ex.200512281558)
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="stylesheet" type="text/css" href="graytable.css"> 
-<title>foltia:EPG</title>
+<title>foltia:EPG番組表</title>
 </head>
 <?php
 include("./foltialib.php");
@@ -41,8 +41,9 @@ if ($start == ""){
 <?php 
 printhtmlpageheader();
 ?>
-  <p align="left"><font color="#494949" size="6">EPG番組表</font></p>
-  <hr size="4">
+<p align="left"><font color="#494949" size="6">EPG番組表</font></p>
+<p align="left"><a href="./m.php">番組手動予約</a ></p>
+<hr size="4">
 <p align="left">EPG番組表を表示します。
 <?php 
 
