@@ -156,10 +156,10 @@ ImageMagick:サムネール作成に利用</p>
 <p class="command">$svn checkout --revision {"2006-03-28 22:00"} svn://svn.mplayerhq.hu/ffmpeg/trunk
 ffmpeg 
 <p>2.ここにあるiPodパッチをあてる<br>
-  <a href = "http://lists.mplayerhq.hu/pipermail/ffmpeg-devel/2006-March/009814.html" target = "_blank">http://lists.mplayerhq.hu/pipermail/ffmpeg-devel/2006-March/009814.html</a><br>
-  
-  <br />
-  3.メイクする<br>
+  <a href = "http://lists.mplayerhq.hu/pipermail/ffmpeg-devel/2006-March/009814.html" target = "_blank">http://lists.mplayerhq.hu/pipermail/ffmpeg-devel/2006-March/009814.html</a><br><br>
+ 環境によっては更にx264.cのアップデートが必要という情報が寄せられた。(From <a href="http://www.dcc-jpl.com/soft/foltia/bbs/minibbs.php">foltia BBS TTTさん</a>)
+ <p class="command">svn cat --revision 6711 ffmpeg/libavcodec/x264.c > ffmpeg/libavcodec/x264.c</p>
+ 3.メイクする<br>
   手もとでは下記オプションでビルドしています。
 <p class="command">$./configure --enable-mp3lame --enable-x264 --enable-gpl --enable-a52
 --enable-xvid --enable-faac --enable-faad --enable-amr_nb --enable-amr_wb --enable-pthreads
