@@ -9,7 +9,7 @@ listreserve.php
 録画予約番組放映予定と予約番組名を表示します。
 
 引数
-なし
+r:録画デバイス数
 
  DCC-JPL Japan/foltia project
 
@@ -70,9 +70,17 @@ foltia_subtitle.enddatetime >= '$now' ORDER BY \"startdatetime\" ASC
 	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$maxrows = pg_num_rows($rs);
 			
+
+//チューナー数
+if ($recunits > 1){
+}else{
+if (getgetnumform(r) != ""){
+	$recunits = getgetnumform(r);
+	}else{
+	$recunits = 2;
+}
+}
 ?>
-
-
 
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
 <div align="center">
@@ -119,7 +127,118 @@ $pid = htmlspecialchars($rowdata[9]);
 $tid = htmlspecialchars($rowdata[0]);
 $title = htmlspecialchars($rowdata[2]);
 $subtitle =  htmlspecialchars($rowdata[4]);
+//重複検出
+//開始時刻 $rowdata[5]
+//終了時刻
+$endtime = calcendtime($rowdata[5],$rowdata[6]);
+//番組の開始時刻より遅い時刻に終了し、終了時刻より前にはじまる番組があるかどうか
+//オンボードチューナー録画
+$query = "
+SELECT
+foltia_program .tid,
+stationname,
+foltia_program .title,
+foltia_subtitle.countno,
+foltia_subtitle.subtitle,
+foltia_subtitle.startdatetime ,
+foltia_subtitle.lengthmin ,
+foltia_tvrecord.bitrate  , 
+foltia_subtitle.startoffset , 
+foltia_subtitle.pid  
+FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
+WHERE foltia_tvrecord.tid = foltia_program.tid AND foltia_tvrecord.stationid = foltia_station .stationid AND foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid
+AND foltia_subtitle.enddatetime >= '$rowdata[5]' 
+AND foltia_subtitle.startdatetime <= '$endtime'  
+UNION
+SELECT
+foltia_program .tid,
+stationname,
+foltia_program .title,
+foltia_subtitle.countno,
+foltia_subtitle.subtitle,
+foltia_subtitle.startdatetime ,
+foltia_subtitle.lengthmin ,
+foltia_tvrecord.bitrate  , 
+foltia_subtitle.startoffset , 
+foltia_subtitle.pid  
+FROM foltia_tvrecord
+LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
+LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
+LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
+WHERE foltia_tvrecord.stationid = 0 AND
+foltia_subtitle.enddatetime >= '$rowdata[5]'  
+AND foltia_subtitle.startdatetime <= '$endtime'  
+	";
+	$rclass = "";
+	$overlap = m_query($con, $query, "DBクエリに失敗しました");
+	$overlapmaxrows = pg_num_rows($overlap);
+	if ($overlapmaxrows > ($recunits) ){
+		for ($rrow = 0; $rrow < $overlapmaxrows ; $rrow++) {
+			$owrowdata = pg_fetch_row($overlap, $rrow);
+			$overlappid[] = $owrowdata[9];
+		}
+	if (in_array($rowdata[9], $overlappid)) {
+		$rclass = "overwraped";
+	}
+	}else{
+	$overlappid = "";
+	}//end if
 
+//外部チューナー録画
+$externalinputs = 1; //現状一系統のみ
+$query = "
+SELECT
+foltia_program .tid,
+stationname,
+foltia_program .title,
+foltia_subtitle.countno,
+foltia_subtitle.subtitle,
+foltia_subtitle.startdatetime ,
+foltia_subtitle.lengthmin ,
+foltia_tvrecord.bitrate  , 
+foltia_subtitle.startoffset , 
+foltia_subtitle.pid  
+FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
+WHERE foltia_tvrecord.tid = foltia_program.tid AND foltia_tvrecord.stationid = foltia_station .stationid AND foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid
+AND foltia_subtitle.enddatetime > '$rowdata[5]' 
+AND foltia_subtitle.startdatetime < '$endtime'  
+AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' ) 
+UNION
+SELECT
+foltia_program .tid,
+stationname,
+foltia_program .title,
+foltia_subtitle.countno,
+foltia_subtitle.subtitle,
+foltia_subtitle.startdatetime ,
+foltia_subtitle.lengthmin ,
+foltia_tvrecord.bitrate  , 
+foltia_subtitle.startoffset , 
+foltia_subtitle.pid  
+FROM foltia_tvrecord
+LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
+LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
+LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
+WHERE foltia_tvrecord.stationid = 0 AND
+foltia_subtitle.enddatetime > '$rowdata[5]'  
+AND foltia_subtitle.startdatetime < '$endtime'  
+AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' ) 
+
+	";
+	$eoverlap = m_query($con, $query, "DBクエリに失敗しました");
+	$eoverlapmaxrows = pg_num_rows($eoverlap);
+	if ($eoverlapmaxrows > ($externalinputs) ){
+		for ($erow = 0; $erow < $eoverlapmaxrows ; $erow++) {
+			$eowrowdata = pg_fetch_row($eoverlap, $erow);
+			$eoverlappid[] = $eowrowdata[9];
+		}
+
+		if (in_array($rowdata[9], $eoverlappid)) {
+			$rclass = "exoverwraped";
+		}
+	}else{
+	$eoverlappid = "";
+	}
 				echo("<tr class=\"$rclass\">\n");
 					// TID
 					print "<td>";
@@ -163,6 +282,15 @@ $subtitle =  htmlspecialchars($rowdata[4]);
 		?>
 	</tbody>
 </table>
+
+
+<table>
+	<tr><td>エンコーダ数</td><td><?=$recunits ?></td></tr>
+	<tr class="overwraped"><td>チューナー重複</td><td><br /></td></tr>
+	<tr class="exoverwraped"><td>外部入力重複</td><td><br /></td></tr>
+</table>
+
+
 <?php
 } //if ($maxrows == 0) {
 

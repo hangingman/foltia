@@ -28,6 +28,8 @@ td               { vertical-align: top;  }
 th, td           { border-right: 1px solid #AAA;border-bottom: 1px solid #AAA; padding: 3px;}
 tr.reserved{background-color: #FFDDDD;}
 tr.reservedtitle{background-color: #DDDDFF;}
+tr.overwraped{background-color: #FF0000;}
+tr.exoverwraped{background-color: #FF00FF;}
 
 /* 全体共通 */
 

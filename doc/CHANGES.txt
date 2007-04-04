@@ -1,4 +1,10 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
+07.4.5
+listreserve.php:
+foltia_config2.php.template:
+graytable.css:
+　チューナー上限数を超える重複検出機能を予約一覧ページに追加。
+　
 
 07.4.4
 foltialib.pl:
