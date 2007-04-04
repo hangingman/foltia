@@ -152,7 +152,7 @@ my $stationid = $stationinfo[0] ;
 $stationid  ++;
 ##$DBQuery =  "insert into  foltia_station values ('$stationid'  ,'$item{ChName}','0','','','','','','')";
 #新規局追加時は非受信局をデフォルトに
-$DBQuery =  "insert into  foltia_station  (stationid , stationname ,stationrecch )  values ('$stationid'  ,'$item{ChName}','-1')";
+$DBQuery =  "insert into  foltia_station  (stationid , stationname ,stationrecch )  values ('$stationid'  ,'$item{ChName}','-10')";
 
 	 $sth = $dbh->prepare($DBQuery);
 	$sth->execute();

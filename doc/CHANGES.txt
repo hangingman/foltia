@@ -1,5 +1,9 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 
+07.4.4
+foltialib.pl:
+　新規追加の放送局をデフォルトで受信不可能にするべきだったのを、不具合修正。
+
 07.3.16
 m.php:新設
 viewepg.php:
