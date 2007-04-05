@@ -445,11 +445,13 @@ print "</div>";
 
 function warndiskfreearea(){
 
+global $demomode;
+
 if ($demomode){
 print "<!-- demo mode -->";
 }else{
 
-global $recfolderpath,$recfolderpath;
+global $recfolderpath,$hdfreearea ;
 
 	exec ( "df   $recfolderpath | grep $recfolderpath", $hdfreearea);
 	$freearea = preg_split ("/[\s,]+/", $hdfreearea[0]);
