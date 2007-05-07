@@ -1,0 +1,60 @@
+<?php
+/*
+ Anime recording system foltia
+ http://www.dcc-jpl.com/soft/foltia/
+
+
+目的
+blogツール、スターライトブレイカー用コンフィグ
+
+引数
+なし
+
+ガイド
+【まだドキュメントもない段階のソフトウェアです】
+
+・機能
+WordPressなどのXML-RPCで書き込めるブログツールにラクチンにアニメの感想を書き込みます。
+スタブレとも略されます。
+簡単な使い方の説明
+http://www.dcc-jpl.com/diary/2007/04/10/starlight-breaker/
+
+・インストール
+sb-config.php.templateを名前を変えてsb-config.phpとします。
+
+sb-config.php
+sb-edit.php
+sb-write.php
+の3つを親ディレクトリのphpディレクトリに移動します。
+
+PEARのライブラリServices_Bloggingインストールします。
+http://pear.php.net/package/Services_Blogging
+なぜかバージョン0.1.1では期待通り動作しなかったんで0.1.0を使っています。
+Services_Blogging日本語ガイド
+http://pear.php.net/manual/ja/package.webservices.services-blogging.php
+
+書き込む先のブログサーバAPIはMetaWeblog決め打ちとなっています。
+ブログツールがWordPressやMovable Typeならばそのまま使えます。
+別のAPIを使う場合はsb-write.phpの98-99行目あたりを書き換えてください。
+
+foltiaサーバからブログサーバへの画像の転送にscpを使っています。
+なんかもっといい方法があったら変更したいのですが現在はチト敷居が高いです。
+foltiaサーバからプログサーバへ適正なアカウントでscpできるように設定してあげてください。
+
+sb-config.phpの内容を適切な値に設定します。
+
+ DCC-JPL Japan/foltia project
+
+*/
+
+//スタブレコンフィグ
+$uploadserver = "www.example.com" ;//ブログを書き込むサーバ名を指定します 
+$uploaddir = "/home/anyuser/wp-content/uploads/StarlightBreaker" ;//画像をアップロードするディレクトリを指定します。末尾のスラッシュは不要です
+$blogurl =  "http://www.example.com/";//表示するブログのURLです。
+$wordpressimgdir = $blogurl . "/wp-content/uploads/StarlightBreaker";
+$scpuploaduseraccount = "useraccount";//scpに使うユーザー名です
+
+$blogwriteid = "Starlight Breaker" ;//WordPressなどのブログツールで書き込み権限を持っているIDです。
+
+
+?>

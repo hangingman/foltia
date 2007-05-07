@@ -109,8 +109,12 @@ $serveruri = getserverfqdn ();
 exec ("ls   $recfolderpath/$tid.localized/img/$path/", $tids);
 //$timecount = 1;
 foreach($tids as $filetid) {
-print "<IMG SRC='http://$serveruri$httpmediamappath/$tid.localized/img/$path/$filetid' WIDTH='160' HEIGHT='120'  ALT='$tid:$countno:$filetid'>\n";
 
+if (file_exists("./sb-edit.php") ) {
+print "<a href=\"./sb-edit.php?pid=$pid&f=$filetid\"><img src='http://$serveruri$httpmediamappath/$tid.localized/img/$path/$filetid' width='160' height='120' alt='$tid:$countno:$filetid'></a>\n";
+}else{
+print "<img src='http://$serveruri$httpmediamappath/$tid.localized/img/$path/$filetid' width='160' height='120' alt='$tid:$countno:$filetid'>\n";
+}
 }//foreach
 // タイトル一覧　ここまで
 }//if rowdata == 0
@@ -119,3 +123,4 @@ print "<IMG SRC='http://$serveruri$httpmediamappath/$tid.localized/img/$path/$fi
 
 </body>
 </html>
+ 
