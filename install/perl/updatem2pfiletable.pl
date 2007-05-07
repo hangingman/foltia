@@ -47,12 +47,11 @@ $query =  "DELETE  FROM  foltia_mp4files  ";
 	 $sth = $dbh->prepare($query);
 	$sth->execute();
 
-@mp4filelist = `find $recfolderpath | grep MP4`;
-# find /home/foltia/php/tv | grep MP4
+@mp4filelist = `find ${recfolderpath}/ | grep MP4`;#by foltia dev ticket #5 http://www.dcc-jpl.com/foltia/ticket/5
+# find /home/foltia/php/tv/ | grep MP4
 
 #/home/foltia/php/tv/1057.localized/mp4/M4V-1057-14-20061016-2345.MP4
 #/home/foltia/php/tv/1057.localized/mp4/M4V-1057-15-20061023-2345.MP4
-
 
 foreach (@mp4filelist) {
 chomp();
@@ -66,7 +65,6 @@ $filetid =~ s/[^0-9]//g;
 $query =  "insert into  foltia_mp4files values ('$filetid','$fileline[2]')";
 	 $sth = $dbh->prepare($query);
 	$sth->execute();
-
 
 #print "$filetid;$fileline[2];$query\n"
 # http://www.atmarkit.co.jp/fnetwork/rensai/sql03/sql1.html
