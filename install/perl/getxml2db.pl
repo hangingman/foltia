@@ -52,6 +52,8 @@ if ($ARGV[0]  eq "long"){
 
 	 $dbh = DBI->connect($data_source,$DBUser,$DBPass) ||die $DBI::error;;
 
+$dbh->{AutoCommit} = 0;
+
 my ($content) = get("$uri");
 if ($content eq ""){
 &writelog("getxml2db   no responce from $uri, exit:");
@@ -126,8 +128,9 @@ $DBQuery =  "SELECT count(*) FROM foltia_program WHERE tid = '$item{TID}'";
 #200412012359
 $nomalstarttime = substr($sttime,8,4);
 $DBQuery =  "insert into  foltia_program values ($item{TID},$programtitle,'','$nomalstarttime','$length','','','3','1','')";
- $sth = $dbh->prepare($DBQuery);
-$sth->execute();
+# $sth = $dbh->prepare($DBQuery);
+# $sth->execute();
+$oserr = $dbh->do($DBQuery);
 &writelog("getxml2db  ADD TV Progtam:$item{TID}:$programtitle");
 
 
@@ -142,8 +145,9 @@ $DBQuery =  "SELECT title FROM foltia_program WHERE tid = '$item{TID}'";
 #print "$titlearray[0] / $programtitle\n";
  if ($titlearray[0] ne "$programtitlename" ){
  	$DBQuery =  "UPDATE  foltia_program  SET 	title = $programtitle where  tid = '$item{TID}' ";
-	  $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
+#	  $sth = $dbh->prepare($DBQuery);
+#	$sth->execute();
+	$oserr = $dbh->do($DBQuery);
 	&writelog("getxml2db  UPDATE TV Progtam:$item{TID}:$programtitle");
  }#end if update
 }# end if TID
@@ -183,9 +187,10 @@ if ($item{Count} == ""){
 	lengthmin = '$length' 
 	WHERE tid = '$item{TID}' AND pid =  '$item{PID}' ";
 }
-		 $sth = $dbh->prepare($DBQuery);
-		$sth->execute();
-	#	@subtitledata= $sth->fetchrow_array;
+#		 $sth = $dbh->prepare($DBQuery);
+#		$sth->execute();
+	$oserr = $dbh->do($DBQuery);
+
  }else{
 	#なければ追加
 	
@@ -196,9 +201,10 @@ if ($item{Count} == ""){
 	}else{
 	$DBQuery = "insert into foltia_subtitle values ( '$item{PID}','$item{TID}','$stationid','$item{Count}',$programSubTitle,'$recstartdate','$recenddate','$offsetmin' ,'$length')";
 	}
-		 $sth = $dbh->prepare($DBQuery);
-		$sth->execute();
-	# @subtitledata= $sth->fetchrow_array;
+#		 $sth = $dbh->prepare($DBQuery);
+#		$sth->execute();
+	$oserr = $dbh->do($DBQuery);
+
 }
 
 
@@ -210,6 +216,7 @@ if ($item{Count} == ""){
 }#if
 }#foreach
 
+$oserr = $dbh->commit;
 
 ##	$dbh->disconnect();
 
