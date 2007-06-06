@@ -1,5 +1,9 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 
+07.6.6
+updatem2pfiletable.pl:
+　AutoCommitを使用せずに高速化をした。
+
 07.5.7
 updatem2pfiletable.pl:
 　バグ修正:チケット #5 録画ライブラリが表示されない http://www.dcc-jpl.com/foltia/ticket/5

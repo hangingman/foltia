@@ -119,8 +119,7 @@ if (getform(preview) == 1){
 // htmlspecialchars(stripslashes( )) 
 $subject = getform(subject); 
 $maintext = getform(textarea); 
-//$replaced = preg_replace ('/\n/', '$1<br />',$maintext ) ;
-$maintext = mbereg_replace("\n","<br />\n", $maintext);
+//$maintext = mbereg_replace("\n","<br />\n", $maintext);
 $rate = getform(rank4);
 
 switch ($rate) {
@@ -150,7 +149,7 @@ switch ($rate) {
 }
 $subject = $ratechara . $subject;
 
-print "". htmlspecialchars(stripslashes( $subject)) ."<br />\n";
+print "". htmlspecialchars(stripslashes( $subject)) ."\n";
 print "". stripslashes( $maintext) ."<br />\n";
 print "<br />\n";
 print "À‹ ∏(source view):<br />". htmlspecialchars(stripslashes( $maintext)) ."<hr><br /><br /><br />\n";
