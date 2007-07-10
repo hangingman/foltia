@@ -28,6 +28,9 @@ list:
 <?php
 include("./foltialib.php");
 
+// Syabas 判定
+$useragent = $_SERVER['HTTP_USER_AGENT'];
+
 //ディスク空き容量によって背景色表示変更
 warndiskfreearea();
 
@@ -195,8 +198,13 @@ $pid  = htmlspecialchars($rowdata[5]);
 //--
 print "
 <tr>
-<td><INPUT TYPE='checkbox' NAME='delete[]' VALUE='$fName'><br></td>
-<td><A HREF=\"$httpmediamappath/$fName\">$fName</A><br></td>";
+<td><INPUT TYPE='checkbox' NAME='delete[]' VALUE='$fName'><br></td>";
+if (ereg("syabas",$useragent)){
+print "<td><A HREF=\"./view_syabas.php?pid=$pid\" vod=playlist>$fName</td>";
+}
+else{
+print "<td><A HREF=\"$httpmediamappath/$fName\">$fName</A><br></td>";
+}
 if ($tid > 0){
 print"<td><a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a></td>
 <td>$count<br></td>
