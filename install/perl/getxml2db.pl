@@ -52,7 +52,7 @@ if ($ARGV[0]  eq "long"){
 
 	 $dbh = DBI->connect($data_source,$DBUser,$DBPass) ||die $DBI::error;;
 
-$dbh->{AutoCommit} = 0;
+#$dbh->{AutoCommit} = 0;
 
 my ($content) = get("$uri");
 if ($content eq ""){
@@ -88,33 +88,31 @@ s/\=}=/}=/gio;
 #$item{ProgComment}='';
 eval("$_");
 Jcode::convert(\$item{Title},'euc');
+
 $programtitlename = $item{Title};
-$programtitle = $dbh->quote($item{Title});
-#print "$item{Title}\n";
-#print "$item{TID}\n";
+$programtitlename =~ s/\&lt\;/</gi;
+$programtitlename =~ s/\&gt\;/>/gi;
+$programtitlename =~ s/\&amp\;/\&/gi;
+$programtitle = $dbh->quote($programtitlename);
+
 Jcode::convert(\$item{ChName},'euc');
-#print "$item{ChName}\n";
 Jcode::convert(\$item{SubTitle},'euc');
-$programSubTitle = $dbh->quote($item{SubTitle});
+
+#$programSubTitle = $dbh->quote($item{SubTitle});
+$programSubTitle = $item{SubTitle};
 $programSubTitle =~ s/\&lt\;/</gi;
 $programSubTitle =~ s/\&gt\;/>/gi;
+$programSubTitle =~ s/\&amp\;/\&/gi;
+$programSubTitle = $dbh->quote($programSubTitle);
 
-#print "$item{SubTitle}\n";
-#print "$item{Count}\n";
 $offsetmin = $item{StOffset}/60;
-#print "Offset:$offsetmin  (min)\n";
-#print "$item{EdTime}/$item{StTime}\n";
 $edtime = &syobocaldate2foltiadate($item{EdTime});
 $sttime = &syobocaldate2foltiadate($item{StTime});
-#print "$sttime-$edtime\n";
 $length = &calclength($sttime,$edtime);
 $recstartdate = &calcoffsetdate($sttime ,$offsetmin );
 $recenddate = &calcoffsetdate($edtime ,$offsetmin );
-#print "$recstartdate-$recenddate\n";
-#print "Length:$length(min)\n";
 
 $stationid = &getstationid($item{ChName});
-#print "StationID:$stationid \n";
 #サブタイトル追加-------------------------------------------------
 #番組があるか確認
 $DBQuery =  "SELECT count(*) FROM foltia_program WHERE tid = '$item{TID}'";
@@ -216,8 +214,7 @@ if ($item{Count} == ""){
 }#if
 }#foreach
 
-$oserr = $dbh->commit;
-
+#$oserr = $dbh->commit;
 ##	$dbh->disconnect();
 
 

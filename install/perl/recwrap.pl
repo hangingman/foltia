@@ -264,6 +264,26 @@ my $pspfilname = $pspfilnamehd.$pspfilnameft  ;
 }# endif MP4ファイル名が新styleなら
 #2006/12/03_10:30:24 recwrap TRCNSTART vfr4psp.sh /home/foltia/php/tv/591-87-20061203-1000.m2p -591-87-20061203-1000 /home/foltia/php/tv/591.localized/mp4/ 3
 
+
+# トラコンキューイング #2007/7/10 
+my $trcnprocesses = "";
+my $cpucores = `ls /proc/acpi/processor | wc -l`;
+$cpucores =~ s/[^0-9]//gi;
+unless ($cpucores >= 1 ){
+	$cpucores = 1;
+}
+do {
+	$trcnprocesses = `ps ax | grep ffmpeg | grep -v grep |  wc -l `;
+	$trcnprocesses =~ s/[^0-9]//gi;
+	# 既にトラコンプロセスが走っているなら適当に待機
+	if ($trcnprocesses  >= $cpucores){
+			&writelog("recwrap TRCN WAITING :$trcnprocesses / $cpucores :$outputfilename ");
+		sleep 53;
+		sleep $recch;
+	}
+} until ($trcnprocesses  < $cpucores);
+
+
 if (($trconqty eq "")||($trconqty == 0 )){
 	&writelog("recwrap TRCNSTART vfr4psp.sh $recfolderpath/$outputfilename $pspfilname $pspdirname $psptrcn[1]");
 	system("$toolpath/perl/transcode/vfr4psp.sh $recfolderpath/$outputfilename $pspfilname $pspdirname $psptrcn[1]");

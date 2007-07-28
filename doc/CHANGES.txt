@@ -1,5 +1,14 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 
+07.7.29
+recwrap.pl:
+　多重トラコン抑制。
+　激しいCPU負荷のかかるH.264トランスコード処理はCPUコア数を上限としたプロセス数までしか同時起動しないように。わりと大ざっぱな実装。
+
+getxml2db.pl:
+　アニメ番組名とサブタイトル&amp;の実態参照を解くように変更。
+　データ追加で不具合がでてたのでAutoCommit使うように戻した。
+
 07.7.10
 showplaylist.php:
 view_syabas.php:
