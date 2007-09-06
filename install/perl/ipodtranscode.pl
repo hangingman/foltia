@@ -102,7 +102,18 @@ $mp4file = "${mp4outdir}MAQ${mp4filenamestring}.MP4";
 
 $encodeoption = "-y -i $inputmpeg2  -target ipod -profile 51 -level 30 $cropopt  -acodec aac -ab 96 -vcodec h264  -maxrate 700 -minrate 0 -deinterlace -b 300 -ar 32000 -mbd 2 -coder 1 -cmp 2 -subcmp 2 -s 320x240 -r 30000/1001  -flags loop -trellis 2 -partitions parti4x4+parti8x8+partp4x4+partp8x8+partb8x8 $movietitle ${mp4outdir}MAQ${mp4filenamestring}.MP4";
 $mp4file = "${mp4outdir}MAQ${mp4filenamestring}.MP4";
+}elsif($trconqty == 3){ #sample:src 106.6sec encode 334.8sec x3.14 kbps @Celeron2.6GHz 904kbps
+
+$encodeoption = "-y -i $inputmpeg2  -target ipod -profile 51 -level 30 $cropopt -s 480x320 -b 350 -r 24 -acodec aac -ar 32000 -ac 2 $movietitle ${mp4outdir}MAQ${mp4filenamestring}.MP4";
+$mp4file = "${mp4outdir}MAQ${mp4filenamestring}.MP4";
+
+}elsif($trconqty == 4){ #sample:src 106.6sec encode 684.5sec x6.42 kbps @Celeron2.6GHz 667kbps
+
+$encodeoption = "-y -i $inputmpeg2  -target ipod -profile 51 -level 30 $cropopt  -acodec aac -ab 96 -vcodec h264  -maxrate 700 -minrate 0 -deinterlace -b 350 -ar 32000 -mbd 2 -coder 1 -cmp 2 -subcmp 2 -s 480x320 -r 30000/1001  -flags loop -trellis 2 -partitions parti4x4+parti8x8+partp4x4+partp8x8+partb8x8 $movietitle ${mp4outdir}MAQ${mp4filenamestring}.MP4";
+$mp4file = "${mp4outdir}MAQ${mp4filenamestring}.MP4";
 }
+
+
 
 $encodeoptionlog = $encodeoption;
 Jcode::convert(\$encodeoptionlog,'euc');
