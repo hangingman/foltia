@@ -65,16 +65,16 @@ offset 0 limit  $max
 $header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> 
 <rss xmlns:itunes=\"http://www.itunes.com/DTDs/Podcast-1.0.dtd\" version=\"2.0\"> 
     <channel> 
-        <title>Folcast ($rsstitle)</title> 
+        <title>$rsstitle:Folcast</title> 
         <itunes:author>DCC-JPL Japan/foltia project</itunes:author> 
         <link>http://www.dcc-jpl.com/soft/foltia/</link> 
         <description>フォルティアが未読処理をお助けしちゃいます</description> 
-        <itunes:subtitle>foltia video podcast :Folcast ($rsstitle)</itunes:subtitle> 
+        <itunes:subtitle>foltia video podcast :$rsstitle:Folcast</itunes:subtitle> 
         <itunes:summary>フォルティアが未読処理をお助けしちゃいます</itunes:summary> 
 		<language>ja</language>
         <copyright>foltia</copyright> 
         <itunes:owner> 
-            <itunes:name>Folcast ($rsstitle)</itunes:name> 
+            <itunes:name>$rsstitle:Folcast</itunes:name> 
             <itunes:email>foltia@dcc-jpl.com</itunes:email> 
         </itunes:owner>          
         <category>Technology</category> 
