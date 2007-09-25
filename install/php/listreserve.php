@@ -10,6 +10,8 @@ listreserve.php
 
 引数
 r:録画デバイス数
+startdate:特定日付からの予約状況。YYYYmmddHHii形式で。表示数に限定かけてないのでレコード数が大量になると重くなるかも知れません。
+
 
  DCC-JPL Japan/foltia project
 
@@ -30,8 +32,11 @@ r:録画デバイス数
 
 $con = m_connect();
 
-$now = date("YmdHi");   
-
+$now = getgetnumform(startdate);
+if ($now > 200501010000){
+}else{
+	$now = date("YmdHi");   
+}
 	$query = "
 SELECT
 foltia_program .tid,
@@ -145,8 +150,8 @@ foltia_subtitle.startoffset ,
 foltia_subtitle.pid  
 FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
 WHERE foltia_tvrecord.tid = foltia_program.tid AND foltia_tvrecord.stationid = foltia_station .stationid AND foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid
-AND foltia_subtitle.enddatetime >= '$rowdata[5]' 
-AND foltia_subtitle.startdatetime <= '$endtime'  
+AND foltia_subtitle.enddatetime > '$rowdata[5]' 
+AND foltia_subtitle.startdatetime < '$endtime'  
 UNION
 SELECT
 foltia_program .tid,
@@ -164,8 +169,8 @@ LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
 LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
 LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
 WHERE foltia_tvrecord.stationid = 0 AND
-foltia_subtitle.enddatetime >= '$rowdata[5]'  
-AND foltia_subtitle.startdatetime <= '$endtime'  
+foltia_subtitle.enddatetime > '$rowdata[5]'  
+AND foltia_subtitle.startdatetime < '$endtime'  
 	";
 	$rclass = "";
 	$overlap = m_query($con, $query, "DBクエリに失敗しました");
