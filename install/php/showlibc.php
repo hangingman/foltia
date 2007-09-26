@@ -29,8 +29,8 @@ if ($tid == "") {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
 <meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" type="text/css" href="graytable.css"> 
-<script src="http://images.apple.com/main/js/ac_quicktime.js" language="JavaScript" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="graytable.css">
+<script src="http://images.apple.com/main/js/ac_quicktime.js" language="JavaScript" type="text/javascript"></script> 
 <?php
 print "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\"./folcast.php?tid=$tid\" />
 ";
@@ -167,7 +167,8 @@ $caplink = "";
 
 if (($sbpluginexist == 1) && (pg_num_rows ($rs ) > 0)){
  $capimgpath = htmlspecialchars(preg_replace("/.m2p/", "", $rowdata[5]));
-	if (file_exists("$recfolderpath/$tid.localized/img/$capimgpath") ){
+ 	
+	if (($capimgpath != "") && (file_exists("$recfolderpath/$tid.localized/img/$capimgpath") )){
 	$caplink = " / <a href = \"./selectcaptureimage.php?pid=$rowdata[6]\">キャプ</a>";
 	}else{
 	$caplink = " / キャプなし";
@@ -176,8 +177,15 @@ if (($sbpluginexist == 1) && (pg_num_rows ($rs ) > 0)){
 $caplink = "";
 }//end if sb
 
+if (file_exists("$recfolderpath/$tid.localized/mp4/$thumbnail") ){
+	$imgsrcuri = "$httpmediamappath/$tid.localized/mp4/$thumbnail\" alt=\"$title $count $subtitle"; 
+}else{
+	$imgsrcuri = "./img/no-thumbnail-img.png\" alt=\"NO IMAGE";
+}
+
+
 print "  <tr>
-    <td rowspan=\"4\" width=\"170\"><a href = \"$httpmediamappath/$tid.localized/mp4/$fName\" target=\"_blank\"><img src = \"$httpmediamappath/$tid.localized/mp4/$thumbnail\" width = \"160\" height = \"120\"></A></td>
+    <td rowspan=\"4\" width=\"170\"><a href = \"$httpmediamappath/$tid.localized/mp4/$fName\" target=\"_blank\"><img src = \"$imgsrcuri\" width=\"160\" height=\"120\"></a></td>
     <td>$count</td>
   </tr>
   <tr>
@@ -203,7 +211,6 @@ print "録画ファイルがありません<br>\n";
 ?>
 	</tbody>
 </table>
-
 
 </body>
 </html>
