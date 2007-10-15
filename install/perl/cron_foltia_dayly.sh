@@ -11,7 +11,7 @@
 
 # XMLTVをつかってEPG番組表インポート
 #
-/usr/bin/perl  /usr/bin/tv_grab_jp --config-file   | /home/foltia/perl/xmltv2foltia.pl
+/usr/bin/perl  /usr/bin/tv_grab_jp | /home/foltia/perl/xmltv2foltia.pl
 # 2つの局設定使うような場合
 #/usr/bin/perl  /usr/bin/tv_grab_jp --config-file ~/.xmltv/tv_grab_jp.conf.jcom  | /home/foltia/perl/xmltv2foltia.pl
 #/usr/bin/perl  /usr/bin/tv_grab_jp --config-file ~/.xmltv/tv_grab_jp.conf.tvk  | /home/foltia/perl/xmltv2foltia.pl
