@@ -1,5 +1,9 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 
+07.10.25
+foltialib.php:
+　空き容量ゼロのときに背景を黒にする機能を追加。
+
 07.10.15
 cron_foltia_dayly.sh:
 　シンタックスエラー修正。

@@ -486,10 +486,14 @@ print "<style type=\"text/css\"><!--
 -->
 </style>
 ";
-}else{
-//print "<!-- no much : $freebytes -->";
-
-
+}else{ //空き容量 0バイト
+print "<style type=\"text/css\"><!--
+	body {
+	background-color:#000000;
+ 	}
+-->
+</style>
+";
 }//endif freebytess
 
 }//endif demomode
