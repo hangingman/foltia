@@ -22,12 +22,12 @@ MPEG4録画ライブラリを表示します。
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="stylesheet" type="text/css" href="graytable.css"> 
+<link rel="alternate" type="application/rss+xml" title="RSS" href="./folcast.php" />
 <title>foltia:MP4 Lib</title>
 </head>
 
 <?php
-
-  include("./foltialib.php");
+include("./foltialib.php");
 
 $con = m_connect();
 $now = date("YmdHi");   

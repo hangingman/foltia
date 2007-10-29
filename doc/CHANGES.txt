@@ -1,5 +1,9 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 
+07.10.29
+showlib.php:
+　folcast RSSをヘッダに追加。
+
 07.10.25
 foltialib.php:
 　空き容量ゼロのときに背景を黒にする機能を追加。
