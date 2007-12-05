@@ -1,5 +1,12 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 
+07.12.5
+updatem2pfiletable.pl:
+　MP4ファイルリストを作成するときの処理をより効率化。
+mktable.txt:
+　しょぼかる放送局名変更にあわせて初期テーブル修正。
+　 [しょぼかる] チャンネル名の変更について(2007-11-13更新)  http://syobocal.g.hatena.ne.jp/gae/20071015
+
 07.10.29
 showlib.php:
 　folcast RSSをヘッダに追加。

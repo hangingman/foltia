@@ -42,12 +42,13 @@ $oserr = $dbh->do($query);
 $oserr = $dbh->commit;
 
 # foltia_mp4files
+@mp4filelist = `find ${recfolderpath}/ | grep MP4`;#by foltia dev ticket #5 http://www.dcc-jpl.com/foltia/ticket/5
+
 #　ひとまず消す
 $query =  "DELETE  FROM  foltia_mp4files  ";
 	 $sth = $dbh->prepare($query);
 	$sth->execute();
 
-@mp4filelist = `find ${recfolderpath}/ | grep MP4`;#by foltia dev ticket #5 http://www.dcc-jpl.com/foltia/ticket/5
 
 foreach (@mp4filelist) {
 chomp();

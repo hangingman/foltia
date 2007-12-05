@@ -44,7 +44,7 @@ GRANT UPDATE,SELECT,INSERT on "foltia_subtitle" to "foltia";
 
 drop table foltia_tvrecord;
 create table foltia_tvrecord (
-tid int8,
+tid int8   PRIMARY KEY,
 stationid int8,
 bitrate int8
 );
@@ -56,7 +56,7 @@ GRANT ALL on "foltia_tvrecord" to "foltia";
 
 drop table foltia_epg;
 create table foltia_epg (
-epgid int8,
+epgid int8   PRIMARY KEY,
 startdatetime int8,
 enddatetime int8,
 lengthmin int8 ,
@@ -89,7 +89,7 @@ GRANT ALL on "foltia_mp4files" to "foltia";
 
 drop table foltia_station;
 CREATE TABLE foltia_station (
-    stationid bigint NOT NULL,
+    stationid bigint  PRIMARY KEY,
     stationname text,
     stationrecch bigint,
     stationcallsign text,
@@ -175,7 +175,7 @@ INSERT INTO foltia_station VALUES (407, 'animate.tv', -10, '', '', NULL, NULL, N
 INSERT INTO foltia_station VALUES (410, 'テレビ愛知', -10, '', '', NULL, NULL, NULL, NULL);
 INSERT INTO foltia_station VALUES (411, 'インターネット', -10, '', '', NULL, NULL, NULL, NULL);
 INSERT INTO foltia_station VALUES (381, 'BSフジ', 0, '', '', 'b', 'X181', NULL, '3008.ontvjapan.com');
-INSERT INTO foltia_station VALUES (413, 'よみうりテレビ', -10, '', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (413, 'ytv', -10, '', '', NULL, NULL, NULL, NULL);
 INSERT INTO foltia_station VALUES (414, 'LFX488', -10, '', '', NULL, NULL, NULL, NULL);
 INSERT INTO foltia_station VALUES (415, 'LFX', -10, '', '', NULL, NULL, NULL, NULL);
 INSERT INTO foltia_station VALUES (416, 'LFX BB', -10, '', '', NULL, NULL, NULL, NULL);
@@ -185,9 +185,9 @@ INSERT INTO foltia_station VALUES (418, '放送大学', 0, 'UAIR', '', NULL, NULL, N
 INSERT INTO foltia_station VALUES (420, 'WOWOW2', 0, NULL, NULL, 'b', 'X192', NULL, '3010.ontvjapan.com');
 INSERT INTO foltia_station VALUES (417, 'とちぎテレビ', -10, 'TTV', '', NULL, NULL, NULL, NULL);
 INSERT INTO foltia_station VALUES (412, '群馬テレビ', -10, 'GTV', '', NULL, NULL, NULL, NULL);
-INSERT INTO foltia_station VALUES (46, '千葉テレビ', -10, 'CTC', '', NULL, NULL, NULL, NULL);
-INSERT INTO foltia_station VALUES (38, 'テレビ埼玉', -10, 'TVS', '', NULL, NULL, NULL, NULL);
-INSERT INTO foltia_station VALUES (14, '東京MXテレビ', 0, 'MX', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (46, 'チバテレビ', -10, 'CTC', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (38, 'テレ玉', -10, 'TVS', '', NULL, NULL, NULL, NULL);
+INSERT INTO foltia_station VALUES (14, 'TOKYO MX', 0, 'MX', '', NULL, NULL, NULL, NULL);
 INSERT INTO foltia_station VALUES (421, 'WOWOW3', 0, NULL, NULL, 'b', 'X193', NULL, '3011.ontvjapan.com');
 INSERT INTO foltia_station VALUES (401, 'チャンネルNECO', 0, '', '', 'c', 'X242', NULL, '1008.ontvjapan.com');
 INSERT INTO foltia_station VALUES (395, 'カミングスーンTV', 0, '', '', 'c', 'X245', NULL, '1012.ontvjapan.com');
@@ -210,5 +210,32 @@ INSERT INTO foltia_station VALUES (263, 'アニマックス', 0, '', '', 'c', 'X263', 
 ALTER TABLE ONLY foltia_station
     ADD CONSTRAINT foltia_station_pkey PRIMARY KEY (stationid);
 
+drop table foltia_envpolicy;
+CREATE TABLE foltia_envpolicy (
+memberid bigint  PRIMARY KEY,
+userclass bigint,
+name text,
+passwd1 text ,
+adddate timestamp,
+remotehost text
+);
+REVOKE ALL on "foltia_envpolicy" from PUBLIC;
+GRANT ALL on "foltia_envpolicy" to "foltia";
+create  index foltia_envpolicy_index on foltia_envpolicy (name);
+insert into foltia_envpolicy  values ( '0','0','foltia','foltiapasswd',now(),'');
+
+
+drop table  foltia_weeklytimer ;
+create table foltia_weeklytimer (
+timerid int8  PRIMARY KEY,
+recpattern int8, 
+stationid int8,
+startdatetime int8,
+enddatetime int8,
+subtitle text,
+addeddate timestamp
+);
+REVOKE ALL on "foltia_weeklytimer" from PUBLIC;
+GRANT UPDATE,SELECT,INSERT on "foltia_weeklytimer" to "foltia";
 
 
