@@ -20,23 +20,27 @@ http://www.geocities.co.jp/SiliconValley-Cupertino/2647/tec.html
 */
 
 include("./foltialib.php");
+$con = m_connect();
+
+if ($useenvironmentpolicy == 1){
+	if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	    header("WWW-Authenticate: Basic realm=\"foltia\"");
+	    header("HTTP/1.0 401 Unauthorized");
+		redirectlogin();
+	    exit;
+	} else {
+	login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
+	}
+}//end if login
+
 
 $pid = getgetform(pid);
 
-if ($pid == "") {
-		exit;
-}
 
-?>
-
-
-<?php
 if ($pid == "") {
 	exit;
 }
 
-
-$con = m_connect();
 $query = "
 SELECT 
 foltia_program.tid,

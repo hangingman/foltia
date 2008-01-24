@@ -31,7 +31,8 @@ enddatetime int8,
 startoffset int8,
 lengthmin int8,
 m2pfilename text ,
-PSPfilename text 
+PSPfilename text ,
+epgaddedby int8
 );
 create unique index foltia_subtitle_pid_index on foltia_subtitle (pid);
 create  index foltia_subtitle_tid_index on foltia_subtitle (tid);
@@ -223,19 +224,5 @@ REVOKE ALL on "foltia_envpolicy" from PUBLIC;
 GRANT ALL on "foltia_envpolicy" to "foltia";
 create  index foltia_envpolicy_index on foltia_envpolicy (name);
 insert into foltia_envpolicy  values ( '0','0','foltia','foltiapasswd',now(),'');
-
-
-drop table  foltia_weeklytimer ;
-create table foltia_weeklytimer (
-timerid int8  PRIMARY KEY,
-recpattern int8, 
-stationid int8,
-startdatetime int8,
-enddatetime int8,
-subtitle text,
-addeddate timestamp
-);
-REVOKE ALL on "foltia_weeklytimer" from PUBLIC;
-GRANT UPDATE,SELECT,INSERT on "foltia_weeklytimer" to "foltia";
 
 

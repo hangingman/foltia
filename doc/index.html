@@ -1,423 +1,1 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
-<link rel="stylesheet" href="./img/styles.css" type="text/css">
-<title>foltia manual</title>
-</head>
-
-<body>
-
-<h1>アニメ録画システム　foltia</h1>
-<p>宗子 (sorshi@dcc-jpl.com) / DCC-JPL Japan / foltia Project.<br />
-  <a href="http://www.dcc-jpl.com/soft/foltia/">http://www.dcc-jpl.com/soft/foltia/<br />
-</a>
-文書最終更新日:$LastChangedDate$<br />
-文書リビジョン:$Rev$<br />
-このドキュメントの最新版はこちらです:<a href="http://svn.dcc-jpl.com/foltia/trunk/doc/index.html">http://svn.dcc-jpl.com/foltia/trunk/doc/index.html</a></p>
-<h2>・目次</h2>
-<ul>
-<li><a href = "#about">foltiaとは何か？</a>
-<li><a href = "#functions">主要機能</a>
-<li><a href = "#requirementhardware">必要ハードウェア</a>
-<li><a href = "#foltiamechanism">foltiaのしくみ</a>
-<li><a href = "#install">インストール</a>
-<li><a href = "#operation">操作概要</a>
-<li><a href = "#colophon">おわりに</a>
-</ul>
-<h2 id="about">・foltiaとは何か？</h2>
-<p>　foltiaは主にアニメを効率良く失敗なく録画するために開発された、Linux上で動く録画システムです。<br />
-  　
-  番組名と放映局を指定しておけばあとはなにもせずに毎回録画されます。<a href="http://cal.syoboi.jp/">しょぼいカレンダー</a>というアニメ番組表サイトと強く連係することで、野球中継で時間がずれても毎回期待通り録画されます。<br />
-  　
-  外部オプションを取り付けることで外付けチューナのコントロールも実現します。<br />
-  　録画した番組は自動的にMPEG4に変換され、iPodに自動転送することが可能です。PSPに転送して視聴することも可能です。<br />
-　全ての主要操作はWebベースでコントロールされます。</p>
-<p><br />
-  <img src="img/syoboi.png" alt="しょぼいカレンダー" width="800" height="600" /></p>
-<hr>
-<h2 id="functions">・主要機能</h2>
-<ul>
-  <li>番組名によるアニメ自動録画機能
-    <ul>
-      <li>最大6番組までの同時録画対応</li>
-    </ul>
-  </li>
-  <li>EPG番組表による番組選択録画機能</li>
-  <li>開始時刻、放送局など個別設定による手動録画機能</li>
-  <li>USBリモコンユニットを使った外部チューナー制御機能</li>
-  <li>録画終了と同時にMPEG2からH.264/AVCへの自動変換機能(iPod Video、PSP、Webブラウザなどで視聴可能形式) </li>
-  <li>video podcastのしくみを使ったiPod自動シンク機能
-    <ul>
-      <li> 録画番組は自動的にiPodに転送されて視聴可能状態となる。<br />
-                <a href="img/foltia_vodcast.jpg"><img src="img/foltia_vodcast_s.jpg" width="320" height="240" border="2" /></a><br />
-      </li>
-    </ul>
-  <li>現在開発中のツール「Starlight Breaker」向け番組キャプチャ画像自動生成機能</li>
-  </li>
-</ul>
-<hr>
-<h2 id="requirementhardware">・必要ハードウェア</h2>
-<ul>
-  <li>Linuxの動くAT互換機:手もと開発・録画機はCeleron 2.6GHz,1GB RAMのスペックで30分番組のH.264/AVC(中画質)変換が33分程度で完了しています。</li>
-  <li>ivtvドライバで動作するビデオキャプチャカード:foltiaの機能を引きだすためには複数のエンコーダを搭載するのがおすすめです。手もとの環境ではIOデータ <a href="http://www.iodata.jp/prod/multimedia/tv/2003/gv-mvprx/">GV-MVP/RX</a>を2枚、<a href="http://www.iodata.jp/prod/multimedia/tv/2004/gv-mvprx2w/index.htm">GV-MVP/RX2W</a>を1枚で計4チャンネル同時録画環境にしています。画質の点からは複数エンコーダが一枚のカードに載ったRX2Wよりも1エンコーダのGV-MVP/RX2の方が多少有利なようです。</li>
- <div class="sidebar">
- IOデータ GV-MVP/RX,RX2は生産完了になり、後継として<a href = "http://www.iodata.jp/prod/multimedia/tv/2005/gv-mvprx3/index.htm">GV-MVP/RX3</a>が出ています。しかしGV-MVP/RX3はMPEG2エンコーダが変更になったため今のところ対応ドライバがありません。<br />
- また同じように生産完了になったWチューナーモデルの<a href = "http://www.iodata.jp/prod/multimedia/tv/2004/gv-mvprx2w/index.htm?type=W">GV-MVP/RX2W</a>の後継である<a href = "http://www.iodata.jp/prod/multimedia/tv/2005/gv-mvpgx2w/index.htm">GV-MVP/GX2W</a>もMPEG2エンコーダが変更になったため対応ドライバがありません。<br />
- ドライバ最新開発状況は「<a href="http://linux.paken.org/">ぱ研</a>　<a href = "http://linux.paken.org/index.php?CX23416GYC-STVLP%A4%CE%B2%F2%C0%CF">CX23416GYC-STVLPの解析</a>」などが参考になります。<br />
- (2007/1/4現在)<br />
- </div>
-  <li>Home Electronics社製USB 赤外線トランスミッタ　<a href="http://www.home-electro.com/tira2.php">Tira-2.1</a>(オプション):外部チューナコントロール機能を使う場合必要です。<br />
-  　</li>
-</ul>
-<hr>
-<h2 id="foltiamechanism">・foltiaのしくみ</h2>
-<p><br />
-  　foltiaは「<a href="http://cal.syoboi.jp/">しょぼいカレンダー</a>」というユーザ参加型アニメ番組表から取得した番組表をもとに、録画予約されている番組の放送予定をatキューに入れることで動作しています。<br />
-  <br />
-  　以下に詳しい流れをみていきます。<br />
-  　foltiaのセットアップが終わった状態で、foltiaのデータベースはしょぼいカレンダー由来の番組情報とXMLTV由来の番組情報をそれぞれ持っています。通常は番組IDと放送局を指定した自動予約を利用します。<br />
-  番組の録画を予約するために、放映予定ページから番組IDである[TID]を選択します。<br />
-  <img src="img/screen01.png" width="800" height="600" /><br />
-  <br />
-  放映テレビ局とビットレートを選択する画面に移動するので内容を確認して予約ボタンを押します。番組の録画予約は番組ごとに一度するだけで全話自動で録画することが可能です。<br />
-  <br />
-  <img src="img/screen02.png" width="800" height="600" /><br />
-  <br />
-  　予約ボタンを押すとデータベースの録画予約テーブル[foltia_tvrecord]に番組IDと放送局、録画ビットレートが追加されます。その後、キュー入れプログラム[addatq.pl]を呼びます。addatq.plは番組IDと局IDを受け取り48時間以内の放映予定を探し、それぞれの放映ごとに録画準備のためのプログラム[folprep.pl]を放送予定時刻の5分前にキュー入れします。<br />
-  　予約番組の放送予定時刻の5分前になると、準備プログラム[folprep.pl]が実行されます。これは、最新の番組表データを再取得し、放映時刻が変更されてないか確認後、放送開始時刻の1分前に録画プログラム[recwrap.pl]が走るようにキューを入れます。放送時刻が15分以上先に延びていたら、再度放送予定時刻の5分前に準備プログラム[folprep.pl]をキュー入れします。<br />
-  　放送予定時刻の1分前になると録画の一連の流れを管理する録画プログラム[recwrap.pl]が起動します。このプログラムは、録画チャンネルが外部入力であれば外部チューナのチャンネルを適切なものに切り替えるためにリモコン送信プログラム[transfer.pl]を呼びだし、次に実際にビデオでバイスからファイルへの記録を行うキャプチャプログラム[tvrecording.pl]を呼び出します。<br />
-  　キャプチャプログラム[tvrecording.pl]はivtvドライバに付属のrecord-v4l2.plをベースに拡張したもので、搭載されている録画デバイスの空き状況を調べて、空いてる適切なデバイスを利用します。foltiaは特に指定をしない場合、同時録画する場合、地上波録画をキャプチャデバイスの若い番号から順番に、外部入力を一番大きいデバイスから順番に使用していきます。例としてキャプチャカードが4枚入っている場合、地上波録画は/dev/video0から、外部入力録画は/dev/video3から使われていきます。空きデバイスがない場合は、一番若い番号を持つビデオデバイスをつかんでるプロセスを止め、そのデバイスを利用します。録画は前後に10秒程度の余分な録画を行おうとするため、同一のチャネルで連続している番組を指定した場合であっても可能であれば2チューナ使用する形となります。tvrecording.plの録画チャンネルの引数に0を指定した場合はS入力が、-1を指定した場合はコンポジット入力が録画されます。外部入力はデフォルトで一番番号の大きいデバイスを利用します。録画が終了するとデータベースの放送情報テーブル[foltia_subtitle]に録画したMPEG2ファイル名を記録して親プロセスに戻ります<br />
-  　録画プログラムが終了すると、親プロセスのrecwrap.plはMPEG4への変換(トラコン)の必要があるか確認して、必要な場合変換スクリプト[vfr4psp.sh]か[ipodtranscode.pl]が呼び出されます。変換フォーマットや品質は設定ファイルであらかじめ設定しておきます。MPEG4ファイルは、MPEG2ファイル保存ディレクトリの下に番組ごとに整理されます。具体的には[TID].localized/mp4/の形を取ります。番組個別ディレクトリはMac
-  OS Xのローカライズ機構に準拠しているため、例えば665.localizedディレクトリはMac OS XのFinderでマウントすると「魔法少女リリカルなのはA's」と表示されます。<br />
-  　MPEG4への変換が終わるとpsp用MPEG4オプティマイザ[mp4psp]でタイトル入れとヘッダ組み立てをして最適化したあと、mplayerとImageMagickを利用してサムネールを作成します。サムネールはPSPの仕様に準拠して120x160で拡張子が.THMのjpegファイルです。そしてデータベースの放送情報テーブル[foltia_subtitle]に変換ファイル名を書き込んで録画の一連の流れが終了します。<br />
-  図に示すとこうなります。<br />
-  <img src="img/blockdiagram.png" width="800" height="399" />　<br />
-</p>
-<p>　定期的な作業として、毎時間ごとに番組データ更新と録画キューの更新を行います。cronが一時間ごとに定時確認プログラム[schedulecheck.pl]を呼びだし、それが番組表の更新プログラム[getxml2db.pl]を呼びだしデータベースを更新したあと、予約されてる番組の数だけキュー入れプログラム[addatq.pl]を読み出します。</p>
-<p>　iPodへの自動シンク機能はiTunesの持つVideo Podcast機能を使うことで実現します。foltia Video Podcast-Folcastは、トラコンが終わった番組からXMLを組み立ててRSSを作ります。このRSSをiTunesに登録することでiPodへの自動シンク機能を実現します。</p>
-<p>　foltiaはデータベースに次のようなテーブルを作ります。</p>
-<ul><li>foltia_program:「魔法少女リリカルなのはA's」のように番組名の情報を格納するテーブルです。番組ごとにトラコンのオン/オフを切り替えることも出来ます。</li>
-  <li>foltia_subtitle:「第1話　はじまりは突然になの」のような個別番組の放映情報を持つテーブルです。</li>
-  <li>foltia_station:放送局の情報を持つテーブルです。受信環境によって設定が必要になります。</li>
-  <li>foltia_tvrecord:録画予約の情報を持つテーブルです。</li>
-  <li>foltia_epg:XMLTV由来のEPG番組表のデータを持つテーブルです。</li>
-  <li>foltia_m2pfiles:録画されたMPEG2ファイルの情報をキャッシュ的に持つテーブルです。</li>
-  <li>foltia_mp4files:変換されたMPEG4ファイルの情報をキャッシュ的に持つテーブルです。</li>
-</ul>
-<div class="sidebar">
-  <p>　現在はデータベースエンジンにPostgreSQLを採用していますが、将来的には扱いが容易なSQLiteへの切りかえも検討しています。<br />
-</p></div>
-<hr>
-<h2 id="install">・インストール</h2>
-<p>　foltiaの動作にはLinux,Apache,PHP,Perl,PostgreSQLとビデオキャプチャ用ivtvドライバなどが必要です。<br />
-  　インストールはおおまかにOS,Apache,ivtvドライバ、PostgreSQL、foltiaの順で進めて行くとよいでしょう。<br />
-  　phpPgAdminやSambaなども必要に応じて入れておくと便利かもしれません。<br />
-　foltiaのダウンロードは公式ページまたはSubversionで入手することが可能です。<br />
-　Subversionを使う場合は下記のコマンドで最新versionを入手できます。</p>
-<p class="command">$svn co http://svn.dcc-jpl.com/foltia/trunk  foltia</p>
-<p class="screen">またインストールについては「<a href="manual/index.html">foltiaインストールマニュアル</a>」も参考になります。</p>
-<h3>・配線</h3>
-<p>　あらかじめキャプチャカードを取り付け、に外部チューナを外部入力端子につないでおきます。</p>
-<h3>・OSインストール</h3>
-<p>　手もとの開発環境ではFedora Coreを使っています。一通りインストールを終えたらfoltiaを動作させるアカウント「foltia」を作ります。</p>
-<h3>・Apacheインストール</h3>
-<p>Apacheは2.2以降が2GBを越えるファイルの転送にも対応していて便利です。<br />
-  ポイントは、Apacheを動かすユーザをfoltiaにすることと、「.THM」のmime typeをimage/jpegにする設定を追加することです。</p>
-<h3>・ivtvドライバインストール</h3>
-<p>「<a href="http://linux.matchy.net/FedoraGV-MVPRX.html">FEDORA
-  CORE で GV-MVP/RX を使う</a>」のrpmパッケージを使用すると早いです。<br />
-  複数エンコーダを搭載している場合には/etc/modprobe.confに<br />
-  <span class="screen">options ivtv tuner=46,46</span><br />
-  と、エンコーダの数だけ「46」を書き足します。<br />
-  ビデオキャプチャデバイスが利用できるようになったら<br />
-  <span class="screen">chmod 0666 /dev/video*</span><br />
-  でroot以外でも利用できるようにパーミッションを変更します。</p>
-<h3>・PostgreSQLインストール</h3>
-<p>ポイントは文字コードをEUC-JPでデータベースをつくることです。foltiaという名前でデータベースを作ったら、foltiaパッケージ付属のmktable.txtでテーブルを作成します。</p>
-<h3>・各種ツールインストール</h3>
-<p>以下のアプリケーションを利用します。インストールされてなければyumやaptなどからインストールして下さい。
-<br />
-  mplayer:サムネール作成に利用<br />
-ImageMagick:サムネール作成に利用</p>
-<h3>・各種Perlモジュールのインストール</h3>
-<p>以下のPerlモジュールを利用します。インストールされてなければCPANなどからインストールして下さい。<br />
-  Time::HiRes<br />
-  Schedule::At<br />
-  DBD::Pg<br />
-  Jcode<br />
-  Device::SerialPort(Tira2を使う場合のオプション)</p>
-<h3>・XMLTVインストール</h3>
-<p>EPG番組表取得に必要なXMLTV日本語版をインストールします。<a href="http://linux.paken.org/index.php?XMLTV%C6%FC%CB%DC%C2%D0%B1%FE%C8%C7">ぱ研</a>が制作したものがすでに本家にマージされているようです。</p>
-<h3>・ffmpegインストール</h3>
-<p>iPod H.264/AVCを作れる拡張をされたffmpegをインストールします。<br />
-  <br />
-1.ffmpegのソースを入手する
-<p class="command">$svn checkout --revision {"2006-03-28 22:00"} svn://svn.mplayerhq.hu/ffmpeg/trunk
-ffmpeg 
-<p>2.ここにあるiPodパッチをあてる<br>
-  <a href = "http://lists.mplayerhq.hu/pipermail/ffmpeg-devel/2006-March/009814.html" target = "_blank">http://lists.mplayerhq.hu/pipermail/ffmpeg-devel/2006-March/009814.html</a><br><br>
- 環境によっては更にx264.cのアップデートが必要という情報が寄せられた。(From <a href="http://www.dcc-jpl.com/soft/foltia/bbs/minibbs.php">foltia BBS TTTさん</a>)
- <p class="command">svn cat --revision 6711 ffmpeg/libavcodec/x264.c > ffmpeg/libavcodec/x264.c</p>
- 3.メイクする<br>
-  手もとでは下記オプションでビルドしています。
-<p class="command">$./configure --enable-mp3lame --enable-x264 --enable-gpl --enable-a52
---enable-xvid --enable-faac --enable-faad --enable-amr_nb --enable-amr_wb --enable-pthreads
-<h3>・foltia本体</h3>
-<p>installディリクトリの中にある「perl」と「php」をそれぞれ適当なところに配置します。<br />
-  手もとの環境では/home/foltia/perl/と/home/foltia/php/に配置しています。</p>
-<h3>・mp4psp</h3>
-<p>MPEG4のトラコンに利用しているツール「mp4psp」をインストールします。「<a href="http://hetima.com/">ヘチマコンピュータ</a>」によって作られたコードの「<a href="http://www.kokone.to/~kgt/diary.shtml?200501#23_3_1">作業日誌と云う名の不定記
-  2005/01/23</a> 」によるLinux版をベースにしたツールです。PSP用にタイトルを入力してATOMヘッダを組み立てて最適化するのに使用します。またファーストスタート形式にも最適化します。</p>
-<h3>・外部チューナコントロール(オプション)</h3>
-<p>Home Electronics社製USB 赤外線トランスミッタ　<a href="http://www.home-electro.com/tira2.php">Tira-2.1</a>を利用することにより、外部チューナのコントロールを行うことが可能です。<br />
-  「<a href="http://www.geocities.jp/coffee_style/Tira-2-0.html">Tira-2.1 シリアルプロトコル(の意訳</a>)」より、サンプルプログラムのcapture.plとtransfer.plをダウンロードしてfoltiaのperlディレクトリの下のirdaディレクトリに実行権限を付けてインストールして下さい。Tira2を接続して/dev/ttyUSB0が使える状態になったら、パーミッションを666に変更しておきます。</p>
-<h3>・各種設定　</h3>
-<p>設定はperl設定php設定と録画局設定に大きく分かれています。<br />
-  録画局設定は[foltia_station]テーブルで行います。<br />
-</p>
-<h4>・設定1:perl/foltia_conf1.pl</h4>
-<p>perl/foltia_conf1.pl.templateをコピーして設定ファイルを作ります。<br />
-  <br />
-  <span class="screen">$toolpath = '/home/foltia';<br />
-  </span>「perl」ディレクトリがあるパス。<br />
-  <span class="screen"><br />
-  $recunits = '4';<br />
-  </span>搭載エンコーダの数。GV-MVP/RX2Wを一枚刺しの場合は2になります。<br />
-  <br />
-  <span class="screen">$recfolderpath = '/home/foltia/php/tv';<br />
-  </span>録画ファイルを置くPATH<br />
-  <br />
-  <span class="screen">$uhfbandtype = 0;<br />
-  </span>UHF帯なら0、CATVなら1を指定します。それぞれivtvのntsc-bcast-jpとntsc-cable-jpに対応します。<br />
-  <span class="screen"><br />
-  $rapidfiledelete = 1;</span><br />
-1なら削除ファイルは「mita」ディレクトリに移動、0なら即時削除します。mitaディレクトリはゴミ箱のように機能しますが自動的に削除はしません。らくちんな運用をしたければ0、安全のため保存しておきたければ1でよいでしょう。</p>
-<p><span class="screen">$tunerinputnum = 6;<br />
-  $svideoinputnum = 7;<br />
-  $comvideoinputnum = 8;</span><br />
-  上記3行にキャプチャカードごとに固有な映像入力のパラメータを示すivtvのinput numperを指示します。それぞれ、チューナ入力、S映像入力、コンポジット入力を指定します。デフォルトはIO
-  DATA製 GV-MVP/RX,RX2,RX2Wカードで利用できる設定となっています。<br />
-カード固有の値を調べるにはivtvドライバをインストールした状態で</p>
-<p><span class="command">$/usr/bin/ivtvctl.paken
-  --list-inputs --device=/dev/video0</span></p>
-<p>などで可能です。<br />
-  <span class="screen"><br />
-  $haveirdaunit = 1;</span><br />
-  Tira-2&lt;http://www.home-electro.com/tira2.php&gt;をつないでいるときに1,なければ0を指定します。<br />
-  <br />
-  <span class="screen">$mp4filenamestyle = 1 ;</span><br />
-古いPSPを利用している場合のみ1を指定します。通常1です。<br />
-0:PSP ファームウェアver.2.80より前と互換性を持つファイル名<br />
-1;よりわかりやすいファイル名<br />
-  <br />
-  <span class="screen">$trconqty = 2;</span><br />
-  MPEG4変換の品質を指定します。デフォルトはH.264/AVCの中画質となっています。<br />
-  3の高画質はファイルサイズは小さく画質もよいのですが処理時間がかかりすぎているのでデフォルトには指定していません。<br />
-  手もとのCeleron2.6GHzのパソコンで、3の設定で実尺の3.4倍、2の設定で1.1倍、1の設定で0.77倍位の処理時間で完了しています。<br />
-  0:PSP/iPod XviD MPEG4(旧式):faacとMPEG4IPを使って変換<br />
-  1:iPod Xvid MPEG4 標準画質 15fps 300kbps<br />
-  2:iPod H.264 中画質 24fps 300kbps<br />
-  3:iPod H.264 高画質 30fps 300kbps<br />
-  4:iPhone/iPod 480x320 H.264 高画質 24fps 350kbps<br />
-  5:iPhone/iPod 480x320 H.264 高画質 30fps 350kbps<br />
-  <br />
-そのほか、データベース設定もありますが環境に応じて設定して下さい。</p>
-<h4>・設定2:php/foltia_config2.php</h4>
-<p>php/foltia_config2.php.templateをコピーして設定ファイルを作ります。</p>
-<p><span class="screen">$toolpath = &quot;/home/foltia&quot; ; </span><br />
-  「php」ディレクトリがあるパス。この場合/home/foltia/php/と設置されている状態になります。<br />
-  <span class="screen"><br />
-  $recfolderpath = '/home/foltia/php/tv'; </span><br />
-  録画ファイルの保存先のパス。<br />
-  <span class="screen"><br />
-  $httpmediamappath = '/tv'; </span><br />
-ブラウザから見える録画ファイルのある位置。この場合http://localhost/tv/を表します。<br />
-  <span class="screen"><br />
-  $recunits = '4'; </span><br />
-foltia_conf1.plと同じ搭載エンコーダの数。GV-MVP/RX2Wを一枚刺しの場合は2になります。</p>
-<h4>・設定3:foltia_stationテーブル</h4>
-<p>録画の重要な設定となる項目です。インストールが無事に終了してれば首都圏の放送局設定サンプルが入っていますのでそれを参考に設定して下さい。<br />
-  foltia_stationテーブルのそれぞれの項目について説明します。<br />
-  <br />
-  <span class="screen">stationid</span>:ユニークなID値です。<br />
-  <span class="screen">stationname</span>:しょぼいカレンダーと共通の放送局名です。<br />
-  <span class="screen">stationrecch</span>:周波数チャンネルです。外部入力の場合はS映像入力の場合に0、コンポジット入力の場合に-1を指定します。受信出来ない局には-10を指定します。新規に自動追加されると-10になります。<br />
-  <span class="screen">stationcallsignue</span>:放送局略称を記入します。空白でも構いません。<br />
-  <span class="screen">stationuri</span>:放送局公式URIを記入します。空白でも構いません。<br />
-  <span class="screen">tunertype</span>:外部チューナコントロールコマンドを書き入れます。「Tira2準備」の項で詳しく述べます。空白でも構いません。<br />
-  <span class="screen">tunerch</span>:外部チューナコントロールコマンドを書き入れます。「Tira2準備」の項で詳しく述べます。空白でも構いません。<br />
-  <span class="screen">device</span>:放送局によって録画デバイスを固定するときに用います。たとえば、BS-2専用チューナを常に/dev/video2につないでいるような場合「/dev/video2」と指定します。通常は空白です。<br />
-  <span class="screen">ontvcode</span>:XMLTVで用いる放送局識別コードを記入します。EPG番組表に表示される局は<br />
-  1.
-  XMLTV初期設定で情報を取得していて<br />
-  2.
-  foltia_epgにデータがインポートされていて<br />
-  3.foltia_stationテーブルのontvcodeフィールドにfoltia_epgテーブルのontvchannelフィールドと同じ放送局識別名が記入されている<br />
-  局になります。デフォルトで関東キー局とBS、BSデジタル局、CS局が設定されています。</p>
-<h3>・Tira2準備(オプション)</h3>
-<p>　USBトランスミッタであるTira2を動作させるために必要な準備を行います。<br />
-  　perl/irda/にインストールされたcapture.plを利用して、チューナリモコンからボタンを学習させていきます。foltiaではひとつのキー表現するファイル名に「一文字.dat」というルールを使用しています。手もとのデジタルチューナをコントロールするのに必要だったキーは0-9の数字と地上デジタル切り替え、BSデジタル切り替え、CATV切り替え、放送局番号入力キーの14キーでした。それぞれのキーに対応するリモコンデータファイル名を0.dat-9.dat,u.dat,b.dat,c.dat,X.datとしました。これらをcapture.plと同じ階層に置きます。<br />
-  　完了したらチューナコントロールが行えるか動作確認をします。<span class="command"><br />
-  </span>./transfer.pl 0.datと実行することでリモコンで0キーを押した状態を再現します。<br />
-  　全てのキーがうまく動作したら、データベースのfoltia_stationテーブルのtunertypeフィールドとtunerchフィールドにチャンネルコマンドを記入します。手もとのチューナではBSデジタル103chのNHK
-  BS-hiに切り替える場合、BSデジタル切り替え、チャンネル番号入力、1,0,3と5つのキーを押します。これを再現するにはb.dat,X.dat,1.dat,0.dat,3.datの5つのファイルを送出することになります。これをデータベースに書くと「bX103」となります。tunertypeフィールドとtunerchフィールドは連結されて実行されますので「b」「X103」と書いても「bX103」「」と書いても等価なものとして扱われます。わかりやすい記入方法で書き込んでください。</p>
-<h3>・動作確認</h3>
-<p>　ここまで設定できたらあと一息で完了します。まず単純な録画ができるか動作確認していきましょう。<br />
-  　最初に</p>
-<p><span class="command">$head /dev/video0</span></p>
-<p>などでキャプチャでバイスからMPEG2データか取れるか確認します。なにか出てくればOKですので次に進みます。<br />
-  　つぎに、録画試験を~/perl/tvrecording.plを使って行います。</p>
-<p><span class="command">$./tvrecording.pl 1 60 0 test.m2p 5 0 0 /dev/video0</span></p>
-<p>としてみましょう。この例は1chを60秒5Mbpsでtest.m2pというファイル名で/dev/video0から録画することを意味しています。2分程度でプロンプトに戻ります。録画ファイル保存フォルダ(デフォルトだと/home/foltia/tv/)にtest.m2pが出来ていて、ファイルを再生して期待通りならば第1段階成功です。うまくいかなかった場合には~/debug.txtに書かれる情報も参考にして原因を突き止めて下さい。<br />
-  　つぎに、しょぼいカレンダーから番組データをインポートできるかを確認します。</p>
-<p><span class="command">$./perl/getxml2db.pl</span></p>
-<p>成功するとデータベースのfoltia_programテーブルとfoltia_subtitleテーブルにデータが入ります。<br />
-  　ここまでできたらWebブラウザでインストールしたphpのディレクトリを開いてみましょう。<br />
-  <img src="img/screen03.png" width="800" height="600" /><br />
-  　番組表が表示されているのが確認できます。実際に予約をして見ましょう。一番左のTIDの数字をクリックするとそのタイトルの予約画面になります。例では690のCanvas2
-  〜虹色のスケッチ〜をクリックした画面です。<br />
-  <img src="img/screen04.png" width="800" height="600" /><br />
-  　放送局とビットレートを選択して予約を押すと予約キューが入ります。放送局の設定で[全局]を選択すると文字通り放送スケジュールが入ってる局を全局録画しようとします。いまのところ受信可能不可能に関係なく録画します。想定してる用途は『千葉テレビとテレビ埼玉とtvkでリリカルなのはA'sを録画しておこう!』というものではなくしょぼいカレンダーが持つ*声優関連*や*アニメ特番*などの放送局が特定できない番組グループを録画するためのものです。<br />
-  　予約が完了したらシェルでatqコマンドでキューが入ったを確認します。</p>
-<p class="command">$atq<br />
-182194 2006-01-31 00:40 a foltia</p>
-<p>放映予定の5分前に起動するプロセスが入ってることが確認できます。<br />
-  この例だと00:40にfolprep.plが起動します。<br />
-  folprep.plが起動すると放映予定1分前にrecwrap.plがキューに入ります。</p>
-<p class="command">$atq<br />
-  182195 2006-01-31 00:44 a foltia</p>
-<p>　番組が終了したらMPEG2が録画されたか確認してみましょう。デフォルトで~/php/tv/690-16-20060131-0045.m2pというファイルが出来ているはずです。ファイル名はそれぞれ以下のルールで命名されます。<br />
-  TID:しょぼいカレンダーと共通の番組IDです。<br />
-  話数:番組が第何話かを示します。該当しない場合は空白になります。<br />
-  放映日:YYYYmmddスタイルの放映日です。<br />
-  放映時刻:0000-2359の間での開始時刻になります。しょぼいカレンダーでは24:00以降の時刻を扱いますがfoltiaでは暦通り24:00以降の時刻は次の日として取り扱います。<br />
-  　MPEG2の録画が完了するとfoltiaはffmpegを利用してH.264/AVCへの変換を開始します。所要時間はCeleron2.6GHz環境で実尺の1.2倍程度の時間です。この例の場合~/php/tv/690.localized/mp4/MAQ-690-16-20060131-0045.MP4という動画ファイルと同じ階層にMAQ-690-16-20060131-0045.THMファイルができ上がります。ファイル名は、先頭がM4Vの場合MPEG4(XviD)、MAQの場合H.264/AVC、そのあとに続くのはMPEG2と同じルールです。</p>
-<p>　番組指定による自動録画が動いたら、つぎにEPGによる個別番組録画の動作確認に移りましょう。<br />
-  　まず番組データをXMLTVを用いてインポートします。</p>
-<p><span class="command">$/usr/bin/perl /usr/bin/tv_grab_jp | /home/foltia/perl/xmltv2foltia.pl</span></p>
-<p>確認のためにブラウザで番組表ページを開きます。<br />
-  <img src="img/screen05.png" width="800" height="1000" /><br />
-</p>
-<p>テレビ東京のワールドビジネスサテライトを予約してみます。<br />
-  <img src="img/screen06.png" width="800" height="600" /><br />
-EPG予約はTIDが0番の番組として扱われます。ファイル名や録画フォルダもそれに準拠します。<br />
-放送が終わったらMPEG2とMPEG4を確認してみましょう。</p>
-<p>　ここまで動作確認ができればfoltiaの基本的な部分は動作しています。残念ながらうまく動かない場合には~/debug.txtをみながら原因を分析してみて下さい。</p>
-<p>　最後の仕上げにcronの設定をしておきましょう。私は以下の様な設定にしています。</p>
-<p class="screen">7 * * * * /home/foltia/perl/schedulecheck.pl  &gt;/dev/null 2&gt;&amp;1<br />
-  1 0 * * * /home/foltia/perl/cron_foltia_dayly.sh  &gt;/dev/null 2&gt;&amp;1</p>
-<p>schedulecheck.plは番組データを更新してキューを再構築するプログラムです。起動頻度はもっと低くても問題ないかもしれません。<br />
-  cron_foltia_dayly.sh はXMLTVを呼び出してEPG番組表データを取得するなどの処理を行います。</p>
-<p>　<del>また、ivtvのバージョンによっては再起動すると/dev/video*のパーミッションがrootでしか読めなくなってしまう場合があります。その場合にはユーザfoltiaでデバイスが読み出せるよう適切なパーミッションを設定し直して下さい。</del></p>
-再起動してもビデオキャプチャデバイスが読めるようにパーミッションを付けます。
-<p class="command">
-# vi /etc/security/console.perms.d/video.perms<br />
-&lt;console&gt;  0666 &lt;sound&gt;      0666 root.foltia<br />
-&lt;console&gt;  0666 &lt;v4l&gt;        0666 root.foltia<br />
-# pam_console_apply<br />
-</p>
-(参考:<a href="http://fedorasrv.com/vrs.shtml ">TV録画予約システム構築(vrs) - Fedoraで自宅サーバー構築</a>)
-<hr>
-<h2 id="operation">・操作概要</h2>
-<p>　foltiaの操作はWeb画面で行います。以下に各メニューの説明をします。</p>
-<h3>foltia:</h3>
-<p>　公式ページ&lt;<a href="http://www.dcc-jpl.com/soft/foltia/">http://www.dcc-jpl.com/soft/foltia/</a>&gt;にジャンプします。</p>
-<h3>放映予定:</h3>
-<p>　しょぼいカレンダーより取得した放送予定の全リストを表示します。通常のトップページです。録画予約されているものが色違いで強調表示されます。<br />
-  赤色表示:その放映が録画対象であることを示します<br />
-  青色表示:録画対象になっている番組の他局放映ことを示します。録画はされません。<br />
-  [TID]をクリックすると番組予約画面へ、[タイトル]をクリックすると「しょぼいカレンダー」の該当番組詳細画面へ、「サブタイトル」をクリックすると「しょぼいカレンダー」の放映予定画面へそれぞれ移動します。<br />
-  デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/">http://www.dcc-jpl.com/soft/foltia/demo/</a><br />
-  <img src="img/screen07.png" width="800" height="600" /><br />
-</p>
-<h3>新番組:</h3>
-<p>　放映予定の中から第1話のものを抽出します。新番組シーズンに予約を入れるとき便利です。<br />
-  デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/index.php?mode=new">http://www.dcc-jpl.com/soft/foltia/demo/index.php?mode=new</a><br />
-<img src="img/screen08.png" width="800" height="600" /></p>
-<p>&nbsp;</p>
-<h3>予約一覧:</h3>
-<p>　大きく上下のふたつのエリアに分かれていて、予約されている番組の放映予定と番組名を一覧表示します。ここでも[TID]をクリックすると番組予約画面へ、[タイトル]をクリックすると「しょぼいカレンダー」の該当番組詳細画面へそれぞれ移動します。録画予約の解除は下半分のタイトルリストの項目から行います。EPG予約の解除もここから行います。「画質」項目は録画ビットレートをMbps単位で表示しています。<br />
-　色が付いている番組は重複警告です。搭載された録画ユニットで録画し切れない場合に色がつきます。赤色はカードに搭載されたアナログチューナーの重複、青色は外部入力の重複を示します。重複警告がでている番組は録画が欠ける可能性があります。また、アナログチューナー、外部チューナーともに00:00-00:30 番組A ,00:30-01:00 番組Bという番組が連続している場合は重複とは判断しません。<br />
-　引数rでエンコーダ数を変更して予約状況を調べる事が出来ます。listreserve.php?r=6で6台エンコーダを搭載したときの予約状況を調べる事が出来ます。<br />
-  デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/listreserve.php">http://www.dcc-jpl.com/soft/foltia/demo/listreserve.php</a><br />
-  <img src="img/screen09.jpg" width="800" height="1000" /><br />
-  |中略<br />
-  <img src="img/screen18.png" width="800" height="600" /><br />
-</p>
-<h3>番組一覧:</h3>
-<p>　foltiaの内部データベースに登録されている全番組リストを表示します。MPEG4リンク項目は[録画ライブラリ]メニューと同じ詳細ページにジャンプします。<br />
-  デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/titlelist.php">http://www.dcc-jpl.com/soft/foltia/demo/titlelist.php</a><br />
-    <img src="img/screen10.png" width="800" height="600" /><br />
-</p>
-<h3>番組表:</h3>
-<p>　EPG録画向け個別番組表を表示します。デフォルトで現在放映中の番組が最上段に表示されて、8時間分、8局表示します。<br />
-既存の番組表サイトと比較して、常に現在放映されているものが最上段に表示されるため、常用に際しても便利です。<br />
-タイトルをクリックすると放映時刻と放映局を選択しての録画予約ページとなります<br />
-  自動録画に対応していない番組を録画するときに役に立つでしょう。ここで予約したものはTIDが0番の放送予定としてデータベースに追加されます。<br />
-  デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/viewepg.php">http://www.dcc-jpl.com/soft/foltia/demo/viewepg.php</a><br />
-    <img src="img/screen05.png" width="800" height="1000" /><br />
-</p>
-<h3>番組表:番組手動予約</h3>
-<p>　個別の手動録画を行います。<br />
-・EPGでまだ降ってきていない番組　<br />
-・ケータイで外から大急ぎで予約したい場合　<br />
-などの用途を想定しています。テンキーから迅速に予約出来るようにあえてプルダウンメニューでなく数字入力式としています。foltiaの仕組み的に番組の尺の最大値は特に制限はないのですが取り回しを考えて最大6時間に区切ってあります。録画したい番組が360分を超える場合には適当に分割して予約してください。</p>
-  デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/m.php">http://www.dcc-jpl.com/soft/foltia/demo/m.php</a><br />
-    <img src="img/screen19.png" width="247" height="503" /><br />
-<h3>録画一覧(録画順):</h3>
-<p>  　録画済みのMPEG2ファイルを放映順に一覧表示します。削除チェックボックスにチェックを入れて削除ボタンを押すとそのファイルは削除されます。上部にディスク空き容量とトラコンプロセスを表示します。<br />
-ディスクの空き容量が少なくなると背景色が100GB,50GB,30GBでそれぞれ変化し注意を喚起します。<br />
-  デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/showplaylist.php">http://www.dcc-jpl.com/soft/foltia/demo/showplaylist.php</a><br />
-    <img src="img/screen11.png" width="800" height="600" /><br />
-</p>
-<h3>録画一覧(番組順):</h3>
-<p>   　録画済みのMPEG2ファイルを番組ID[TID]順に一覧表示します。<br />
-  デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/showplaylist.php?list=title">http://www.dcc-jpl.com/soft/foltia/demo/showplaylist.php?list=title</a><br />
-    <img src="img/screen12.png" width="800" height="600" /><br />
-</p>
-<h3>録画一覧(全):</h3>
- <p>  　データベースを使わず、録画ディレクトリの中にあるファイルを一覧表示するモードです。主にメンテナンス用途として使います。<br />
-</p>
-<h3>録画ライブラリ:</h3>
-<p>  　MPEG4録画ファイルを番組ごとに一覧表示します。<br />
- デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/showlib.php">http://www.dcc-jpl.com/soft/foltia/demo/showlib.php</a><br />
-    <img src="img/screen14.png" width="800" height="600" /><br />
-</p>
-<p>詳細をクリックすると番組ごとの一覧になります。詳細表示の画面では、ブラウザでMPEG4を再生する事も可能です。番組単体のPodcast用RSSもこの画面内にあります。<br />
-MP4ファイル名をクリックするとブラウザ内で再生を開始します。その右のアイコンは、QuickTimePlayerでムービーを再生します。<br />
- デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/showlibc.php?tid=665">http://www.dcc-jpl.com/soft/foltia/demo/showlibc.php?tid=665</a><br />
-    <img src="img/screen15.png" width="800" height="600" /><br /> 
-　「キャプ」でキャプチャ画面一覧を開きます。<br />
-    <img src="img/screen17.png" width="800" height="600" /><br /> 
-</p>
-<h3>Folcast(RSS):</h3>
-  　Video Podcast用のRSSです。このRSSをiTunesに登録することで、iPodとの自動シンク機能を実現します。トップメニューにあるRSSは新規録画が全部含まれるPodcastを実現します。番組単体のPodcastは録画ライブラリの詳細から取得して下さい。[iTunesにFolcastを登録]をクリックするとiTunesに自動的に追加することができます。 <br />
-参考リンク:<a href="http://d.hatena.ne.jp/egyo2nd/">さくらぷらすα日記</a> 2006-03-14<a href="http://d.hatena.ne.jp/egyo2nd/20060314/1142305040"> フォルキャスト(folcast) の解説</a> <br />
-    <img src="img/screen16.png" width="800" height="600" /><br /> 
-</p>
-<hr>
-<h2 id="colophon">・おわりに</h2>
-<p>　以上、駆け足でfoltiaの概要を説明してきました。今のところfoltiaには視聴に関する機能は一切ありませんが、使用例として自宅では富士通T90Hというパソコンにfoltia録画ボリュームをSambaでマウントし、WinDVDでMPEG2を再生、外ではiPod
-  VideoでMPEG4を視聴しています。DVD Playerソフトでファイルを選んで再生するのがいまひとつめんどくさい操作なので、今後の改良点としたいところです。<br />
-  　foltiaはまだまだ開発途上のソフトウェアです。今後の計画は以下の様なものを考えています。<br />
-  　・未読番組管理機能<br />
-  　・ロケーションフリーテレビのようなライブストリーミング機能<br />
-  　・デジタル放送のデジタル録画機能<br />
- 詳しくはfoltia Development Central wiki:「<a href = "http://www.dcc-jpl.com/foltia/wiki/futuretodo">foltia のToDoやらゆめを適当に書くwik</a>i」に。 <br />
-  今後も全ての情報はDCC-JPL Japanの公式ページ&lt;<a href="http://www.dcc-jpl.com/soft/foltia/">http://www.dcc-jpl.com/soft/foltia/</a>&gt;に掲載していきます。</p>
-<p>・謝辞<br />
-  以下の数々のサイトを利用、参考にさせていただいております。改めましてお礼申し上げます。<br />
-  <a href = "http://cal.syoboi.jp/">しょぼいカレンダー</a>&lt;http://cal.syoboi.jp/&gt;<br />
-  <a href = "http://www.paken.org">AAF ぱ研</a>&lt;http://www.paken.org/&gt;<br />
-  <a href = "http://www.geocities.jp/coffee_style/Tira-2-0.html">Tira-2.1 シリアルプロトコル(の意訳)</a>&lt;http://www.geocities.jp/coffee_style/Tira-2-0.html&gt;<br />
-  <a href = "http://www.kokone.to/~kgt/diary.html">「月琴日記」</a>&lt;http://www.kokone.to/~kgt/diary.html&gt;<br />
-  <a href = "http://www.tadachi-net.com/desktop_pc/asus_terminator/avserver3.html">Linuxで最強のテレビ録画サーバを目指す</a>&lt;http://www.tadachi-net.com/desktop_pc/asus_terminator/avserver3.html&gt;<br />
- <a href="http://fedorasrv.com/">Fedoraで自宅サーバー構築 </a>&lt;http://fedorasrv.com/&gt;<br />
-  <a href = "http://www.ontvjapan.com/">ONTV JAPAN</a>&lt;http://www.ontvjapan.com/&gt;<br />
-  IRC #dameTunesのみなさま<br />
-  他多数</p>
-<p>本ドキュメントはオープンソースマガジン200年6月号(ソフトバンククリエイティブ刊)向け原稿として書き起こした稿をもとに加筆したものです。公開を快く許諾して下さいましたソフトバンククリエイティブ様にお礼申し上げます。</p>
-<p>本ソフトウェアは完全な無保証です。ライセンスとしてGPL2を適用したいと考えていますが適用出来るかどうかの判断がまだ終わっていない段階です。</p>
-</body>
-</html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" /><link rel="stylesheet" href="./img/styles.css" type="text/css"><title>foltia manual</title></head><body><h1>アニメ録画システム　foltia</h1><p>宗子 (sorshi@dcc-jpl.com) / DCC-JPL Japan / foltia Project.<br />  <a href="http://www.dcc-jpl.com/soft/foltia/">http://www.dcc-jpl.com/soft/foltia/<br /></a>文書最終更新日:$LastChangedDate$<br />文書リビジョン:$Rev$<br />このドキュメントの最新版はこちらです:<a href="http://svn.dcc-jpl.com/foltia/trunk/doc/index.html">http://svn.dcc-jpl.com/foltia/trunk/doc/index.html</a></p><h2>・目次</h2><ul><li><a href = "#about">foltiaとは何か？</a><li><a href = "#functions">主要機能</a><li><a href = "#requirementhardware">必要ハードウェア</a><li><a href = "#foltiamechanism">foltiaのしくみ</a><li><a href = "#install">インストール</a><li><a href = "#operation">操作概要</a><li><a href = "#envpolicy">環境ポリシー</a><li><a href = "#colophon">おわりに</a></ul><h2 id="about">・foltiaとは何か？</h2><p>　foltiaは主にアニメを効率良く失敗なく録画するために開発された、Linux上で動く録画システムです。<br />  　  番組名と放映局を指定しておけばあとはなにもせずに毎回録画されます。<a href="http://cal.syoboi.jp/">しょぼいカレンダー</a>というアニメ番組表サイトと強く連係することで、野球中継で時間がずれても毎回期待通り録画されます。<br />  　  外部オプションを取り付けることで外付けチューナのコントロールも実現します。<br />  　録画した番組は自動的にMPEG4に変換され、iPodに自動転送することが可能です。PSPに転送して視聴することも可能です。<br />　全ての主要操作はWebベースでコントロールされます。</p><p><br />  <img src="img/syoboi.png" alt="しょぼいカレンダー" width="800" height="600" /></p><hr><h2 id="functions">・主要機能</h2><ul>  <li>番組名によるアニメ自動録画機能    <ul>      <li>最大6番組までの同時録画対応</li>    </ul>  </li>  <li>EPG番組表による番組選択録画機能</li>  <li>開始時刻、放送局など個別設定による手動録画機能</li>  <li>USBリモコンユニットを使った外部チューナー制御機能</li>  <li>録画終了と同時にMPEG2からH.264/AVCへの自動変換機能(iPod Video、PSP、Webブラウザなどで視聴可能形式) </li>  <li>video podcastのしくみを使ったiPod自動シンク機能    <ul>      <li> 録画番組は自動的にiPodに転送されて視聴可能状態となる。<br />                <a href="img/foltia_vodcast.jpg"><img src="img/foltia_vodcast_s.jpg" width="320" height="240" border="2" /></a><br />      </li>    </ul>  <li>現在開発中のツール「Starlight Breaker」向け番組キャプチャ画像自動生成機能</li>  </li></ul><hr><h2 id="requirementhardware">・必要ハードウェア</h2><ul>  <li>Linuxの動くAT互換機:手もと開発・録画機はCeleron 2.6GHz,1GB RAMのスペックで30分番組のH.264/AVC(中画質)変換が33分程度で完了しています。</li>  <li>ivtvドライバで動作するビデオキャプチャカード:foltiaの機能を引きだすためには複数のエンコーダを搭載するのがおすすめです。手もとの環境ではIOデータ <a href="http://www.iodata.jp/prod/multimedia/tv/2003/gv-mvprx/">GV-MVP/RX</a>を2枚、<a href="http://www.iodata.jp/prod/multimedia/tv/2004/gv-mvprx2w/index.htm">GV-MVP/RX2W</a>を1枚で計4チャンネル同時録画環境にしています。画質の点からは複数エンコーダが一枚のカードに載ったRX2Wよりも1エンコーダのGV-MVP/RX2の方が多少有利なようです。</li> <div class="sidebar"> IOデータ GV-MVP/RX,RX2は生産完了になり、後継として<a href = "http://www.iodata.jp/prod/multimedia/tv/2005/gv-mvprx3/index.htm">GV-MVP/RX3</a>が出ています。しかしGV-MVP/RX3はMPEG2エンコーダが変更になったため今のところ対応ドライバがありません。<br /> また同じように生産完了になったWチューナーモデルの<a href = "http://www.iodata.jp/prod/multimedia/tv/2004/gv-mvprx2w/index.htm?type=W">GV-MVP/RX2W</a>の後継である<a href = "http://www.iodata.jp/prod/multimedia/tv/2005/gv-mvpgx2w/index.htm">GV-MVP/GX2W</a>もMPEG2エンコーダが変更になったため対応ドライバがありません。<br /> ドライバ最新開発状況は「<a href="http://linux.paken.org/">ぱ研</a>　<a href = "http://linux.paken.org/index.php?CX23416GYC-STVLP%A4%CE%B2%F2%C0%CF">CX23416GYC-STVLPの解析</a>」などが参考になります。<br /> (2007/1/4現在)<br /> </div>  <li>Home Electronics社製USB 赤外線トランスミッタ　<a href="http://www.home-electro.com/tira2.php">Tira-2.1</a>(オプション):外部チューナコントロール機能を使う場合必要です。<br />  　</li></ul><hr><h2 id="foltiamechanism">・foltiaのしくみ</h2><p><br />  　foltiaは「<a href="http://cal.syoboi.jp/">しょぼいカレンダー</a>」というユーザ参加型アニメ番組表から取得した番組表をもとに、録画予約されている番組の放送予定をatキューに入れることで動作しています。<br />  <br />  　以下に詳しい流れをみていきます。<br />  　foltiaのセットアップが終わった状態で、foltiaのデータベースはしょぼいカレンダー由来の番組情報とXMLTV由来の番組情報をそれぞれ持っています。通常は番組IDと放送局を指定した自動予約を利用します。<br />  番組の録画を予約するために、放映予定ページから番組IDである[TID]を選択します。<br />  <img src="img/screen01.png" width="800" height="600" /><br />  <br />  放映テレビ局とビットレートを選択する画面に移動するので内容を確認して予約ボタンを押します。番組の録画予約は番組ごとに一度するだけで全話自動で録画することが可能です。<br />  <br />  <img src="img/screen02.png" width="800" height="600" /><br />  <br />  　予約ボタンを押すとデータベースの録画予約テーブル[foltia_tvrecord]に番組IDと放送局、録画ビットレートが追加されます。その後、キュー入れプログラム[addatq.pl]を呼びます。addatq.plは番組IDと局IDを受け取り48時間以内の放映予定を探し、それぞれの放映ごとに録画準備のためのプログラム[folprep.pl]を放送予定時刻の5分前にキュー入れします。<br />  　予約番組の放送予定時刻の5分前になると、準備プログラム[folprep.pl]が実行されます。これは、最新の番組表データを再取得し、放映時刻が変更されてないか確認後、放送開始時刻の1分前に録画プログラム[recwrap.pl]が走るようにキューを入れます。放送時刻が15分以上先に延びていたら、再度放送予定時刻の5分前に準備プログラム[folprep.pl]をキュー入れします。<br />  　放送予定時刻の1分前になると録画の一連の流れを管理する録画プログラム[recwrap.pl]が起動します。このプログラムは、録画チャンネルが外部入力であれば外部チューナのチャンネルを適切なものに切り替えるためにリモコン送信プログラム[transfer.pl]を呼びだし、次に実際にビデオでバイスからファイルへの記録を行うキャプチャプログラム[tvrecording.pl]を呼び出します。<br />  　キャプチャプログラム[tvrecording.pl]はivtvドライバに付属のrecord-v4l2.plをベースに拡張したもので、搭載されている録画デバイスの空き状況を調べて、空いてる適切なデバイスを利用します。foltiaは特に指定をしない場合、同時録画する場合、地上波録画をキャプチャデバイスの若い番号から順番に、外部入力を一番大きいデバイスから順番に使用していきます。例としてキャプチャカードが4枚入っている場合、地上波録画は/dev/video0から、外部入力録画は/dev/video3から使われていきます。空きデバイスがない場合は、一番若い番号を持つビデオデバイスをつかんでるプロセスを止め、そのデバイスを利用します。録画は前後に10秒程度の余分な録画を行おうとするため、同一のチャネルで連続している番組を指定した場合であっても可能であれば2チューナ使用する形となります。tvrecording.plの録画チャンネルの引数に0を指定した場合はS入力が、-1を指定した場合はコンポジット入力が録画されます。外部入力はデフォルトで一番番号の大きいデバイスを利用します。録画が終了するとデータベースの放送情報テーブル[foltia_subtitle]に録画したMPEG2ファイル名を記録して親プロセスに戻ります<br />  　録画プログラムが終了すると、親プロセスのrecwrap.plはMPEG4への変換(トラコン)の必要があるか確認して、必要な場合変換スクリプト[vfr4psp.sh]か[ipodtranscode.pl]が呼び出されます。変換フォーマットや品質は設定ファイルであらかじめ設定しておきます。MPEG4ファイルは、MPEG2ファイル保存ディレクトリの下に番組ごとに整理されます。具体的には[TID].localized/mp4/の形を取ります。番組個別ディレクトリはMac  OS Xのローカライズ機構に準拠しているため、例えば665.localizedディレクトリはMac OS XのFinderでマウントすると「魔法少女リリカルなのはA's」と表示されます。<br />  　MPEG4への変換が終わるとpsp用MPEG4オプティマイザ[mp4psp]でタイトル入れとヘッダ組み立てをして最適化したあと、mplayerとImageMagickを利用してサムネールを作成します。サムネールはPSPの仕様に準拠して120x160で拡張子が.THMのjpegファイルです。そしてデータベースの放送情報テーブル[foltia_subtitle]に変換ファイル名を書き込んで録画の一連の流れが終了します。<br />  図に示すとこうなります。<br />  <img src="img/blockdiagram.png" width="800" height="399" />　<br /></p><p>　定期的な作業として、毎時間ごとに番組データ更新と録画キューの更新を行います。cronが一時間ごとに定時確認プログラム[schedulecheck.pl]を呼びだし、それが番組表の更新プログラム[getxml2db.pl]を呼びだしデータベースを更新したあと、予約されてる番組の数だけキュー入れプログラム[addatq.pl]を読み出します。</p><p>　iPodへの自動シンク機能はiTunesの持つVideo Podcast機能を使うことで実現します。foltia Video Podcast-Folcastは、トラコンが終わった番組からXMLを組み立ててRSSを作ります。このRSSをiTunesに登録することでiPodへの自動シンク機能を実現します。</p><p>　foltiaはデータベースに次のようなテーブルを作ります。</p><ul><li>foltia_program:「魔法少女リリカルなのはA's」のように番組名の情報を格納するテーブルです。番組ごとにトラコンのオン/オフを切り替えることも出来ます。</li>  <li>foltia_subtitle:「第1話　はじまりは突然になの」のような個別番組の放映情報を持つテーブルです。</li>  <li>foltia_station:放送局の情報を持つテーブルです。受信環境によって設定が必要になります。</li>  <li>foltia_tvrecord:録画予約の情報を持つテーブルです。</li>  <li>foltia_epg:XMLTV由来のEPG番組表のデータを持つテーブルです。</li>  <li>foltia_m2pfiles:録画されたMPEG2ファイルの情報をキャッシュ的に持つテーブルです。</li>  <li>foltia_mp4files:変換されたMPEG4ファイルの情報をキャッシュ的に持つテーブルです。</li>  <li>foltia_envpolicy:環境ポリシー利用時にユーザの情報を持つテーブルです。</li></ul><div class="sidebar">  <p>　現在はデータベースエンジンにPostgreSQLを採用していますが、将来的には扱いが容易なSQLiteへの切りかえも検討しています。<br /></p></div><hr><h2 id="install">・インストール</h2><p>　foltiaの動作にはLinux,Apache,PHP,Perl,PostgreSQLとビデオキャプチャ用ivtvドライバなどが必要です。<br />  　インストールはおおまかにOS,Apache,ivtvドライバ、PostgreSQL、foltiaの順で進めて行くとよいでしょう。<br />  　phpPgAdminやSambaなども必要に応じて入れておくと便利かもしれません。<br />　foltiaのダウンロードは公式ページまたはSubversionで入手することが可能です。<br />　Subversionを使う場合は下記のコマンドで最新versionを入手できます。</p><p class="command">$svn co http://svn.dcc-jpl.com/foltia/trunk  foltia</p><p class="screen">またインストールについては「<a href="manual/index.html">foltiaインストールマニュアル</a>」も参考になります。</p><h3>・配線</h3><p>　あらかじめキャプチャカードを取り付け、に外部チューナを外部入力端子につないでおきます。</p><h3>・OSインストール</h3><p>　手もとの開発環境ではFedora Coreを使っています。一通りインストールを終えたらfoltiaを動作させるアカウント「foltia」を作ります。</p><h3>・Apacheインストール</h3><p>Apacheは2.2以降が2GBを越えるファイルの転送にも対応していて便利です。<br />  ポイントは、Apacheを動かすユーザをfoltiaにすることと、「.THM」のmime typeをimage/jpegにする設定を追加することです。</p><h3>・ivtvドライバインストール</h3><p>「<a href="http://linux.matchy.net/FedoraGV-MVPRX.html">FEDORA  CORE で GV-MVP/RX を使う</a>」のrpmパッケージを使用すると早いです。<br />  複数エンコーダを搭載している場合には/etc/modprobe.confに<br />  <span class="screen">options ivtv tuner=46,46</span><br />  と、エンコーダの数だけ「46」を書き足します。<br />  ビデオキャプチャデバイスが利用できるようになったら<br />  <span class="screen">chmod 0666 /dev/video*</span><br />  でroot以外でも利用できるようにパーミッションを変更します。</p><h3>・PostgreSQLインストール</h3><p>ポイントは文字コードをEUC-JPでデータベースをつくることです。foltiaという名前でデータベースを作ったら、foltiaパッケージ付属のmktable.txtでテーブルを作成します。</p><h3>・各種ツールインストール</h3><p>以下のアプリケーションを利用します。インストールされてなければyumやaptなどからインストールして下さい。<br />  mplayer:サムネール作成に利用<br />ImageMagick:サムネール作成に利用</p><h3>・各種Perlモジュールのインストール</h3><p>以下のPerlモジュールを利用します。インストールされてなければCPANなどからインストールして下さい。<br />  Time::HiRes<br />  Schedule::At<br />  DBD::Pg<br />  Jcode<br />  Device::SerialPort(Tira2を使う場合のオプション)</p><h3>・XMLTVインストール</h3><p>EPG番組表取得に必要なXMLTV日本語版をインストールします。<a href="http://linux.paken.org/index.php?XMLTV%C6%FC%CB%DC%C2%D0%B1%FE%C8%C7">ぱ研</a>が制作したものがすでに本家にマージされているようです。</p><h3>・ffmpegインストール</h3><p>iPod H.264/AVCを作れる拡張をされたffmpegをインストールします。<br />  <br />1.ffmpegのソースを入手する<p class="command">$svn checkout --revision {"2006-03-28 22:00"} svn://svn.mplayerhq.hu/ffmpeg/trunkffmpeg <p>2.ここにあるiPodパッチをあてる<br>  <a href = "http://lists.mplayerhq.hu/pipermail/ffmpeg-devel/2006-March/009814.html" target = "_blank">http://lists.mplayerhq.hu/pipermail/ffmpeg-devel/2006-March/009814.html</a><br><br> 環境によっては更にx264.cのアップデートが必要という情報が寄せられた。(From <a href="http://www.dcc-jpl.com/soft/foltia/bbs/minibbs.php">foltia BBS TTTさん</a>)<p class="command">svn cat --revision 6711 ffmpeg/libavcodec/x264.c > ffmpeg/libavcodec/x264.c</p> 3.メイクする<br>  手もとでは下記オプションでビルドしています。<p class="command">$./configure --enable-mp3lame --enable-x264 --enable-gpl --enable-a52--enable-xvid --enable-faac --enable-faad --enable-amr_nb --enable-amr_wb --enable-pthreads<h3>・foltia本体</h3><p>installディリクトリの中にある「perl」と「php」をそれぞれ適当なところに配置します。<br />  手もとの環境では/home/foltia/perl/と/home/foltia/php/に配置しています。</p><h3>・mp4psp</h3><p>MPEG4のトラコンに利用しているツール「mp4psp」をインストールします。「<a href="http://hetima.com/">ヘチマコンピュータ</a>」によって作られたコードの「<a href="http://www.kokone.to/~kgt/diary.shtml?200501#23_3_1">作業日誌と云う名の不定記  2005/01/23</a> 」によるLinux版をベースにしたツールです。PSP用にタイトルを入力してATOMヘッダを組み立てて最適化するのに使用します。またファーストスタート形式にも最適化します。</p><h3>・外部チューナコントロール(オプション)</h3><p>Home Electronics社製USB 赤外線トランスミッタ　<a href="http://www.home-electro.com/tira2.php">Tira-2.1</a>を利用することにより、外部チューナのコントロールを行うことが可能です。<br />  「<a href="http://www.geocities.jp/coffee_style/Tira-2-0.html">Tira-2.1 シリアルプロトコル(の意訳</a>)」より、サンプルプログラムのcapture.plとtransfer.plをダウンロードしてfoltiaのperlディレクトリの下のirdaディレクトリに実行権限を付けてインストールして下さい。Tira2を接続して/dev/ttyUSB0が使える状態になったら、パーミッションを666に変更しておきます。</p><h3>・各種設定　</h3><p>設定はperl設定php設定と録画局設定に大きく分かれています。<br />  録画局設定は[foltia_station]テーブルで行います。<br /></p><h4>・設定1:perl/foltia_conf1.pl</h4><p>perl/foltia_conf1.pl.templateをコピーして設定ファイルを作ります。<br />  <br />  <span class="screen">$toolpath = '/home/foltia';<br />  </span>「perl」ディレクトリがあるパス。<br />  <span class="screen"><br />  $recunits = '4';<br />  </span>搭載エンコーダの数。GV-MVP/RX2Wを一枚刺しの場合は2になります。<br />  <br />  <span class="screen">$recfolderpath = '/home/foltia/php/tv';<br />  </span>録画ファイルを置くPATH<br />  <br />  <span class="screen">$uhfbandtype = 0;<br />  </span>UHF帯なら0、CATVなら1を指定します。それぞれivtvのntsc-bcast-jpとntsc-cable-jpに対応します。<br />  <span class="screen"><br />  $rapidfiledelete = 1;</span><br />1なら削除ファイルは「mita」ディレクトリに移動、0なら即時削除します。mitaディレクトリはゴミ箱のように機能しますが自動的に削除はしません。らくちんな運用をしたければ0、安全のため保存しておきたければ1でよいでしょう。</p><p><span class="screen">$tunerinputnum = 6;<br />  $svideoinputnum = 7;<br />  $comvideoinputnum = 8;</span><br />  上記3行にキャプチャカードごとに固有な映像入力のパラメータを示すivtvのinput numperを指示します。それぞれ、チューナ入力、S映像入力、コンポジット入力を指定します。デフォルトはIO  DATA製 GV-MVP/RX,RX2,RX2Wカードで利用できる設定となっています。<br />カード固有の値を調べるにはivtvドライバをインストールした状態で</p><p><span class="command">$/usr/bin/ivtvctl.paken  --list-inputs --device=/dev/video0</span></p><p>などで可能です。<br />  <span class="screen"><br />  $haveirdaunit = 1;</span><br />  Tira-2&lt;http://www.home-electro.com/tira2.php&gt;をつないでいるときに1,なければ0を指定します。<br />  <br />  <span class="screen">$mp4filenamestyle = 1 ;</span><br />古いPSPを利用している場合のみ1を指定します。通常1です。<br />0:PSP ファームウェアver.2.80より前と互換性を持つファイル名<br />1;よりわかりやすいファイル名<br />  <br />  <span class="screen">$trconqty = 2;</span><br />  MPEG4変換の品質を指定します。デフォルトはH.264/AVCの中画質となっています。<br />  3の高画質はファイルサイズは小さく画質もよいのですが処理時間がかかりすぎているのでデフォルトには指定していません。<br />  手もとのCeleron2.6GHzのパソコンで、3の設定で実尺の3.4倍、2の設定で1.1倍、1の設定で0.77倍位の処理時間で完了しています。<br />  0:PSP/iPod XviD MPEG4(旧式):faacとMPEG4IPを使って変換<br />  1:iPod Xvid MPEG4 標準画質 15fps 300kbps<br />  2:iPod H.264 中画質 24fps 300kbps<br />  3:iPod H.264 高画質 30fps 300kbps<br />  4:iPhone/iPod 480x320 H.264 高画質 24fps 350kbps<br />  5:iPhone/iPod 480x320 H.264 高画質 30fps 350kbps<br />  <br />  <span class="screen">$phptoolpath = $toolpath ;</span><br />  foltiaのphpディレクトリのパスを指定します。デフォルトではperlと同じ階層になります。<br />  <br />そのほか、データベース設定もありますが環境に応じて設定して下さい。</p><h4>・設定2:php/foltia_config2.php</h4><p>php/foltia_config2.php.templateをコピーして設定ファイルを作ります。</p><p><span class="screen">$toolpath = &quot;/home/foltia&quot; ; </span><br />  「php」ディレクトリがあるパス。この場合/home/foltia/php/と設置されている状態になります。<br />  <span class="screen"><br />  $recfolderpath = '/home/foltia/php/tv'; </span><br />  録画ファイルの保存先のパス。<br />  <span class="screen"><br />  $httpmediamappath = '/tv'; </span><br />ブラウザから見える録画ファイルのある位置。この場合http://localhost/tv/を表します。<br />  <span class="screen"><br />  $recunits = '4'; </span><br />foltia_conf1.plと同じ搭載エンコーダの数。GV-MVP/RX2Wを一枚刺しの場合は2になります。</p><p> <span class="screen">$useenvironmentpolicy = 0 ;</span><br />環境ポリシーを使うかどうか。<a href = "#envpolicy">環境ポリシー</a>機能については後述します。最初は利用しない状態で動作確認をすることをおすすめいたします。</p><p><span class="screen">$environmentpolicytoken = &quot;&quot;;</span><br />  環境ポリシーのパスワードに連結されるセキュリティコード。<a href = "#envpolicy">環境ポリシー</a>機能については後述します</p><p><span class="screen">$perltoolpath = $toolpath ;</span><br />foltiaのperlディレクトリのパスを指定します。デフォルトではphpと同じ階層になります。</p><h4>・設定3:foltia_stationテーブル</h4><p>録画の重要な設定となる項目です。インストールが無事に終了してれば首都圏の放送局設定サンプルが入っていますのでそれを参考に設定して下さい。<br />  foltia_stationテーブルのそれぞれの項目について説明します。<br />  <br />  <span class="screen">stationid</span>:ユニークなID値です。<br />  <span class="screen">stationname</span>:しょぼいカレンダーと共通の放送局名です。<br />  <span class="screen">stationrecch</span>:周波数チャンネルです。外部入力の場合はS映像入力の場合に0、コンポジット入力の場合に-1を指定します。受信出来ない局には-10を指定します。新規に自動追加されると-10になります。<br />  <span class="screen">stationcallsignue</span>:放送局略称を記入します。空白でも構いません。<br />  <span class="screen">stationuri</span>:放送局公式URIを記入します。空白でも構いません。<br />  <span class="screen">tunertype</span>:外部チューナコントロールコマンドを書き入れます。「Tira2準備」の項で詳しく述べます。空白でも構いません。<br />  <span class="screen">tunerch</span>:外部チューナコントロールコマンドを書き入れます。「Tira2準備」の項で詳しく述べます。空白でも構いません。<br />  <span class="screen">device</span>:放送局によって録画デバイスを固定するときに用います。たとえば、BS-2専用チューナを常に/dev/video2につないでいるような場合「/dev/video2」と指定します。通常は空白です。<br />  <span class="screen">ontvcode</span>:XMLTVで用いる放送局識別コードを記入します。EPG番組表に表示される局は<br />  1.  XMLTV初期設定で情報を取得していて<br />  2.  foltia_epgにデータがインポートされていて<br />  3.foltia_stationテーブルのontvcodeフィールドにfoltia_epgテーブルのontvchannelフィールドと同じ放送局識別名が記入されている<br />  局になります。デフォルトで関東キー局とBS、BSデジタル局、CS局が設定されています。</p><h3>・Tira2準備(オプション)</h3><p>　USBトランスミッタであるTira2を動作させるために必要な準備を行います。<br />  　perl/irda/にインストールされたcapture.plを利用して、チューナリモコンからボタンを学習させていきます。foltiaではひとつのキー表現するファイル名に「一文字.dat」というルールを使用しています。手もとのデジタルチューナをコントロールするのに必要だったキーは0-9の数字と地上デジタル切り替え、BSデジタル切り替え、CATV切り替え、放送局番号入力キーの14キーでした。それぞれのキーに対応するリモコンデータファイル名を0.dat-9.dat,u.dat,b.dat,c.dat,X.datとしました。これらをcapture.plと同じ階層に置きます。<br />  　完了したらチューナコントロールが行えるか動作確認をします。<span class="command"><br />  </span>./transfer.pl 0.datと実行することでリモコンで0キーを押した状態を再現します。<br />  　全てのキーがうまく動作したら、データベースのfoltia_stationテーブルのtunertypeフィールドとtunerchフィールドにチャンネルコマンドを記入します。手もとのチューナではBSデジタル103chのNHK  BS-hiに切り替える場合、BSデジタル切り替え、チャンネル番号入力、1,0,3と5つのキーを押します。これを再現するにはb.dat,X.dat,1.dat,0.dat,3.datの5つのファイルを送出することになります。これをデータベースに書くと「bX103」となります。tunertypeフィールドとtunerchフィールドは連結されて実行されますので「b」「X103」と書いても「bX103」「」と書いても等価なものとして扱われます。わかりやすい記入方法で書き込んでください。</p><h3>・動作確認</h3><p>　ここまで設定できたらあと一息で完了します。まず単純な録画ができるか動作確認していきましょう。<br />  　最初に</p><p><span class="command">$head /dev/video0</span></p><p>などでキャプチャでバイスからMPEG2データか取れるか確認します。なにか出てくればOKですので次に進みます。<br />  　つぎに、録画試験を~/perl/tvrecording.plを使って行います。</p><p><span class="command">$./tvrecording.pl 1 60 0 test.m2p 5 0 0 /dev/video0</span></p><p>としてみましょう。この例は1chを60秒5Mbpsでtest.m2pというファイル名で/dev/video0から録画することを意味しています。2分程度でプロンプトに戻ります。録画ファイル保存フォルダ(デフォルトだと/home/foltia/tv/)にtest.m2pが出来ていて、ファイルを再生して期待通りならば第1段階成功です。うまくいかなかった場合には~/debug.txtに書かれる情報も参考にして原因を突き止めて下さい。<br />  　つぎに、しょぼいカレンダーから番組データをインポートできるかを確認します。</p><p><span class="command">$./perl/getxml2db.pl</span></p><p>成功するとデータベースのfoltia_programテーブルとfoltia_subtitleテーブルにデータが入ります。<br />  　ここまでできたらWebブラウザでインストールしたphpのディレクトリを開いてみましょう。<br />  <img src="img/screen03.png" width="800" height="600" /><br />  　番組表が表示されているのが確認できます。実際に予約をして見ましょう。一番左のTIDの数字をクリックするとそのタイトルの予約画面になります。例では690のCanvas2  〜虹色のスケッチ〜をクリックした画面です。<br />  <img src="img/screen04.png" width="800" height="600" /><br />  　放送局とビットレートを選択して予約を押すと予約キューが入ります。放送局の設定で[全局]を選択すると文字通り放送スケジュールが入ってる局を全局録画しようとします。いまのところ受信可能不可能に関係なく録画します。想定してる用途は『千葉テレビとテレビ埼玉とtvkでリリカルなのはA'sを録画しておこう!』というものではなくしょぼいカレンダーが持つ*声優関連*や*アニメ特番*などの放送局が特定できない番組グループを録画するためのものです。<br />  　予約が完了したらシェルでatqコマンドでキューが入ったを確認します。</p><p class="command">$atq<br />182194 2006-01-31 00:40 a foltia</p><p>放映予定の5分前に起動するプロセスが入ってることが確認できます。<br />  この例だと00:40にfolprep.plが起動します。<br />  folprep.plが起動すると放映予定1分前にrecwrap.plがキューに入ります。</p><p class="command">$atq<br />  182195 2006-01-31 00:44 a foltia</p><p>　番組が終了したらMPEG2が録画されたか確認してみましょう。デフォルトで~/php/tv/690-16-20060131-0045.m2pというファイルが出来ているはずです。ファイル名はそれぞれ以下のルールで命名されます。<br />  TID:しょぼいカレンダーと共通の番組IDです。<br />  話数:番組が第何話かを示します。該当しない場合は空白になります。<br />  放映日:YYYYmmddスタイルの放映日です。<br />  放映時刻:0000-2359の間での開始時刻になります。しょぼいカレンダーでは24:00以降の時刻を扱いますがfoltiaでは暦通り24:00以降の時刻は次の日として取り扱います。<br />  　MPEG2の録画が完了するとfoltiaはffmpegを利用してH.264/AVCへの変換を開始します。所要時間はCeleron2.6GHz環境で実尺の1.2倍程度の時間です。この例の場合~/php/tv/690.localized/mp4/MAQ-690-16-20060131-0045.MP4という動画ファイルと同じ階層にMAQ-690-16-20060131-0045.THMファイルができ上がります。ファイル名は、先頭がM4Vの場合MPEG4(XviD)、MAQの場合H.264/AVC、そのあとに続くのはMPEG2と同じルールです。</p><p>　番組指定による自動録画が動いたら、つぎにEPGによる個別番組録画の動作確認に移りましょう。<br />  　まず番組データをXMLTVを用いてインポートします。</p><p><span class="command">$/usr/bin/perl /usr/bin/tv_grab_jp | /home/foltia/perl/xmltv2foltia.pl</span></p><p>確認のためにブラウザで番組表ページを開きます。<br />  <img src="img/screen05.png" width="800" height="1000" /><br /></p><p>テレビ東京のワールドビジネスサテライトを予約してみます。<br />  <img src="img/screen06.png" width="800" height="600" /><br />EPG予約はTIDが0番の番組として扱われます。ファイル名や録画フォルダもそれに準拠します。<br />放送が終わったらMPEG2とMPEG4を確認してみましょう。</p><p>　ここまで動作確認ができればfoltiaの基本的な部分は動作しています。残念ながらうまく動かない場合には~/debug.txtをみながら原因を分析してみて下さい。</p><p>　最後の仕上げにcronの設定をしておきましょう。私は以下の様な設定にしています。</p><p class="screen">7 * * * * /home/foltia/perl/schedulecheck.pl  &gt;/dev/null 2&gt;&amp;1<br />  1 0 * * * /home/foltia/perl/cron_foltia_dayly.sh  &gt;/dev/null 2&gt;&amp;1</p><p>schedulecheck.plは番組データを更新してキューを再構築するプログラムです。起動頻度はもっと低くても問題ないかもしれません。<br />  cron_foltia_dayly.sh はXMLTVを呼び出してEPG番組表データを取得するなどの処理を行います。</p><p>　<del>また、ivtvのバージョンによっては再起動すると/dev/video*のパーミッションがrootでしか読めなくなってしまう場合があります。その場合にはユーザfoltiaでデバイスが読み出せるよう適切なパーミッションを設定し直して下さい。</del></p>再起動してもビデオキャプチャデバイスが読めるようにパーミッションを付けます。<p class="command"># vi /etc/security/console.perms.d/video.perms<br />&lt;console&gt;  0666 &lt;sound&gt;      0666 root.foltia<br />&lt;console&gt;  0666 &lt;v4l&gt;        0666 root.foltia<br /># pam_console_apply<br /></p>(参考:<a href="http://fedorasrv.com/vrs.shtml ">TV録画予約システム構築(vrs) - Fedoraで自宅サーバー構築</a>)<hr><h2 id="operation">・操作概要</h2><p>　foltiaの操作はWeb画面で行います。以下に各メニューの説明をします。</p><h3>foltia:</h3><p>　公式ページ&lt;<a href="http://www.dcc-jpl.com/soft/foltia/">http://www.dcc-jpl.com/soft/foltia/</a>&gt;にジャンプします。</p><h3>放映予定:</h3><p>　しょぼいカレンダーより取得した放送予定の全リストを表示します。通常のトップページです。録画予約されているものが色違いで強調表示されます。<br />  赤色表示:その放映が録画対象であることを示します<br />  青色表示:録画対象になっている番組の他局放映ことを示します。録画はされません。<br />  [TID]をクリックすると番組予約画面へ、[タイトル]をクリックすると「しょぼいカレンダー」の該当番組詳細画面へ、「サブタイトル」をクリックすると「しょぼいカレンダー」の放映予定画面へそれぞれ移動します。<br />  デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/">http://www.dcc-jpl.com/soft/foltia/demo/</a><br />  <img src="img/screen07.png" width="800" height="600" /><br /></p><h3>新番組:</h3><p>　放映予定の中から第1話のものを抽出します。新番組シーズンに予約を入れるとき便利です。<br />  デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/index.php?mode=new">http://www.dcc-jpl.com/soft/foltia/demo/index.php?mode=new</a><br /><img src="img/screen08.png" width="800" height="600" /></p><p>&nbsp;</p><h3>予約一覧:</h3><p>　大きく上下のふたつのエリアに分かれていて、予約されている番組の放映予定と番組名を一覧表示します。ここでも[TID]をクリックすると番組予約画面へ、[タイトル]をクリックすると「しょぼいカレンダー」の該当番組詳細画面へそれぞれ移動します。録画予約の解除は下半分のタイトルリストの項目から行います。EPG予約の解除もここから行います。「画質」項目は録画ビットレートをMbps単位で表示しています。<br />　色が付いている番組は重複警告です。搭載された録画ユニットで録画し切れない場合に色がつきます。赤色はカードに搭載されたアナログチューナーの重複、青色は外部入力の重複を示します。重複警告がでている番組は録画が欠ける可能性があります。また、アナログチューナー、外部チューナーともに00:00-00:30 番組A ,00:30-01:00 番組Bという番組が連続している場合は重複とは判断しません。<br />　引数rでエンコーダ数を変更して予約状況を調べる事が出来ます。listreserve.php?r=6で6台エンコーダを搭載したときの予約状況を調べる事が出来ます。<br />  デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/listreserve.php">http://www.dcc-jpl.com/soft/foltia/demo/listreserve.php</a><br />  <img src="img/screen09.jpg" width="800" height="1000" /><br />  |中略<br />  <img src="img/screen18.png" width="800" height="600" /><br /></p><h3>番組一覧:</h3><p>　foltiaの内部データベースに登録されている全番組リストを表示します。MPEG4リンク項目は[録画ライブラリ]メニューと同じ詳細ページにジャンプします。<br />  デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/titlelist.php">http://www.dcc-jpl.com/soft/foltia/demo/titlelist.php</a><br />    <img src="img/screen10.png" width="800" height="600" /><br /></p><h3>番組表:</h3><p>　EPG録画向け個別番組表を表示します。デフォルトで現在放映中の番組が最上段に表示されて、8時間分、8局表示します。<br />既存の番組表サイトと比較して、常に現在放映されているものが最上段に表示されるため、常用に際しても便利です。<br />タイトルをクリックすると放映時刻と放映局を選択しての録画予約ページとなります<br />  自動録画に対応していない番組を録画するときに役に立つでしょう。ここで予約したものはTIDが0番の放送予定としてデータベースに追加されます。<br />  デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/viewepg.php">http://www.dcc-jpl.com/soft/foltia/demo/viewepg.php</a><br />    <img src="img/screen05.png" width="800" height="1000" /><br /></p><h3>番組表:番組手動予約</h3><p>　個別の手動録画を行います。<br />・EPGでまだ降ってきていない番組　<br />・ケータイで外から大急ぎで予約したい場合　<br />などの用途を想定しています。テンキーから迅速に予約出来るようにあえてプルダウンメニューでなく数字入力式としています。foltiaの仕組み的に番組の尺の最大値は特に制限はないのですが取り回しを考えて最大6時間に区切ってあります。録画したい番組が360分を超える場合には適当に分割して予約してください。</p>  デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/m.php">http://www.dcc-jpl.com/soft/foltia/demo/m.php</a><br />    <img src="img/screen19.png" width="247" height="503" /><br /><h3>録画一覧(録画順):</h3><p>  　録画済みのMPEG2ファイルを放映順に一覧表示します。削除チェックボックスにチェックを入れて削除ボタンを押すとそのファイルは削除されます。上部にディスク空き容量とトラコンプロセスを表示します。<br />ディスクの空き容量が少なくなると背景色が100GB,50GB,30GBでそれぞれ変化し注意を喚起します。<br />  デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/showplaylist.php">http://www.dcc-jpl.com/soft/foltia/demo/showplaylist.php</a><br />    <img src="img/screen11.png" width="800" height="600" /><br /></p><h3>録画一覧(番組順):</h3><p>   　録画済みのMPEG2ファイルを番組ID[TID]順に一覧表示します。<br />  デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/showplaylist.php?list=title">http://www.dcc-jpl.com/soft/foltia/demo/showplaylist.php?list=title</a><br />    <img src="img/screen12.png" width="800" height="600" /><br /></p><h3>録画一覧(全):</h3> <p>  　データベースを使わず、録画ディレクトリの中にあるファイルを一覧表示するモードです。主にメンテナンス用途として使います。<br /></p><h3>録画ライブラリ:</h3><p>  　MPEG4録画ファイルを番組ごとに一覧表示します。<br /> デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/showlib.php">http://www.dcc-jpl.com/soft/foltia/demo/showlib.php</a><br />    <img src="img/screen14.png" width="800" height="600" /><br /></p><p>詳細をクリックすると番組ごとの一覧になります。詳細表示の画面では、ブラウザでMPEG4を再生する事も可能です。番組単体のPodcast用RSSもこの画面内にあります。<br />MP4ファイル名をクリックするとブラウザ内で再生を開始します。その右のアイコンは、QuickTimePlayerでムービーを再生します。<br /> デモ画面:<a href="http://www.dcc-jpl.com/soft/foltia/demo/showlibc.php?tid=665">http://www.dcc-jpl.com/soft/foltia/demo/showlibc.php?tid=665</a><br />    <img src="img/screen15.png" width="800" height="600" /><br /> 　「キャプ」でキャプチャ画面一覧を開きます。<br />    <img src="img/screen17.png" width="800" height="600" /><br /> </p><h3>Folcast(RSS):</h3>  　Video Podcast用のRSSです。このRSSをiTunesに登録することで、iPodとの自動シンク機能を実現します。トップメニューにあるRSSは新規録画が全部含まれるPodcastを実現します。番組単体のPodcastは録画ライブラリの詳細から取得して下さい。[iTunesにFolcastを登録]をクリックするとiTunesに自動的に追加することができます。 <br />参考リンク:<a href="http://d.hatena.ne.jp/egyo2nd/">さくらぷらすα日記</a> 2006-03-14<a href="http://d.hatena.ne.jp/egyo2nd/20060314/1142305040"> フォルキャスト(folcast) の解説</a> <br />    <img src="img/screen16.png" width="800" height="600" /><br /> </p><h2 id="envpolicy">・環境ポリシー</h2><p>foltiaではチェンジセット70にて環境ポリシーと呼ばれる機能が追加されました。以下では環境ポリシー機能について説明いたします。</p><h3>概要</h3>環境ポリシーは家庭内など利用者が複数いる環境でより便利に使えるよう導入されました。具体的には次のような機能を持ちます。<br />・ユーザの概念の導入<br />・ユーザごとの権限の概念の導入<br />・ユーザごとの個別設定の保持(未実装)<h3>設定</h3><p>foltia_config2.phpで次の設定を変更します。</p><p><span class="screen">$useenvironmentpolicy = 0 ;</span><br />  環境ポリシーを使うかどうか。0が未使用(デフォルト)、1が使用です。</p><p><span class="screen">$environmentpolicytoken = &quot;&quot;;</span><br />  環境ポリシーのパスワードに連結されるセキュリティコード。セキュリティコードとは各ユーザがログインするために自分のアカウントのパスワード以外に知らなければいけないフレーズです。デフォルトは空白です。空白でも差し支えありません。</p><p><span class="screen">$perltoolpath = $toolpath ;</span><br />  foltiaのperlディレクトリのパスを指定します。デフォルトではphpと同じ階層になります。</p><p>&nbsp;</p><div class="sidebar">  <p>古いfoltiaからアップグレードする場合はデータベースのテーブルを拡張する必要があります。<br />    テーブルの    詳細はmktable.txtファイルを参考にして下さい。<br />    ・新規作成テーブル:foltia_envpolicy<br />    ・追加カラム:foltia_subtitleテーブルにepgaddedbyカラム追加<br />    ・新規レコード追加:foltia管理者アカウントをユーザリストに作ります。新規インストールした場合は次のように作られます。<br />    <span class="screen">　insert into foltia_envpolicy    values ( '0','0','foltia','foltiapasswd',now(),'');</span><br />    <br /></p></div><p>　つぎに.htpasswdファイルを作成します。デフォルトではperlディレクトリと同じ階層に設置されます。もし既に.htpasswdがあるならば必要に応じてバックアップを取っておいて下さい。ファイルの作成はperl/envpolicyupdate.plを実行することで自動的に作成されます。</p><p>　環境ポリシーが有効になると、アクセス時にブラウザによって認証画面が出るようになります。ID:foltia  PW:foltiapasswd)が初期管理者パスワードです。 ページが表示されるとメニューの右端にアカウントが出るようになります。<br />  <img src="img/env1.png" width="806" height="87" /></p><h3>操作</h3><p>ログイン時に認証されなかった場合下記の画面になります。<br />  <img src="img/env2.png" width="497" height="163" />  <br />ここで「こちらから。」につながってるリンクをたどるとaccountregist.phpに移動して次のような画面となります。<br /><img src="img/env3.png" /> <br />ここでアカウントを追加すると即時に有効になります。<br />　設定でセキュリティコードを空白のデフォルトにしておいた場合、ここで登録されたパスワードでログイン出来ます。セキュリティコードを設定した場合パスワードとセキュリティコードをつないだ文字列でログイン可能となります。具体的にはこんな感じです。<br />・アカウントのパスワード[fate]、セキュリティコード、空白の場合、ログインパスワード:[fate]<br />・アカウントのパスワード[fate]、セキュリティコード、[nanoha]の場合、ログインパスワード:[fatenanoha]<br />特権管理者はセキュリティコードのいかんにかかわらず常にアカウントのパスワードでログイン出来ます。</p><p class="sidebar">ユーザクラスは次のように定義されています。<br />  <br />  0:特権管理者:インストール時に設定されるfoltiaアカウントのクラス。<br />  1:管理者:予約削除、ファイル削除が出来る。セキュリティコード以外特権管理者と同様。<br />  2:利用者:EPG追加、予約追加が出来る。<br />  3:ビュアー:ファイルダウンロードが出来る。<br />4:ゲスト:インターフェイスが見れる。(未実装)<br /><br />新規登録されたアカウントのデフォルトユーザクラスは2の利用者となります。<br /></p><p>管理者はEPG録画の予約者確認と、予約削除が可能です。<br />  <img src="img/env4.png" width="788" height="302" /></p><p>今後ユーザごとにFolcastを編集出来る機能などを開発予定です。</p><h2 id="colophon">・おわりに</h2><p>　以上、駆け足でfoltiaの概要を説明してきました。今のところfoltiaには視聴に関する機能は一切ありませんが、使用例として自宅では富士通T90Hというパソコンにfoltia録画ボリュームをSambaでマウントし、WinDVDでMPEG2を再生、外ではiPod  VideoでMPEG4を視聴しています。DVD Playerソフトでファイルを選んで再生するのがいまひとつめんどくさい操作なので、今後の改良点としたいところです。<br />  　foltiaはまだまだ開発途上のソフトウェアです。今後の計画は以下の様なものを考えています。<br />  　・未読番組管理機能<br />  　・ロケーションフリーテレビのようなライブストリーミング機能<br />  　・デジタル放送のデジタル録画機能<br /> 詳しくはfoltia Development Central wiki:「<a href = "http://www.dcc-jpl.com/foltia/wiki/futuretodo">foltia のToDoやらゆめを適当に書くwik</a>i」に。 <br />  今後も全ての情報はDCC-JPL Japanの公式ページ&lt;<a href="http://www.dcc-jpl.com/soft/foltia/">http://www.dcc-jpl.com/soft/foltia/</a>&gt;に掲載していきます。</p><p>・謝辞<br />  以下の数々のサイトを利用、参考にさせていただいております。改めましてお礼申し上げます。<br />  <a href = "http://cal.syoboi.jp/">しょぼいカレンダー</a>&lt;http://cal.syoboi.jp/&gt;<br />  <a href = "http://www.paken.org">AAF ぱ研</a>&lt;http://www.paken.org/&gt;<br />  <a href = "http://www.geocities.jp/coffee_style/Tira-2-0.html">Tira-2.1 シリアルプロトコル(の意訳)</a>&lt;http://www.geocities.jp/coffee_style/Tira-2-0.html&gt;<br />  <a href = "http://www.kokone.to/~kgt/diary.html">「月琴日記」</a>&lt;http://www.kokone.to/~kgt/diary.html&gt;<br />  <a href = "http://www.tadachi-net.com/desktop_pc/asus_terminator/avserver3.html">Linuxで最強のテレビ録画サーバを目指す</a>&lt;http://www.tadachi-net.com/desktop_pc/asus_terminator/avserver3.html&gt;<br /> <a href="http://fedorasrv.com/">Fedoraで自宅サーバー構築 </a>&lt;http://fedorasrv.com/&gt;<br />  <a href = "http://www.ontvjapan.com/">ONTV JAPAN</a>&lt;http://www.ontvjapan.com/&gt;<br />  IRC #dameTunesのみなさま<br />  他多数</p><p>本ドキュメントはオープンソースマガジン2006年6月号(ソフトバンククリエイティブ刊)向け原稿として書き起こした稿をもとに加筆したものです。公開を快く許諾して下さいましたソフトバンククリエイティブ様にお礼申し上げます。</p><p>本ソフトウェアは完全な無保証です。ライセンスとしてGPL2を適用したいと考えていますが適用出来るかどうかの判断がまだ終わっていない段階です。</p></body></html>

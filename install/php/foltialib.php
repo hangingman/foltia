@@ -260,9 +260,17 @@ select p.code
 
 function printhtmlpageheader(){
 
-$serveruri = getserveruri();
+global $useenvironmentpolicy;
 
-print "<p align='left'><font color='#494949'><A HREF = 'http://www.dcc-jpl.com/soft/foltia/' target=\"_blank\">foltia</A>　| <A HREF = './index.php'>放映予定</A> | <A HREF = './index.php?mode=new'>新番組</A> | <A HREF = './listreserve.php'>予約一覧</A> | <A HREF = './titlelist.php'>番組一覧</A> | <A HREF = './viewepg.php'>番組表</A> | 録画一覧(<A HREF = './showplaylist.php'>録画順</A>・<A HREF = './showplaylist.php?list=title'>番組順</A>・<A HREF = './showplaylist.php?list=raw'>全</A>) | <A HREF = './showlib.php'>録画ライブラリ</A> |  <A HREF = './folcast.php'>Folcast(RSS)</A>[<a href=\"itpc://$serveruri/folcast.php\">iTunesにFolcastを登録</a>] |</font></p>\n";
+$serveruri = getserveruri();
+$username = $_SERVER['PHP_AUTH_USER'];
+
+print "<p align='left'><font color='#494949'><A HREF = 'http://www.dcc-jpl.com/soft/foltia/' target=\"_blank\">foltia</A>　| <A HREF = './index.php'>放映予定</A> | <A HREF = './index.php?mode=new'>新番組</A> | <A HREF = './listreserve.php'>予約一覧</A> | <A HREF = './titlelist.php'>番組一覧</A> | <A HREF = './viewepg.php'>番組表</A> | 録画一覧(<A HREF = './showplaylist.php'>録画順</A>・<A HREF = './showplaylist.php?list=title'>番組順</A>・<A HREF = './showplaylist.php?list=raw'>全</A>) | <A HREF = './showlib.php'>録画ライブラリ</A> |  <A HREF = './folcast.php'>Folcast</A>[<a href=\"itpc://$serveruri/folcast.php\">iTunesに登録</a>] | ";
+if ($useenvironmentpolicy == 1){
+	print "【 $username 】";
+}
+
+print "</font></p>\n";
 
 }
 
@@ -528,16 +536,162 @@ if (strlen($foldate) == 12 ){
 
 
 
+function login($con,$name,$passwd){
+global $environmentpolicytoken;
+
+//入力内容確認
+ if (((mb_ereg('[^0-9a-zA-Z]', $name)) ||(mb_ereg('[^0-9a-zA-Z]', $passwd) ))){
+	
+	//print "エラー処理\n";
+	//print "<!-- DEBUG name/passwd format error-->";
+	redirectlogin();
+	
+}else{
+//print "正常処理\n";
+//db検索
+escape_string($name);
+escape_string($passwd);
+
+$query = "
+SELECT memberid ,userclass,name,passwd1 
+FROM foltia_envpolicy 
+WHERE foltia_envpolicy.name  = '$name'  
+	";
+	$useraccount = m_query($con, $query, "DBクエリに失敗しました");
+	$useraccountrows = pg_num_rows($useraccount);
+	
+	if ($useraccountrows == 1 ){
+		$rowdata = pg_fetch_row($useraccount, 0);
+		$memberid = $rowdata[0];
+		$userclass = $rowdata[1];
+		$username =  $rowdata[2];
+		$dbpasswd = $rowdata[3];
+	}else{
+		header("HTTP/1.0 401 Unauthorized");
+		//print "<!-- DEBUG DB record error ($useraccountrows)-->";
+		redirectlogin();
+	}//end if
+
+
+// passwdをdbから取りだし
+if ($userclass == 0){
+$dbpasswd = "$dbpasswd";
+}else{
+// db passwdとトークンを連結し
+$dbpasswd = "$dbpasswd"."$environmentpolicytoken";
+}
+//それが入力と一致すれば認証
+if ($passwd == $dbpasswd) {
+//print "認証成功<br>$dbpasswd  $passwd\n";
+}else{
+//print "認証失敗<br>$dbpasswd  $passwd\n";
+		header("HTTP/1.0 401 Unauthorized");
+		//print "<!-- DEBUG passwd unmatch error>";
+		redirectlogin();
+}
+}//end if mb_ereg
+}//end function login
 
 
 
 
+function redirectlogin(){
+
+print "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n";
+print "<html><head>\n";
+print "<title>foltia:Invalid login</title>\n";
+print "</head><body>\n";
+print "<h1>Invalid login</h1>";
+print "<p>foltiaヘのアクセスにはログインが必要です。新規アカウント登録は<a href=\"./accountregist.php\">こちらから。</a></p><hr>\n";
+print "<address>foltia by DCC-JPL Japan/foltia Project.  <a href = \"http://www.dcc-jpl.com/soft/foltia/\">http://www.dcc-jpl.com/soft/foltia/</a></address>\n";
+print "</body></html>\n";
 
 
 
+exit;
+}//end function redirectlogin
+
+function getuserclass($con){
+global $useenvironmentpolicy;
+$username = $_SERVER['PHP_AUTH_USER'];
+
+if ($useenvironmentpolicy == 1){
+$query = "
+SELECT memberid ,userclass,name,passwd1 
+FROM foltia_envpolicy 
+WHERE foltia_envpolicy.name  = '$username'  
+	";
+		$useraccount = m_query($con, $query, "DBクエリに失敗しました");
+	$useraccountrows = pg_num_rows($useraccount);
+	
+	if ($useraccountrows == 1 ){
+		$rowdata = pg_fetch_row($useraccount, 0);
+		//$userclass = $rowdata[1];
+		return ($rowdata[1]);
+	}else{
+	return (99);//エラー
+	}//end if
+	
+}else{
+	return (0);//環境ポリシー使わないときはつねに特権モード
+}//end if
+}//end function getuserclass
 
 
 
+function getmymemberid($con){
+global $useenvironmentpolicy;
+$username = $_SERVER['PHP_AUTH_USER'];
 
+if ($useenvironmentpolicy == 1){
+$query = "
+SELECT memberid ,userclass,name,passwd1 
+FROM foltia_envpolicy 
+WHERE foltia_envpolicy.name  = '$username'  
+	";
+		$useraccount = m_query($con, $query, "DBクエリに失敗しました");
+	$useraccountrows = pg_num_rows($useraccount);
+	
+	if ($useraccountrows == 1 ){
+		$rowdata = pg_fetch_row($useraccount, 0);
+		//$userclass = $rowdata[1];
+		return ($rowdata[0]);
+	}else{
+	return (-1);//エラー
+	}//end if
+	
+}else{
+	return (0);//環境ポリシー使わないときはつねに特権モード
+}//end if
+}//end function getuserclass
+
+
+function getmemberid2name($con,$memberid){
+global $useenvironmentpolicy;
+//$username = $_SERVER['PHP_AUTH_USER'];
+
+if ($useenvironmentpolicy == 1){
+$query = "
+SELECT memberid ,userclass,name,passwd1 
+FROM foltia_envpolicy 
+WHERE foltia_envpolicy.memberid  = '$memberid'  
+	";
+		$useraccount = m_query($con, $query, "DBクエリに失敗しました");
+	$useraccountrows = pg_num_rows($useraccount);
+	
+	if ($useraccountrows == 1 ){
+		$rowdata = pg_fetch_row($useraccount, 0);
+		return ($rowdata[2]);
+	}else{
+	return ("");//エラー
+	}//end if
+	
+}else{
+	return ("");
+}//end if
+
+
+
+}//end function getmemberid2name
 
 ?>

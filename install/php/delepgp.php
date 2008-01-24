@@ -15,6 +15,22 @@ delflag:確認フラグ
  DCC-JPL Japan/foltia project
 
 */
+
+include("./foltialib.php");
+$con = m_connect();
+
+if ($useenvironmentpolicy == 1){
+if (!isset($_SERVER['PHP_AUTH_USER'])) {
+    header("WWW-Authenticate: Basic realm=\"foltia\"");
+    header("HTTP/1.0 401 Unauthorized");
+	redirectlogin();
+    exit;
+} else {
+login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
+}
+}//end if login
+
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="ja">
@@ -27,14 +43,12 @@ delflag:確認フラグ
 
 <?php
 
-  include("./foltialib.php");
 
 $pid = getgetform(pid);
 		if ($pid == "") {
 		die_exit("番組がありません<BR>");
 		}
 
-$con = m_connect();
 $now = date("YmdHi");   
 ?>
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >

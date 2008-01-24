@@ -226,6 +226,36 @@ return ($filename );
 }
 
 
+sub getphpstyleconfig{
+my $key = $_[0];
+my $phpconfigpath = "";
+my $configline = "";
+ # read
+if (-e "$phptoolpath/php/foltia_config2.php"){
+	$phpconfigpath = "$phptoolpath/php/foltia_config2.php";
+}elsif(-e "$toolpath/php/foltia_config2.php"){
+	$phpconfigpath = "$toolpath/php/foltia_config2.php";
+}else{
+	$phpconfigpath = `locate foltia_config2.php | head -1`;
+	chomp($phpconfigpath);
+}
+
+
+if (-r $phpconfigpath ){
+open (CONFIG ,"$phpconfigpath") || die "File canot read.$!";
+while(<CONFIG>){
+	if (/$key/){
+	$configline = $_;
+	$configline =~ s/\/\/.*$//;
+	$configline =~ s/\/\*.*\*\///;
+	}else{
+	}
+}
+close(CONFIG);
+}#end if -r $phpconfigpath 
+return ($configline);
+}#end sub getphpstyleconfig
+
 
 1;
 

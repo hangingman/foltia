@@ -277,9 +277,15 @@ do {
 	$trcnprocesses =~ s/[^0-9]//gi;
 	# 既にトラコンプロセスが走っているなら適当に待機
 	if ($trcnprocesses  >= $cpucores){
-			&writelog("recwrap TRCN WAITING :$trcnprocesses / $cpucores :$outputfilename ");
-		sleep 53;
-		sleep $recch;
+			if (-e "/proc/uptime" ){
+			$loadaverage = `uptime`;
+			chomp($loadaverage);
+			}else{
+			$loadaverage = "";
+			}
+			&writelog("recwrap TRCN WAITING :$trcnprocesses / $cpucores :$outputfilename $loadaverage");
+		sleep 113;
+		sleep ($recch)*5;
 	}
 } until ($trcnprocesses  < $cpucores);
 

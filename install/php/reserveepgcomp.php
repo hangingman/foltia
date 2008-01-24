@@ -18,6 +18,22 @@ lengthmin:録画時間(単位:分)
  DCC-JPL Japan/foltia project
 
 */
+
+include("./foltialib.php");
+$con = m_connect();
+
+if ($useenvironmentpolicy == 1){
+if (!isset($_SERVER['PHP_AUTH_USER'])) {
+    header("WWW-Authenticate: Basic realm=\"foltia\"");
+    header("HTTP/1.0 401 Unauthorized");
+	redirectlogin();
+    exit;
+} else {
+login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
+}
+}//end if login
+
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="ja">
@@ -28,7 +44,6 @@ lengthmin:録画時間(単位:分)
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
 
 <?php 
-  include("./foltialib.php");
 
 	printhtmlpageheader();
 ?>
@@ -48,7 +63,6 @@ $lengthmin = getnumform(lengthmin);
 		}
 print "	<title>foltia:EPG予約:完了</title>
 </head>\n";
-$con = m_connect();
 $now = date("YmdHi");   
 // - DB登録作業
 
@@ -80,25 +94,48 @@ $query = "SELECT max(countno) FROM  foltia_subtitle WHERE tid = 0";
 
 //INSERT
 if ($demomode){
+	print "下記予約を完了いたしました。<br>";
 }else{
+$userclass = getuserclass($con);
+if ( $userclass <= 2){
+/*
+pid 
+tid 
+stationid  
+countno 
+subtitle
+startdatetime  
+enddatetime  
+startoffset  
+lengthmin  
+m2pfilename 
+pspfilename 
+epgaddedby  
 
-$query = "
-insert into foltia_subtitle  
+*/
+
+$memberid = getmymemberid($con);
+	$query = "
+insert into foltia_subtitle  (pid ,tid ,stationid , countno ,subtitle ,
+startdatetime ,enddatetime ,startoffset , lengthmin , epgaddedby ) 
 values ( '$insertpid','0','$stationid',
-	'$nextcno','$subtitle','$startdatetime','$enddatetime','0' ,'$lengthmin')";
+	'$nextcno','$subtitle','$startdatetime','$enddatetime','0' ,'$lengthmin' , '$memberid')";
 
 	$rs = m_query($con, $query, "DBクエリに失敗しました");
 
-//addatq.pl
-//キュー入れプログラムをキック
-//引数　TID チャンネルID
-//echo("$toolpath/perl/addatq.pl $tid $station");
+	//addatq.pl
+	//キュー入れプログラムをキック
+	//引数　TID チャンネルID
+	//echo("$toolpath/perl/addatq.pl $tid $station");
 
 	$oserr = system("$toolpath/perl/addatq.pl 0 0");
-
+	print "下記予約を完了いたしました。<br>";
+}else{
+	print "EPG予約を行う権限がありません。";
+}// end if $userclass <= 2
 }//end if demomode
 
-print "下記予約を完了いたしました。<br>";
+
 
 }else{
 print "時刻が不正なために予約できませんでした。 <br>";

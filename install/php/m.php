@@ -22,9 +22,19 @@ pname:番組名
 ?>
 
 <?php
-  include("./foltialib.php");
-
+include("./foltialib.php");
 $con = m_connect();
+if ($useenvironmentpolicy == 1){
+	if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	    header("WWW-Authenticate: Basic realm=\"foltia\"");
+	    header("HTTP/1.0 401 Unauthorized");
+		redirectlogin();
+	    exit;
+	} else {
+	login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
+	}
+}//end if login
+
 $now = date("YmdHi");   
 $errflag = 0;
 $pname = "手動録画";
@@ -186,6 +196,7 @@ print "時刻が不正なために予約できませんでした。 <br>";
     録画尺:
       <input name="lengthmin" type="text" id="lengthmin" size="4" value="<?=$lengthmin?>"/> 
     分 (最長360分) </p>
+
   <p>録画局:
 <?php
 $query = "
@@ -237,6 +248,17 @@ if ($stationcount > 0 ){
   <p>番組名:
     <input name="pname" type="text" id="pname" value="<?=$pname ?>" />
   </p>
+<p  style='background-color: #DDDDFF'>
+繰り返し指定-毎週以下の曜日に録画:
+<input name="weeklyloop" type="radio" value="128" />  日曜　
+<input name="weeklyloop" type="radio" value="64" />  月曜　
+<input name="weeklyloop" type="radio" value="32" />  火曜　
+<input name="weeklyloop" type="radio" value="16" />  水曜　
+<input name="weeklyloop" type="radio" value="8" />  木曜　
+<input name="weeklyloop" type="radio" value="4" />  金曜　
+<input name="weeklyloop" type="radio" value="2" />  土曜　
+ </p>
+ 
 <input type="submit" value="予約">　
 </form>
 

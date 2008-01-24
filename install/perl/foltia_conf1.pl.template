@@ -24,6 +24,7 @@ $trconqty = 2;
 #1:iPod Xvid MPEG4 標準画質 15fps 300kbps
 #2:iPod H.264 中画質 24fps 300kbps
 #3:iPod H.264 高画質 30fps 300kbps
+$phptoolpath = $toolpath ;#php版の初期設定の位置。デフォルトではperlと同じ位置
 
 #以下はデフォルトでインストールしてればいじらなくてもいい
 $main::DBDriv="Pg";

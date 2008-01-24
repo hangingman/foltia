@@ -15,7 +15,19 @@ tid:タイトルID
 
 */
 
-  include("./foltialib.php");
+include("./foltialib.php");
+$con = m_connect();
+
+if ($useenvironmentpolicy == 1){
+	if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	    header("WWW-Authenticate: Basic realm=\"foltia\"");
+	    header("HTTP/1.0 401 Unauthorized");
+		redirectlogin();
+	    exit;
+	} else {
+	login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
+	}
+}//end if login
 
 $tid = getgetnumform(tid);
 
@@ -40,7 +52,6 @@ print "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\
 		printhtmlpageheader();
 		die_exit("再生可能番組がありません<BR>");
 		}
-$con = m_connect();
 $now = date("YmdHi");   
 
 $query = "

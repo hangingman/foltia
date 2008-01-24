@@ -21,9 +21,20 @@ max:表示上限
 header('Content-Type: application/rss+xml');
 header('Content-Disposition: attachment; filename="folcast.xml"');
 
-  include("./foltialib.php");
+include("./foltialib.php");
 $con = m_connect();
-
+/*
+if ($useenvironmentpolicy == 1){
+	if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	    header("WWW-Authenticate: Basic realm=\"foltia\"");
+	    header("HTTP/1.0 401 Unauthorized");
+		redirectlogin();
+	    exit;
+	} else {
+	login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
+	}
+}//end if login
+*/
 $now = date("YmdHi");   
 $nowrfc822 =  date("r");
 

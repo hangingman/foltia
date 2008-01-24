@@ -16,6 +16,22 @@ startdate:特定日付からの予約状況。YYYYmmddHHii形式で。表示数に限定かけてないので
  DCC-JPL Japan/foltia project
 
 */
+
+include("./foltialib.php");
+$con = m_connect();
+
+if ($useenvironmentpolicy == 1){
+	if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	    header("WWW-Authenticate: Basic realm=\"foltia\"");
+	    header("HTTP/1.0 401 Unauthorized");
+		redirectlogin();
+	    exit;
+	} else {
+	login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
+	}
+}//end if login
+$userclass = getuserclass($con);
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="ja">
@@ -27,12 +43,9 @@ startdate:特定日付からの予約状況。YYYYmmddHHii形式で。表示数に限定かけてないので
 </head>
 
 <?php
-
-  include("./foltialib.php");
-
-$con = m_connect();
-
+$mymemberid = getmymemberid($con);
 $now = getgetnumform(startdate);
+
 if ($now > 200501010000){
 }else{
 	$now = date("YmdHi");   
@@ -48,7 +61,8 @@ foltia_subtitle.startdatetime ,
 foltia_subtitle.lengthmin ,
 foltia_tvrecord.bitrate  , 
 foltia_subtitle.startoffset , 
-foltia_subtitle.pid  
+foltia_subtitle.pid , 
+foltia_subtitle.epgaddedby 
 FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
 WHERE foltia_tvrecord.tid = foltia_program.tid AND foltia_tvrecord.stationid = foltia_station .stationid AND foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid
 AND foltia_subtitle.enddatetime >= '$now'
@@ -63,7 +77,8 @@ foltia_subtitle.startdatetime ,
 foltia_subtitle.lengthmin ,
 foltia_tvrecord.bitrate , 
 foltia_subtitle.startoffset , 
-foltia_subtitle.pid  
+foltia_subtitle.pid , 
+foltia_subtitle.epgaddedby 
 FROM foltia_tvrecord
 LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
 LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
@@ -129,7 +144,9 @@ $pid = htmlspecialchars($rowdata[9]);
 
 $tid = htmlspecialchars($rowdata[0]);
 $title = htmlspecialchars($rowdata[2]);
-$subtitle =  htmlspecialchars($rowdata[4]);
+$subtitle = htmlspecialchars($rowdata[4]);
+$dbepgaddedby = htmlspecialchars($rowdata[10]);
+
 //重複検出
 //開始時刻 $rowdata[5]
 //終了時刻
@@ -267,10 +284,17 @@ AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' )
 					if ($pid > 0 ){
 					print "<td><a href=\"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$subtitle<br></td>\n";
 					}else{
-					if ($protectmode) {
-					print "<td>$subtitle<br></td>\n";
+					//if ( $userclass <= 2){
+					if (($mymemberid == $dbepgaddedby)||($userclass <= 1)){
+						if ($userclass <= 1 ){//管理者なら
+							$membername = getmemberid2name($con,$dbepgaddedby);
+							$membername = ":" . $membername ;
+						}else{
+						$membername = "";
+						}
+					print "<td>$subtitle [<a href=\"delepgp.php?pid=$pid\">予約解除</a>$membername]<br></td>\n";
 					}else{
-					print "<td>$subtitle [<a href=\"delepgp.php?pid=$pid\">予約解除</a>]<br></td>\n";
+					print "<td>$subtitle [解除不能]<br></td>\n";
 					}
 					}
 					// 開始時刻(ズレ)
@@ -344,11 +368,11 @@ ORDER BY foltia_program.tid  DESC
 				if ($tid > 0){
 				echo("<tr>\n");
 				//予約解除
-				if ($protectmode) {
-					echo("<td>−</td>");				
-				}else{
+				if ( $userclass <= 1){
 					echo("<td><a href=\"delreserve.php?tid=$tid&sid=" .
-					 htmlspecialchars($rowdata[4])  . "\">解除</a></td>\n");
+					htmlspecialchars($rowdata[4])  . "\">解除</a></td>\n");
+				}else{
+				echo("<td>−</td>");		
 				}
 				//TID
 					echo("<td><a href=\"reserveprogram.php?tid=$tid\">$tid</a></td>\n");

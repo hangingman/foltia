@@ -20,6 +20,9 @@ foltia_config2.php
 
 		$protectmode = 0; //未使用:(ブラウザからの予約削除を禁止するなどの保護モードで動作します)
 		$demomode = 0; //未使用:(ユーザインターフェイスだけ動作するデモモードで動作します)
+		$useenvironmentpolicy = 0 ;//環境ポリシーを使うかどうか
+		$environmentpolicytoken = "";//環境ポリシーのパスワードに連結されるセキュリティコード
+		$perltoolpath = $toolpath ;//perl版の初期設定の位置。デフォルトではphpと同じ位置
 
 // データベース接続設定
         define("DATABASE_NAME", "foltia");

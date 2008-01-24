@@ -14,6 +14,21 @@ showplaylist.phpから削除対象mpeg2リスト。
  DCC-JPL Japan/foltia project
 
 */
+
+include("./foltialib.php");
+$con = m_connect();
+
+if ($useenvironmentpolicy == 1){
+if (!isset($_SERVER['PHP_AUTH_USER'])) {
+    header("WWW-Authenticate: Basic realm=\"foltia\"");
+    header("HTTP/1.0 401 Unauthorized");
+	redirectlogin();
+    exit;
+} else {
+login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
+}
+}//end if login
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="ja">
@@ -25,8 +40,6 @@ showplaylist.phpから削除対象mpeg2リスト。
 </head>
 
 <?php
-  include("./foltialib.php");
-$con = m_connect();
 $now = date("YmdHi");   
 
 $delete = $_POST['delete'];
@@ -40,23 +53,24 @@ printhtmlpageheader();
 ?>
   <p align="left"><font color="#494949" size="6">録画番組削除</font></p>
   <hr size="4">
-<p align="left">次の番組を削除しました。</p>
+<?php
+$userclass = getuserclass($con);
+if ( $userclass <= 1){
 
-
-  <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
+print "<p align=\"left\">次の番組を削除しました。</p>
+  <table BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"2\" WIDTH=\"100%\">
 	<thead>
 		<tr>
-			<th align="left">ファイル名</th>
-			<th align="left">タイトル</th>
-			<th align="left">話数</th>
-			<th align="left">サブタイ</th>
+			<th align=\"left\">ファイル名</th>
+			<th align=\"left\">タイトル</th>
+			<th align=\"left\">話数</th>
+			<th align=\"left\">サブタイ</th>
 		</tr>
 	</thead>
+	<tbody>";
 
-	<tbody>
-<?
 
-//--
+
 
 foreach ($delete as $fName) {
 
@@ -128,9 +142,13 @@ $oserr = system("$toolpath/perl/deletemovie.pl $fName");
 
 }//foreach
 
+print "	</tbody></table>\n";
+
+}else{//権限なし
+	print "<p align=\"left\">ファイル削除権限がありません。</p>";
+}
+
 ?>
-	</tbody>
-</table>
 
 </body>
 </html>

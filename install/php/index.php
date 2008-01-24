@@ -16,14 +16,22 @@ mode:"new"を指定すると、新番組(第1話)のみの表示となる。
  DCC-JPL Japan/foltia project
 
 */
-?>
 
-<?php
-  include("./foltialib.php");
-
+include("./foltialib.php");
 $con = m_connect();
-$now = date("YmdHi");   
 
+if ($useenvironmentpolicy == 1){
+	if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	    header("WWW-Authenticate: Basic realm=\"foltia\"");
+	    header("HTTP/1.0 401 Unauthorized");
+		redirectlogin();
+	    exit;
+	} else {
+	login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
+	}
+}//end if login
+
+$now = date("YmdHi");   
 
 function printtitle(){
 

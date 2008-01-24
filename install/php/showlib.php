@@ -14,6 +14,21 @@ MPEG4録画ライブラリを表示します。
  DCC-JPL Japan/foltia project
 
 */
+
+include("./foltialib.php");
+$con = m_connect();
+
+if ($useenvironmentpolicy == 1){
+	if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	    header("WWW-Authenticate: Basic realm=\"foltia\"");
+	    header("HTTP/1.0 401 Unauthorized");
+		redirectlogin();
+	    exit;
+	} else {
+	login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
+	}
+}//end if login
+
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -27,9 +42,6 @@ MPEG4録画ライブラリを表示します。
 </head>
 
 <?php
-include("./foltialib.php");
-
-$con = m_connect();
 $now = date("YmdHi");   
 
 ?>
