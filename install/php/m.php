@@ -248,7 +248,7 @@ if ($stationcount > 0 ){
   <p>番組名:
     <input name="pname" type="text" id="pname" value="<?=$pname ?>" />
   </p>
-<p  style='background-color: #DDDDFF'>
+<!- <p  style='background-color: #DDDDFF'>
 繰り返し指定-毎週以下の曜日に録画:
 <input name="weeklyloop" type="radio" value="128" />  日曜　
 <input name="weeklyloop" type="radio" value="64" />  月曜　
@@ -258,7 +258,7 @@ if ($stationcount > 0 ){
 <input name="weeklyloop" type="radio" value="4" />  金曜　
 <input name="weeklyloop" type="radio" value="2" />  土曜　
  </p>
- 
+ ->
 <input type="submit" value="予約">　
 </form>
 
