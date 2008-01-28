@@ -90,7 +90,7 @@ print "$title 【<A HREF = \"./folcast.php?tid=$tid\">この番組のFolcast</A>】 <br
 }else{
 
 print "<a href=\"http://cal.syoboi.jp/tid/" .
-				     htmlspecialchars($tid)  . "\" target=\"_blank\">$title</a> 【<A HREF = \"./folcast.php?tid=$tid\">この番組のFolcast</A>】 <br>\n";
+				     htmlspecialchars($tid)  . "\" target=\"_blank\">$title</a> 【<A HREF = \"./folcast.php?tid=$tid\">この番組のFolcast</A> [<a href=\"itpc://$serveruri/folcast.php?tid=$tid\">iTunesに登録</a>]】 <br>\n";
 }
 //確認
 if (file_exists ("$recfolderpath/$tid.localized")){
