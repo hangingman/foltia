@@ -84,9 +84,9 @@ print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">録画ライブラリ番組
   <hr size=\"4\">
 <p align=\"left\">再生可能ムービーを表示します。<br>";
 
-
+$serveruri = getserveruri();
 if ($tid == 0){
-print "$title 【<A HREF = \"./folcast.php?tid=$tid\">この番組のFolcast</A>】 <br>\n";
+print "$title 【<A HREF = \"./folcast.php?tid=$tid\">この番組のFolcast</A> [<a href=\"itpc://$serveruri/folcast.php?tid=$tid\">iTunesに登録</a>】 <br>\n";
 }else{
 
 print "<a href=\"http://cal.syoboi.jp/tid/" .
