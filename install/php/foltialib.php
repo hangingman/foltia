@@ -596,13 +596,19 @@ if ($passwd == $dbpasswd) {
 
 
 function redirectlogin(){
+global $environmentpolicytoken;
 
 print "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n";
 print "<html><head>\n";
 print "<title>foltia:Invalid login</title>\n";
 print "</head><body>\n";
 print "<h1>Invalid login</h1>";
-print "<p>foltiaヘのアクセスにはログインが必要です。新規アカウント登録は<a href=\"./accountregist.php\">こちらから。</a></p><hr>\n";
+print "<p>foltiaヘのアクセスにはログインが必要です。再ログインはリロードやブラウザ再起動で、新規アカウント登録は<a href=\"./accountregist.php\">こちらから。</a></p>";
+if ($environmentpolicytoken == ""){
+}else{
+	print "<p>突然この画面が表示された場合にはセキュリティコードが変更されたかも知れません。</p>";
+}
+print "</p><hr>\n";
 print "<address>foltia by DCC-JPL Japan/foltia Project.  <a href = \"http://www.dcc-jpl.com/soft/foltia/\">http://www.dcc-jpl.com/soft/foltia/</a></address>\n";
 print "</body></html>\n";
 

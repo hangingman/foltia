@@ -19,9 +19,7 @@ pname:ÈÖÁÈÌ¾
  DCC-JPL Japan/foltia project
 
 */
-?>
 
-<?php
 include("./foltialib.php");
 $con = m_connect();
 if ($useenvironmentpolicy == 1){

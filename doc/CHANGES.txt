@@ -1,5 +1,10 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 
+08.2.25
+m.php:
+foltialib.php:
+　ログイン処理修正。
+
 08.2.7
 showlibc.php:
 　番組別FolcastにiTunesに追加メニューが正常動作していなかったところを修正。
