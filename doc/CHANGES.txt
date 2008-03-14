@@ -1,4 +1,7 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
+08.3.14
+deletemovie.php:
+　カラ削除のときの対策。
 
 08.2.25
 m.php:

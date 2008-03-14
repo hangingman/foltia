@@ -54,6 +54,11 @@ printhtmlpageheader();
   <p align="left"><font color="#494949" size="6">録画番組削除</font></p>
   <hr size="4">
 <?php
+if ($delete == ""){
+	print "<p align=\"left\">削除番組はありません。</p>\n";
+}else{
+
+
 $userclass = getuserclass($con);
 if ( $userclass <= 1){
 
@@ -147,7 +152,7 @@ print "	</tbody></table>\n";
 }else{//権限なし
 	print "<p align=\"left\">ファイル削除権限がありません。</p>";
 }
-
+}//if $delete == ""
 ?>
 
 </body>
