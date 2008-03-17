@@ -1,4 +1,9 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
+
+08.3.17
+m.php
+　環境ポリシー対応が不十分だったところを修正。
+
 08.3.14
 deletemovie.php:
 　カラ削除のときの対策。

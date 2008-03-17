@@ -141,21 +141,27 @@ $query = "SELECT max(countno) FROM  foltia_subtitle WHERE tid = 0";
 //INSERT
 if ($demomode){
 }else{
-
-$query = "
-insert into foltia_subtitle  
-values ( '$insertpid','0','$recstid',
-	'$nextcno','$pname','$startdatetime','$enddatetime','0' ,'$lengthmin')";
-
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-
-//addatq.pl
-//キュー入れプログラムをキック
-//引数　TID チャンネルID
-//echo("$toolpath/perl/addatq.pl $tid $station");
-
-	$oserr = system("$toolpath/perl/addatq.pl 0 0");
-
+	$userclass = getuserclass($con);
+	if ( $userclass <= 2){
+	$memberid = getmymemberid($con);
+	
+	$query = "
+	insert into foltia_subtitle  (pid ,tid ,stationid , countno ,subtitle ,
+startdatetime ,enddatetime ,startoffset , lengthmin , epgaddedby )  
+	values ( '$insertpid','0','$recstid',
+		'$nextcno','$pname','$startdatetime','$enddatetime','0' ,'$lengthmin', '$memberid')";
+	
+		$rs = m_query($con, $query, "DBクエリに失敗しました");
+	
+	//addatq.pl
+	//キュー入れプログラムをキック
+	//引数　TID チャンネルID
+	//echo("$toolpath/perl/addatq.pl $tid $station");
+	
+		$oserr = system("$toolpath/perl/addatq.pl 0 0");
+	}else{
+		print "EPG予約を行う権限がありません。";
+	}// end if $userclass <= 2
 }//end if demomode
 
 print "下記予約を完了いたしました。<br>";
@@ -246,7 +252,7 @@ if ($stationcount > 0 ){
   <p>番組名:
     <input name="pname" type="text" id="pname" value="<?=$pname ?>" />
   </p>
-<!- <p  style='background-color: #DDDDFF'>
+<!-- <p  style='background-color: #DDDDFF'>
 繰り返し指定-毎週以下の曜日に録画:
 <input name="weeklyloop" type="radio" value="128" />  日曜　
 <input name="weeklyloop" type="radio" value="64" />  月曜　
@@ -256,7 +262,7 @@ if ($stationcount > 0 ){
 <input name="weeklyloop" type="radio" value="4" />  金曜　
 <input name="weeklyloop" type="radio" value="2" />  土曜　
  </p>
- ->
+ -->
 <input type="submit" value="予約">　
 </form>
 
