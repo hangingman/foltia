@@ -73,8 +73,9 @@ s/\"\/>/\" /i;
 s/\"[\s]/\";\n/gio;
 s/\'/\\'/gio;
 s/\"/\'/gio;
-s/[\w]*=/\$item{$&}=/gio;
-s/\=}=/}=/gio;
+#s/[\w]*=/\$item{$&}=/gio;
+#s/\=}=/}=/gio;
+s/(\w+)=/\$item{$1}=/gio;#by foltiaBBS
 
 #$item{PID}='21543';
 #$item{TID}='528';

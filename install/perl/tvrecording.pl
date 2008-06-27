@@ -306,13 +306,13 @@ if ($ARGV[6] eq "0"){
 		$outputfile = $outputpath.$outputfile ;
 #		$outputfile .= "$ARGV[3]";		
 #		$outputfile .= `date  +%Y%m%d-%H%M --date "1 min "`;
- &writelog("tvrecording:  DEBUG ARGV[2] ne null  \$outputfile $outputfile ");
+ &writelog("tvrecording:  DEBUG ARGV[3] ne null  \$outputfile $outputfile ");
 
 	}else{
 	$outputfile .= `date  +%Y%m%d-%H%M --date "1 min "`;
 	chomp($outputfile);
 	$outputfile .= ".m2p";
-&writelog("tvrecording:  DEBUG ARGV[2] is null  \$outputfile $outputfile ");
+&writelog("tvrecording:  DEBUG ARGV[3] is null  \$outputfile $outputfile ");
 
 	}
 
