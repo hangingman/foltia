@@ -15,8 +15,20 @@ f:file name
 
 */
 
-
 include("./foltialib.php");
+$con = m_connect();
+
+if ($useenvironmentpolicy == 1){
+	if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	    header("WWW-Authenticate: Basic realm=\"foltia\"");
+	    header("HTTP/1.0 401 Unauthorized");
+		redirectlogin();
+	    exit;
+	} else {
+	login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
+	}
+}//end if login
+
 
 $pid = getgetform(pid);
 $filename = getgetform(f);
@@ -46,7 +58,6 @@ if (($pid == "") ||($filename == "")) {
 }
 
 
-$con = m_connect();
 $query = "
 SELECT 
 foltia_program.tid,
@@ -187,7 +198,7 @@ print "<form id=\"form1\" name=\"form1\" method=\"post\" action=\"./sb-edit.php?
 ";
 if ($tid > 0){
 print "
-
+<br />
 参考リンク:<a href = \"http://cal.syoboi.jp/tid/$tid/\" target=\"_blank\"> $title</a> "; 
 	if ($countno != ""){ 
 	print "第". $countno ."話 ";
