@@ -18,6 +18,7 @@ use Jcode;
 use Time::Local;
 use DBI;
 use DBD::Pg;
+use Digest::MD5 qw(md5_hex);
 
 $path = $0;
 $path =~ s/getxml2db.pl$//i;
@@ -54,13 +55,22 @@ if ($ARGV[0]  eq "long"){
 
 #$dbh->{AutoCommit} = 0;
 
-my ($content) = get("$uri");
-if ($content eq ""){
-&writelog("getxml2db   no responce from $uri, exit:");
-	exit;#しょぼかるが落ちているなど
+# If-Modified-Since使うように変更#2008/11/14 
+my  $CacheDir = '/tmp/shobocal';
+if (! -e $CacheDir) {
+	mkdir $CacheDir or die "cannot create $CacheDir: $!";
 }
-
-my (@line) = split(/\n/, $content);
+my $cache = sprintf("%s/%s.xml", $CacheDir, Digest::MD5::md5_hex($uri));
+LWP::Simple::mirror($uri, $cache) or die "cannot get content from $uri";
+open(SHOBO, "<$cache");
+my (@line) = <SHOBO>;
+close(SHOBO);
+#my ($content) = get("$uri");
+#if ($content eq ""){
+#&writelog("getxml2db   no responce from $uri, exit:");
+#	exit;#しょぼかるが落ちているなど
+#}
+#my (@line) = split(/\n/, $content);
 
 foreach(@line){
 

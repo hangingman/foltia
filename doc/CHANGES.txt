@@ -1,5 +1,9 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 
+08.11.15
+getxml2db.pl:
+If-Modified-Sinceの条件付きGETに対応。
+
 08.6.27
 tvrecording.pl:
 　foltia簡易BBSで指摘されたXML解析の正規表現修正。
