@@ -12,6 +12,7 @@ index.php
 
 オプション
 mode:"new"を指定すると、新番組(第1話)のみの表示となる。
+now:YmdHi形式で日付を指定するとその日からの番組表が表示される。
 
  DCC-JPL Japan/foltia project
 
@@ -31,8 +32,10 @@ if ($useenvironmentpolicy == 1){
 	}
 }//end if login
 
-$now = date("YmdHi");   
-
+$now = getgetnumform(date);
+if(($now < 200001010000 ) || ($now > 209912342353 )){ 
+	$now = date("YmdHi");   
+}
 function printtitle(){
 
 print "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">
@@ -63,8 +66,9 @@ foltia_subtitle.pid
 FROM foltia_subtitle , foltia_program  ,foltia_tvrecord
 WHERE foltia_tvrecord.tid = foltia_program.tid 
 AND foltia_program.tid = foltia_subtitle.tid 
-AND foltia_subtitle.enddatetime >= '$now'
- ORDER BY \"startdatetime\" ASC
+AND foltia_subtitle.enddatetime >= '$now' 
+ORDER BY \"startdatetime\" ASC 
+LIMIT 1000
 	";
 	$reservedrssametid = m_query($con, $query, "DBクエリに失敗しました");
 	$reservedmaxrowssameid = pg_num_rows($reservedrssametid);
@@ -111,7 +115,8 @@ LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
 LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
 LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
 WHERE foltia_tvrecord.stationid = 0 AND
-foltia_subtitle.enddatetime >= '$now' ORDER BY \"startdatetime\" ASC
+foltia_subtitle.enddatetime >= '$now' ORDER BY \"startdatetime\" ASC 
+LIMIT 1000
 	";
 
 	$reservedrs = m_query($con, $query, "DBクエリに失敗しました");
@@ -144,7 +149,8 @@ foltia_subtitle.startoffset
 FROM foltia_subtitle , foltia_program ,foltia_station  
 WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
  AND foltia_subtitle.enddatetime >= '$now'  AND foltia_subtitle.countno = '1' 
-ORDER BY foltia_subtitle.startdatetime  ASC
+ORDER BY foltia_subtitle.startdatetime  ASC 
+LIMIT 1000
 	";
 	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$maxrows = pg_num_rows($rs);
@@ -165,7 +171,8 @@ foltia_subtitle.startoffset
 FROM foltia_subtitle , foltia_program ,foltia_station  
 WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
  AND foltia_subtitle.enddatetime >= '$now'  
-ORDER BY foltia_subtitle.startdatetime  ASC
+ORDER BY foltia_subtitle.startdatetime  ASC 
+LIMIT 1000
 	";
 	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$maxrows = pg_num_rows($rs);

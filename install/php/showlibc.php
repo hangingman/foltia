@@ -40,18 +40,28 @@ if ($tid == "") {
 <html lang="ja">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" type="text/css" href="graytable.css">
-<script src="http://images.apple.com/main/js/ac_quicktime.js" language="JavaScript" type="text/javascript"></script> 
 <?php
-print "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\"./folcast.php?tid=$tid\" />
+if (file_exists  ( "./iui/iui.css"  )){
+	$useragent = $_SERVER['HTTP_USER_AGENT'];
+}
+if(ereg("iPhone",$useragent)){
+print "<meta name=\"viewport\" content=\"width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;\"/>
+<link rel=\"apple-touch-icon\" type=\"image/png\" href=\"./img/icon.png\" />
+<style type=\"text/css\" media=\"screen\">@import \"./iui/iui.css\";</style>
+<script type=\"application/x-javascript\" src=\"./iui/iui.js\"></script>";
+}else{
+print "<meta http-equiv=\"Content-Style-Type\" content=\"text/css\">
+<link rel=\"stylesheet\" type=\"text/css\" href=\"graytable.css\">
+<script src=\"http://images.apple.com/main/js/ac_quicktime.js\" language=\"JavaScript\" type=\"text/javascript\"></script> 
+<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\"./folcast.php?tid=$tid\" />
 ";
-		if ($tid == "") {
+}
+if ($tid == "") {
 	print "<title>foltia:Lib</title>
 </head><body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#000000\" ALINK=\"#c6edff\" > \n";
 		printhtmlpageheader();
 		die_exit("再生可能番組がありません<BR>");
-		}
+	}
 $now = date("YmdHi");   
 
 $query = "
@@ -74,17 +84,25 @@ $title = $rowdata[0];
 $title =  htmlspecialchars($title) ;
 }
 //ヘッダ続き
-print "<title>foltia:Lib $tid:$title</title>
-</head>
-<body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#000000\" ALINK=\"#c6edff\" >
+print "<title>foltia:Lib $tid:$title</title></head>";
+$serveruri = getserveruri();
+
+if(ereg("iPhone",$useragent)){
+	print "<body onclick=\"console.log('Hello', event.target);\">
+    <div class=\"toolbar\">
+        <h1 id=\"pageTitle\"></h1>
+        <a id=\"backButton\" class=\"button\" href=\"#\"></a>
+    </div>
+";
+}else{
+
+print "<body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#000000\" ALINK=\"#c6edff\" >
 <div align=\"center\">
 ";
 	printhtmlpageheader();
 print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">録画ライブラリ番組個別表示</font></p>
   <hr size=\"4\">
 <p align=\"left\">再生可能ムービーを表示します。<br>";
-
-$serveruri = getserveruri();
 if ($tid == 0){
 print "$title 【<A HREF = \"./folcast.php?tid=$tid\">この番組のFolcast</A> [<a href=\"itpc://$serveruri/folcast.php?tid=$tid\">iTunesに登録</a>】 <br>\n";
 }else{
@@ -92,6 +110,8 @@ print "$title 【<A HREF = \"./folcast.php?tid=$tid\">この番組のFolcast</A> [<a h
 print "<a href=\"http://cal.syoboi.jp/tid/" .
 				     htmlspecialchars($tid)  . "\" target=\"_blank\">$title</a> 【<A HREF = \"./folcast.php?tid=$tid\">この番組のFolcast</A> [<a href=\"itpc://$serveruri/folcast.php?tid=$tid\">iTunesに登録</a>]】 <br>\n";
 }
+}// endif if(ereg("iPhone",$useragent))
+
 //確認
 if (file_exists ("$recfolderpath/$tid.localized")){
 //	print "ディレクトリは存在します\n";
@@ -100,8 +120,6 @@ if (file_exists ("$recfolderpath/$tid.localized")){
 		print "再生可能番組がありません<BR>\n</body></html>";
 	exit;
 }					 
-
-
 
 //新仕様/* 2006/10/26 */
 if (file_exists("./selectcaptureimage.php") ) {
@@ -132,11 +150,14 @@ $rs = "";
 $rs = m_query($con, $query, "DBクエリに失敗しました");
 $maxrows = pg_num_rows($rs);
 if ($maxrows > 0 ){
+if(ereg("iPhone",$useragent)){
+	print "<ul id=\"home\" title=\"$title\" selected=\"true\">";
+}else{
 print "
   <table BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"2\" WIDTH=\"100%\">
 	<tbody>
 ";
-
+}
 for ($row = 0; $row < $maxrows; $row++) {
 	$rowdata = pg_fetch_row($rs, $row);
 
@@ -177,7 +198,8 @@ $onairdate = "$day $time";
 $caplink = "";
 
 if (($sbpluginexist == 1) && (pg_num_rows ($rs ) > 0)){
- $capimgpath = htmlspecialchars(preg_replace("/.m2p/", "", $rowdata[5]));
+ //$capimgpath = htmlspecialchars(preg_replace("/.m2p/", "", $rowdata[5]));
+ $capimgpath = htmlspecialchars(preg_replace("/.m2./", "", $rowdata[5]));
  	
 	if (($capimgpath != "") && (file_exists("$recfolderpath/$tid.localized/img/$capimgpath") )){
 	$caplink = " / <a href = \"./selectcaptureimage.php?pid=$rowdata[6]\">キャプ</a>";
@@ -194,18 +216,22 @@ if (file_exists("$recfolderpath/$tid.localized/mp4/$thumbnail") ){
 	$imgsrcuri = "./img/no-thumbnail-img.png\" alt=\"NO IMAGE";
 }
 
+if(ereg("iPhone",$useragent)){
 
+print "<li><a href=\"http://$serverfqdn/$httpmediamappath/$tid.localized/mp4/$fName\" target=\"_self\">$count $subtitle $onairdate</a></li>\n";
+
+}else{
 print "  <tr>
     <td rowspan=\"4\" width=\"170\"><a href = \"$httpmediamappath/$tid.localized/mp4/$fName\" target=\"_blank\"><img src = \"$imgsrcuri\" width=\"160\" height=\"120\"></a></td>
     <td>$count</td>
   </tr>
   <tr>
 ";
-if ($tid == 0){
-print "\n    <td>$subtitle</td>";
-}else{
-print "\n    <td><a href = \"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$subtitle</a></td>";
-}//if
+	if ($tid == 0){
+	print "\n    <td>$subtitle</td>";
+	}else{
+	print "\n    <td><a href = \"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$subtitle</a></td>";
+	}//if
 print "  </tr>
   <tr>
     <td>$onairdate</td>
@@ -215,13 +241,21 @@ print "  </tr>
   </tr>
 ";
 
+}//endif iPhone
+
 }//for
 }else{
 print "録画ファイルがありません<br>\n";
 }//if
-?>
-	</tbody>
-</table>
 
+if(ereg("iPhone",$useragent)){
+	print "<li><a href=\"http://$serveruri/showlib.php\" target=\"_self\">一覧へ戻る</a></li>\n";
+	print "</ul>\n";
+}else{
+	print "</tbody></table>\n";
+}
+?>
 </body>
 </html>
+
+	

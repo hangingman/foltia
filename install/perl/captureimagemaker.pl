@@ -99,7 +99,7 @@ unless (-e $capimgdirname ){
 # キャプチャ入れるディレクトリ作成 
 # $captureimgdir = "$tid"."-"."$countno"."-"."$date"."-"."$time";
 $captureimgdir = $filename;
-$captureimgdir =~ s/\.m2p$//; 
+$captureimgdir =~ s/\.m2p$|\.m2t$//; 
 
 unless (-e "$capimgdirname/$captureimgdir"){
 	mkdir "$capimgdirname/$captureimgdir" ,0777;
@@ -117,5 +117,11 @@ unless (-e "$capimgdirname/$captureimgdir"){
 #system ("mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf crop=690:460:12:10,scale=160:120 -ao null -sstep 14 -v 3 $recfolderpath/$filename");
 
 #　10秒ごとに
-system ("mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf crop=690:460:12:10,scale=160:120 -ao null -sstep 9 -v 3 $recfolderpath/$filename");
+if ($filename =~ /m2t$/){
+	&writelog("captureimagemaker DEBUG mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf scale=192:108 -ao null -sstep 9 -v 3 $recfolderpath/$filename");
+	system ("mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf scale=192:108 -ao null -sstep 9 -v 3 $recfolderpath/$filename");
+}else{
+	&writelog("captureimagemaker DEBUG mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf crop=690:460:12:10,scale=160:120 -ao null -sstep 9 -v 3 $recfolderpath/$filename");
+	system ("mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf crop=690:460:12:10,scale=160:120 -ao null -sstep 9 -v 3 $recfolderpath/$filename");
+}
 

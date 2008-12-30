@@ -77,8 +77,13 @@ $query = "SELECT min(pid) FROM  foltia_subtitle ";
 	$insertpid = -1 ;
 	}else{
 	$rowdata = pg_fetch_row($rs, 0);
+	
 	$insertpid = $rowdata[0];
-	$insertpid-- ;
+		if ($insertpid > 0){
+		$insertpid = -1;
+		}else{
+		$insertpid-- ;
+		}
 	}
 // next 話数を探す
 $query = "SELECT max(countno) FROM  foltia_subtitle WHERE tid = 0";
@@ -120,7 +125,6 @@ insert into foltia_subtitle  (pid ,tid ,stationid , countno ,subtitle ,
 startdatetime ,enddatetime ,startoffset , lengthmin , epgaddedby ) 
 values ( '$insertpid','0','$stationid',
 	'$nextcno','$subtitle','$startdatetime','$enddatetime','0' ,'$lengthmin' , '$memberid')";
-
 	$rs = m_query($con, $query, "DBクエリに失敗しました");
 
 	//addatq.pl
@@ -142,10 +146,7 @@ print "時刻が不正なために予約できませんでした。 <br>";
 
 }
 
-?>
 
-
-<?php
 print "<table width=\"100%\" border=\"0\">
     <tr><td>放送開始</td><td>$startdatetime</td></tr>
     <tr><td>放送終了</td><td>$enddatetime</td></tr>

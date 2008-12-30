@@ -22,6 +22,27 @@ use DBD::Pg;
 	 $DBPass="";
 	
 
+
+  $FILESTATUSRESERVINGLONG = 10;
+  $FILESTATUSRESERVINGSHORT = 20;
+  $FILESTATUSRECORDING = 30;
+  $FILESTATUSRECTSSPLITTING = 40;
+  $FILESTATUSRECEND = 50;
+  $FILESTATUSWAITINGCAPTURE = 55;
+  $FILESTATUSCAPTURE = 60;
+  $FILESTATUSCAPEND = 70;
+  $FILESTATUSTHMCREATE = 72;
+  $FILESTATUSWAITINGTRANSCODE = 80;
+  $FILESTATUSTRANSCODETSSPLITTING = 90;
+  $FILESTATUSTRANSCODEFFMPEG = 100;
+  $FILESTATUSTRANSCODEWAVE = 110;
+  $FILESTATUSTRANSCODEAAC = 120;
+  $FILESTATUSTRANSCODEMP4BOX = 130;
+  $FILESTATUSTRANSCODEATOM = 140;
+  $FILESTATUSTRANSCODECOMPLETE = 150;
+  $FILESTATUSALLCOMPLETE = 200;
+
+
 #------------------------------
 sub writelog{
 my $messages = $_[0];
@@ -255,6 +276,166 @@ close(CONFIG);
 }#end if -r $phpconfigpath 
 return ($configline);
 }#end sub getphpstyleconfig
+
+
+sub getpidbympegfilename {
+#引き数:m2pfilename
+#戻り値:PID
+my $m2pfilename =  $_[0] ;
+if ($m2pfilename eq ""){
+	return  0 ;
+}
+
+my $DBQuery =  "SELECT pid FROM foltia_subtitle WHERE m2pfilename = '$m2pfilename' LIMIT 1 ";
+my $sth;
+$sth = $dbh->prepare($DBQuery);
+$sth->execute();
+#print "$DBQuery\n";
+my @pidinfo = $sth->fetchrow_array;
+my $pid  = $pidinfo[0];
+
+if ($pid eq ""){
+	return  0 ;
+}else{
+	return $pid;
+}
+}#end sub getpidbympegfilename
+
+sub changefilestatus {
+#引き数:PID,updatestatus
+#戻り値:エラーコード
+my $pid =  $_[0] ;
+my $updatestatus = $_[1];
+if (($pid eq "" ) || ($updatestatus eq "")){
+	return  0 ;
+}
+
+if ($updatestatus > 0 ){
+my $DBQuery =  "UPDATE  foltia_subtitle SET filestatus = $updatestatus , lastupdate 	 = now() WHERE pid = $pid ";
+my $sth;
+$sth = $dbh->prepare($DBQuery);
+$sth->execute();
+return 1;
+}else{
+	&writelog("foltialib changefilestatus ERR Sttus invalid:$updatestatus");
+	return  0 ;
+}
+}# end sub changefilestatus
+
+
+sub getfilestatus {
+#引き数:PID
+#戻り値:ステータス
+
+#10:予約中(5分以上先)
+#20:予約中(5分以内)
+#30:録画中
+#40:TSSplit中
+#50:MPEG2録画終了
+#55 静止画キャプチャ待
+#60:静止画キャプ中
+#70:静止画キャプ終了
+#72:サムネイル作成済み(.THM)
+#80:トラコン待
+#90:トラコン中:TSsplit
+#100:トラコン中:H264
+#110:トラコン中:WAVE
+#120:トラコン中:AAC
+#130:トラコン中:MP4Box
+#140:トラコン中:ATOM
+#150:トラコン完了
+#200:全完了
+my $pid =  $_[0] ;
+if ($pid eq "" ){
+	return  0 ;
+}
+
+my $DBQuery =  "SELECT filestatus FROM foltia_subtitle  WHERE pid = $pid ";
+my $sth;
+$sth = $dbh->prepare($DBQuery);
+$sth->execute();
+
+my @statusinfo = $sth->fetchrow_array;
+my $status  = $statusinfo[0];
+
+if ($status eq ""){
+	return  0 ;
+}else{
+	return $status;
+}
+
+
+}# end sub getfilestatus
+
+
+sub makemp4dir{
+#TIDが100以上の3桁の場合はそのまま
+my $pspfilnamehd = $_[0];
+my $tid = $_[0];
+my $pspdirname = "$tid.localized/";
+$pspdirname = $recfolderpath."/".$pspdirname;
+
+#なければ作る
+unless (-e $pspdirname ){
+	system("$toolpath/perl/mklocalizeddir.pl $tid");
+	#&writelog("recwrap mkdir $pspdirname");
+}
+$pspdirname = "$tid.localized/mp4/";
+$pspdirname = $recfolderpath."/".$pspdirname;
+#なければ作る
+unless (-e $pspdirname ){
+	mkdir $pspdirname ,0777;
+	#&writelog("recwrap mkdir $pspdirname");
+}
+return ("$pspdirname");
+}#endsub makemp4dir
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 1;

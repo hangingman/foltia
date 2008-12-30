@@ -115,7 +115,7 @@ $m2pfilename = $rowdata[8];
 list($tid,$countno,$date,$time)= split ("-", $m2pfilename );
 	$tid = ereg_replace("[^0-9]", "", $tid);
 
-$path = ereg_replace("\.m2p$", "", $m2pfilename);
+$path = ereg_replace("\.m2p$|\.m2t$", "", $m2pfilename);
 $serveruri = getserverfqdn ();
 
 exec ("ls   $recfolderpath/$tid.localized/img/$path/", $tids);
@@ -123,9 +123,9 @@ exec ("ls   $recfolderpath/$tid.localized/img/$path/", $tids);
 foreach($tids as $filetid) {
 
 if (file_exists("./sb-edit.php") ) {
-print "<a href=\"./sb-edit.php?pid=$pid&f=$filetid\"><img src='http://$serveruri$httpmediamappath/$tid.localized/img/$path/$filetid' width='160' height='120' alt='$tid:$countno:$filetid'></a>\n";
+print "<a href=\"./sb-edit.php?pid=$pid&f=$filetid\"><img src='http://$serveruri$httpmediamappath/$tid.localized/img/$path/$filetid' alt='$tid:$countno:$filetid'></a>\n";
 }else{
-print "<img src='http://$serveruri$httpmediamappath/$tid.localized/img/$path/$filetid' width='160' height='120' alt='$tid:$countno:$filetid'>\n";
+print "<img src='http://$serveruri$httpmediamappath/$tid.localized/img/$path/$filetid'  alt='$tid:$countno:$filetid'>\n";
 }
 }//foreach
 // タイトル一覧　ここまで

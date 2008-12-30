@@ -53,7 +53,10 @@ $station = getgetnumform(station);
 		if ($station == "") {
 		$station = 0;
 		}
-
+$usedigital = getgetnumform(usedigital);
+		if ($usedigital == "") {
+		$usedigital = 0;
+		}
 $bitrate = getgetnumform(bitrate);
 		if ($bitrate == "") {
 		$bitrate = 5;
@@ -201,12 +204,11 @@ WHERE tid = '$tid'  AND stationid = '$station'
 	$maxrows = pg_num_rows($rs);
 
 		if ($maxrows == 0) { //新規追加
-				$query = "INSERT INTO  foltia_tvrecord  values ('$tid','$station','$bitrate')";
+				$query = "INSERT INTO  foltia_tvrecord  values ('$tid','$station','$bitrate','$usedigital')";
 				$rs = m_query($con, $query, "DB書き込みに失敗しました");
 		}else{//修正　(ビットレート)
 			$query = "UPDATE  foltia_tvrecord  SET 
-  bitrate = '$bitrate' WHERE tid = '$tid'  AND stationid = '$station'
-			";
+  bitrate = '$bitrate' , digital = '$usedigital'  WHERE tid = '$tid'  AND stationid = '$station' ";
 			$rs = m_query($con, $query, "DB書き込みに失敗しました");
 		}
 	

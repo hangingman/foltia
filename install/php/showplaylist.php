@@ -13,7 +13,7 @@ showplaylist.php
 list:
 　省略時、録画順にソートされる。
 　titleのときに、番組順ソートされる。
-　rawのときに、DBに記録されている番組録画情報ではなくディレクトリにあるm2pファイルを全て表示する。
+　rawのときに、DBに記録されている番組録画情報ではなくディレクトリにあるm2p/m2tファイルを全て表示する。
 
  DCC-JPL Japan/foltia project
 
@@ -96,7 +96,7 @@ $list = getgetform('list');
 
 //旧仕様
 if($list == "raw"){
-exec ("ls -t  $recfolderpath/*.m2p", $m2pfiles);
+exec ("ls -t  $recfolderpath/*.m2?", $m2pfiles);
 
 
 foreach($m2pfiles as $pathfName) {
@@ -105,7 +105,7 @@ $fName = array_pop($fNametmp);
 //print "FILENAME:$fName<BR>\n";
 
         if(($fName == ".") or ($fName == "..") ){ continue; }
-	if (ereg(".m2p", $fName)){
+	if (ereg(".m2.+", $fName)){
 		$filesplit = split("-",$fName);
 	
 if ($filesplit[1] == ""){
@@ -229,7 +229,7 @@ print"<td>$title</td>
 <td>$subtitle<br></td>";
 }
 	if (file_exists("./selectcaptureimage.php") ) {
-	$capimgpath = preg_replace("/.m2p/", "", $fName);
+	$capimgpath = preg_replace("/.m2.+/", "", $fName);
 	print "			<td align=\"left\"><a href=\"./selectcaptureimage.php?pid=$pid\">キャプ</a></td>\n";
 	}
 print "</tr>\n

@@ -35,26 +35,45 @@ if ($useenvironmentpolicy == 1){
 <html lang="ja">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" type="text/css" href="graytable.css"> 
-<link rel="alternate" type="application/rss+xml" title="RSS" href="./folcast.php" />
+<?php
+if (file_exists  ( "./iui/iui.css"  )){
+	$useragent = $_SERVER['HTTP_USER_AGENT'];
+}
+if(ereg("iPhone",$useragent)){
+print "<meta name=\"viewport\" content=\"width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;\"/>
+<link rel=\"apple-touch-icon\" type=\"image/png\" href=\"./img/icon.png\" />
+
+<style type=\"text/css\" media=\"screen\">@import \"./iui/iui.css\";</style>
+<script type=\"application/x-javascript\" src=\"./iui/iui.js\"></script>";
+}else{
+print "<meta http-equiv=\"Content-Style-Type\" content=\"text/css\">
+<link rel=\"stylesheet\" type=\"text/css\" href=\"graytable.css\"> 
+<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\"./folcast.php\" />";
+}
+?>
 <title>foltia:MP4 Lib</title>
 </head>
 
 <?php
-$now = date("YmdHi");   
-
-?>
-<body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
-<div align="center">
-<?php 
+$now = date("YmdHi");  
+if(ereg("iPhone",$useragent)){
+	print "<body onclick=\"console.log('Hello', event.target);\">
+    <div class=\"toolbar\">
+        <h1 id=\"pageTitle\"></h1>
+        <a id=\"backButton\" class=\"button\" href=\"#\"></a>
+    </div>
+";
+}else{
+	print "<body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#000000\" ALINK=\"#c6edff\" >
+<div align=\"center\">
+";
 	printhtmlpageheader();
-?>
-  <p align="left"><font color="#494949" size="6">録画ライブラリ表示</font></p>
-  <hr size="4">
-<p align="left">再生可能ライブラリを表示します。<br>
+print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">録画ライブラリ表示</font></p>
+  <hr size=\"4\">
+<p align=\"left\">再生可能ライブラリを表示します。<br>
+";
+} 
 
-<?
 //新仕様 /* 2006/10/26 */
 $query = "
 SELECT foltia_mp4files.tid,foltia_program.title , count(foltia_mp4files.mp4filename) 
@@ -69,6 +88,9 @@ $rs = m_query($con, $query, "DBクエリに失敗しました");
 $maxrows = pg_num_rows($rs);
 
 if ($maxrows > 0 ){
+if(ereg("iPhone",$useragent)){
+	print "<ul id=\"home\" title=\"録画ライブラリ表示\" selected=\"true\">";
+}else{
 print "
   <table BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"2\" WIDTH=\"100%\">
 	<thead>
@@ -81,6 +103,7 @@ print "
 	</thead>
 	<tbody>
 ";
+}
 for ($row = 0; $row < $maxrows; $row++) {
 	$rowdata = pg_fetch_row($rs, $row);
 $title = $rowdata[1];
@@ -89,6 +112,9 @@ $tid = htmlspecialchars($rowdata[0]);
 $title = htmlspecialchars($title);
 $counts = htmlspecialchars($counts);
 
+if(ereg("iPhone",$useragent)){
+print "<li><a href=\"showlibc.php?tid=$tid\" target=\"_self\">$title</a></li>\n";
+}else{
 print "
 <tr>
 <td>$tid<br></td>
@@ -97,13 +123,20 @@ print "
 <td><a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">しょぼかる-$tid</a><br></td>
 </tr>\n
 ";
+}
 }//for
+
+if(ereg("iPhone",$useragent)){
+	print "</ul>\n</body>\n</html>\n";
+}else{
 print "
 	</tbody>
 </table>
 </body>
 </html>
 ";
+}
+
 }else{
 print "録画ファイルが存在しません。</body></html>";
 

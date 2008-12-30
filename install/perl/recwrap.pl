@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-#usage recwrap.pl  ch length(sec) [bitrate(5)] [TID] [NO]  [PID]
+#usage recwrap.pl ch length(sec) [bitrate(5)] [TID] [NO] [PID] [stationid] [digitalflag] [digitalband] [digitalch] 
 #
 # Anime recording system foltia
 # http://www.dcc-jpl.com/soft/foltia/
@@ -38,22 +38,65 @@ $reclength = $ARGV[1] ;
 $bitrate  = $ARGV[2] ;
 $tid  = $ARGV[3] ;
 $countno  = $ARGV[4] ;
-$pid  = $ARGV[5] ;
+$pid = $ARGV[5] ;
+$stationid = $ARGV[6] ;
+$usedigital = $ARGV[7] ;
+$digitalstationband = $ARGV[8] ;
+$digitalch= $ARGV[9] ;
+
+#DB初期化
+	my $data_source = sprintf("dbi:%s:dbname=%s;host=%s;port=%d",
+		$DBDriv,$DBName,$DBHost,$DBPort);
+	 $dbh = DBI->connect($data_source,$DBUser,$DBPass) ||die $DBI::error;;
+
+
+if ($usedigital == 1){
+	$extension = ".m2t";#TSの拡張子
+}else{
+	$extension = ".m2p";#MPEG2の拡張子
+}
 
 $outputfile = `date  +%Y%m%d-%H%M --date "1 min "`;
 chomp($outputfile);
+
 if ($tid == 0){
-		$outputfilename = "0--".$outputfile."-".$recch.".m2p";
+		$outputfilename = "0--".$outputfile."-".$recch.$extension;
 		$mp4newstylefilename = "-0--".$outputfile."-".$recch;
 }else{
 	if ($countno == 0){
-		$outputfilename = $tid ."--".$outputfile.".m2p";
+		$outputfilename = $tid ."--".$outputfile.$extension;
 		$mp4newstylefilename = "-" . $tid ."--".$outputfile;
 	}else{
-		$outputfilename = $tid ."-".$countno."-".$outputfile.".m2p";
+		$outputfilename = $tid ."-".$countno."-".$outputfile.$extension;
 		$mp4newstylefilename = "-" . $tid ."-".$countno."-".$outputfile;
 	}
 }
+
+if ($usedigital == 1){
+#デジタルなら
+&writelog("recwrap RECSTART DIGITAL $digitalstationband $digitalch $reclength $stationid 0 $outputfilename $tid $countno friio");
+#録画
+$starttime = (`date +%s`);
+$oserr = system("$toolpath/perl/digitaltvrecording.pl $digitalstationband $digitalch $reclength $stationid 0 $outputfilename $tid $countno friio");
+$oserr = $oserr / 256;
+
+if ($oserr == 1){
+	&writelog("recwrap ABORT recfile exist. [$outputfilename] $digitalstationband $digitalch $reclength $stationid 0  $outputfilename $tid $countno");
+	exit;
+}elsif ($oserr == 2){
+	&writelog("recwrap ERR 2:friio busy;retry.");
+	&continuousrecordingcheck;#もうすぐ終わる番組をkill
+	sleep(2);
+	$oserr = system("$toolpath/perl/digitaltvrecording.pl $digitalstationband $digitalch $reclength $stationid N $outputfilename $tid $countno friio");
+	$oserr = $oserr / 256;
+	if ($oserr == 2){
+	&writelog("recwrap ERR 2:friio busy;Giving up digital recording.");
+	}
+}elsif ($oserr == 3){
+&writelog("recwrap ABORT:ERR 3");
+exit ;
+}
+}else{
 #リモコン操作
 # $haveirdaunit = 1;リモコンつないでるかどうか確認
 if ($haveirdaunit == 1){
@@ -70,8 +113,9 @@ if($recch == -10){
 	&writelog("recwrap Not recordable channel;exit:PID $pid");
 	exit;
 	}#end if
+# アナログ録画
+&writelog("recwrap RECSTART $recch $reclength 0 $outputfilename $bitrate $tid $countno $pid $usedigital $digitalstationband $digitalch");
 
-&writelog("recwrap RECSTART $recch $reclength 0 $outputfilename $bitrate $tid $countno $pid");
 #録画
 #system("$toolpath/perl/tvrecording.pl $recch $reclength 0 $outputfile $bitrate $tid $countno");
 $starttime = (`date +%s`);
@@ -82,12 +126,24 @@ if ($oserr == 1){
 	&writelog("recwrap ABORT recfile exist. [$outputfilename] $recch $reclength 0 0 $bitrate $tid $countno $pid");
 	exit;
 }
+
+}#endif #デジタル優先フラグ
+
 #デバイスビジーで即死してないか検出
 $now = (`date +%s`);
 	if ($now < $starttime + 100){ #録画プロセス起動してから100秒以内に戻ってきてたら
+	$retrycounter == 0;
 		while($now < $starttime + 100){
+			if($retrycounter >= 5){
+				&writelog("recwrap WARNING  Giving up recording.");
+				last;
+			}
 		&writelog("recwrap retry recording $now $starttime");
+		#アナログ録画
 $starttime = (`date +%s`);
+if($outputfilename =~ /.m2t$/){
+	$outputfilename =~ s/.m2t$/.m2p/;
+}
 $oserr = system("$toolpath/perl/tvrecording.pl $recch $reclength N $outputfilename $bitrate $tid $countno");
 $now = (`date +%s`);
 $oserr = $oserr / 256;
@@ -95,69 +151,75 @@ $oserr = $oserr / 256;
 				&writelog("recwrap ABORT recfile exist. in resume process.[$outputfilename] $recch $reclength 0 0 $bitrate $tid $countno $pid");
 				exit;
 			}# if
+		$retrycounter++;
 		}# while
 	} # if 
 
-
 	&writelog("recwrap RECEND [$outputfilename] $recch $reclength 0 0 $bitrate $tid $countno $pid");
 
-#DB初期化
-	my $data_source = sprintf("dbi:%s:dbname=%s;host=%s;port=%d",
-		$DBDriv,$DBName,$DBHost,$DBPort);
-	 $dbh = DBI->connect($data_source,$DBUser,$DBPass) ||die $DBI::error;;
 
 # m2pファイル名をPIDレコードに書き込み
-	$DBQuery =  "UPDATE  foltia_subtitle  SET 
-	m2pfilename 	 = '$outputfilename' 
-	WHERE pid =  '$pid' ";
+	$DBQuery =  "UPDATE foltia_subtitle SET m2pfilename = '$outputfilename' WHERE pid = '$pid' ";
 	 $sth = $dbh->prepare($DBQuery);
 	$sth->execute();
-&writelog("recwrap UPDATEDB  $DBQuery");
+&writelog("recwrap DEBUG UPDATEDB $DBQuery");
+&changefilestatus($pid,$FILESTATUSRECEND);
 
 # m2pファイル名をPIDレコードに書き込み
-	$DBQuery =  "insert into  foltia_m2pfiles values ('$outputfilename')";
+	$DBQuery =  "insert into foltia_m2pfiles values ('$outputfilename')";
 	 $sth = $dbh->prepare($DBQuery);
 	$sth->execute();
-&writelog("recwrap UPDATEDB  $DBQuery");
+&writelog("recwrap DEBUG UPDATEDB $DBQuery");
 
 # Starlight breaker向けキャプチャ画像作成
 if (-e "$toolpath/perl/captureimagemaker.pl"){
 	&writelog("recwrap Call captureimagemaker $outputfilename");
+&changefilestatus($pid,$FILESTATUSCAPTURE);
 	system ("$toolpath/perl/captureimagemaker.pl $outputfilename");
+&changefilestatus($pid,$FILESTATUSCAPEND);
 }
 
 
 
-# PSP ------------------------------------------------------
-#PSPトラコン必要かどうか
-$DBQuery =  "SELECT psp,aspect,title FROM  foltia_program WHERE tid = '$tid' ";
+# MPEG4 ------------------------------------------------------
+#MPEG4トラコン必要かどうか
+$DBQuery =  "SELECT psp,aspect,title FROM foltia_program WHERE tid = '$tid' ";
 	 $sth = $dbh->prepare($DBQuery);
 	$sth->execute();
  @psptrcn= $sth->fetchrow_array;
- if ($psptrcn[0]  == 1 ){#トラコン番組
+if ($psptrcn[0]  == 1 ){#トラコン番組
+&writelog("recwrap Launch ipodtranscode.pl");
+exec ("$toolpath/perl/ipodtranscode.pl");
+exit;
+#
+# ここから下は旧エンコード#2008/12/23 
+# 新エンコードはDBを見て未完了MPEG2を順次トラコン処理、
+# 分散エンコードもきっとラクチンに対応可能
+# 新エンコードではXviD/M4VスタイルとPSPファイル名対応を廃止
 
-
-#PSPムービーディレクトリがアルかどうか
+&changefilestatus($pid,80);
+#MPEG4ムービーディレクトリがあるかどうか
  
 #TIDが100以上の3桁の場合はそのまま
 my $pspfilnamehd = "";
 
-	$pspfilnamehd = $tid;
+$pspfilnamehd = $tid;
+&makemp4dir($tid);
 $pspdirname = "$tid.localized/";
 $pspdirname = $recfolderpath."/".$pspdirname;
 
 #なければ作る
-unless (-e $pspdirname ){
-	system("$toolpath/perl/mklocalizeddir.pl $tid");
-	#&writelog("recwrap mkdir $pspdirname");
-}
+#unless (-e $pspdirname ){
+#	system("$toolpath/perl/mklocalizeddir.pl $tid");
+#	#&writelog("recwrap mkdir $pspdirname");
+#}
 $pspdirname = "$tid.localized/mp4/";
 $pspdirname = $recfolderpath."/".$pspdirname;
 #なければ作る
-unless (-e $pspdirname ){
-	mkdir $pspdirname ,0777;
-	#&writelog("recwrap mkdir $pspdirname");
-}
+#unless (-e $pspdirname ){
+#	mkdir $pspdirname ,0777;
+#	#&writelog("recwrap mkdir $pspdirname");
+#}
 
 #ファイル名決定
 if ($mp4filenamestyle == 1){# 1;よりわかりやすいファイル名
@@ -349,21 +411,102 @@ system("rm -rf $pspdirname/0000000*.jpg ");
 
 
 # MP4ファイル名をPIDレコードに書き込み
-	$DBQuery =  "UPDATE  foltia_subtitle  SET 
-	PSPfilename 	 = '$mp4filename' 
-	WHERE pid =  '$pid' ";
+	$DBQuery =  "UPDATE foltia_subtitle SET PSPfilename = '$mp4filename' WHERE pid = '$pid' ";
 	 $sth = $dbh->prepare($DBQuery);
 	$sth->execute();
 &writelog("recwrap UPDATEsubtitleDB  $DBQuery");
 
 # MP4ファイル名をfoltia_mp4files挿入
-	$DBQuery =  "insert into  foltia_mp4files values ('$tid','$mp4filename') ";
+	$DBQuery = "insert into foltia_mp4files values ('$tid','$mp4filename') ";
 	 $sth = $dbh->prepare($DBQuery);
 	$sth->execute();
 &writelog("recwrap UPDATEmp4DB  $DBQuery");
 
+&changefilestatus($pid,200);
 }#PSPトラコンあり
 
+sub continuousrecordingcheck(){
+my $now = `date  +%s --date "2 min "`;
+&writelog("recwrap DEBUG continuousrecordingcheck() now $now");
+my @processes =`ps ax | grep recfriio`;
+
+my $psline = "";
+my @processline = "";
+my $pid = "";
+my @pid;
+my $sth;
+foreach (@processes){
+	if (/friiodetect/) {
+		if (/^.[0-9]*\s/){
+			push(@pid, $&);
+		}#if
+	}#if
+}#foreach
+
+if (@pid > 0){
+my @filenameparts;
+my $tid = "";
+my $startdate = "";
+my $starttime = "";
+my $startdatetime = "";
+my @recfile;
+my $endtime = "";
+my $endtimeepoch = "";
+foreach $pid (@pid){
+#print "DEBUG  PID $pid\n";
+&writelog("recwrap DEBUG continuousrecordingcheck() PID $pid");
+
+	my @lsofoutput = `/usr/sbin/lsof -p $pid`;
+	my $filename = "";
+	#print "recfolferpath $recfolderpath\n";
+	foreach (@lsofoutput){
+		if (/m2t/){
+		@processline = split(/\s+/,$_);
+		$filename = $processline[8];
+		#print "DEBUG  $_ \n";
+		#print "DEBUG $processline[0]/$processline[1]/$processline[2]/$processline[3]/$processline[4]/$processline[5]/$processline[6]/$processline[7]/$processline[8] \n";
+		$filename =~ s/$recfolderpath\///;
+		#print "DEBUG FILENAME $filename\n";
+			&writelog("recwrap DEBUG continuousrecordingcheck()  FILENAME $filename");
+		# 1520-9-20081201-0230.m2t
+		@filenameparts = split(/-/,$filename);
+		$tid = $filenameparts[0];
+		$startdate = $filenameparts[2];
+		$starttime = $filenameparts[3];
+		$startdatetime = $filenameparts[2].$filenameparts[3];
+		#DBから録画中番組のデータ探す
+	$DBQuery =  "
+SELECT foltia_subtitle.tid,foltia_subtitle.countno,foltia_subtitle.subtitle,foltia_subtitle.startdatetime ,foltia_subtitle.enddatetime ,foltia_subtitle.lengthmin ,foltia_tvrecord.bitrate , foltia_subtitle.startoffset , foltia_subtitle.pid ,foltia_tvrecord.digital 
+FROM foltia_subtitle ,foltia_tvrecord 
+WHERE 
+foltia_tvrecord.tid = foltia_subtitle.tid AND 
+foltia_tvrecord.tid = $tid AND 
+foltia_subtitle.startdatetime = $startdatetime AND 
+foltia_tvrecord.digital = 1";
+	&writelog("recwrap DEBUG continuousrecordingcheck() $DBQuery");
+	$sth = $dbh->prepare($DBQuery);
+	&writelog("recwrap DEBUG continuousrecordingcheck() prepare");
+	$sth->execute();
+	&writelog("recwrap DEBUG continuousrecordingcheck() execute");
+	@recfile = $sth->fetchrow_array;
+	&writelog("recwrap DEBUG continuousrecordingcheck() @recfile  $recfile[0] $recfile[1] $recfile[2] $recfile[3] $recfile[4] $recfile[5] $recfile[6] $recfile[7] $recfile[8] $recfile[9] ");
+	#終了時刻
+	$endtime = $recfile[4];
+	$endtimeepoch = &foldate2epoch($endtime);
+	&writelog("recwrap DEBUG continuousrecordingcheck() $recfile[0] $recfile[1] $recfile[2] $recfile[3] $recfile[4] $recfile[5] endtimeepoch $endtimeepoch");
+	if ($endtimeepoch < $now){#まもなく終わる番組なら
+		#kill
+		system("kill $pid");
+		&writelog("recwrap recording process killed $pid/$endtimeepoch/$now");
+	}
+		}#endif m2t
+	}#foreach lsofoutput
+}#foreach
+}else{
+#print "DEBUG fecfriio NO PID\n";
+&writelog("recwrap No recording process killed.");
+}
+}#endsub
 
 
 

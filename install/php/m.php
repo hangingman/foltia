@@ -34,6 +34,8 @@ if ($useenvironmentpolicy == 1){
 }//end if login
 
 $now = date("YmdHi");   
+$today = date("Ymd");
+$nowdate = date("Hi",(mktime(date("G"),date("i")+8,date("s"),date("m"),date("d"),date("Y"))));
 $errflag = 0;
 $pname = "手動録画";
 
@@ -73,6 +75,8 @@ if (($startdate == "") || ($starttime == "")){
 $lengthmin = getgetnumform(lengthmin);
 $recstid = getgetnumform(recstid);
 $pname = getgetform(pname);
+//$usedigital = getgetnumform(usedigital);
+
 //確認
 $startdatetime = "$startdate"."$starttime";
 if (foldatevalidation($startdatetime)){
@@ -104,6 +108,12 @@ WHERE stationid = $recstid";
 		$errmsg = "放送局設定が異常です。";
 	}
 }
+//デジタル優先
+/*if ($usedigital == 1){
+}else{
+	$usedigital = 0;
+}
+*/
 //正しければ
 if ($errflag == 0){
 //重複があるか?
@@ -192,10 +202,10 @@ print "時刻が不正なために予約できませんでした。 <br>";
 <form id="record" name="record" method="get" action="./m.php">
   <p>放送日:
     <input name="startdate" type="text" id="startdate" size="9" value="<?=$startdate?>" />
-  年月日 Ex.19800121</p>
+  年月日 Ex.<?=$today?></p>
   <p>録画開始時刻:
     <input name="starttime" type="text" id="starttime" size="5" value="<?=$starttime?>" />
-  時分 Ex.2304  </p>
+  時分 Ex.<?=$nowdate?>  </p>
   <p>
     録画尺:
       <input name="lengthmin" type="text" id="lengthmin" size="4" value="<?=$lengthmin?>"/> 
@@ -204,9 +214,13 @@ print "時刻が不正なために予約できませんでした。 <br>";
   <p>録画局:
 <?php
 $query = "
-SELECT stationid,stationname,stationrecch 
+SELECT stationid,stationname,stationrecch ,digitalch 
 FROM foltia_station 
 WHERE stationrecch > 0 
+UNION 
+SELECT DISTINCT  stationid,stationname,stationrecch ,digitalch 
+FROM  foltia_station 
+WHERE digitalch > 0
 ORDER BY \"stationid\" ASC";
 
 	$stations = m_query($con, $query, "DBクエリに失敗しました");
@@ -247,7 +261,19 @@ if ($stationcount > 0 ){
 		}
 	}
 }
+/*
+print "<p>デジタル録画を優先:";
 
+if ($usedigital == 1){
+print "<input name="useditial" type="radio" value="1" selected />  する　
+<input name="useditial" type="radio" value="0" />  しない　
+";
+}else{
+print "<input name="useditial" type="radio" value="1" />  する　
+<input name="useditial" type="radio" value="0" selected />  しない　
+";
+}
+*/
 ?>
   <p>番組名:
     <input name="pname" type="text" id="pname" value="<?=$pname ?>" />

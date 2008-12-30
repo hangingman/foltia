@@ -45,6 +45,9 @@ $userclass = getuserclass($con);
 <?php
 $mymemberid = getmymemberid($con);
 $now = getgetnumform(startdate);
+*if ($now == ""){
+$now = getgetnumform(date);
+}
 
 if ($now > 200501010000){
 }else{
@@ -62,7 +65,8 @@ foltia_subtitle.lengthmin ,
 foltia_tvrecord.bitrate  , 
 foltia_subtitle.startoffset , 
 foltia_subtitle.pid , 
-foltia_subtitle.epgaddedby 
+foltia_subtitle.epgaddedby , 
+foltia_tvrecord.digital 
 FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
 WHERE foltia_tvrecord.tid = foltia_program.tid AND foltia_tvrecord.stationid = foltia_station .stationid AND foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid
 AND foltia_subtitle.enddatetime >= '$now'
@@ -78,7 +82,8 @@ foltia_subtitle.lengthmin ,
 foltia_tvrecord.bitrate , 
 foltia_subtitle.startoffset , 
 foltia_subtitle.pid , 
-foltia_subtitle.epgaddedby 
+foltia_subtitle.epgaddedby , 
+foltia_tvrecord.digital 
 FROM foltia_tvrecord
 LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
 LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
@@ -126,9 +131,10 @@ printhtmlpageheader();
 			<th align="left">タイトル</th>
 			<th align="left">話数</th>
 			<th align="left">サブタイトル</th>
-			<th align="left">開始時刻</th>
+			<th align="left">開始時刻(ズレ)</th>
 			<th align="left">総尺</th>
 			<th align="left">画質</th>
+			<th align="left">デジタル優先</th>
 
 		</tr>
 	</thead>
@@ -164,7 +170,8 @@ foltia_subtitle.startdatetime ,
 foltia_subtitle.lengthmin ,
 foltia_tvrecord.bitrate  , 
 foltia_subtitle.startoffset , 
-foltia_subtitle.pid  
+foltia_subtitle.pid  , 
+foltia_tvrecord.digital 
 FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
 WHERE foltia_tvrecord.tid = foltia_program.tid AND foltia_tvrecord.stationid = foltia_station .stationid AND foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid
 AND foltia_subtitle.enddatetime > '$rowdata[5]' 
@@ -180,7 +187,8 @@ foltia_subtitle.startdatetime ,
 foltia_subtitle.lengthmin ,
 foltia_tvrecord.bitrate  , 
 foltia_subtitle.startoffset , 
-foltia_subtitle.pid  
+foltia_subtitle.pid , 
+foltia_tvrecord.digital 
 FROM foltia_tvrecord
 LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
 LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
@@ -217,7 +225,8 @@ foltia_subtitle.startdatetime ,
 foltia_subtitle.lengthmin ,
 foltia_tvrecord.bitrate  , 
 foltia_subtitle.startoffset , 
-foltia_subtitle.pid  
+foltia_subtitle.pid  , 
+foltia_tvrecord.digital 
 FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
 WHERE foltia_tvrecord.tid = foltia_program.tid AND foltia_tvrecord.stationid = foltia_station .stationid AND foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid
 AND foltia_subtitle.enddatetime > '$rowdata[5]' 
@@ -234,7 +243,8 @@ foltia_subtitle.startdatetime ,
 foltia_subtitle.lengthmin ,
 foltia_tvrecord.bitrate  , 
 foltia_subtitle.startoffset , 
-foltia_subtitle.pid  
+foltia_subtitle.pid , 
+foltia_tvrecord.digital 
 FROM foltia_tvrecord
 LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
 LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
@@ -276,6 +286,7 @@ AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' )
 					print "$title";
 					}else{
 					print "<a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a>";
+
 					}
 					print "</td>\n";
 					 // 話数
@@ -304,6 +315,15 @@ AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' )
 					
 					//録画レート
 					echo("<td>".htmlspecialchars($rowdata[7])."<br></td>\n");
+					
+					//デジタル優先
+					echo("<td>");
+					if (htmlspecialchars($rowdata[11]) == 1){
+					print "する";
+					}else{
+					print "しない";
+					}
+					echo("<br></td>\n");
 				echo("</tr>\n");
 			}
 		?>
@@ -312,6 +332,7 @@ AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' )
 
 
 <table>
+	<tr><td>アナログ重複表示</td><td><br /></td></tr>
 	<tr><td>エンコーダ数</td><td><?=$recunits ?></td></tr>
 	<tr class="overwraped"><td>チューナー重複</td><td><br /></td></tr>
 	<tr class="exoverwraped"><td>外部入力重複</td><td><br /></td></tr>
@@ -328,9 +349,10 @@ foltia_program.tid,
 stationname,
 foltia_program .title ,
 foltia_tvrecord.bitrate ,
-foltia_tvrecord.stationid  
+foltia_tvrecord.stationid , 
+foltia_tvrecord.digital   
 FROM  foltia_tvrecord , foltia_program , foltia_station 
-WHERE foltia_tvrecord.tid = foltia_program.tid  AND foltia_tvrecord.stationid = foltia_station .stationid   
+WHERE foltia_tvrecord.tid = foltia_program.tid  AND foltia_tvrecord.stationid = foltia_station .stationid 
 ORDER BY foltia_program.tid  DESC
 ";
 	$rs = m_query($con, $query, "DBクエリに失敗しました");
@@ -353,6 +375,8 @@ ORDER BY foltia_program.tid  DESC
 			<th align="left">タイトル</th>
 			<th align="left">録画リスト</th>
 			<th align="left">画質</th>
+			<th align="left">デジタル優先</th>
+
 		</tr>
 	</thead>
 
@@ -384,9 +408,15 @@ ORDER BY foltia_program.tid  DESC
 
 					//MP4
 					echo("<td><a href=\"showlibc.php?tid=$tid\">mp4</a></td>\n");
-
+					//画質(アナログビットレート)
 					echo("<td>".htmlspecialchars($rowdata[3])."<br></td>\n");
-	
+					//デジタル優先
+					echo("<td>");
+					if (htmlspecialchars($rowdata[5]) == 1){
+					print "する";
+					}else{
+					print "しない";
+					}
 				echo("</tr>\n");
 				}else{
 				print "<tr>
@@ -394,7 +424,15 @@ ORDER BY foltia_program.tid  DESC
 				<td>[全局]<br></td>
 				<td>EPG録画</td>
 				<td><a href=\"showlibc.php?tid=0\">mp4</a></td>";
-				echo("<td>".htmlspecialchars($rowdata[3])."<br></td>\n</tr>");
+				echo("<td>".htmlspecialchars($rowdata[3])."<br></td>");
+					//デジタル優先
+					echo("<td>");
+					if (htmlspecialchars($rowdata[5]) == 1){
+					print "する";
+					}else{
+					print "しない";
+					}
+				echo("\n</tr>");
 				}//if tid 0
 			}//for
 		}//else

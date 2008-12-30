@@ -33,7 +33,7 @@ $query =  "DELETE  FROM  foltia_m2pfiles  ";
 	 $sth = $dbh->prepare($query);
 	$sth->execute();
 
-while ($file = glob("$recfolderpath/*.m2p")) {
+while ($file = glob("$recfolderpath/*.m2?")) {
 $file =~ s/$recfolderpath\///;
 $query =  "insert into  foltia_m2pfiles values ('$file')";
 $oserr = $dbh->do($query);
@@ -56,12 +56,12 @@ s/$recfolderpath\///;
 @fileline = split (/\//);
 $filetid = $fileline[0];
 $filetid =~ s/[^0-9]//g;
-
-$query =  "insert into  foltia_mp4files values ('$filetid','$fileline[2]')";
-$oserr = $dbh->do($query);
+if (($filetid ne "" )&& ($fileline[2] ne "" )){
+	$query =  "insert into  foltia_mp4files values ('$filetid','$fileline[2]')";
+	$oserr = $dbh->do($query);
 #print "$filetid;$fileline[2];$query\n"
 # http://www.atmarkit.co.jp/fnetwork/rensai/sql03/sql1.html
-
-}
+}#end if
+}# end foreach
 $oserr = $dbh->commit;
 

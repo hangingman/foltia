@@ -88,7 +88,8 @@ if ($tid == 0){
 <table width="100%" border="0">
   <tr>
     <td>放送局</td>
-    <td>ビットレート</td>
+    <td>デジタル録画優先</td>
+    <td>アナログビットレート</td>
   </tr>
   <tr>
     <td>
@@ -127,6 +128,25 @@ ORDER BY stationrecch DESC
 	?>
 
 	</td>
+	
+	<td>
+	<select name="usedigital">
+	<?php
+	 if ($usedigital == 1){
+	 	print "
+		<option value=\"1\" selected>する</option>
+		<option value=\"0\">しない</option>
+		";
+		}else{
+	 	print "
+		<option value=\"1\">する</option>
+		<option value=\"0\" selected>しない</option>
+		";
+		}
+	?>
+	</select>
+	</td>
+
     <td><select name="bitrate">
         <option value="14">最高画質</option>
         <option value="13">13Mbps</option>
