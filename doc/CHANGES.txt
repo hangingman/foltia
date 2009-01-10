@@ -1,5 +1,15 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 
+
+09.1.10
+delepgp.php:
+SQLが間違ってたたのを修正。
+foltialib.php:
+getgetnumform()を負の数にも対応。
+
+08.12.30
+foltiaHD最初のリリース。
+
 08.11.15
 getxml2db.pl:
 If-Modified-Sinceの条件付きGETに対応。

@@ -29,7 +29,7 @@ http://www.hizlab.net/app/
 		$value = $_GET["{$key}"];
 		escape_string($value);
 		htmlspecialchars($value);
-		$value = ereg_replace("[^0-9]", "", $value);
+		$value = ereg_replace("[^-0-9]", "", $value);
 		$value = escape_numeric($value);
 	return ($value);
     }

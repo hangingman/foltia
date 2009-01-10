@@ -40,21 +40,19 @@ login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
 <link rel="stylesheet" type="text/css" href="graytable.css"> 
 <title>foltia:delete EPG Program</title>
 </head>
+<body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
 
 <?php
 
+	printhtmlpageheader();
 
-$pid = getgetform(pid);
+$pid = getgetnumform(pid);
 		if ($pid == "") {
 		die_exit("番組がありません<BR>");
 		}
 
 $now = date("YmdHi");   
-?>
-<body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
 
-<?php 
-	printhtmlpageheader();
 
 //タイトル取得
 $query = "
@@ -68,8 +66,8 @@ foltia_subtitle.enddatetime ,
 foltia_subtitle.lengthmin ,
 foltia_station.stationname , 
 foltia_station.stationrecch 
-FROM     foltia_subtitle 
-WHERE    foltia_subtitle.tid = 0 AND 
+FROM foltia_subtitle , foltia_station 
+WHERE foltia_subtitle.tid = 0 AND 
 foltia_station.stationid = foltia_subtitle.stationid AND 
 foltia_subtitle.pid = $pid 
  ";
