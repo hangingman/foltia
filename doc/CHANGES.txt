@@ -6,6 +6,8 @@ delepgp.php:
 SQLが間違ってたたのを修正。
 foltialib.php:
 getgetnumform()を負の数にも対応。
+selectcaptureimage.php:
+getgetnumform使う様に変更。
 
 08.12.30
 foltiaHD最初のリリース。
