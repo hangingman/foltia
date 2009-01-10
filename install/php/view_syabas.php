@@ -34,7 +34,7 @@ if ($useenvironmentpolicy == 1){
 }//end if login
 
 
-$pid = getgetform(pid);
+$pid = getgetnumform(pid);
 
 
 if ($pid == "") {

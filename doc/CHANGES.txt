@@ -7,7 +7,10 @@ SQLが間違ってたたのを修正。
 foltialib.php:
 getgetnumform()を負の数にも対応。
 selectcaptureimage.php:
-getgetnumform使う様に変更。
+getgetnumform使うように変更。
+view_syabas.php:
+getgetnumform使うように変更。
+
 
 08.12.30
 foltiaHD最初のリリース。
