@@ -18,8 +18,8 @@ http://www.hizlab.net/app/
 	  function getgetform($key) {
     if ($_GET["{$key}"] != "") {
 		$value = $_GET["{$key}"];
-                   escape_string($value);
-                   htmlspecialchars($value);
+        $value = escape_string($value);
+        $value = htmlspecialchars($value);
 	return ($value);
     }
   }
@@ -27,8 +27,6 @@ http://www.hizlab.net/app/
 	  function getgetnumform($key) {
     if ($_GET["{$key}"] != "") {
 		$value = $_GET["{$key}"];
-		escape_string($value);
-		htmlspecialchars($value);
 		$value = ereg_replace("[^-0-9]", "", $value);
 		$value = escape_numeric($value);
 	return ($value);
@@ -37,11 +35,10 @@ http://www.hizlab.net/app/
 	
 	//フォームデコード
 	  function getform($key) {
-			//    global $where;
     if ($_POST["{$key}"] != "") {
 		$value = $_POST["{$key}"];
-                   escape_string($value);
-                   htmlspecialchars($value);
+        $value = escape_string($value);
+        $value = htmlspecialchars($value);
 	return ($value);
     }
   }
@@ -49,9 +46,9 @@ http://www.hizlab.net/app/
 	  function getnumform($key) {
     if ($_POST["{$key}"] != "") {
 		$value = $_POST["{$key}"];
-                   escape_string($value);
-                   htmlspecialchars($value);
-                   $value = ereg_replace("[^0-9]", "", $value);
+		$value = escape_string($value);
+        $value = htmlspecialchars($value);
+        $value = ereg_replace("[^0-9]", "", $value);
 		$value = escape_numeric($value);
 	return ($value);
     }
@@ -105,7 +102,7 @@ http://www.hizlab.net/app/
 	}
 	
 	/* SQL 文字列のエスケープ */
-	function escape_string($sql, $quote = TRUE) {
+	function escape_string($sql, $quote = FALSE) {
 		if ($quote && strlen($sql) == 0) {
 			return "null";
 		}
