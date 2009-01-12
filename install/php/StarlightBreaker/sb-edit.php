@@ -129,7 +129,8 @@ if (getform(preview) == 1){
 //プレビュー表示
 // htmlspecialchars(stripslashes( )) 
 $subject = getform(subject); 
-$maintext = getform(textarea); 
+$maintext = $_POST["textarea"];
+$maintext = pg_escape_string($maintext);
 //$maintext = mbereg_replace("\n","<br />\n", $maintext);
 $rate = getform(rank4);
 
