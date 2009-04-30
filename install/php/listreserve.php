@@ -15,6 +15,12 @@ startdate:特定日付からの予約状況。YYYYmmddHHii形式で。表示数に限定かけてないので
 
  DCC-JPL Japan/foltia project
 
+
+History
+
+2009/5/1 
+重複予約検出処理の修正 http://www.dcc-jpl.com/foltia/ticket/7
+パッチ適用
 */
 
 include("./foltialib.php");
@@ -201,16 +207,30 @@ AND foltia_subtitle.startdatetime < '$endtime'
 	$overlap = m_query($con, $query, "DBクエリに失敗しました");
 	$overlapmaxrows = pg_num_rows($overlap);
 	if ($overlapmaxrows > ($recunits) ){
+		
+		$owtimeline = array();
+		
 		for ($rrow = 0; $rrow < $overlapmaxrows ; $rrow++) {
-			$owrowdata = pg_fetch_row($overlap, $rrow);
-			$overlappid[] = $owrowdata[9];
+			$owrowdata = pg_fetch_array($overlap, $rrow);
+			$owtimeline[ $owrowdata['startdatetime'] ] = $owtimeline[ $owrowdata['startdatetime'] ] +1;
+			
+			$owrend = calcendtime( $owrowdata['startdatetime'], $owrowdata['lengthmin'] );
+			$owtimeline[ $owrend ] = $owtimeline[ $owrend ] -1;
+			//注意: NULL に減算子を適用しても何も起こりませんが、NULL に加算子を 適用すると 1 となります。
 		}
-	if (in_array($rowdata[9], $overlappid)) {
-		$rclass = "overwraped";
+		
+		ksort ( $owtimeline );
+		
+		$owcount = 0;
+		foreach ( $owtimeline as $key => $val ) {
+			$owcount += $val;
+			
+			if ( $owcount > $recunits ) {
+				$rclass = "overwraped";
+				break;
+			}
+		}
 	}
-	}else{
-	$overlappid = "";
-	}//end if
 
 //外部チューナー録画
 $externalinputs = 1; //現状一系統のみ
@@ -258,16 +278,29 @@ AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' )
 	$eoverlap = m_query($con, $query, "DBクエリに失敗しました");
 	$eoverlapmaxrows = pg_num_rows($eoverlap);
 	if ($eoverlapmaxrows > ($externalinputs) ){
+		
+		$eowtimeline = array();
+		
 		for ($erow = 0; $erow < $eoverlapmaxrows ; $erow++) {
-			$eowrowdata = pg_fetch_row($eoverlap, $erow);
-			$eoverlappid[] = $eowrowdata[9];
+			$eowrowdata = pg_fetch_array($eoverlap, $erow);
+			$eowtimeline[ $eowrowdata['startdatetime'] ] = $eowtimeline[ $eowrowdata['startdatetime'] ] +1;
+			
+			$eowrend = calcendtime( $eowrowdata['startdatetime'], $eowrowdata['lengthmin'] );
+			$eowtimeline[ $eowrend ] = $eowtimeline[ $eowrend ] -1;
 		}
-
-		if (in_array($rowdata[9], $eoverlappid)) {
-			$rclass = "exoverwraped";
+		
+		ksort ( $eowtimeline );
+		
+		$eowcount = 0;
+		foreach ( $eowtimeline as $key => $val ) {
+			$eowcount += $val;
+			
+			if ( $eowcount > $externalinputs ) {
+				$rclass = "exoverwraped";
+				break;
+			}
 		}
-	}else{
-	$eoverlappid = "";
+	
 	}
 				echo("<tr class=\"$rclass\">\n");
 					// TID

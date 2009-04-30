@@ -1,5 +1,15 @@
 foltia 更新履歴 http://www.dcc-jpl.com/soft/foltia/
 
+09.4.30
+listreserve.php:
+チケット#7適用。
+http://www.dcc-jpl.com/foltia/ticket/7
+表記ミス修正。
+
+foltialib.php:
+表記ミス修正。
+
+
 09.1.13:
 sb-edit.php:
 foltialib.phpを変更したら書き込むHTMLタグをエスケープしてしまっていた箇所を修正。
