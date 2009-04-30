@@ -45,7 +45,7 @@ $userclass = getuserclass($con);
 <?php
 $mymemberid = getmymemberid($con);
 $now = getgetnumform(startdate);
-*if ($now == ""){
+if ($now == ""){
 $now = getgetnumform(date);
 }
 

@@ -25,7 +25,8 @@ http://www.hizlab.net/app/
   }
 	//GET用数字フォームデコード
 	  function getgetnumform($key) {
-    if ($_GET["{$key}"] != "") {
+//    if ($_GET["{$key}"] != "") {
+    if (isset($_GET["{$key}"] )) {
 		$value = $_GET["{$key}"];
 		$value = ereg_replace("[^-0-9]", "", $value);
 		$value = escape_numeric($value);
@@ -77,7 +78,7 @@ http://www.hizlab.net/app/
 		<p class="error"><?= $message ?></p>
 		<div class="index"><a href="./">トップ</a></div>
 	</body>
-</html><?
+</html><?php
 		exit;
 	}
 	
