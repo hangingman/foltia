@@ -39,7 +39,7 @@ if ($useenvironmentpolicy == 1){
 <title>foltia:EPG番組表</title>
 </head>
 <?php
-$start = getgetnumform(start);
+$start = getgetnumform("start");
 
 if ($start == ""){
 	$start =  date("YmdHi");
@@ -99,7 +99,7 @@ if ($maxrows > $maxdisplay){
 	$pages = ceil($maxrows / $maxdisplay) ;
 }
 
-$page = getgetnumform(p);
+$page = getgetnumform("p");
 
 if (($page == "")|| ($page <= 0) ){
 	$page = 1 ;
@@ -246,8 +246,9 @@ for ($i=1; $i <= $colmnums ; $i++){
 	if ($i === ($colmnums )){//最終行
 		$rowspan = $i - $dataplace ;
 		//そして自分自身にタグを
-			if ($item[$i][$stationname] == ""){
-			$item[$i][$stationname]  = "";
+			//if ((!isset($item[$i][$stationname])) && ($item[$i][$stationname] == "")){
+			if (!isset($item[$i][$stationname])){
+			$item[$i][$stationname]  = null ;
 			}else{
 			$item[$i][$stationname]  = "<td ". $item[$i][$stationname] . "</td>";
 			$rowspan--;
@@ -260,17 +261,23 @@ for ($i=1; $i <= $colmnums ; $i++){
 //			$item[$dataplace][$stationname]  = "<td ". $item[$dataplace][$stationname] . "$rowspan </td>";
 			}
 
-	}elseif ($item[$i][$stationname] == ""){
+//	}elseif ((!isset($item[$i][$stationname]))&&($item[$i][$stationname] == "")){
+	}elseif (!isset($item[$i][$stationname])){
 	//ヌルなら
-		$item[$i][$stationname]  =  $item[$i][$stationname] ;
+		//$item[$i][$stationname]  =  $item[$i][$stationname] ;
+		$item[$i][$stationname]  =  null ;
 //		$item[$i][$stationname]  =  "<td><br></td>" ;
 	}else{
 	//なんか入ってるなら
 		$rowspan = $i - $dataplace;
+		$itemDataplaceStationname = null;
+		if (isset($item[$dataplace][$stationname])){
+		$itemDataplaceStationname = $item[$dataplace][$stationname];
+		}
 			if ($rowspan === 1 ){
-			$item[$dataplace][$stationname]  = "<td ". $item[$dataplace][$stationname] . "</td>";
+			$item[$dataplace][$stationname]  = "<td ". $itemDataplaceStationname . "</td>";
 			}else{
-			$item[$dataplace][$stationname]  = "<td rowspan = $rowspan ". $item[$dataplace][$stationname] . "</td>";
+			$item[$dataplace][$stationname]  = "<td rowspan = $rowspan ". $itemDataplaceStationname . "</td>";
 //			$item[$dataplace][$stationname]  = "<td ". $item[$dataplace][$stationname] . "$rowspan </td>";
 			}
 		$dataplace = $i;

@@ -463,17 +463,15 @@ foreach $pid (@pid){
 		if (/m2t/){
 		@processline = split(/\s+/,$_);
 		$filename = $processline[8];
-		#print "DEBUG  $_ \n";
-		#print "DEBUG $processline[0]/$processline[1]/$processline[2]/$processline[3]/$processline[4]/$processline[5]/$processline[6]/$processline[7]/$processline[8] \n";
 		$filename =~ s/$recfolderpath\///;
-		#print "DEBUG FILENAME $filename\n";
-			&writelog("recwrap DEBUG continuousrecordingcheck()  FILENAME $filename");
+		&writelog("recwrap DEBUG continuousrecordingcheck()  FILENAME $filename");
 		# 1520-9-20081201-0230.m2t
 		@filenameparts = split(/-/,$filename);
 		$tid = $filenameparts[0];
 		$startdate = $filenameparts[2];
 		$starttime = $filenameparts[3];
-		$startdatetime = $filenameparts[2].$filenameparts[3];
+		@filenameparts = split(/\./,$starttime);
+		$startdatetime = $startdate.$filenameparts[0];
 		#DBから録画中番組のデータ探す
 	$DBQuery =  "
 SELECT foltia_subtitle.tid,foltia_subtitle.countno,foltia_subtitle.subtitle,foltia_subtitle.startdatetime ,foltia_subtitle.enddatetime ,foltia_subtitle.lengthmin ,foltia_tvrecord.bitrate , foltia_subtitle.startoffset , foltia_subtitle.pid ,foltia_tvrecord.digital 

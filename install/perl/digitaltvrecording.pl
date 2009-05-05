@@ -326,11 +326,12 @@ if ($bandtype == 0){
 #
 sub calldigitalrecorder{
 #
-#いまんところ白friioと黒friioのみ
+#白friioと黒friio、PT1対応
 #2008/10/23 recfriio4仕様に変更 
 #
 my $oserr = 0;
-
+my $originalrecch = $recch;
+my $errorflag = 0;
 if ($bandtype == 0){
 # 地デジ friio
 }elsif($bandtype == 1){
@@ -374,7 +375,22 @@ if ($bandtype == 0){
 	exit 3;
 }
 
-
+# PT1
+# b25,recpt1があるか確認
+	if  (-e "$toolpath/perl/tool/recpt1"){
+		&writelog("digitaltvrecording DEBUG recpt1 --b25  $originalrecch $reclengthsec $outputfile  ");
+		$oserr = system("$toolpath/perl/tool/recpt1 --b25  $originalrecch $reclengthsec $outputfile  ");
+		$oserr = $oserr >> 8;
+			if ($oserr > 0){
+			&writelog("digitaltvrecording :ERROR :PT1 is BUSY.$oserr");
+			$errorflag = 2;
+			}
+	}else{ # エラー recpt1がありません
+		&writelog("digitaltvrecording :ERROR :recpt1  not found. You must install $toolpath/b25 and $toolpath/recpt1.");
+	$errorflag = 1;
+	}
+# friio
+if ($errorflag >= 1 ){
 # b25,recfriioがあるか確認
 	if  (-e "$toolpath/perl/tool/recfriio"){
 	
@@ -395,6 +411,7 @@ if ($bandtype == 0){
 		&writelog("digitaltvrecording :ERROR :recfriio  not found. You must install $toolpath/b25 and $toolpath/recfriio.");
 	exit 1;
 	}
+}#end if errorflag
 
 #BS1/BS2などのスプリットを
 if ($bssplitflag == 101){
