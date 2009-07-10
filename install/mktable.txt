@@ -79,7 +79,7 @@ GRANT ALL on "foltia_epg" to "foltia";
 
 drop table foltia_m2pfiles;
 create table foltia_m2pfiles (
-m2pfilename text 
+m2pfilename text  PRIMARY KEY
 );
 REVOKE ALL on "foltia_m2pfiles" from PUBLIC;
 GRANT ALL on "foltia_m2pfiles" to "foltia";
@@ -87,7 +87,7 @@ GRANT ALL on "foltia_m2pfiles" to "foltia";
 drop table foltia_mp4files;
 create table foltia_mp4files (
 tid int8,
-mp4filename text 
+mp4filename text
 );
 REVOKE ALL on "foltia_mp4files" from PUBLIC;
 GRANT ALL on "foltia_mp4files" to "foltia";
