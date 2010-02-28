@@ -25,10 +25,11 @@
 
 use DBI;
 use DBD::Pg;
+use DBD::SQLite;
 
 $path = $0;
 $path =~ s/changestbch.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 require 'foltialib.pl';
@@ -53,13 +54,10 @@ if (-e "/dev/ttyUSB0"){
 
 # pidから局(送出コマンド)調べる
 #DB初期化
-	my $data_source = sprintf("dbi:%s:dbname=%s;host=%s;port=%d",
-		$DBDriv,$DBName,$DBHost,$DBPort);
-	 $dbh = DBI->connect($data_source,$DBUser,$DBPass) ||die $DBI::error;;
+	$dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
-$DBQuery =  "SELECT foltia_station.tunertype,foltia_station.tunerch ,foltia_station.stationrecch ,foltia_station.stationid FROM foltia_subtitle,foltia_station WHERE foltia_subtitle.stationid = foltia_station.stationid AND foltia_subtitle.pid =  '$pid' ";
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
+	$sth = $dbh->prepare($stmt{'changestbch.1'});
+	$sth->execute($pid);
  @chstatus = $sth->fetchrow_array;
  	$tunertype = $chstatus[0];
 	$tunercmd =  $chstatus[1];

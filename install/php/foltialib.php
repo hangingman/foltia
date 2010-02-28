@@ -92,25 +92,26 @@ http://www.hizlab.net/app/
 			die_exit("$name ¤Ï $len Ê¸»ú°Ê²¼¤ÇÆþÎÏ¤·¤Æ²¼¤µ¤¤¡£Á´³ÑÊ¸»ú¤Ï¡¢°ìÊ¸»ú¤ÇÆóÊ¸»úÊ¬¤È·×»»¤µ¤ì¤Þ¤¹¡£");
 		}
 	}
-	
-	/* LIKE ÍÑ¤ÎÊ¸»úÎó¤Î¥¨¥¹¥±¡¼¥× */
-	function escape_like($sql, $quote = TRUE) {
-		return ($quote ? "'" : "") .
-		       str_replace(array("\\\\",     "%"    , "_"    ),
-		                   array("\\\\\\\\", "\\\\%", "\\\\_"),
-		                   pg_escape_string($sql)) .
-		       ($quote ? "'" : "");
-	}
-	
+
 	/* SQL Ê¸»úÎó¤Î¥¨¥¹¥±¡¼¥× */
 	function escape_string($sql, $quote = FALSE) {
 		if ($quote && strlen($sql) == 0) {
 			return "null";
 		}
+		if (preg_match("/^pgsql/", DSN)){
 		return ($quote ? "'" : "") .
 		       pg_escape_string($sql) .
 		       ($quote ? "'" : "");
-	}
+		}else if (preg_match("/^sqlite/", DSN)){
+		/*	return ($quote ? "'" : "") .
+				sqlite_escape_string($sql) .
+				($quote ? "'" : "");
+		*/
+		return($sql);
+		}else{
+			return "null";
+		}
+	} 
 	
 	/* SQL ¿ôÃÍ¤Î¥¨¥¹¥±¡¼¥× */
 	function escape_numeric($sql) {
@@ -123,57 +124,72 @@ http://www.hizlab.net/app/
 		return $sql;
 	}
 	
-	/* PostgreSQL ¥µ¡¼¥Ð¤ËÀÜÂ³ */
+	/* DB¤ËÀÜÂ³ */
 	function m_connect() { 
-/*		$con = @pg_connect("host=".DBHOST ." dbname=".DATABASE_NAME .
-		                   " user=".USER_NAME .
-		                   " password=".USER_PASSWORD);
-*/
-		$con = @pg_pconnect("host=".DBHOST ." dbname=".DATABASE_NAME .
-		                   " user=".USER_NAME .
-		                   " password=".USER_PASSWORD);
-
-
-		if (!$con) {
-			die_exit("¥Ç¡¼¥¿¥Ù¡¼¥¹¤ËÀÜÂ³½ÐÍè¤Þ¤»¤ó¤Ç¤·¤¿¡£");
+	try {
+		$dbh = new PDO(DSN);
+		$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		return($dbh);
+	} catch (PDOException $e) {
+		die_exit($e->getMessage() . ": ¥Ç¡¼¥¿¥Ù¡¼¥¹¤ËÀÜÂ³½ÐÍè¤Þ¤»¤ó¤Ç¤·¤¿¡£");
 		}
 		/* ¥Ç¡¼¥¿¥Ù¡¼¥¹¤È¡¢PHP ¤ÎÆâÉôÊ¸»ú¥³¡¼¥É¤¬°ã¤¦¾ì¹ç */
-		return($con);
 	}
 
 	/* ¥Ç¡¼¥¿¥Ù¡¼¥¹¤È¤ÎÀÜÂ³¤òÀÚ¤êÎ¥¤¹ */
-	function m_close($con) {
-		return @pg_close($con);
+function m_close($dbh) {
+	return null;
 	}
 
-	/* SQL Ê¸¤ò¼Â¹Ô */
-	function m_query($con, $query, $errmessage) {
-		$rtn = @pg_query($con, $query);
-		if (!$rtn) {
+//µì´Ø¿ô¡¡sql_query¤ËÃÖ¤­´¹¤¨
+function m_query($dbh, $query, $errmessage) {
+	try {
+		$rtn = $dbh->query($query);
+		return($rtn);
+	} catch (PDOException $e) {
 			/* ¥¨¥é¡¼¥á¥Ã¥»¡¼¥¸¤Ë SQL Ê¸¤ò½Ð¤¹¤Î¤Ï¥»¥­¥å¥ê¥Æ¥£¾åÎÉ¤¯¤Ê¤¤¡ª¡ª */
 			$msg = $errmessage . "<br>\n" .
-			       @pg_last_error($con) . "<br>\n" .
+		    $e->getMessage() . "<br>\n" .
+		    var_export($e->errorInfo, true) . "<br>\n" .
 			       "<small><code>" . htmlspecialchars($query) .
 			       "</code></small>\n";
-			       $rtn = @pg_query($con, "rollback");//04.4.8
-			m_close($con);
+//		$dbh->rollBack();
+		$dbh = null;
 			die_exit($msg);
 		}
+	}
+/* SQL Ê¸¤ò¼Â¹Ô */
+function sql_query($dbh, $query, $errmessage,$paramarray) {
+	try {
+		$rtn = $dbh->prepare("$query");
+		$rtn->execute($paramarray);
 		return($rtn);
+	} catch (PDOException $e) {
+			/* ¥¨¥é¡¼¥á¥Ã¥»¡¼¥¸¤Ë SQL Ê¸¤ò½Ð¤¹¤Î¤Ï¥»¥­¥å¥ê¥Æ¥£¾åÎÉ¤¯¤Ê¤¤¡ª¡ª */
+			$msg = $errmessage . "<br>\n" .
+		    $e->getMessage() . "<br>\n" .
+		    var_export($e->errorInfo, true) . "<br>\n" .
+			       "<small><code>" . htmlspecialchars($query) .
+			       "</code></small>\n";
+//		$dbh->rollBack();
+		$dbh = null;
+			die_exit($msg);
+		}
 	}
 
 	/* select ¤·¤¿·ë²Ì¤ò¥Æ¡¼¥Ö¥ë¤ÇÉ½¼¨ */
 	function m_showtable($rs) {
 		/* ¸¡º÷·ï¿ô */
-		$maxrows = pg_num_rows($rs);
+	$maxrows = 0;
 		
-		if ($maxrows == 0) {
+	$rowdata = $rs->fetch();
+	if (! $rowdata) {
 			echo("<p class=\"msg\">¥Ç¡¼¥¿¤¬Â¸ºß¤·¤Þ¤»¤ó</p>\n");
 			return 0;
 		}
 		
 		/* ¥Õ¥£¡¼¥ë¥É¿ô */
-		$maxcols = pg_num_fields($rs);
+	$maxcols = $rs->columnCount();
 		?>
 <table class="list" summary="¥Ç¡¼¥¿¸¡º÷·ë²Ì¤òÉ½¼¨" border="1">
 	<thead>
@@ -182,7 +198,8 @@ http://www.hizlab.net/app/
 				/* ¥Æ¡¼¥Ö¥ë¤Î¥Ø¥Ã¥À¡¼¤ò½ÐÎÏ */
 				for ($col = 1; $col < $maxcols; $col++) {
 					/* pg_field_name() ¤Ï¥Õ¥£¡¼¥ë¥ÉÌ¾¤òÊÖ¤¹ */
-					$f_name = htmlspecialchars(pg_field_name($rs, $col));
+		     $meta = $rs->getColumnMeta($col);
+		     $f_name = htmlspecialchars($meta["name"]);
 					echo("<th abbr=\"$f_name\">$f_name</th>\n");
 				}
 			?>
@@ -191,10 +208,10 @@ http://www.hizlab.net/app/
 	<tbody>
 		<?php
 			/* ¥Æ¡¼¥Ö¥ë¤Î¥Ç¡¼¥¿¤ò½ÐÎÏ */
-			for ($row = 0; $row < $maxrows; $row++) { /* ¹Ô¤ËÂÐ±þ */
+	      do {
+		      $maxrows++;
+
 				echo("<tr>\n");
-				/* pg_fetch_row ¤Ç°ì¹Ô¼è¤ê½Ð¤¹ */
-				$rowdata = pg_fetch_row($rs, $row);
 				/* £±ÎóÌÜ¤Ë¥ê¥ó¥¯¤òÄ¥¤ë */
 				echo("<td><a href=\"edit.php?q_code=" .
 				     urlencode($rowdata[0]) . "\">" .
@@ -203,7 +220,7 @@ http://www.hizlab.net/app/
 					echo("<td>".htmlspecialchars($rowdata[$col])."<br></td>\n");
 				}
 				echo("</tr>\n");
-			}
+	      } while ($rowdata = $rs->fetch());
 		?>
 	</tbody>
 </table>
@@ -211,48 +228,51 @@ http://www.hizlab.net/app/
 		return $maxrows;
 	}
 
-	/* »ØÄê¤·¤¿¥³¡¼¥É¤Î¥Ç¡¼¥¿¤òÉ½¼¨ */
-	function m_viewdata($con, $code) {
-		/* ¥³¡¼¥É¤Ë³ºÅö¤¹¤ë¥Ç¡¼¥¿¤ò¸¡º÷ */
-		$query = "
+
+function m_viewdata($dbh, $code) {
+
+/*¤³¤ì»È¤Ã¤Æ¤Ê¤¤¤è¤Í?
+
+	$query = "
 select p.code
       ,p.name
       ,p.email
       ,p.pseudonym
       ,s.name as job
       ,p.profile
-      ,to_char(p.editdate, 'YYYY/MM/DD HH24:MI:SS') as editdate
+      ,datetime(p.editdate) as editdate
   from inet_profile p left join inet_job s on p.job = s.code
  where p.code = $code";
-		$rs = m_query($con, $query, "¸Ä¿Í¾ðÊó¤Î¼èÆÀ¤Ë¼ºÇÔ¤·¤Þ¤·¤¿¡£");
-		if (pg_num_rows($rs) == 0) {
+	$rs = m_query($dbh, $query, "¸Ä¿Í¾ðÊó¤Î¼èÆÀ¤Ë¼ºÇÔ¤·¤Þ¤·¤¿¡£");
+	$rowdata = $rs->fetch();
+	if (! $rowdata) {
 			echo("<p class=\"msg\">¥Ç¡¼¥¿¤¬Â¸ºß¤·¤Þ¤»¤ó</p>\n");
 			return FALSE;
 		}
 		
-		/* ¥Õ¥£¡¼¥ë¥É¿ô */
-		$maxcols = pg_num_fields($rs);
-		/* ÀèÆ¬¹Ô */
-		$rowdata = pg_fetch_row($rs, 0);
+		// ¥Õ¥£¡¼¥ë¥É¿ô 
+	$maxcols = $rs->columnCount();
 		?>
 <table class="view" summary="¥Ç¡¼¥¿¥Ù¡¼¥¹¾å¤Î¥Ç¡¼¥¿¤òÉ½¼¨" border="1">
 	<tr>
-		<td class="name"><?= htmlspecialchars(pg_field_name($rs, 1)) ?></td>
+	     <?php $meta = $rs->getColumnMeta(1); ?>
+	     <td class="name"><?= htmlspecialchars($meta["name"]) ?></td>
 		<td><a href="edit.php?q_code=<?= $rowdata[0] ?>"
 		     ><?= htmlspecialchars($rowdata[1]) ?></a></td>
 	</tr>
-	<?php for ($col = 2; $col < $maxcols; $col++) { ?>
+	     <?php for ($col = 2; $col < $maxcols; $col++) {
+		$meta = $rs->getColumnMeta($col); ?>
 	<tr>
-		<td class="name"><?= htmlspecialchars(pg_field_name($rs, $col)) ?></td>
+	    <td class="name"><?= htmlspecialchars($meta["name"]) ?></td>
 		<td><?= htmlspecialchars($rowdata[$col]) ?></td>
 	</tr>
 	<?php } ?>
 </table>
 		<?php
-		/* ¥¯¥¨¥ê¡¼¤ò²òÊü */
-		pg_free_result($rs);
-		
+		// ¥¯¥¨¥ê¡¼¤ò²òÊü 
+      $rs = null;
 		return TRUE;
+*/
 	}
 	
 
@@ -293,17 +313,14 @@ startdatetime  < $epgend
 ORDER BY foltia_epg.startdatetime  ASC
 	";
 	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Þ¤·¤¿");
-	$maxrows = pg_num_rows($rs);
-if ($maxrows == 0) {
+	$rowdata = $rs->fetch();
+	if (! $rowdata) {
 		print("ÈÖÁÈ¥Ç¡¼¥¿¤¬¤¢¤ê¤Þ¤»¤ó<BR>");			
 }else{
 print "<table width=\"100%\"  border=\"0\">\n";
 //print "<ul><!-- ($maxrows) $query -->\n";
 
-for ($row = 0; $row < $maxrows; $row++) { 
-	 
-$rowdata = pg_fetch_row($rs, $row);
-
+		do {
 $printstarttime = substr($rowdata[0],8,2) . ":" .  substr($rowdata[0],10,2);
 $tdclass = "t".substr($rowdata[0],8,2) .  substr($rowdata[0],10,2);
 $title = htmlspecialchars($rowdata[3]);
@@ -322,7 +339,7 @@ print"
 $printstarttime  <A HREF=\"./reserveepg.php?epgid=$epgid\">$title</A> $desc($rowdata[0] - $rowdata[1])
 </li>\n";
 */
-}//for
+		} while ($rowdata = $rs->fetch());//do
 //print "</ul>\n";
 print "</table>\n";
 
@@ -428,8 +445,10 @@ function getdiskusage(){//Ìá¤êÃÍ¡¡ÇÛÎó¡¡[,Á´ÂÎÍÆÎÌ, »ÈÍÑÍÆÎÌ , ¶õ¤­ÍÆÎÌ, ÍøÍÑ³ä¹
 
 global $recfolderpath,$recfolderpath;
 
-	exec ( "df -h  $recfolderpath | grep $recfolderpath", $hdfreearea);
-	$freearea = preg_split ("/[\s,]+/", $hdfreearea[0]);
+//	exec ( "df -h  $recfolderpath | grep $recfolderpath", $hdfreearea);
+//	$freearea = preg_split ("/[\s,]+/", $hdfreearea[0]);
+	exec ( "df -hP  $recfolderpath", $hdfreearea);
+	$freearea = preg_split ("/[\s,]+/", $hdfreearea[count($hdfreearea)-1]);
 
     return $freearea;
 	
@@ -556,20 +575,22 @@ FROM foltia_envpolicy
 WHERE foltia_envpolicy.name  = '$name'  
 	";
 	$useraccount = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Þ¤·¤¿");
-	$useraccountrows = pg_num_rows($useraccount);
+		$rowdata = $useraccount->fetch();
+		if (! $rowdata) {
+			header("HTTP/1.0 401 Unauthorized");
+			redirectlogin();
+		}
 	
-	if ($useraccountrows == 1 ){
-		$rowdata = pg_fetch_row($useraccount, 0);
 		$memberid = $rowdata[0];
 		$userclass = $rowdata[1];
 		$username =  $rowdata[2];
 		$dbpasswd = $rowdata[3];
-	}else{
-		header("HTTP/1.0 401 Unauthorized");
-		//print "<!-- DEBUG DB record error ($useraccountrows)-->";
-		redirectlogin();
-	}//end if
 
+		$rowdata = $useraccount->fetch();
+		if ($rowdata) {
+		header("HTTP/1.0 401 Unauthorized");
+		redirectlogin();
+		}
 
 // passwd¤òdb¤«¤é¼è¤ê¤À¤·
 if ($userclass == 0){
@@ -626,15 +647,19 @@ FROM foltia_envpolicy
 WHERE foltia_envpolicy.name  = '$username'  
 	";
 		$useraccount = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Þ¤·¤¿");
-	$useraccountrows = pg_num_rows($useraccount);
+		$rowdata = $useraccount->fetch();
+		if (! $rowdata) {
+			return (99);
+		}
 	
-	if ($useraccountrows == 1 ){
-		$rowdata = pg_fetch_row($useraccount, 0);
-		//$userclass = $rowdata[1];
-		return ($rowdata[1]);
-	}else{
-	return (99);//¥¨¥é¡¼
-	}//end if
+		$userclass = $rowdata[1];
+
+		$rowdata = $useraccount->fetch();
+		if ($rowdata) {
+			return (99);
+		}
+
+		return ($userclass);
 	
 }else{
 	return (0);//´Ä¶­¥Ý¥ê¥·¡¼»È¤ï¤Ê¤¤¤È¤­¤Ï¤Ä¤Í¤ËÆÃ¸¢¥â¡¼¥É
@@ -654,15 +679,19 @@ FROM foltia_envpolicy
 WHERE foltia_envpolicy.name  = '$username'  
 	";
 		$useraccount = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Þ¤·¤¿");
-	$useraccountrows = pg_num_rows($useraccount);
-	
-	if ($useraccountrows == 1 ){
-		$rowdata = pg_fetch_row($useraccount, 0);
-		//$userclass = $rowdata[1];
-		return ($rowdata[0]);
-	}else{
+		$rowdata = $useraccount->fetch();
+		if (! $rowdata) {
 	return (-1);//¥¨¥é¡¼
-	}//end if
+		}
+
+		$memberid = $rowdata[0];
+
+		$rowdata = $useraccount->fetch();
+		if ($rowdata) {
+			return (-1);
+		}
+
+		return ($memberid);
 	
 }else{
 	return (0);//´Ä¶­¥Ý¥ê¥·¡¼»È¤ï¤Ê¤¤¤È¤­¤Ï¤Ä¤Í¤ËÆÃ¸¢¥â¡¼¥É
@@ -681,20 +710,23 @@ FROM foltia_envpolicy
 WHERE foltia_envpolicy.memberid  = '$memberid'  
 	";
 		$useraccount = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Þ¤·¤¿");
-	$useraccountrows = pg_num_rows($useraccount);
-	
-	if ($useraccountrows == 1 ){
-		$rowdata = pg_fetch_row($useraccount, 0);
-		return ($rowdata[2]);
-	}else{
+		$rowdata = $useraccount->fetch();
+		if (! $rowdata) {
 	return ("");//¥¨¥é¡¼
-	}//end if
+		}
 	
-}else{
+		$name = $rowdata[2];
+
+		$rowdata = $useraccount->fetch();
+		if ($rowdata) {
 	return ("");
-}//end if
+		}
 
+		return ($name);
 
+	}else{
+		return ("");
+	}//end if
 
 }//end function getmemberid2name
 

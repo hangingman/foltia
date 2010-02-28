@@ -29,23 +29,23 @@ use Jcode;
 use Time::Local;
 use DBI;
 use DBD::Pg;
+use DBD::SQLite;
 
 $path = $0;
 $path =~ s/xmltv2foltia.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 require "foltialib.pl";
 
 $currentworkdate = "" ;
 $currentworkch = "" ;
-$today =`date "+%Y%m%d"`;
-$todaytime =`date "+%Y%m%d%H%M"`;
+$today = strftime("%Y%m%d", localtime);
+$todaytime = strftime("%Y%m%d%H%M", localtime);
 
 # DB Connect
-	my $data_source = sprintf("dbi:%s:dbname=%s;host=%s;port=%d",
-		$DBDriv,$DBName,$DBHost,$DBPort);
-	 $dbh = DBI->connect($data_source,$DBUser,$DBPass) ||die $DBI::error;;
+$dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
+$dbh->{AutoCommit} = 0;
 
 while(<>){
 #print $_;
@@ -186,15 +186,15 @@ if(/<channel/){
 
 }elsif(/<\/programme>/){
 #登録処理はココで
-#&writelog("xmltv2foltia DEBUG call chkerase $item{start},$item{channel}");
+#&writelog("xmltv2foltia DEBUG call chkerase $item{'start'},$item{'channel'}");
 
-&chkerase($item{start},$item{channel});
-if ($item{subtitle} ne "" ){
-	$registdesc = $item{subtitle}." ".$item{desc};
+	&chkerase($item{'start'}, $item{'channel'});
+	if ($item{'subtitle'} ne "" ){
+	    $registdesc = $item{'subtitle'}." ".$item{'desc'};
 }else{
-	$registdesc = $item{desc};
+	    $registdesc = $item{'desc'};
 }
-&registdb($item{start},$item{stop},$item{channel},$item{title},$registdesc ,$item{category});
+	&registdb($item{'start'},$item{'stop'},$item{'channel'},$item{'title'},$registdesc ,$item{'category'});
 
 #	print "$item{start}
 #$item{stop}
@@ -215,6 +215,11 @@ if ($item{subtitle} ne "" ){
 }# endif
 }# while
 
+$dbh->commit;
+
+#end
+################
+
 sub chkerase{
 # xmltvからきた日付とチャンネルをfoltia epgと比較
 my $foltiastarttime = $_[0]; # 14桁
@@ -231,10 +236,9 @@ if ($epgstartdate >= $today){# xmltvtvから今日以降のデータが来ていれば
 my $epgstartdatetime = $today * 10000 ; # 200508070000 12桁
 # 新規に入る予定の未来の番組表、全部いったん消す
 # $DBQuery =  "DELETE from foltia_epg where startdatetime > $epgstartdatetime AND ontvchannel = '$ontvepgchannel' ";
- $DBQuery =  "DELETE from foltia_epg where startdatetime > $todaytime AND ontvchannel = '$ontvepgchannel' ";
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
-&writelog("xmltv2foltia DELETE EPG $epgstartdatetime:$DBQuery");
+	    $sth = $dbh->prepare($stmt{'xmltv2foltia.chkerase.1'});
+	    $sth->execute($todaytime, $ontvepgchannel);
+	    &writelog("xmltv2foltia DELETE EPG $epgstartdatetime:$stmt{'xmltv2foltia.chkerase.1'}");
 #$currentworkdate = "$today";
 $currentworkch = $ontvepgchannel ;
 }else{
@@ -260,8 +264,7 @@ $foltiaendtime = substr($foltiaendtime,0,12);
 
 if($foltiastarttime > $todaytime){
 	
-	my $DBQuery =  "SELECT max(epgid) FROM foltia_epg ";
-		 $sth = $dbh->prepare($DBQuery);
+	$sth = $dbh->prepare($stmt{'xmltv2foltia.registdb.1'});
 		$sth->execute();
 	 @currentepgid = $sth->fetchrow_array;
 	 
@@ -273,20 +276,18 @@ if($foltiastarttime > $todaytime){
 	}
 #&writelog("xmltv2foltia DEBUG $currentepgid[0] /  $newepgid");
 my $lengthmin = &calclength($foltiastarttime , $foltiaendtime);
-$newepgid = $dbh->quote($newepgid );
-$foltiastarttime = $dbh->quote($foltiastarttime);
-$foltiaendtime = $dbh->quote($foltiaendtime );
-$lengthmin = $dbh->quote($lengthmin );
-$channel = $dbh->quote($channel );
-$title = $dbh->quote($title);
-$desc = $dbh->quote($desc);
-$category = $dbh->quote($category);
+#	$newepgid = $dbh->quote($newepgid );
+#	$foltiastarttime = $dbh->quote($foltiastarttime);
+#	$foltiaendtime = $dbh->quote($foltiaendtime );
+#	$lengthmin = $dbh->quote($lengthmin );
+#	$channel = $dbh->quote($channel );
+#	$title = $dbh->quote($title);
+#	$desc = $dbh->quote($desc);
+#	$category = $dbh->quote($category);
 
-$DBQuery =  "insert into  foltia_epg values ($newepgid,$foltiastarttime,$foltiaendtime,$lengthmin,$channel,$title,$desc,$category)";
-#	$DBQuery = $dbh->quote($DBQuery);
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
-
+	$sth = $dbh->prepare($stmt{'xmltv2foltia.registdb.2'});
+	$sth->execute($newepgid, $foltiastarttime, $foltiaendtime, $lengthmin, $channel, $title, $desc, $category) ||
+	    warn "error: $newepgid, $foltiastarttime, $foltiaendtime, $lengthmin, $channel, $title, $desc, $category\n";
 
 # &writelog("xmltv2foltia DEBUG $DBQuery");
 

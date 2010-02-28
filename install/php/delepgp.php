@@ -69,16 +69,15 @@ foltia_station.stationrecch
 FROM foltia_subtitle , foltia_station 
 WHERE foltia_subtitle.tid = 0 AND 
 foltia_station.stationid = foltia_subtitle.stationid AND 
-foltia_subtitle.pid = $pid 
+foltia_subtitle.pid = ? 
  ";
 
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-			
-		if ($maxrows == 0) {
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($pid));
+$rowdata = $rs->fetch();
+if (! $rowdate) {
 		die_exit("登録番組がありません<BR>");
 		}
-		$rowdata = pg_fetch_row($rs, 0);
 
 		$pid = htmlspecialchars($rowdata[0]);
 		$stationid = htmlspecialchars($rowdata[1]);
@@ -113,8 +112,9 @@ if ($delflag == "1") {
 		$query = "
 		DELETE  
 		FROM  foltia_subtitle  
-		WHERE foltia_subtitle.pid = $pid AND  foltia_subtitle.tid = 0 ";
-			$rs = m_query($con, $query, "DBクエリに失敗しました");
+		WHERE foltia_subtitle.pid = ? AND  foltia_subtitle.tid = 0 ";
+//			$rs = m_query($con, $query, "DBクエリに失敗しました");
+			$rs = sql_query($con, $query, "DBクエリに失敗しました",array($pid));
 		}
 	}else{
 		print "<strong>過去番組は予約削除出来ません。</strong>";

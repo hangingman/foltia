@@ -15,12 +15,13 @@
 
 use DBI;
 use DBD::Pg;
+use DBD::SQLite;
 use Schedule::At;
 use Time::Local;
 
 $path = $0;
 $path =~ s/addatq.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 
@@ -37,85 +38,79 @@ if (($tid eq "" )|| ($station eq "")){
 }
 
 #DB検索(TIDとStationIDからPIDへ)
- $data_source = sprintf("dbi:%s:dbname=%s;host=%s;port=%d",
-		$DBDriv,$DBName,$DBHost,$DBPort);
-	 $dbh = DBI->connect($data_source,$DBUser,$DBPass) ||die $DBI::error;;
+$dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
 if ($station == 0){
-	$DBQuery =  "SELECT count(*) FROM  foltia_tvrecord WHERE tid = '$tid'  ";
+    $sth = $dbh->prepare($stmt{'addatq.1'});
+    $sth->execute($tid);
 }else{
-	$DBQuery =  "SELECT count(*) FROM  foltia_tvrecord WHERE tid = '$tid' AND stationid  = '$station' ";
+    $sth = $dbh->prepare($stmt{'addatq.2'});
+    $sth->execute($tid, $station);
 }
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
  @titlecount = $sth->fetchrow_array;
 #件数数える
 
 #2以上だったら
 if ($titlecount[0]  >= 2){
-	#全曲取りが含まれているか調べる
-	$DBQuery =  "SELECT count(*) FROM  foltia_tvrecord WHERE tid = '$tid'  AND  stationid  ='0' ";
-	$kth = $dbh->prepare($DBQuery);
-	$kth->execute();
+    #全局録りが含まれているか調べる
+    $kth = $dbh->prepare($stmt{'addatq.3'});
+    $kth->execute($tid);
  	@reservecounts = $kth->fetchrow_array;
 
 	if($reservecounts[0] >= 1 ){#含まれていたら
 		if($tid == 0){
 		#今回の引き数がSID 0だったら
-		#全局取りだけ予約
-#		&writelog("addatq  DEBUG; ALL STATION RESERVE. TID=$tid SID=$station $titlecount[0] match:$DBQuery");
+	    #全局録りだけ予約
+#		&writelog("addatq  DEBUG; ALL STATION RESERVE. TID=$tid SID=$station $titlecount[0] match:$stmt{'addatq.3'}");
 		&addcue;
 		}else{
 		#ほかの全局録画addatqが予約入れてくれるからなにもしない
-#		&writelog("addatq  DEBUG; SKIP OPERSTION. TID=$tid SID=$station $titlecount[0] match:$DBQuery");
+#		&writelog("addatq  DEBUG; SKIP OPERSTION. TID=$tid SID=$station $titlecount[0] match:$stmt{'addatq.3'}");
 		exit;
   		}#end if ふくまれていたら
 	}#endif 2つ以上	
 }elsif($titlecount[0]  == 1){
 		&addcue;
 }else{
-&writelog("addatq  error; reserve impossible . TID=$tid SID=$station $titlecount[0] match:$DBQuery");
+    &writelog("addatq  error; reserve impossible . TID=$tid SID=$station $titlecount[0] match:$stmt{'addatq.3'}");
 }
 
 #旧処理
 # if ($titlecount[0]  == 1 ){
 # 	& addcue;
 # }else{
-#&writelog("addatq  error record TID=$tid SID=$station $titlecount[0] match:$DBQuery");
+#&writelog("addatq  error record TID=$tid SID=$station $titlecount[0] match:$stmt{'addatq.3'}");
 #}
 
 sub addcue{
 
 if ($station == 0){
-	$DBQuery =  "SELECT * FROM  foltia_tvrecord WHERE tid = '$tid'  ";
+	$sth = $dbh->prepare($stmt{'addatq.addcue.1'});
+	$sth->execute($tid);
 }else{
-	$DBQuery =  "SELECT * FROM  foltia_tvrecord WHERE tid = '$tid' AND stationid  = '$station' ";
+	$sth = $dbh->prepare($stmt{'addatq.addcue.2'});
+	$sth->execute($tid, $station);
 }
- $sth = $dbh->prepare($DBQuery);
-$sth->execute();
  @titlecount= $sth->fetchrow_array;
 $bitrate = $titlecount[2];#ビットレート取得
 
 #PID抽出
-$now = &epoch2foldate(`date +%s`);
-$twodaysafter = &epoch2foldate(`date +%s` + (60 * 60 * 24 * 2));
+    $now = &epoch2foldate(time());
+    $twodaysafter = &epoch2foldate(time() + (60 * 60 * 24 * 2));
 #キュー入れは直近2日後まで
 if ($station == 0 ){
-	$DBQuery =  "
-SELECT * from foltia_subtitle WHERE tid = '$tid'  AND startdatetime >  '$now'  AND startdatetime < '$twodaysafter' ";
+	$sth = $dbh->prepare($stmt{'addatq.addcue.3'});
+	$sth->execute($tid, $now, $twodaysafter);
 }else{
-	$DBQuery =  "
-SELECT * from foltia_subtitle WHERE tid = '$tid' AND stationid  = '$station'  AND startdatetime >  '$now'  AND startdatetime < '$twodaysafter' ";
 #stationIDからrecch
-$getrecchquery="SELECT stationid , stationrecch  FROM foltia_station where stationid  = '$station' ";
- $stationh = $dbh->prepare($getrecchquery);
-	$stationh->execute();
+	$stationh = $dbh->prepare($stmt{'addatq.addcue.4'});
+	$stationh->execute($station);
 @stationl =  $stationh->fetchrow_array;
 $recch = $stationl[1];
-}
 
- $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
+	$sth = $dbh->prepare($stmt{'addatq.addcue.5'});
+	$sth->execute($tid, $station, $now, $twodaysafter);
+    }
  
 while (($pid ,
 $tid ,
@@ -130,9 +125,8 @@ $atid ) = $sth->fetchrow_array()) {
 
 if ($station == 0 ){
 #stationIDからrecch
-$getrecchquery="SELECT stationid , stationrecch  FROM foltia_station where stationid  = '$stationid' ";
- $stationh = $dbh->prepare($getrecchquery);
-	$stationh->execute();
+	    $stationh = $dbh->prepare($stmt{'addatq.addcue.6'});
+	    $stationh->execute($stationid);
 @stationl =  $stationh->fetchrow_array;
 $recch = $stationl[1];
 }

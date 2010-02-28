@@ -15,10 +15,11 @@
 
 use DBI;
 use DBD::Pg;
+use DBD::SQLite;
 
 $path = $0;
 $path =~ s/envpolicyupdate.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 
@@ -32,13 +33,9 @@ if ($useenvironmentpolicy == 1){
 $returnparam = getphpstyleconfig("environmentpolicytoken");
 eval "$returnparam\n";
 
-	my $data_source = sprintf("dbi:%s:dbname=%s;host=%s;port=%d",
-		$DBDriv,$DBName,$DBHost,$DBPort);
-	 $dbh = DBI->connect($data_source,$DBUser,$DBPass) ||die $DBI::error;;
+    $dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
-$DBQuery =  "SELECT userclass,name,passwd1 FROM foltia_envpolicy ";
-
- $envph = $dbh->prepare($DBQuery);
+    $envph = $dbh->prepare($stmt{'envpolicyupdate.1'});
 	$envph->execute();
 
 #なければつくる

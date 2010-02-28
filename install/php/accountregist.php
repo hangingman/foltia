@@ -57,12 +57,14 @@ if ($username == "") {
 //すでにそのユーザが存在しているかどうか確認
 if ($username != ""){
 $query = "
-SELECT memberid ,userclass,name,passwd1 
+SELECT count(memberid)
 FROM foltia_envpolicy 
-WHERE foltia_envpolicy.name  = '$username'  
+WHERE foltia_envpolicy.name  = ?  
 ";
-	$isaccountexist = m_query($con, $query, "DBクエリに失敗しました");
-	$isaccountexistncount = pg_num_rows($isaccountexist);
+//	$isaccountexist = m_query($con, $query, "DBクエリに失敗しました");
+	$isaccountexist = sql_query($con, $query, "DBクエリに失敗しました",array($username));
+
+	$isaccountexistncount = $isaccountexist->fetchColumn(0);
 
 	if ($isaccountexistncount == 0){
 	//valid
@@ -84,13 +86,11 @@ SELECT max(memberid)
 FROM  foltia_envpolicy 
 ";
 	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-	if ($maxrows == 0){
-	$nextcno = 1 ;
+	$maxid = $rs->fetchColumn(0);
+	if ($maxid) {
+		$nextcno = $maxid + 1;
 	}else{
-	$rowdata = pg_fetch_row($rs, 0);
-	$nextcno = $rowdata[0];
-	$nextcno++ ;
+		$nextcno = 1;
 	}
 
 //登録
@@ -109,9 +109,10 @@ $remotehost = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
 $query = "
 insert into foltia_envpolicy  
-values ( '$nextcno','2','$username','$userpasswd',now(),'$remotehost')";
+values ( ?,'2',?,?,now(),?)";
 //print "$query <br>\n";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($nextcno,$username,$userpasswd,$remotehost));
 
 print "次のアカウントを登録しました。<br>
 ログイン名:$username<br>

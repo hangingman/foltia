@@ -26,10 +26,8 @@ foltia_config2.php
 		$usedigital = 1;//Friioなどでデジタル録画をするか 1:する 0:しない
 
 // データベース接続設定
-        define("DATABASE_NAME", "foltia");
-        define("DBHOST", "localhost");
-        define("USER_NAME"    , "foltia"    );
-        define("USER_PASSWORD", "passwd"    );
+// define("DSN", "pgsql:host=localhost dbname=foltia user=foltia password= ");
+define("DSN", "sqlite:/home/foltia/foltia.sqlite");
 
 //        $mylocalip = "192.168.0.177" ; //動いている機械のIPアドレス
 

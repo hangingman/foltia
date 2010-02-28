@@ -66,14 +66,13 @@ $bitrate = getgetnumform(bitrate);
 $now = date("YmdHi");   
 
 //タイトル取得
-	$query = "select title from foltia_program where tid='$tid'";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-			
-		if ($maxrows == 0) {
+	$query = "select title from foltia_program where tid = ? ";
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
+$rowdata = $rs->fetch();
+if (! $rowdata) {
 		$title = "(未登録)";
 		}else{
-		$rowdata = pg_fetch_row($rs, 0);
 		$title = htmlspecialchars($rowdata[0]);
 		}
 
@@ -129,13 +128,12 @@ ORDER BY foltia_subtitle.startdatetime  ASC
 
 }
 	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-			
-		if ($maxrows == 0) {
+$rowdata = $rs->fetch();
+if (! $rowdata) {
 		echo("放映予定はいまのところありません<BR>");
 		}
 		else{
-		$maxcols = pg_num_fields($rs);		
+	$maxcols = $rs->columnCount();
 ?>
   <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%" BGCOLOR="#bcf1be">
 	<thead>
@@ -154,16 +152,13 @@ ORDER BY foltia_subtitle.startdatetime  ASC
 	<tbody>
 		<?php
 			/* テーブルのデータを出力 */
-			for ($row = 0; $row < $maxrows; $row++) { /* 行に対応 */
+       do {
 				echo("<tr>\n");
-				/* pg_fetch_row で一行取り出す */
-				$rowdata = pg_fetch_row($rs, $row);
-
 				for ($col = 0; $col < $maxcols; $col++) { /* 列に対応 */
 					echo("<td>".htmlspecialchars($rowdata[$col])."<br></td>\n");
 				}
 				echo("</tr>\n");
-			}
+       } while ($rowdata = $rs->fetch());
 		}//end if
 		?>
 	</tbody>
@@ -176,40 +171,33 @@ if ($demomode){
 //foltia_tvrecord　書き込み
 //既存が予約あって、新着が全局予約だったら
 if ($station ==0){
-	$query = "
-SELECT 
- * 
-FROM foltia_tvrecord  
-WHERE tid = '$tid' 
-";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-	if ($maxrows > 0){
 	//既存局を消す
 		$query = "DELETE 
 FROM foltia_tvrecord  
-WHERE tid = '$tid' 
+WHERE tid = ? 
 ";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-		}
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
 }//endif
 
 	$query = "
 SELECT 
- * 
+count(*) 
 FROM foltia_tvrecord  
-WHERE tid = '$tid'  AND stationid = '$station' 
+WHERE tid = ?  AND stationid = ? 
 ";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid,$station));
+	$maxrows = $rs->fetchColumn(0);
 		if ($maxrows == 0) { //新規追加
-				$query = "INSERT INTO  foltia_tvrecord  values ('$tid','$station','$bitrate','$usedigital')";
-				$rs = m_query($con, $query, "DB書き込みに失敗しました");
+				$query = "INSERT INTO  foltia_tvrecord  values (?,?,?,?)";
+//				$rs = m_query($con, $query, "DB書き込みに失敗しました");
+				$rs = sql_query($con, $query, "DB書き込みに失敗しました",array($tid,$station,$bitrate,$usedigital));
 		}else{//修正　(ビットレート)
 			$query = "UPDATE  foltia_tvrecord  SET 
-  bitrate = '$bitrate' , digital = '$usedigital'  WHERE tid = '$tid'  AND stationid = '$station' ";
-			$rs = m_query($con, $query, "DB書き込みに失敗しました");
+  bitrate = ? , digital = ? WHERE tid = ? AND stationid = ? ";
+//			$rs = m_query($con, $query, "DB書き込みに失敗しました");
+			$rs = sql_query($con, $query, "DB書き込みに失敗しました",array( $bitrate, $usedigital , $tid , $station ));
 		}
 	
 //キュー入れプログラムをキック

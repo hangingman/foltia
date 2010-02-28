@@ -13,12 +13,13 @@
 
 use DBI;
 use DBD::Pg;
+use DBD::SQLite;
 use Schedule::At;
 use Time::Local;
 
 $path = $0;
 $path =~ s/addpidatq.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 
@@ -35,20 +36,15 @@ if ($pid eq "" ){
 
 
 #DB検索(PID)
-	my $data_source = sprintf("dbi:%s:dbname=%s;host=%s;port=%d",
-		$DBDriv,$DBName,$DBHost,$DBPort);
-	 $dbh = DBI->connect($data_source,$DBUser,$DBPass) ||die $DBI::error;;
+$dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
-$DBQuery =  "SELECT count(*) FROM  foltia_subtitle WHERE pid = '$pid' ";
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
+$sth = $dbh->prepare($stmt{'addpidatq.1'});
+$sth->execute($pid);
  @titlecount= $sth->fetchrow_array;
  
  if ($titlecount[0]  == 1 ){
-
-$DBQuery =  "SELECT bitrate,digital FROM  foltia_tvrecord , foltia_subtitle  WHERE foltia_tvrecord.tid = foltia_subtitle.tid AND pid='$pid' ";
- $sth = $dbh->prepare($DBQuery);
-$sth->execute();
+    $sth = $dbh->prepare($stmt{'addpidatq.2'});
+    $sth->execute($pid);
  @titlecount= $sth->fetchrow_array;
 $bitrate = $titlecount[0];#ビットレート取得
 if ($titlecount[1] >= 1){
@@ -58,17 +54,15 @@ if ($titlecount[1] >= 1){
 }
 
 #PID抽出
-$now = &epoch2foldate(`date +%s`);
+    $now = &epoch2foldate(time());
 
 #stationIDからrecch
-$DBQuery =  "SELECT stationrecch,digitalch ,digitalstationband ,foltia_station.stationid  FROM foltia_station,foltia_subtitle WHERE foltia_subtitle.pid = '$pid'  AND  foltia_subtitle.stationid =  foltia_station.stationid ";
-
- $stationh = $dbh->prepare($DBQuery);
-	$stationh->execute();
-@stationl =  $stationh->fetchrow_array;
+    $stationh = $dbh->prepare($stmt{'addpidatq.3'});
+    $stationh->execute($pid);
+    @stationl =  $stationh->fetchrow_array();
 $recch = $stationl[0];
 if ($recch eq ""){
-	&writelog("addpidatq ERROR recch is NULL:$DBQuery.");
+	&writelog("addpidatq ERROR recch is NULL:$stmt{'addpidatq.3'}.");
 	exit 1;
 }
 if ($stationl[1] => 1){
@@ -81,9 +75,8 @@ if ($stationl[2] => 1){
 }else{
 	$digitalstationband = 0;
 }
-$DBQuery =  "SELECT  * FROM  foltia_subtitle WHERE pid='$pid' ";
- $sth = $dbh->prepare($DBQuery);
-$sth->execute();
+    $sth = $dbh->prepare($stmt{'addpidatq.4'});
+    $sth->execute($pid);
 ($pid ,
 $tid ,
 $stationid ,

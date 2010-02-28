@@ -50,14 +50,12 @@ foltia_program .title
 FROM  foltia_program 
 ORDER BY foltia_program.tid  DESC
 	";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-			
-		if ($maxrows == 0) {
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました");
+$rowdata = $rs->fetch();
+if (! $rowdata) {
 		die_exit("番組データがありません<BR>");
-			
 		}
-
 ?>
 
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
@@ -71,7 +69,7 @@ printhtmlpageheader();
 
 <?
 		/* フィールド数 */
-		$maxcols = pg_num_fields($rs);
+$maxcols = $rs->columnCount();
 		?>
   <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
 	<thead>
@@ -85,10 +83,9 @@ printhtmlpageheader();
 	<tbody>
 		<?php
 			/* テーブルのデータを出力 */
-			for ($row = 0; $row < $maxrows; $row++) { /* 行に対応 */
+    do {
 				echo("<tr>\n");
-				/* pg_fetch_row で一行取り出す */
-				$rowdata = pg_fetch_row($rs, $row);
+
 				//TID
 					echo("<td><a href=\"reserveprogram.php?tid=" .
 				     htmlspecialchars($rowdata[0])  . "\">" .
@@ -99,7 +96,7 @@ printhtmlpageheader();
 				     htmlspecialchars($rowdata[1]) . "</a></td>\n");
 					print "<td><A HREF = \"showlibc.php?tid=".htmlspecialchars($rowdata[0])."\">mp4</A></td>\n";
 				echo("</tr>\n");
-			}
+    } while ($rowdata = $rs->fetch());
 		?>
 	</tbody>
 </table>

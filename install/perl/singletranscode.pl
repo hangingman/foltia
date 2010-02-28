@@ -27,13 +27,14 @@
 
 use DBI;
 use DBD::Pg;
+use DBD::SQLite;
 use Schedule::At;
 use Time::Local;
 use Jcode;
 
 $path = $0;
 $path =~ s/singletranscode.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 
@@ -62,17 +63,13 @@ $outputfile =~ s/\.m2p//;
 # -- recwrapからほとんどコピー
 
 #PSPトラコン必要かどうか
-	my $data_source = sprintf("dbi:%s:dbname=%s;host=%s;port=%d",
-
-		$DBDriv,$DBName,$DBHost,$DBPort);
-	 $dbh = DBI->connect($data_source,$DBUser,$DBPass) ||die $DBI::error;;
+$dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
 if ($ARGV[1] != ""){
 	$pid = $ARGV[1] ;
 }else{
-$DBQuery =  "SELECT pid FROM  foltia_subtitle WHERE m2pfilename = '$ARGV[0]' ";
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
+    $sth = $dbh->prepare($stmt{'singletranscode.1'});
+    $sth->execute($ARGV[0]);
  @pidarray = $sth->fetchrow_array;
 	unless ($pidarray[0]  == "" ){
 		$pid = $pidarray[0]
@@ -85,15 +82,13 @@ $DBQuery =  "SELECT pid FROM  foltia_subtitle WHERE m2pfilename = '$ARGV[0]' ";
 
 #　追加部分
 
-$query =  "SELECT count(*)  FROM  foltia_subtitle WHERE tid = '$tid' AND countno = '$countno' ";
-	 $sth = $dbh->prepare($query);
-	$sth->execute();
+$sth = $dbh->prepare($stmt{'singletranscode.2'});
+$sth->execute($tid, $countno);
  @subticount= $sth->fetchrow_array;
  unless ($subticount[0]  >= 1){
 
-$query =  "SELECT count(*)  FROM  foltia_subtitle WHERE tid = '$tid'  ";
-	 $sth = $dbh->prepare($query);
-	$sth->execute();
+    $sth = $dbh->prepare($stmt{'singletranscode.3'});
+    $sth->execute($tid);
  @subticount= $sth->fetchrow_array;
 
  unless ($subticount[0]  >= 1){
@@ -119,9 +114,8 @@ if (-e "$toolpath/perl/captureimagemaker.pl"){
 
 # PSP ------------------------------------------------------
 #PSPトラコン必要かどうか
-$DBQuery =  "SELECT psp,aspect,title FROM  foltia_program WHERE tid = '$tid' ";
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
+$sth = $dbh->prepare($stmt{'singletranscode.4'});
+$sth->execute($tid);
  @psptrcn= $sth->fetchrow_array;
  if ($psptrcn[0]  == 1 ){#トラコン番組
 
@@ -226,7 +220,7 @@ if (0 < $countno && $countno < 100 ){
 #タイムスタンプが最新のMP4ファイル名取得
 my $newestmp4filename = `cd $pspdirname ; ls -t *.MP4 | head -1`;
  if ($newestmp4filename =~ /M4V$tid/){
-	$nowcountno = $' ;
+		$nowcountno = $' ;#'
 		$nowcountno++;
 		$pspfilnameft = sprintf("%02d",$nowcountno);
 	while (-e "$pspdirname/M4V".$pspfilnamehd.$pspfilnameft.".MP4"){
@@ -260,9 +254,8 @@ system("$toolpath/perl/transcode/vfr4psp.sh $recfolderpath/$outputfilename $pspf
 
 #最適化
 
-$DBQuery =  "SELECT subtitle  FROM  foltia_subtitle WHERE tid = '$tid' AND countno = '$countno' ";
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
+    $sth = $dbh->prepare($stmt{'singletranscode.5'});
+    $sth->execute($tid, $countno);
  @programtitle = $sth->fetchrow_array;
 
 if ( $countno == "0" ){
@@ -284,7 +277,7 @@ system ("mplayer -ss 00:01:20 -vo jpeg:outdir=$pspdirname -ao null -sstep 1 -fra
 &writelog("singletranscode THAMI  convert -crop 160x120+1+3 -resize 165x126\! $pspdirname/00000002.jpg $pspdirname/M4V$pspdirname.THM ");
 
 if (-e "$pspdirname/M4V".$pspfilname.".THM"){
-$timestamp =`date "+%Y%m%d-%H%M%S"`;
+	$timestamp = strftime("%Y%m%d-%H%M%S", localtime);
 chomp $timestamp;
 	system("convert -crop 160x120+1+3 -resize 165x126\! $pspdirname/00000002.jpg $pspdirname/M4V".$pspfilname.".THM.".$timestamp.".THM");
 
@@ -296,27 +289,17 @@ chomp $timestamp;
 # rm -rf 00000002.jpg  
 system("rm -rf $pspdirname/0000000*.jpg ");
 
-
-
-
 # MP4ファイル名をPIDレコードに書き込み
 unless ($pid eq ""){
-	$DBQuery =  "
-	UPDATE  foltia_subtitle  
-	SET PSPfilename = 'M4V$pspfilname.MP4' 
-	WHERE pid =  '$pid' ";
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
-&writelog("singletranscode UPDATEsubtitleDB  $DBQuery");
+	$sth = $dbh->prepare($stmt{'singletranscode.6'});
+	$sth->execute("M4V$pspfilname.MP4", $pid);
+	&writelog("singletranscode UPDATEsubtitleDB $stmt{'singletranscode.6'}");
 }else{
 &writelog("singletranscode PID not found");
 }
 # MP4ファイル名をfoltia_mp4files挿入
-	$DBQuery =  "insert into  foltia_mp4files values ('$tid','M4V$pspfilname.MP4') ";
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
-&writelog("singletranscode UPDATEmp4DB  $DBQuery");
+    $sth = $dbh->prepare($stmt{'singletranscode.7'});
+    $sth->execute($tid, "M4V$pspfilname.MP4");
+    &writelog("singletranscode UPDATEmp4DB $stmt{'singletranscode.7'}");
 
 }#PSPトラコンあり
-
-

@@ -22,7 +22,7 @@ use Time::Local;
 
 $path = $0;
 $path =~ s/folprep.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 

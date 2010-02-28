@@ -15,11 +15,11 @@
 use Jcode;
 use DBI;
 use DBD::Pg;
-
+use DBD::SQLite;
 
 $path = $0;
 $path =~ s/mklocalizeddir.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 require "foltialib.pl";
@@ -42,14 +42,11 @@ if (-e "$recfolderpath/$tid.localized"){
 #.localized用文字列取得
 
 #接続
-	my $data_source = sprintf("dbi:%s:dbname=%s;host=%s;port=%d",
-		$DBDriv,$DBName,$DBHost,$DBPort);
-	 $dbh = DBI->connect($data_source,$DBUser,$DBPass) ||die $DBI::error;;
+    $dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
 #検索
-$DBQuery =  "select title from foltia_program where tid=$tid ";
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
+    $sth = $dbh->prepare($stmt{'mklocalizeddir.1'});
+    $sth->execute($tid);
  @subticount= $sth->fetchrow_array;
 $title = $subticount[0] ;
 $titleeuc = $title ;

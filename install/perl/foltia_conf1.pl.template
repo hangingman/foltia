@@ -27,10 +27,15 @@ $trconqty = 2;
 $phptoolpath = $toolpath ;#php版の初期設定の位置。デフォルトではperlと同じ位置
 
 #以下はデフォルトでインストールしてればいじらなくてもいい
-$main::DBDriv="Pg";
-$main::DBHost="localhost";
-$main::DBPort="5432";
-$main::DBName="foltia";
+
+## for postgresql
+#$main::DSN="dbi:Pg:dbname=foltia;host=localhost;port=5432";
+#require 'db/Pg.pl';
+
+## for sqlite
+$main::DSN="dbi:SQLite:dbname=/home/foltia/foltia.sqlite";
+require 'db/SQLite.pl';
+
 $main::DBUser="foltia";
 $main::DBPass="";
 

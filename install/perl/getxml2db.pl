@@ -18,11 +18,12 @@ use Jcode;
 use Time::Local;
 use DBI;
 use DBD::Pg;
+use DBD::SQLite;
 use Digest::MD5 qw(md5_hex);
 
 $path = $0;
 $path =~ s/getxml2db.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 require "foltialib.pl";
@@ -47,13 +48,9 @@ if ($ARGV[0]  eq "long"){
 	#$uri="http://syobocal.orz.hm/cal_chk.xml";
 }
 
+$dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
-	my $data_source = sprintf("dbi:%s:dbname=%s;host=%s;port=%d",
-		$DBDriv,$DBName,$DBHost,$DBPort);
-
-	 $dbh = DBI->connect($data_source,$DBUser,$DBPass) ||die $DBI::error;;
-
-#$dbh->{AutoCommit} = 0;
+$dbh->{AutoCommit} = 0;
 
 # If-Modified-Since使うように変更#2008/11/14 
 my  $CacheDir = '/tmp/shobocal';
@@ -104,7 +101,8 @@ $programtitlename = $item{Title};
 $programtitlename =~ s/\&lt\;/</gi;
 $programtitlename =~ s/\&gt\;/>/gi;
 $programtitlename =~ s/\&amp\;/\&/gi;
-$programtitle = $dbh->quote($programtitlename);
+#	$programtitle = $dbh->quote($programtitlename);
+	$programtitle = $programtitlename;
 
 Jcode::convert(\$item{ChName},'euc');
 Jcode::convert(\$item{SubTitle},'euc');
@@ -114,7 +112,7 @@ $programSubTitle = $item{SubTitle};
 $programSubTitle =~ s/\&lt\;/</gi;
 $programSubTitle =~ s/\&gt\;/>/gi;
 $programSubTitle =~ s/\&amp\;/\&/gi;
-$programSubTitle = $dbh->quote($programSubTitle);
+#	$programSubTitle = $dbh->quote($programSubTitle);
 
 $offsetmin = $item{StOffset}/60;
 $edtime = &syobocaldate2foltiadate($item{EdTime});
@@ -126,9 +124,8 @@ $recenddate = &calcoffsetdate($edtime ,$offsetmin );
 $stationid = &getstationid($item{ChName});
 #サブタイトル追加-------------------------------------------------
 #番組があるか確認
-$DBQuery =  "SELECT count(*) FROM foltia_program WHERE tid = '$item{TID}'";
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
+	$sth = $dbh->prepare($stmt{'getxml2db.1'});
+	$sth->execute($item{TID});
  @titlecount= $sth->fetchrow_array;
  
  if ($titlecount[0] == 0){
@@ -136,36 +133,29 @@ $DBQuery =  "SELECT count(*) FROM foltia_program WHERE tid = '$item{TID}'";
 
 #200412012359
 $nomalstarttime = substr($sttime,8,4);
-$DBQuery =  "insert into  foltia_program values ($item{TID},$programtitle,'','$nomalstarttime','$length','','','3','1','')";
-# $sth = $dbh->prepare($DBQuery);
-# $sth->execute();
-$oserr = $dbh->do($DBQuery);
-&writelog("getxml2db  ADD TV Progtam:$item{TID}:$programtitle");
 
-
+	    $sth = $dbh->prepare($stmt{'getxml2db.2'});
+	    $oserr = $sth->execute($item{TID}, $programtitle, '', $nomalstarttime, $length, '', '', 3, 1, '', '');
+	    &writelog("getxml2db  ADD TV Progtam:$item{TID}:$programtitle");
 }else{
 #2006/2/26 
 #あったら、タイトル確認して
-$DBQuery =  "SELECT title FROM foltia_program WHERE tid = '$item{TID}'";
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
+	    $sth = $dbh->prepare($stmt{'getxml2db.3'});
+	    $sth->execute($item{TID});
  @titlearray = $sth->fetchrow_array;
 #更新などされてたらupdate
 #print "$titlearray[0] / $programtitle\n";
  if ($titlearray[0] ne "$programtitlename" ){
- 	$DBQuery =  "UPDATE  foltia_program  SET 	title = $programtitle where  tid = '$item{TID}' ";
-#	  $sth = $dbh->prepare($DBQuery);
-#	$sth->execute();
-	$oserr = $dbh->do($DBQuery);
+		$sth = $dbh->prepare($stmt{'getxml2db.4'});
+		$oserr = $sth->execute($programtitle, $item{TID});
 	&writelog("getxml2db  UPDATE TV Progtam:$item{TID}:$programtitle");
  }#end if update
 }# end if TID
 
 
 #PIDがあるか確認
-$DBQuery =  "SELECT count(*) FROM foltia_subtitle WHERE tid = '$item{TID}' AND pid =  '$item{PID}' ";
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
+	$sth = $dbh->prepare($stmt{'getxml2db.5'});
+	$sth->execute($item{'TID'}, $item{'PID'});
  @subticount= $sth->fetchrow_array;
  if ($subticount[0]  >= 1){
 	#PIDあったら上書き更新
@@ -173,49 +163,25 @@ $DBQuery =  "SELECT count(*) FROM foltia_subtitle WHERE tid = '$item{TID}' AND p
 #	DBD::Pg::st execute failed: ERROR:  invalid input syntax for type bigint: "" at /home/foltia/perl/getxml2db.pl line 147.
 #UPDATE  foltia_subtitle  SET stationid = '42',countno = '8',subtitle = '京都行きます' ,startdatetime = '200503010035'  ,enddatetime = '200503010050',startoffset  = '0' ,lengthmin = '15' WHERE tid = '550' AND pid =  '26000' 
 if ($item{Count} == ""){
-
-	$DBQuery =  "UPDATE  foltia_subtitle  SET 
-	stationid = '$stationid',
-	countno =  null,
-	subtitle = $programSubTitle ,
-	startdatetime = '$recstartdate'  ,
-	enddatetime = '$recenddate',
-	startoffset  = '$offsetmin' ,
-	lengthmin = '$length' 
-	WHERE tid = '$item{TID}' AND pid =  '$item{PID}' ";
-
+		$sth = $dbh->prepare($stmt{'getxml2db.6'});
+		$oserr = $sth->execute($stationid, undef, $programSubTitle, $recstartdate, $recenddate, $offsetmin, $length, $item{'TID'}, $item{'PID'});
 }else{
-
-	$DBQuery =  "UPDATE  foltia_subtitle  SET 
-	stationid = '$stationid',
-	countno = '$item{Count}',
-	subtitle = $programSubTitle ,
-	startdatetime = '$recstartdate'  ,
-	enddatetime = '$recenddate',
-	startoffset  = '$offsetmin' ,
-	lengthmin = '$length' 
-	WHERE tid = '$item{TID}' AND pid =  '$item{PID}' ";
-}
-#		 $sth = $dbh->prepare($DBQuery);
-#		$sth->execute();
-	$oserr = $dbh->do($DBQuery);
-
+		$sth = $dbh->prepare($stmt{'getxml2db.7'});
+		$oserr = $sth->execute($stationid, $item{'Count'}, $programSubTitle,  $recstartdate, $recenddate, $offsetmin, $length, $item{'TID'}, $item{'PID'});
+	    }
  }else{
 	#なければ追加
 	
 	#こっちに入る時刻はオフセットされた時刻!
 	#そのままキューに入る形で
 	if ($item{Count} eq ""){
-	$DBQuery = "insert into foltia_subtitle values ( '$item{PID}','$item{TID}','$stationid',null,$programSubTitle,'$recstartdate','$recenddate','$offsetmin' ,'$length')";
+		$sth = $dbh->prepare($stmt{'getxml2db.8'});
+		$oserr = $sth->execute($item{'PID'}, $item{'TID'}, $stationid, undef, $programSubTitle, $recstartdate, $recenddate, $offsetmin, $length);
 	}else{
-	$DBQuery = "insert into foltia_subtitle values ( '$item{PID}','$item{TID}','$stationid','$item{Count}',$programSubTitle,'$recstartdate','$recenddate','$offsetmin' ,'$length')";
+		$sth = $dbh->prepare($stmt{'getxml2db.9'});
+		$oserr = $sth->execute($item{'PID'}, $item{'TID'}, $stationid, $item{'Count'}, $programSubTitle, $recstartdate, $recenddate, $offsetmin, $length);
 	}
-#		 $sth = $dbh->prepare($DBQuery);
-#		$sth->execute();
-	$oserr = $dbh->do($DBQuery);
-
 }
-
 
 #print "$DBQuery\n\n\n";
 #debug 20050803
@@ -225,7 +191,5 @@ if ($item{Count} == ""){
 }#if
 }#foreach
 
-#$oserr = $dbh->commit;
+$oserr = $dbh->commit;
 ##	$dbh->disconnect();
-
-

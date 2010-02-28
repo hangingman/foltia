@@ -61,46 +61,33 @@ if ($now > 200501010000){
 }
 	$query = "
 SELECT
-foltia_program .tid,
-stationname,
-foltia_program .title,
-foltia_subtitle.countno,
-foltia_subtitle.subtitle,
-foltia_subtitle.startdatetime ,
-foltia_subtitle.lengthmin ,
-foltia_tvrecord.bitrate  , 
-foltia_subtitle.startoffset , 
-foltia_subtitle.pid , 
-foltia_subtitle.epgaddedby , 
+ foltia_program.tid, stationname, foltia_program.title,
+ foltia_subtitle.countno, foltia_subtitle.subtitle,
+ foltia_subtitle.startdatetime as x, foltia_subtitle.lengthmin,
+ foltia_tvrecord.bitrate, foltia_subtitle.startoffset,
+ foltia_subtitle.pid, foltia_subtitle.epgaddedby,
 foltia_tvrecord.digital 
 FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
 WHERE foltia_tvrecord.tid = foltia_program.tid AND foltia_tvrecord.stationid = foltia_station .stationid AND foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid
-AND foltia_subtitle.enddatetime >= '$now'
+AND foltia_subtitle.enddatetime >= ? 
 UNION
 SELECT
-foltia_program .tid,
-stationname,
-foltia_program .title,
-foltia_subtitle.countno,
-foltia_subtitle.subtitle,
-foltia_subtitle.startdatetime ,
-foltia_subtitle.lengthmin ,
-foltia_tvrecord.bitrate , 
-foltia_subtitle.startoffset , 
-foltia_subtitle.pid , 
-foltia_subtitle.epgaddedby , 
+ foltia_program.tid, stationname, foltia_program.title,
+ foltia_subtitle.countno, foltia_subtitle.subtitle,
+ foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
+ foltia_tvrecord.bitrate,  foltia_subtitle.startoffset,
+ foltia_subtitle.pid,  foltia_subtitle.epgaddedby,
 foltia_tvrecord.digital 
 FROM foltia_tvrecord
 LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
 LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
 LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
 WHERE foltia_tvrecord.stationid = 0 AND
-foltia_subtitle.enddatetime >= '$now' ORDER BY \"startdatetime\" ASC
+ foltia_subtitle.enddatetime >= ? ORDER BY x ASC
 	";
 
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-			
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$now));
 
 //チューナー数
 if (getgetnumform(r) != ""){
@@ -121,13 +108,12 @@ printhtmlpageheader();
 <p align="left">録画予約番組放映予定と予約番組名を表示します。</p>
 
 <?
-	if ($maxrows == 0) {
+     $rowdata = $rs->fetch();
+     if (! $rowdata) {
 		print "番組データがありません<BR>\n";			
 		}else{
-
-
 		/* フィールド数 */
-		$maxcols = pg_num_fields($rs);
+	     $maxcols = $rs->columnCount();
 		?>
   <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
 	<thead>
@@ -148,10 +134,9 @@ printhtmlpageheader();
 	<tbody>
 		<?php
 			/* テーブルのデータを出力 */
-			for ($row = 0; $row < $maxrows; $row++) { /* 行に対応 */
+		  do {
 				echo("<tr>\n");
-				/* pg_fetch_row で一行取り出す */
-				$rowdata = pg_fetch_row($rs, $row);
+
 $pid = htmlspecialchars($rowdata[9]);
 
 $tid = htmlspecialchars($rowdata[0]);
@@ -167,51 +152,41 @@ $endtime = calcendtime($rowdata[5],$rowdata[6]);
 //オンボードチューナー録画
 $query = "
 SELECT
-foltia_program .tid,
-stationname,
-foltia_program .title,
-foltia_subtitle.countno,
-foltia_subtitle.subtitle,
-foltia_subtitle.startdatetime ,
-foltia_subtitle.lengthmin ,
-foltia_tvrecord.bitrate  , 
-foltia_subtitle.startoffset , 
-foltia_subtitle.pid  , 
-foltia_tvrecord.digital 
+ foltia_program.tid, stationname, foltia_program.title,
+ foltia_subtitle.countno, foltia_subtitle.subtitle,
+ foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
+ foltia_tvrecord.bitrate, foltia_subtitle.startoffset,
+ foltia_subtitle.pid, foltia_tvrecord.digital
 FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
 WHERE foltia_tvrecord.tid = foltia_program.tid AND foltia_tvrecord.stationid = foltia_station .stationid AND foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid
-AND foltia_subtitle.enddatetime > '$rowdata[5]' 
-AND foltia_subtitle.startdatetime < '$endtime'  
+AND foltia_subtitle.enddatetime > ? 
+AND foltia_subtitle.startdatetime < ?  
 UNION
 SELECT
-foltia_program .tid,
-stationname,
-foltia_program .title,
-foltia_subtitle.countno,
-foltia_subtitle.subtitle,
-foltia_subtitle.startdatetime ,
-foltia_subtitle.lengthmin ,
-foltia_tvrecord.bitrate  , 
-foltia_subtitle.startoffset , 
-foltia_subtitle.pid , 
-foltia_tvrecord.digital 
+ foltia_program.tid, stationname, foltia_program.title,
+ foltia_subtitle.countno, foltia_subtitle.subtitle,
+ foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
+ foltia_tvrecord.bitrate, foltia_subtitle.startoffset,
+ foltia_subtitle.pid, foltia_tvrecord.digital
 FROM foltia_tvrecord
 LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
 LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
 LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
 WHERE foltia_tvrecord.stationid = 0 AND
-foltia_subtitle.enddatetime > '$rowdata[5]'  
-AND foltia_subtitle.startdatetime < '$endtime'  
-	";
+foltia_subtitle.enddatetime > ?  
+AND foltia_subtitle.startdatetime < ?  
+";
 	$rclass = "";
-	$overlap = m_query($con, $query, "DBクエリに失敗しました");
-	$overlapmaxrows = pg_num_rows($overlap);
+//	$overlap = m_query($con, $query, "DBクエリに失敗しました");
+	$overlap = sql_query($con, $query, "DBクエリに失敗しました",array($rowdata[5],$endtime,$rowdata[5],$endtime));
+			  $owrowall = $overlap->fetchAll();
+			  $overlapmaxrows = count($owrowall);
 	if ($overlapmaxrows > ($recunits) ){
 		
 		$owtimeline = array();
 		
 		for ($rrow = 0; $rrow < $overlapmaxrows ; $rrow++) {
-			$owrowdata = pg_fetch_array($overlap, $rrow);
+					  $owrowdata = $owrowall[$rrow];
 			$owtimeline[ $owrowdata['startdatetime'] ] = $owtimeline[ $owrowdata['startdatetime'] ] +1;
 			
 			$owrend = calcendtime( $owrowdata['startdatetime'], $owrowdata['lengthmin'] );
@@ -236,53 +211,42 @@ AND foltia_subtitle.startdatetime < '$endtime'
 $externalinputs = 1; //現状一系統のみ
 $query = "
 SELECT
-foltia_program .tid,
-stationname,
-foltia_program .title,
-foltia_subtitle.countno,
-foltia_subtitle.subtitle,
-foltia_subtitle.startdatetime ,
-foltia_subtitle.lengthmin ,
-foltia_tvrecord.bitrate  , 
-foltia_subtitle.startoffset , 
-foltia_subtitle.pid  , 
-foltia_tvrecord.digital 
+ foltia_program.tid, stationname, foltia_program.title,
+ foltia_subtitle.countno, foltia_subtitle.subtitle,
+ foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
+ foltia_tvrecord.bitrate, foltia_subtitle.startoffset,
+ foltia_subtitle.pid, foltia_tvrecord.digital
 FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
 WHERE foltia_tvrecord.tid = foltia_program.tid AND foltia_tvrecord.stationid = foltia_station .stationid AND foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid
-AND foltia_subtitle.enddatetime > '$rowdata[5]' 
-AND foltia_subtitle.startdatetime < '$endtime'  
+AND foltia_subtitle.enddatetime > ? 
+AND foltia_subtitle.startdatetime < ?  
 AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' ) 
 UNION
 SELECT
-foltia_program .tid,
-stationname,
-foltia_program .title,
-foltia_subtitle.countno,
-foltia_subtitle.subtitle,
-foltia_subtitle.startdatetime ,
-foltia_subtitle.lengthmin ,
-foltia_tvrecord.bitrate  , 
-foltia_subtitle.startoffset , 
-foltia_subtitle.pid , 
-foltia_tvrecord.digital 
+ foltia_program.tid, stationname, foltia_program.title,
+ foltia_subtitle.countno, foltia_subtitle.subtitle,
+ foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
+ foltia_tvrecord.bitrate, foltia_subtitle.startoffset,
+ foltia_subtitle.pid, foltia_tvrecord.digital
 FROM foltia_tvrecord
 LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
 LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
 LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
 WHERE foltia_tvrecord.stationid = 0 AND
-foltia_subtitle.enddatetime > '$rowdata[5]'  
-AND foltia_subtitle.startdatetime < '$endtime'  
+foltia_subtitle.enddatetime > ?  
+AND foltia_subtitle.startdatetime < ?  
 AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' ) 
-
 	";
-	$eoverlap = m_query($con, $query, "DBクエリに失敗しました");
-	$eoverlapmaxrows = pg_num_rows($eoverlap);
+//	$eoverlap = m_query($con, $query, "DBクエリに失敗しました");
+	$eoverlap = sql_query($con, $query, "DBクエリに失敗しました",array($rowdata[5], $endtime,$rowdata[5],  $endtime));
+			  $eowrowall = $eoverlap->fetchAll();
+			  $eoverlapmaxrows = count($eowrowall);
 	if ($eoverlapmaxrows > ($externalinputs) ){
 		
 		$eowtimeline = array();
 		
 		for ($erow = 0; $erow < $eoverlapmaxrows ; $erow++) {
-			$eowrowdata = pg_fetch_array($eoverlap, $erow);
+					  $eowrowdata = $eowrowall[$erow];
 			$eowtimeline[ $eowrowdata['startdatetime'] ] = $eowtimeline[ $eowrowdata['startdatetime'] ] +1;
 			
 			$eowrend = calcendtime( $eowrowdata['startdatetime'], $eowrowdata['lengthmin'] );
@@ -358,7 +322,7 @@ AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' )
 					}
 					echo("<br></td>\n");
 				echo("</tr>\n");
-			}
+		  } while ($rowdata = $rs->fetch());
 		?>
 	</tbody>
 </table>
@@ -373,29 +337,24 @@ AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' )
 
 
 <?php
-} //if ($maxrows == 0) {
-
-
+    } //if ($maxrows == 0)
 	$query = "
 SELECT 
-foltia_program.tid,
-stationname,
-foltia_program .title ,
-foltia_tvrecord.bitrate ,
-foltia_tvrecord.stationid , 
+ foltia_program.tid, stationname, foltia_program.title,
+ foltia_tvrecord.bitrate, foltia_tvrecord.stationid, 
 foltia_tvrecord.digital   
 FROM  foltia_tvrecord , foltia_program , foltia_station 
 WHERE foltia_tvrecord.tid = foltia_program.tid  AND foltia_tvrecord.stationid = foltia_station .stationid 
 ORDER BY foltia_program.tid  DESC
 ";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-			
-		if ($maxrows == 0) {
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+	$rs = sql_query($con, $query, "DBクエリに失敗しました");
+$rowdata = $rs->fetch();			
+if (! $rowdata) {
 //なければなにもしない
 			
 		}else{
-		$maxcols = pg_num_fields($rs);
+	$maxcols = $rs->columnCount();
 
 ?>
 <p align="left">録画予約番組タイトルを表示します。</p>
@@ -416,10 +375,7 @@ ORDER BY foltia_program.tid  DESC
 	<tbody>
 		<?php
 			/* テーブルのデータを出力 */
-			for ($row = 0; $row < $maxrows; $row++) { /* 行に対応 */
-				/* pg_fetch_row で一行取り出す */
-				$rowdata = pg_fetch_row($rs, $row);
-
+	     do {
 				$tid = htmlspecialchars($rowdata[0]);
 				
 				if ($tid > 0){
@@ -467,7 +423,7 @@ ORDER BY foltia_program.tid  DESC
 					}
 				echo("\n</tr>");
 				}//if tid 0
-			}//for
+	     } while ($rowdata = $rs->fetch());
 		}//else
 		?>
 	</tbody>

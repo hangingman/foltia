@@ -96,14 +96,11 @@ if ($recstid != ""){
 $query = "
 SELECT stationname  
 FROM foltia_station 
-WHERE stationid = $recstid";
-	$stationvalid = m_query($con, $query, "DBクエリに失敗しました");
-	$stationcount = pg_num_rows($stationvalid);
-
-	if ($stationcount == 1){
-		$recstationname = pg_fetch_row($stationvalid, 0);
-	//valid
-	}else{
+WHERE stationid = ? ";
+//	$stationvalid = m_query($con, $query, "DBクエリに失敗しました");
+	$stationvalid = sql_query($con, $query, "DBクエリに失敗しました",array($recstid));
+		$recstationname = $stationvalid->fetch();
+		if (! $recstationname) {
 		$errflag = 3;
 		$errmsg = "放送局設定が異常です。";
 	}
@@ -127,23 +124,27 @@ if (($startdatetime > $now ) && ($enddatetime > $now ) && ($enddatetime  > $star
 
 //min pidを探す
 $query = "SELECT min(pid) FROM  foltia_subtitle ";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-	if ($maxrows == 0){
-	$insertpid = -1 ;
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+	$rs = sql_query($con, $query, "DBクエリに失敗しました");
+	$rowdata = $rs->fetch();
+	if (! $rowdata) {
+		$insertpid = -1 ;
 	}else{
-	$rowdata = pg_fetch_row($rs, 0);
-	$insertpid = $rowdata[0];
-	$insertpid-- ;
+		if ($rowdata[0] > 0) {
+			$insertpid = -1 ;
+		}else{
+			$insertpid = $rowdata[0];
+			$insertpid-- ;
+		}
 	}
 // next 話数を探す
 $query = "SELECT max(countno) FROM  foltia_subtitle WHERE tid = 0";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-	if ($maxrows == 0){
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+	$rs = sql_query($con, $query, "DBクエリに失敗しました");
+			$rowdata = $rs->fetch();
+			if (! $rowdata) {
 	$nextcno = 1 ;
 	}else{
-	$rowdata = pg_fetch_row($rs, 0);
 	$nextcno = $rowdata[0];
 	$nextcno++ ;
 	}
@@ -158,17 +159,33 @@ if ($demomode){
 	$query = "
 	insert into foltia_subtitle  (pid ,tid ,stationid , countno ,subtitle ,
 startdatetime ,enddatetime ,startoffset , lengthmin , epgaddedby )  
-	values ( '$insertpid','0','$recstid',
-		'$nextcno','$pname','$startdatetime','$enddatetime','0' ,'$lengthmin', '$memberid')";
+	values ( ?,'0',?,?,?,?,?,'0',?,?)";
 	
-		$rs = m_query($con, $query, "DBクエリに失敗しました");
+//		$rs = m_query($con, $query, "DBクエリに失敗しました");
+//print "【DEBUG】$insertpid,$recstid,$nextcno,$pname,$startdatetime,$enddatetime ,$lengthmin,$memberid <br>\n";
+		$rs = sql_query($con, $query, "DBクエリに失敗しました",array($insertpid,$recstid,$nextcno,$pname,$startdatetime,$enddatetime ,$lengthmin,$memberid));
 	
 	//addatq.pl
 	//キュー入れプログラムをキック
 	//引数　TID チャンネルID
 	//echo("$toolpath/perl/addatq.pl $tid $station");
-	
-		$oserr = system("$toolpath/perl/addatq.pl 0 0");
+	exec("$toolpath/perl/addatq.pl 0 0");
+	$oserr = system("$toolpath/perl/addatq.pl 0 0");
+	//---------------------------------------------------
+			if ($oserr){
+			print "[DEBUG]$oserr 「$toolpath/perl/addatq.pl 0 0」<br>\n";
+		}else{
+			print "[DEBUG]exec addatq.pl false 「$toolpath/perl/addatq.pl 0 0」<br>\n";
+			
+			$oserr = system("$toolpath/perl/perltestscript.pl");
+			if ($oserr){
+				print "[DEBUG]exec perltestscript.pl $oserr<br>\n";
+			}else{
+				print "[DEBUG]exec perltestscript.pl false <br>\n";
+			}
+			
+		}
+	//-----------------------------------------------------
 	}else{
 		print "EPG予約を行う権限がありません。";
 	}// end if $userclass <= 2
@@ -199,7 +216,7 @@ print "時刻が不正なために予約できませんでした。 <br>";
 
 }//　初回表示かデータ処理か
 ?>
-<form id="record" name="record" method="get" action="./m.php">
+<form id="record" name="record" method="get" action="./m.php" autocomplete="off">
   <p>放送日:
     <input name="startdate" type="text" id="startdate" size="9" value="<?=$startdate?>" />
   年月日 Ex.<?=$today?></p>
@@ -214,43 +231,41 @@ print "時刻が不正なために予約できませんでした。 <br>";
   <p>録画局:
 <?php
 $query = "
-SELECT stationid,stationname,stationrecch ,digitalch 
+SELECT stationid as x, stationname, stationrecch, digitalch 
 FROM foltia_station 
 WHERE stationrecch > 0 
 UNION 
 SELECT DISTINCT  stationid,stationname,stationrecch ,digitalch 
 FROM  foltia_station 
-WHERE digitalch > 0
-ORDER BY \"stationid\" ASC";
+WHERE digitalch > 0 
+ORDER BY x ASC";
 
-	$stations = m_query($con, $query, "DBクエリに失敗しました");
-	$stationcount = pg_num_rows($stations);
-	
-if ($stationcount > 0 ){
-	for ($row = 0; $row < $stationcount ; $row++) {
-		$rowdata = pg_fetch_row($stations, $row);
+$stations = sql_query($con, $query, "DBクエリに失敗しました");
+$rowdata = $stations->fetch();
+
+if ($rowdata) {
+			   do {
 			if ($recstid == $rowdata[0]){
-			print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" checked />  $rowdata[1] ($rowdata[2]ch)　\n";
+			print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" checked />  $rowdata[1] ($rowdata[2]ch / $rowdata[3]ch)　\n";
 			}else{
-				print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" />  $rowdata[1] ($rowdata[2]ch)　\n";
+				print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" />  $rowdata[1] ($rowdata[2]ch / $rowdata[3]ch)　\n";
 			}
-	}
+			   } while ($rowdata = $stations->fetch());
 }else{
 print "放送局データベースが正しくセットアップされていません。録画可能局がありません";
 }
-
+//外部入力チャンネル
 $query = "
-SELECT stationid,stationname,stationrecch 
+SELECT stationid as x ,stationname,stationrecch 
 FROM foltia_station 
 WHERE stationrecch > -2 AND stationrecch < 1 
-ORDER BY \"stationid\" ASC";
+ORDER BY x ASC";
 
-	$stations = m_query($con, $query, "DBクエリに失敗しました");
-	$stationcount = pg_num_rows($stations);
-	
-if ($stationcount > 0 ){
-	for ($row = 0; $row < $stationcount ; $row++) {
-		$rowdata = pg_fetch_row($stations, $row);
+//	$stations = m_query($con, $query, "DBクエリに失敗しました");
+	$stations = sql_query($con, $query, "DBクエリに失敗しました");
+$rowdata = $stations->fetch();	
+if ($rowdata) {
+	do {
 		if ($rowdata[0] != 0){
 			if ($recstid == $rowdata[0]){
 			print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" checked />  $rowdata[1]　\n";
@@ -259,7 +274,7 @@ if ($stationcount > 0 ){
 			}
 
 		}
-	}
+	} while ($rowdata = $stations->fetch());
 }
 /*
 print "<p>デジタル録画を優先:";

@@ -71,13 +71,12 @@ if (($startdatetime > $now ) && ($enddatetime > $now ) && ($enddatetime  > $star
 
 //min pidを探す
 $query = "SELECT min(pid) FROM  foltia_subtitle ";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-	if ($maxrows == 0){
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+	$rs = sql_query($con, $query, "DBクエリに失敗しました");
+	$rowdata = $rs->fetch();
+	if (! $rowdata) {
 	$insertpid = -1 ;
 	}else{
-	$rowdata = pg_fetch_row($rs, 0);
-	
 	$insertpid = $rowdata[0];
 		if ($insertpid > 0){
 		$insertpid = -1;
@@ -87,12 +86,12 @@ $query = "SELECT min(pid) FROM  foltia_subtitle ";
 	}
 // next 話数を探す
 $query = "SELECT max(countno) FROM  foltia_subtitle WHERE tid = 0";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-	if ($maxrows == 0){
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+	$rs = sql_query($con, $query, "DBクエリに失敗しました");
+	$rowdata = $rs->fetch();
+	if (! $rowdata) {
 	$nextcno = 1 ;
 	}else{
-	$rowdata = pg_fetch_row($rs, 0);
 	$nextcno = $rowdata[0];
 	$nextcno++ ;
 	}
@@ -123,9 +122,9 @@ $memberid = getmymemberid($con);
 	$query = "
 insert into foltia_subtitle  (pid ,tid ,stationid , countno ,subtitle ,
 startdatetime ,enddatetime ,startoffset , lengthmin , epgaddedby ) 
-values ( '$insertpid','0','$stationid',
-	'$nextcno','$subtitle','$startdatetime','$enddatetime','0' ,'$lengthmin' , '$memberid')";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
+values ( ?,'0',?,?,?,?,?,'0',?,?)";
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($insertpid,$stationid,$nextcno,$subtitle,$startdatetime,$enddatetime,$lengthmin,$memberid));
 
 	//addatq.pl
 	//キュー入れプログラムをキック

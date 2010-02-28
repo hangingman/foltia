@@ -16,7 +16,7 @@
 
 $path = $0;
 $path =~ s/deletemovie.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 

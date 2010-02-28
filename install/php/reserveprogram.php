@@ -52,14 +52,14 @@ $tid = getgetnumform(tid);
 $now = date("YmdHi");   
 
 //タイトル取得
-	$query = "select title from foltia_program where tid='$tid'";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-			
-		if ($maxrows == 0) {
+	$query = "select title from foltia_program where tid = ? ";
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
+$rowdata = $rs->fetch();
+if (! $rowdata) {
 		die_exit("登録番組がありません<BR>");
 		}
-		$rowdata = pg_fetch_row($rs, 0);
+
 		$title = htmlspecialchars($rowdata[0]);
 ?>
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
@@ -99,30 +99,27 @@ if ($tid == 0){
 SELECT distinct  foltia_station.stationid , stationname , foltia_station.stationrecch 
 FROM foltia_subtitle , foltia_program ,foltia_station  
 WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
- AND foltia_program.tid ='$tid' 
+ AND foltia_program.tid = ? 
 ORDER BY stationrecch DESC
 ";
-
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-			
-		if ($maxrows == 0) {
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
+$rowdata = $rs->fetch();
+if (! $rowdata) {
 		echo("放映局情報がまだはいってません<BR>");
 		}
 		else{
-		$maxcols = pg_num_fields($rs);
+	$maxcols = $rs->columnCount();
 		
 			echo("<select name=\"station\">\n");
 			/* テーブルのデータを出力 */
-			for ($row = 0; $row < $maxrows; $row++) { /* 行に対応 */
-				/* pg_fetch_row で一行取り出す */
-				$rowdata = pg_fetch_row($rs, $row);
+	do {
 				echo("<option value=\"");
 				echo(htmlspecialchars($rowdata[0]));
 				echo("\">");
 				echo(htmlspecialchars($rowdata[1]));
 				echo("</option>\n");
-			}//for
+	} while ($rowdata = $rs->fetch());
 			echo("<option value=\"0\">全局</option>\n</select>\n");
 		}//endif		
 	?>
@@ -181,17 +178,17 @@ foltia_subtitle.lengthmin ,
 foltia_subtitle.startoffset 
 FROM foltia_subtitle , foltia_program ,foltia_station  
 WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
- AND foltia_subtitle.startdatetime >=  '$now'  AND foltia_program.tid ='$tid' 
+ AND foltia_subtitle.startdatetime >= ?  AND foltia_program.tid = ? 
 ORDER BY foltia_subtitle.startdatetime  ASC
 ";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-			
-		if ($maxrows == 0) {
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$tid));
+$rowdata = $rs->fetch();
+if (! $rowdata) {
 		echo("放映予定はありません<BR>");
 		}
 		else{
-		$maxcols = pg_num_fields($rs);		
+	$maxcols = $rs->columnCount();
 ?>
   <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%" BGCOLOR="#bcf1be">
 	<thead>
@@ -209,11 +206,8 @@ ORDER BY foltia_subtitle.startdatetime  ASC
 	<tbody>
 		<?php
 			/* テーブルのデータを出力 */
-			for ($row = 0; $row < $maxrows; $row++) { /* 行に対応 */
+       do {
 				echo("<tr>\n");
-				/* pg_fetch_row で一行取り出す */
-				$rowdata = pg_fetch_row($rs, $row);
-
 				for ($col = 0; $col < $maxcols; $col++) { /* 列に対応 */
 					if ($col == 3){
 					echo("<td>".htmlspecialchars(foldate2print($rowdata[$col]))."<br></td>\n");
@@ -222,7 +216,7 @@ ORDER BY foltia_subtitle.startdatetime  ASC
 					}
 				}
 				echo("</tr>\n");
-			}
+       } while ($rowdata = $rs->fetch());
 		}//end if
 		?>
 	</tbody>

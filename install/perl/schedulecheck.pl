@@ -13,12 +13,13 @@
 
 use DBI;
 use DBD::Pg;
+use DBD::SQLite;
 use Schedule::At;
 use Time::Local;
 
 $path = $0;
 $path =~ s/schedulecheck.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 
@@ -28,28 +29,21 @@ require "foltialib.pl";
 system("$toolpath/perl/getxml2db.pl");
 
 #予約番組探し
-$now = &epoch2foldate(`date +%s`);
+$now = &epoch2foldate(time());
 $now = &epoch2foldate($now);
 $checkrangetime = $now   + 15*60;#15分後まで
 $checkrangetime =  &epoch2foldate($checkrangetime);
 
-	my $data_source = sprintf("dbi:%s:dbname=%s;host=%s;port=%d",
-		$DBDriv,$DBName,$DBHost,$DBPort);
-	 $dbh = DBI->connect($data_source,$DBUser,$DBPass) ||die $DBI::error;;
+$dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
-$DBQuery =  "SELECT count(*)  FROM foltia_tvrecord ";
-
-
-	 $sth = $dbh->prepare($DBQuery);
+$sth = $dbh->prepare($stmt{'schedulecheck.1'});
 	$sth->execute();
  @titlecount= $sth->fetchrow_array;
 
  if ($titlecount[0]  == 0 ){
 exit;
 }else{
-
-$DBQuery =  "SELECT  tid ,stationid  FROM foltia_tvrecord ";
-	 $sth = $dbh->prepare($DBQuery);
+    $sth = $dbh->prepare($stmt{'schedulecheck.2'});
 	$sth->execute();
 while (($tid,$stationid  ) = $sth->fetchrow_array()) {
 #キュー再投入

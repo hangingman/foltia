@@ -114,10 +114,12 @@ SELECT
 foltia_program.tid,foltia_program.title,foltia_subtitle.subtitle  
 FROM foltia_subtitle , foltia_program   
 WHERE foltia_program.tid = foltia_subtitle.tid  
- AND foltia_subtitle.tid = $filesplit[0] 
+ AND foltia_subtitle.tid = ? 
 ";
-$rs = m_query($con, $query, "DBクエリに失敗しました");
-$rowdata = pg_fetch_row($rs, $row);
+//$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0]));
+				$rall = $rs->fetchAll();
+				$rowdata = $rall[$row];
 //print" $fName./$rowdata[1]//$rowdata[2]<BR>\n";
 $title = $rowdata[1];
 $subtitle = "";
@@ -129,11 +131,13 @@ SELECT
 foltia_program.tid,foltia_program.title,foltia_subtitle.countno,foltia_subtitle.subtitle  
 FROM foltia_subtitle , foltia_program   
 WHERE foltia_program.tid = foltia_subtitle.tid  
- AND foltia_subtitle.tid = $filesplit[0] 
- AND foltia_subtitle.countno = $filesplit[1] 
+ AND foltia_subtitle.tid = ? 
+ AND foltia_subtitle.countno = ? 
 ";
-$rs = m_query($con, $query, "DBクエリに失敗しました");
-$rowdata = pg_fetch_row($rs, $row);
+//$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0],$filesplit[1]));
+				$rall = $rs->fetchAll();
+				$rowdata = $rall[$row];
 //print" $fName./$rowdata[1]/$rowdata[2]/$rowdata[3]<BR>\n";
 $title = $rowdata[1];
 $count = $rowdata[2];
@@ -196,13 +200,11 @@ ORDER BY foltia_subtitle.startdatetime DESC
 ";
 }
 
-$rs = m_query($con, $query, "DBクエリに失敗しました");
-$maxrows = pg_num_rows($rs);
-
-if ($maxrows > 0){
-for ($row = 0; $row < $maxrows; $row++) { 
-$rowdata = pg_fetch_row($rs, $row);
-
+//$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました");
+$rowdata = $rs->fetch();
+if ($rowdata) {
+	do {
 $tid = htmlspecialchars($rowdata[0]);
 $title = htmlspecialchars($rowdata[1]);
 $count = htmlspecialchars($rowdata[2]);
@@ -234,7 +236,7 @@ print"<td>$title</td>
 	}
 print "</tr>\n
 ";
-}//for
+	} while ($rowdata = $rs->fetch());
 }else{
 print "
 <tr>
@@ -261,11 +263,10 @@ WHERE foltia_program.tid = foltia_subtitle.tid
 ORDER BY foltia_program.tid DESC 
 ";
 
-$rs = m_query($con, $query, "DBクエリに失敗しました");
-$maxrows = pg_num_rows($rs);
-
-
-if ($maxrows > 0){
+//$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました");
+	$rowdata = $rs->fetch();
+	if ($rowdata) {
 print "<hr>
 <p align=\"left\">未読タイトルを表示します。<br>
   <table BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"2\" WIDTH=\"100%\">
@@ -278,16 +279,13 @@ print "<hr>
 	<tbody>
 ";
 
-for ($row = 0; $row < $maxrows; $row++) { 
-$rowdata = pg_fetch_row($rs, $row);
-
+		do {
 $tid = htmlspecialchars($rowdata[0]);
 $title = htmlspecialchars($rowdata[1]);
 
-
 print "<tr><td>$tid</td><td>$title</td></tr>\n";
 
-}//for
+		} while ($rowdata = $rs->fetch());
 print "</tbody></table>\n";
 }//if maxrows
 }//if title

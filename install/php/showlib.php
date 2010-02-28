@@ -83,11 +83,10 @@ GROUP BY foltia_mp4files.tid ,foltia_program.title
 ORDER BY foltia_mp4files.tid DESC
 ";
 
-$rs = m_query($con, $query, "DBクエリに失敗しました");
-
-$maxrows = pg_num_rows($rs);
-
-if ($maxrows > 0 ){
+//$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました");
+$rowdata = $rs->fetch();
+if ($rowdata) {
 if(ereg("iPhone",$useragent)){
 	print "<ul id=\"home\" title=\"録画ライブラリ表示\" selected=\"true\">";
 }else{
@@ -104,8 +103,7 @@ print "
 	<tbody>
 ";
 }
-for ($row = 0; $row < $maxrows; $row++) {
-	$rowdata = pg_fetch_row($rs, $row);
+	do {
 $title = $rowdata[1];
 $counts = $rowdata[2];
 $tid = htmlspecialchars($rowdata[0]);
@@ -124,7 +122,7 @@ print "
 </tr>\n
 ";
 }
-}//for
+	} while ($rowdata = $rs->fetch());
 
 if(ereg("iPhone",$useragent)){
 	print "</ul>\n</body>\n</html>\n";
@@ -159,7 +157,7 @@ FROM   foltia_program
 WHERE foltia_program.tid = $filesplit[0] 
 ";
 $rs = m_query($con, $query, "DBクエリに失敗しました");
-$rowdata = pg_fetch_row($rs, $row);
+$rowdata = $rs->fetch();
 //print" $fName./$rowdata[1]/$rowdata[2]/$rowdata[3]<BR>\n";
 $title = $rowdata[1];
 

@@ -87,10 +87,12 @@ SELECT
 foltia_program.tid,foltia_program.title,foltia_subtitle.subtitle  
 FROM foltia_subtitle , foltia_program   
 WHERE foltia_program.tid = foltia_subtitle.tid  
- AND foltia_subtitle.tid = $filesplit[0] 
+ AND foltia_subtitle.tid = ? 
 ";
-$rs = m_query($con, $query, "DBクエリに失敗しました");
-$rowdata = pg_fetch_row($rs, $row);
+//$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0]));
+				$rall = $rs->fetchAll();
+				$rowdata = $rall[$row];
 //print" $fName./$rowdata[1]//$rowdata[2]<BR>\n";
 $title = $rowdata[1];
 $subtitle = "";
@@ -102,11 +104,13 @@ SELECT
 foltia_program.tid,foltia_program.title,foltia_subtitle.countno,foltia_subtitle.subtitle  
 FROM foltia_subtitle , foltia_program   
 WHERE foltia_program.tid = foltia_subtitle.tid  
- AND foltia_subtitle.tid = $filesplit[0] 
- AND foltia_subtitle.countno = $filesplit[1] 
+ AND foltia_subtitle.tid = ? 
+ AND foltia_subtitle.countno = ? 
 ";
-$rs = m_query($con, $query, "DBクエリに失敗しました");
-$rowdata = pg_fetch_row($rs, $row);
+//$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0] ,$filesplit[1]));
+				$rall = $rs->fetchAll();
+				$rowdata = $rall[$row];
 //print" $fName./$rowdata[1]/$rowdata[2]/$rowdata[3]<BR>\n";
 $title = $rowdata[1];
 $count = $rowdata[2];
@@ -118,9 +122,6 @@ $tid = htmlspecialchars($rowdata[0]);
 $title = htmlspecialchars($title);
 $count = htmlspecialchars($count);
 $subtitle = htmlspecialchars($subtitle);
-
-//--
-
 
 print "
 <tr>
@@ -137,9 +138,10 @@ if ($demomode){
 
 $query = "
 DELETE  FROM  foltia_m2pfiles  
-WHERE m2pfilename = '$fName' 
+WHERE m2pfilename = ? 
 ";
-$rs = m_query($con, $query, "DBクエリに失敗しました");
+//$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($fName));
 
 //削除処理
 $oserr = system("$toolpath/perl/deletemovie.pl $fName");

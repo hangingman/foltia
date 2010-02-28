@@ -15,28 +15,26 @@
 
 use DBI;
 use DBD::Pg;
+use DBD::SQLite;
 
 $path = $0;
 $path =~ s/updatem2pfiletable.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 
 require "foltialib.pl";
-	my $data_source = sprintf("dbi:%s:dbname=%s;host=%s;port=%d",
-		$DBDriv,$DBName,$DBHost,$DBPort);
-	 $dbh = DBI->connect($data_source,$DBUser,$DBPass) ||die $DBI::error;;
+$dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
 $dbh->{AutoCommit} = 0;
 #　ひとまず消す
-$query =  "DELETE  FROM  foltia_m2pfiles  ";
-	 $sth = $dbh->prepare($query);
+$sth = $dbh->prepare($stmt{'updatem2pfiletable.1'});
 	$sth->execute();
 
 while ($file = glob("$recfolderpath/*.m2?")) {
 $file =~ s/$recfolderpath\///;
-$query =  "insert into  foltia_m2pfiles values ('$file')";
-$oserr = $dbh->do($query);
+    $sth = $dbh->prepare($stmt{'updatem2pfiletable.2'});
+    $sth->execute($file);
 # print "$file\n";
 }#while
 $oserr = $dbh->commit;
@@ -45,8 +43,7 @@ $oserr = $dbh->commit;
 @mp4filelist = `find ${recfolderpath}/ | grep MP4`;#by foltia dev ticket #5 http://www.dcc-jpl.com/foltia/ticket/5
 
 #　ひとまず消す
-$query =  "DELETE  FROM  foltia_mp4files  ";
-	 $sth = $dbh->prepare($query);
+$sth = $dbh->prepare($stmt{'updatem2pfiletable.3'});
 	$sth->execute();
 
 
@@ -57,8 +54,8 @@ s/$recfolderpath\///;
 $filetid = $fileline[0];
 $filetid =~ s/[^0-9]//g;
 if (($filetid ne "" )&& ($fileline[2] ne "" )){
-	$query =  "insert into  foltia_mp4files values ('$filetid','$fileline[2]')";
-	$oserr = $dbh->do($query);
+	$sth = $dbh->prepare($stmt{'updatem2pfiletable.4'});
+	$oserr = $sth->execute($filetid, $fileline[2]);
 #print "$filetid;$fileline[2];$query\n"
 # http://www.atmarkit.co.jp/fnetwork/rensai/sql03/sql1.html
 }#end if

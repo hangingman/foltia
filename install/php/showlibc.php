@@ -67,19 +67,19 @@ $now = date("YmdHi");
 $query = "
 SELECT foltia_program.title  
 FROM  foltia_program   
-WHERE foltia_program.tid = $tid  
+WHERE foltia_program.tid = ? 
 ";
-$rs = m_query($con, $query, "DBクエリに失敗しました");
-$maxrows = pg_num_rows($rs);
-if ($maxrows == 0 ){
- $syobocaldb = `curl "http://cal.syoboi.jp/db?Command=TitleLookup&TID=$tid" | head -2 `;
+//$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
+$rowdata = $rs->fetch();
+if (! $rowdata) {
+$syobocaldb = `curl "http://cal.syoboi.jp/db?Command=TitleLookup&TID=$tid" | head -2 `;
 $syobocaldb = mb_convert_encoding($syobocaldb, "EUC-JP", "UTF-8");
 	$syobocaldb = preg_match("/<Title>.*<\/Title>/", $syobocaldb,$title);
 	$title = $title[0];
 	$title = strip_tags($title);
 	$title =  htmlspecialchars($title) ;
 }else{
-$rowdata = pg_fetch_row($rs, 0);
 $title = $rowdata[0];
 $title =  htmlspecialchars($title) ;
 }
@@ -142,14 +142,15 @@ LEFT JOIN foltia_subtitle
 ON   foltia_mp4files.mp4filename = foltia_subtitle.pspfilename   
 LEFT JOIN foltia_program  
 ON foltia_mp4files.tid = foltia_program.tid 
-WHERE foltia_mp4files.tid = $tid  
+WHERE foltia_mp4files.tid = ?  
 ORDER BY \"startdatetime\" ASC
 ";
 
 $rs = "";
-$rs = m_query($con, $query, "DBクエリに失敗しました");
-$maxrows = pg_num_rows($rs);
-if ($maxrows > 0 ){
+//$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
+$rowdata = $rs->fetch();
+if ($rowdata) {
 if(ereg("iPhone",$useragent)){
 	print "<ul id=\"home\" title=\"$title\" selected=\"true\">";
 }else{
@@ -158,9 +159,7 @@ print "
 	<tbody>
 ";
 }
-for ($row = 0; $row < $maxrows; $row++) {
-	$rowdata = pg_fetch_row($rs, $row);
-
+	do {
 $title = $rowdata[1];
 
 if ($rowdata[2]== "" ){
@@ -194,10 +193,10 @@ $time = substr($onairdate,8,2).":".substr($onairdate,10,2);
 $onairdate = "$day $time";
 }
 //Starlight Breaker向け拡張
-//$debug_pg_num_rows = pg_num_rows ($rs );
+//$debug_pg_num_rows = $rs ->rowCount();
 $caplink = "";
 
-if (($sbpluginexist == 1) && (pg_num_rows ($rs ) > 0)){
+		if ($sbpluginexist == 1) {
  //$capimgpath = htmlspecialchars(preg_replace("/.m2p/", "", $rowdata[5]));
  $capimgpath = htmlspecialchars(preg_replace("/.m2./", "", $rowdata[5]));
  	
@@ -243,7 +242,7 @@ print "  </tr>
 
 }//endif iPhone
 
-}//for
+	} while ($rowdata = $rs->fetch());
 }else{
 print "録画ファイルがありません<br>\n";
 }//if

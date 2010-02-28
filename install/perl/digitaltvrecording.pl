@@ -24,7 +24,7 @@
 
 $path = $0;
 $path =~ s/digitaltvrecording.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 
@@ -111,7 +111,7 @@ if ($countno eq "0"){
 		$outputfile = $outputpath.$outputfile ;
 		&writelog("digitaltvrecording: DEBUG FILENAME ne null \$outputfile $outputfile ");
 	}else{
-		$outputfile .= `date  +%Y%m%d-%H%M --date "1 min "`;
+	$outputfile .= strftime("%Y%m%d-%H%M", localtime(time + 60));
 		chomp($outputfile);
 		$outputfile .= ".m2t";
 		$outputfilewithoutpath = $outputfile ;
@@ -192,7 +192,7 @@ if ($bandtype == 0){
 			}
 		}
 	}else{ # エラー b25とrecfriioがありません
-		&writelog("digitaltvrecording :ERROR :recfriio or b25 not found. You must install $toolpath/b25 and $toolpath/recfriio.");
+		&writelog("digitaltvrecording :ERROR :recfriio or b25 not found. You must install $toolpath/perl/tool/b25 and $toolpath/perl/tool/recfriio.");
 	exit 1;
 	}
 
@@ -386,7 +386,7 @@ if ($bandtype == 0){
 			$errorflag = 2;
 			}
 	}else{ # エラー recpt1がありません
-		&writelog("digitaltvrecording :ERROR :recpt1  not found. You must install $toolpath/b25 and $toolpath/recpt1.");
+		&writelog("digitaltvrecording :ERROR :recpt1  not found. You must install $toolpath/tool/b25 and $toolpath/tool/recpt1.");
 	$errorflag = 1;
 	}
 # friio
@@ -408,7 +408,7 @@ if ($errorflag >= 1 ){
 			exit 2;
 			}
 	}else{ # エラー recfriioがありません
-		&writelog("digitaltvrecording :ERROR :recfriio  not found. You must install $toolpath/b25 and $toolpath/recfriio.");
+		&writelog("digitaltvrecording :ERROR :recfriio  not found. You must install $toolpath/perl/tool/b25 and $toolpath/perl/tool/recfriio.");
 	exit 1;
 	}
 }#end if errorflag

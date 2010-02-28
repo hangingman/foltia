@@ -28,7 +28,7 @@
 
 $path = $0;
 $path =~ s/tvrecording.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 
@@ -300,17 +300,17 @@ if ($ARGV[6] eq "0"){
 #		if ($ARGV[3] =~ /[0-9]{8}-[0-9]{4}/){
 #		$outputfile .= "$ARGV[3]";
 #		}else{
-#		$outputfile .= `date  +%Y%m%d-%H%M --date "1 min "`;
+#		$outputfile .= strftime("%Y%m%d-%H%M", localtime(time + 60));
 #		}
 		$outputfile = $ARGV[3];
 		$outputfile = &filenameinjectioncheck($outputfile);
 		$outputfilewithoutpath = $outputfile ;
 		$outputfile = $outputpath.$outputfile ;
 #		$outputfile .= "$ARGV[3]";		
-#		$outputfile .= `date  +%Y%m%d-%H%M --date "1 min "`;
+#		$outputfile .= strftime("%Y%m%d-%H%M", localtime(time + 60));
 		&writelog("tvrecording:  DEBUG ARGV[2] ne null  \$outputfile $outputfile ");
 	}else{
-		$outputfile .= `date  +%Y%m%d-%H%M --date "1 min "`;
+	$outputfile .= strftime("%Y%m%d-%H%M", localtime(time + 60));
 		chomp($outputfile);
 		$outputfile .= ".m2p";
 		$outputfilewithoutpath = $outputfile ;

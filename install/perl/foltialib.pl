@@ -3,7 +3,7 @@
 
 $path = $0;
 $path =~ s/foltialib.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 require "foltia_conf1.pl";
@@ -12,12 +12,10 @@ require "foltia_conf1.pl";
 #  foltia lib
 use DBI;
 use DBD::Pg;
+use DBD::SQLite;
+use POSIX qw(strftime);
 
-
-	 $DBDriv=$main::DBDriv;
-	 $DBHost=$main::DBHost;
-	 $DBPort=$main::DBPort;
-	 $DBName=$main::DBName;
+$DSN=$main::DSN;
 	 $DBUser=$main::DBUser;
 	 $DBPass="";
 	
@@ -46,7 +44,7 @@ use DBD::Pg;
 #------------------------------
 sub writelog{
 my $messages = $_[0];
-my $timestump = `date  +%Y/%m/%d_%H:%M:%S`;
+    my $timestump = strftime("%Y/%m/%d_%H:%M:%S", localtime);
 chomp($timestump);
 if ($debugmode == 1){
 	open (DEBUGLOG , ">>$toolpath/debuglog.txt") || die "Cant write log file.$! \n ";
@@ -145,19 +143,17 @@ sub getstationid{
 #戻り値:1
 my $stationname =  $_[0] ;
 my $stationid ;
-my $DBQuery =  "SELECT count(*) FROM foltia_station WHERE stationname = '$item{ChName}'";
 
 my $sth;
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
+    $sth = $dbh->prepare($stmt{'foltialib.getstationid.1'});
+    $sth->execute($item{'ChName'});
  my  @stationcount;
  @stationcount= $sth->fetchrow_array;
 
 if ($stationcount[0] == 1){
 #チャンネルID取得
-$DBQuery =  "SELECT stationid,stationname FROM foltia_station WHERE stationname = '$item{ChName}'";
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
+	$sth = $dbh->prepare($stmt{'foltialib.getstationid.2'});
+	$sth->execute($item{'ChName'});
  @stationinfo= $sth->fetchrow_array;
 #局ID
 $stationid  = $stationinfo[0];
@@ -165,20 +161,17 @@ $stationid  = $stationinfo[0];
 
 }elsif($stationcount[0] == 0){
 #新規登録
-$DBQuery =  "SELECT max(stationid) FROM foltia_station";
-	 $sth = $dbh->prepare($DBQuery);
+	$sth = $dbh->prepare($stmt{'foltialib.getstationid.3'});
 	$sth->execute();
  @stationinfo= $sth->fetchrow_array;
 my $stationid = $stationinfo[0] ;
 $stationid  ++;
 ##$DBQuery =  "insert into  foltia_station values ('$stationid'  ,'$item{ChName}','0','','','','','','')";
 #新規局追加時は非受信局をデフォルトに
-$DBQuery =  "insert into  foltia_station  (stationid , stationname ,stationrecch )  values ('$stationid'  ,'$item{ChName}','-10')";
-
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
+	$sth = $dbh->prepare($stmt{'foltialib.getstationid.4'});
+	$sth->execute($stationid, $item{'ChName'}, -10);
 #print "Add station;$DBQuery\n";
-&writelog("foltialib Add station;$DBQuery");
+	&writelog("foltialib Add station;$stmt{'foltialib.getstationid.4'}");
 }else{
 
 #print "Error  getstationid $stationcount[0] stations found. $DBQuery\n";
@@ -286,11 +279,10 @@ if ($m2pfilename eq ""){
 	return  0 ;
 }
 
-my $DBQuery =  "SELECT pid FROM foltia_subtitle WHERE m2pfilename = '$m2pfilename' LIMIT 1 ";
 my $sth;
-$sth = $dbh->prepare($DBQuery);
-$sth->execute();
-#print "$DBQuery\n";
+    $sth = $dbh->prepare($stmt{'foltialib.getpidbympegfilename.1'});
+    $sth->execute($m2pfilename);
+#print "$stmt{'foltialib.getpidbympegfilename.1'}\n";
 my @pidinfo = $sth->fetchrow_array;
 my $pid  = $pidinfo[0];
 
@@ -311,10 +303,9 @@ if (($pid eq "" ) || ($updatestatus eq "")){
 }
 
 if ($updatestatus > 0 ){
-my $DBQuery =  "UPDATE  foltia_subtitle SET filestatus = $updatestatus , lastupdate 	 = now() WHERE pid = $pid ";
 my $sth;
-$sth = $dbh->prepare($DBQuery);
-$sth->execute();
+	$sth = $dbh->prepare($stmt{'foltialib.changefilestatus.1'});
+	$sth->execute($updatestatus, $pid);
 return 1;
 }else{
 	&writelog("foltialib changefilestatus ERR Sttus invalid:$updatestatus");
@@ -350,10 +341,9 @@ if ($pid eq "" ){
 	return  0 ;
 }
 
-my $DBQuery =  "SELECT filestatus FROM foltia_subtitle  WHERE pid = $pid ";
 my $sth;
-$sth = $dbh->prepare($DBQuery);
-$sth->execute();
+    $sth = $dbh->prepare($stmt{'foltialib.getfilestatus.1'});
+    $sth->execute($pid);
 
 my @statusinfo = $sth->fetchrow_array;
 my $status  = $statusinfo[0];

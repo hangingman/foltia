@@ -90,11 +90,10 @@ $day7 = date ("m/d",mktime($starthour , 0 , 0, $startmonth , $startday +7 , $sta
 // $page = 1 ~ 
 $maxdisplay = 8;
 
-	$query = "SELECT stationid, stationname, stationrecch, ontvcode FROM foltia_station WHERE \"ontvcode\" ~~ '%ontvjapan%' 
-	";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
-
+$query = "SELECT count(*) FROM foltia_station WHERE \"ontvcode\" LIKE '%ontvjapan%'";
+//$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました");
+$maxrows = $rs->fetchColumn(0);
 if ($maxrows > $maxdisplay){
 	$pages = ceil($maxrows / $maxdisplay) ;
 }
@@ -137,15 +136,16 @@ if ($page < $pages){
 //・局リスト
 $query = "SELECT stationid, stationname, stationrecch, ontvcode 
 FROM foltia_station 
-WHERE \"ontvcode\" ~~ '%ontvjapan%'  
+WHERE \"ontvcode\" LIKE '%ontvjapan%'  
 ORDER BY stationid ASC , stationrecch 
-OFFSET $offset LIMIT $maxdisplay 
+LIMIT ? OFFSET ?
 ";
-$slistrs = m_query($con, $query, "DBクエリに失敗しました");
-$stations =  pg_num_rows($slistrs);
-for ($i=0 ; $i < $stations ; $i++){
-	$rowdata = pg_fetch_row($slistrs, $i);
-	$stationhash[$i] = $rowdata[3] ;
+
+//$slistrs = m_query($con, $query, "DBクエリに失敗しました");
+$slistrs = sql_query($con, $query, "DBクエリに失敗しました",array($maxdisplay,$offset));
+while ($rowdata = $slistrs->fetch()) {
+	$stationhash[] = $rowdata[3];
+	$snames[] = $rowdata[1]; // headder
 }
 
 //・時間と全順番のハッシュ作る
@@ -157,60 +157,54 @@ FROM foltia_epg
 WHERE foltia_epg.ontvchannel in (
 	SELECT ontvcode 
 	FROM foltia_station 
-	WHERE \"ontvcode\" ~~ '%ontvjapan%'  
+	WHERE \"ontvcode\" LIKE '%ontvjapan%'  
 	ORDER BY stationid ASC , stationrecch 
-	OFFSET $offset LIMIT $maxdisplay
+	LIMIT ? OFFSET ?
 	)
-AND startdatetime  >= $start  
-AND startdatetime  < $epgend  
+AND startdatetime  >= ? 
+AND startdatetime  < ? 
 ORDER BY foltia_epg.startdatetime  ASC	";
 
-$rs = m_query($con, $query, "DBクエリに失敗しました");
+//$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($maxdisplay,$offset,$start,$epgend));
 
 //print "$query<br>\n";
 
-$colmnums =  pg_num_rows($rs);
-if ($colmnums == 0){
+$rowdata = $rs->fetch();
+if (! $rowdata) {
 //番組データがない
 $colmnums = 2;
 }else{
-	for ($i=0 ; $i < $colmnums ; $i++){
-		$rowdata = pg_fetch_row($rs, $i);
-		$timetablehash["$rowdata[0]"] = ($i + 1);
+	$colmnums = 0;
+	do {
+		$colmnums++;
+		$timetablehash[$rowdata[0]] = $colmnums;
 //		print "$rowdata[0]:$i+1 <br>\n";
-	}
+	} while ($rowdata = $rs->fetch());
 }
 //print "colmnums $colmnums <br>\n";
 
 //・局ごとに縦に配列入れていく
-for ($j=0 ; $j < $stations ; $j++){
-	$rowdata = pg_fetch_row($slistrs, $j);
-	$stationname = $rowdata[3];
-
+foreach ($stationhash as $stationname) {
 $epgstart = $start ;
 $epgend = calcendtime($start , (8*60));
 $query = "
 SELECT startdatetime , enddatetime , lengthmin , epgtitle , epgdesc , epgcategory  ,ontvchannel  ,epgid ,	epgcategory 
 FROM foltia_epg 
-WHERE foltia_epg.ontvchannel = '$stationname' AND 
-enddatetime  > $epgstart  AND 
-startdatetime  < $epgend  
+WHERE foltia_epg.ontvchannel = ? AND 
+enddatetime  > ?  AND 
+startdatetime  < ?  
 ORDER BY foltia_epg.startdatetime  ASC
 	";
-	$statiodh = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrowsstation = pg_num_rows($statiodh);
 
-//print "maxrowsstation $maxrowsstation  stationname $stationname<br>\n";
-
-if ($maxrowsstation == 0) {
+//	$statiodh = m_query($con, $query, "DBクエリに失敗しました");
+	$statiodh = sql_query($con, $query, "DBクエリに失敗しました",array($stationname,$epgstart,$epgend));
+	$stationrowdata = $statiodh->fetch();
+	if (! $stationrowdata) {
 		//print("番組データがありません<BR>");
 		$item[0]["$stationname"] =  ">番組データがありません";
 }else{
-
-for ($srow = 0; $srow < $maxrowsstation ; $srow++) { 
-	 
-$stationrowdata = pg_fetch_row($statiodh, $srow);
-
+		do {
 $printstarttime = substr($stationrowdata[0],8,2) . ":" .  substr($stationrowdata[0],10,2);
 $tdclass = "t".substr($stationrowdata[0],8,2) .  substr($stationrowdata[0],10,2);
 $title = $stationrowdata[3];
@@ -234,7 +228,7 @@ $item["$number"]["$stationname"] =  " onClick=\"location = './reserveepg.php?epg
 $item["$number"]["$stationname"] =  " id=\"$epgcategory\" onClick=\"location = './reserveepg.php?epgid=$epgid'\"><span id=\"epgstarttime\">$printstarttime</span> <A HREF=\"./reserveepg.php?epgid=$epgid\"><span id=\"epgtitle\">$title</span></A> <span id=\"epgdesc\">$desc</span></span>";
 }//if
 
-}//for
+		} while ($stationrowdata = $statiodh->fetch());
 }//if
 
 //・局ごとに間隔決定
@@ -290,15 +284,13 @@ for ($i=1; $i <= $colmnums ; $i++){
 print "<table>\n<tr>";
 
 //ヘッダ
-for ($i=0;$i<$stations;$i++){
-	$rowdata = pg_fetch_row($slistrs, $i);
-	print "<th>".htmlspecialchars($rowdata[1])."</th>" ;
+foreach ($snames as $s) {
+	print "<th>".htmlspecialchars($s)."</th>" ;
 }
 //本体
 for ($l = 0 ;$l <  $colmnums; $l++){
 	print "<tr>";
-	for ($m = 0 ; $m < $stations ; $m++ ){
-		$stationname = $stationhash[$m];
+	foreach ($stationhash as $stationname) {
 		print_r($item[$l]["$stationname"]);
 	}
 	print "</tr>\n";

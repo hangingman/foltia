@@ -12,11 +12,12 @@
 
 use DBI;
 use DBD::Pg;
+use DBD::SQLite;
 use Jcode;
 
 $path = $0;
 $path =~ s/ipodtranscode.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 require "foltialib.pl";
@@ -34,9 +35,7 @@ exit;
 }
 
 #DB初期化
-	my $data_source = sprintf("dbi:%s:dbname=%s;host=%s;port=%d",
-		$DBDriv,$DBName,$DBHost,$DBPort);
-	 $dbh = DBI->connect($data_source,$DBUser,$DBPass) ||die $DBI::error;;
+$dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
 # タイトル取得
 #トラコンフラグがたっていてステータス50以上150未満のファイルを古い順にひとつ探す
@@ -56,18 +55,11 @@ if ($counttranscodefiles == 0){
 sleep 30;
 
 while ($counttranscodefiles >= 1){
-
-$DBQuery =  "SELECT foltia_subtitle.pid,foltia_subtitle.tid,foltia_subtitle.m2pfilename,filestatus,foltia_program.aspect ,foltia_subtitle.countno 
-FROM foltia_subtitle, foltia_program, foltia_m2pfiles 
-WHERE filestatus >= $FILESTATUSRECEND AND filestatus < $FILESTATUSTRANSCODECOMPLETE  AND foltia_program.tid = foltia_subtitle.TID AND foltia_program.PSP = 1  AND foltia_m2pfiles.m2pfilename = foltia_subtitle.m2pfilename 
-ORDER BY enddatetime ASC 
-LIMIT 1  ";
-
-$sth = $dbh->prepare($DBQuery);
-$sth->execute();
+    $sth = $dbh->prepare($stmt{'ipodtranscode.1'});
+    $sth->execute($FILESTATUSRECEND, $FILESTATUSTRANSCODECOMPLETE, );
 @dbparam = $sth->fetchrow_array;
 #print "$dbparam[0],$dbparam[1],$dbparam[2],$dbparam[3],$dbparam[4],$dbparam[5]\n";
-&writelog("ipodtranscode DEBUG $DBQuery");
+#&writelog("ipodtranscode DEBUG $DBQuery");
 &writelog("ipodtranscode DEBUG $dbparam[0],$dbparam[1],$dbparam[2],$dbparam[3],$dbparam[4],$dbparam[5]");
 $pid = $dbparam[0];
 $tid = $dbparam[1];
@@ -85,13 +77,8 @@ $mp4outdir = $pspdirname ;
 # 実際のトラコン
 # タイトル取得
 if ($pid ne ""){
-
-$DBQuery =  "SELECT title , countno , subtitle  
-FROM  foltia_program, foltia_subtitle 
-WHERE foltia_program.tid = foltia_subtitle.tid 
-AND foltia_subtitle.pid = $pid ";
-$sth = $dbh->prepare($DBQuery);
-$sth->execute();
+	$sth = $dbh->prepare($stmt{'ipodtranscode.2'});
+	$sth->execute($pid);
 @programtitle = $sth->fetchrow_array;
 $programtitle[0] =~ s/\"/\\"/gi;
 $programtitle[2] =~ s/\"/\\"/gi;
@@ -146,8 +133,10 @@ if ($filestatus <= $FILESTATUSCAPEND){
 if ($filestatus <= $FILESTATUSWAITINGTRANSCODE){
 }
 
+
 $filenamebody = $inputmpeg2 ;
 $filenamebody =~ s/.m2t$|.ts$|.m2p$|.mpg$//gi;
+
 #デジタルかアナログか
 if ($inputmpeg2 =~ /m2t$|ts$/i){
 	#print "MPEG2-TS\n";
@@ -173,9 +162,13 @@ if ($filestatus <= $FILESTATUSTRANSCODEFFMPEG){
 	if (($trconqty eq "")||($trconqty == 1)){
 	$ffmpegencopt = " -s 360x202 -deinterlace -r 24.00 -vcodec libx264 -g 300 -b 330000 -level 13 -loop 1 -sc_threshold 60 -partp4x4 1 -rc_eq 'blurCplx^(1-qComp)' -refs 3 -maxrate 700000 -async 50 -f h264 $filenamebody.264";
 	}elsif($trconqty == 2){
-	$ffmpegencopt = " -s 480x272 -deinterlace -r 29.97 -vcodec libx264 -g 300 -b 400000 -level 13 -loop 1 -sc_threshold 60 -partp4x4 1 -rc_eq 'blurCplx^(1-qComp)' -refs 3 -maxrate 700000 -async 50 -f h264 $filenamebody.264";
+#	$ffmpegencopt = " -s 480x272 -deinterlace -r 29.97 -vcodec libx264 -g 300 -b 400000 -level 13 -loop 1 -sc_threshold 60 -partp4x4 1 -rc_eq 'blurCplx^(1-qComp)' -refs 3 -maxrate 700000 -async 50 -f h264 $filenamebody.264";
+# for ffmpeg 0.5 or later
+	$ffmpegencopt = " -s 480x272 -deinterlace -r 29.97 -vcodec libx264 -vpre default   -g 300 -b 400000 -level 13 -sc_threshold 60 -rc_eq 'blurCplx^(1-qComp)' -refs 3 -maxrate 700000 -async 50 -f h264 $filenamebody.264";
 	}elsif($trconqty == 3){#640x352
-	$ffmpegencopt = " -s 640x352 -deinterlace -r 29.97 -vcodec libx264 -g 100 -b 600000 -level 13 -loop 1 -sc_threshold 60 -partp4x4 1 -rc_eq 'blurCplx^(1-qComp)' -refs 3 -maxrate 700000 -async 50 -f h264 $filenamebody.264";
+#	$ffmpegencopt = " -s 640x352 -deinterlace -r 29.97 -vcodec libx264 -g 100 -b 600000 -level 13 -loop 1 -sc_threshold 60 -partp4x4 1 -rc_eq 'blurCplx^(1-qComp)' -refs 3 -maxrate 700000 -async 50 -f h264 $filenamebody.264";
+# for ffmpeg 0.5 or later
+	$ffmpegencopt = " -s 640x352 -deinterlace -r 29.97 -vcodec libx264 -vpre default   -g 100 -b 600000 -level 13 -sc_threshold 60 -rc_eq 'blurCplx^(1-qComp)' -refs 3 -maxrate 700000 -async 50 -f h264 $filenamebody.264";
 	}
 	&changefilestatus($pid,$FILESTATUSTRANSCODEFFMPEG);
 	&writelog("ipodtranscode ffmpeg $filenamebody.264");
@@ -245,43 +238,60 @@ if ($filestatus <= $FILESTATUSTRANSCODEAAC){
 if ($filestatus <= $FILESTATUSTRANSCODEMP4BOX){
 	# MP4ビルド
 	unlink("${filenamebody}.base.mp4");
-	&changefilestatus($pid,$FILESTATUSTRANSCODEMP4BOX);
-	&writelog("ipodtranscode MP4Box $filenamebody");
-		system ("cd $recfolderpath ; MP4Box -fps 29.97 -add $filenamebody.264 -new $filenamebody.base.mp4");
-#$exit_value = $? >> 8;
-#$signal_num = $? & 127;
-#$dumped_core = $? & 128; 
-#&writelog("ipodtranscode DEBUG MP4Box -fps 29.97 -add:$exit_value:$signal_num:$dumped_core");
+	if (-e "$toolpath/perl/tool/MP4Box"){
+		&changefilestatus($pid,$FILESTATUSTRANSCODEMP4BOX);
+		&writelog("ipodtranscode MP4Box $filenamebody");
+#			system ("cd $recfolderpath ; MP4Box -fps 29.97 -add $filenamebody.264 -new $filenamebody.base.mp4");
+			system ("cd $recfolderpath ;$toolpath/perl/tool/MP4Box -fps 29.97 -add $filenamebody.264 -new $filenamebody.base.mp4");
+	$exit_value = $? >> 8;
+	$signal_num = $? & 127;
+	$dumped_core = $? & 128;
+	&writelog("ipodtranscode DEBUG MP4Box -fps 29.97 -add $filenamebody.264 -new $filenamebody.base.mp4:$exit_value:$signal_num:$dumped_core");
 
-	if (-e "$filenamebody.base.mp4"){
-	system ("cd $recfolderpath ; MP4Box -add $filenamebody.aac $filenamebody.base.mp4");
-#$exit_value = $? >> 8;
-#$signal_num = $? & 127;
-#$dumped_core = $? & 128; 
-#&writelog("ipodtranscode DEBUG MP4Box -add $filenamebody.aac:$exit_value:$signal_num:$dumped_core");
+	
+		if (-e "$filenamebody.base.mp4"){
+#		system ("cd $recfolderpath ; MP4Box -add $filenamebody.aac $filenamebody.base.mp4");
+		system ("cd $recfolderpath ;$toolpath/perl/tool/MP4Box -add $filenamebody.aac $filenamebody.base.mp4");
+	$exit_value = $? >> 8;
+	$signal_num = $? & 127;
+	$dumped_core = $? & 128; 
+	&writelog("ipodtranscode DEBUG MP4Box -add $filenamebody.aac:$exit_value:$signal_num:$dumped_core");
+		}else{
+		$filelist = `ls -lhtr $recfolderpath/${filenamebody}*`;
+		$debugenv = `env`;
+		&writelog("ipodtranscode ERR File not exist.$debugenv.$filelist ;$filenamebody.base.mp4;$filelist;cd $recfolderpath ;$toolpath/perl/tool/MP4Box -fps 29.97 -add $filenamebody.264 -new $filenamebody.base.mp4");
+		}
 	}else{
-	&writelog("ipodtranscode ERR File not exist.$filenamebody.base.mp4");
+		&writelog("ipodtranscode WARN; Pls. install $toolpath/perl/tool/MP4Box");
 	}
+#}
 
-}
-
-if ($filestatus <= $FILESTATUSTRANSCODEATOM){
-	unlink("${mp4outdir}MAQ${mp4filenamestring}.MP4");
-	# iPodヘッダ付加
-	&changefilestatus($pid,$FILESTATUSTRANSCODEATOM);
-	&writelog("ipodtranscode ATOM $filenamebody");
-	#system ("/usr/local/bin/ffmpeg -y -i $filenamebody.base.mp4 -vcodec copy -acodec copy -f ipod ${mp4outdir}MAQ${mp4filenamestring}.MP4");
-	system ("cd $recfolderpath ; MP4Box -ipod $filenamebody.base.mp4");
-$exit_value = $? >> 8;
-$signal_num = $? & 127;
-$dumped_core = $? & 128;
-&writelog("ipodtranscode DEBUG MP4Box -ipod:$exit_value:$signal_num:$dumped_core");
-	system("mv $filenamebody.base.mp4 ${mp4outdir}MAQ${mp4filenamestring}.MP4");
-	&writelog("ipodtranscode mv $filenamebody.base.mp4 ${mp4outdir}MAQ${mp4filenamestring}.MP4");
-# ipodtranscode mv /home/foltia/php/tv/1329-21-20080829-0017.base.mp4 /home/foltia/php/tv/1329.localized/mp4/MAQ-/home/foltia/php/tv/1329-21-20080829-0017.MP4
-
+#if ($filestatus <= $FILESTATUSTRANSCODEATOM){
+	if (-e "$toolpath/perl/tool/MP4Box"){
+		# iPodヘッダ付加
+#		&changefilestatus($pid,$FILESTATUSTRANSCODEATOM);
+		&writelog("ipodtranscode ATOM $filenamebody");
+		#system ("/usr/local/bin/ffmpeg -y -i $filenamebody.base.mp4 -vcodec copy -acodec copy -f ipod ${mp4outdir}MAQ${mp4filenamestring}.MP4");
+#		system ("cd $recfolderpath ; MP4Box -ipod $filenamebody.base.mp4");
+		system ("cd $recfolderpath ; $toolpath/perl/tool/MP4Box -ipod $filenamebody.base.mp4");
+	$exit_value = $? >> 8;
+	$signal_num = $? & 127;
+	$dumped_core = $? & 128;
+	&writelog("ipodtranscode DEBUG MP4Box -ipod $filenamebody.base.mp4:$exit_value:$signal_num:$dumped_core");
+		if (-e "$filenamebody.base.mp4"){
+		unlink("${mp4outdir}MAQ${mp4filenamestring}.MP4");
+		system("mv $filenamebody.base.mp4 ${mp4outdir}MAQ${mp4filenamestring}.MP4");
+		&writelog("ipodtranscode mv $filenamebody.base.mp4 ${mp4outdir}MAQ${mp4filenamestring}.MP4");
+		}else{
+		&writelog("ipodtranscode ERR $filenamebody.base.mp4 Not found.");
+		}
+	# ipodtranscode mv /home/foltia/php/tv/1329-21-20080829-0017.base.mp4 /home/foltia/php/tv/1329.localized/mp4/MAQ-/home/foltia/php/tv/1329-21-20080829-0017.MP4
+	}else{
+		&writelog("ipodtranscode WARN; Pls. install $toolpath/perl/tool/MP4Box");
+	}
 }
 if ($filestatus <= $FILESTATUSTRANSCODECOMPLETE){
+	if (-e "${mp4outdir}MAQ${mp4filenamestring}.MP4"){
 	# 中間ファイル消す
 	&changefilestatus($pid,$FILESTATUSTRANSCODECOMPLETE);
 	unlink("${filenamebody}_HD.m2t");
@@ -292,7 +302,9 @@ if ($filestatus <= $FILESTATUSTRANSCODECOMPLETE){
 	unlink("$filenamebody.base.mp4");
 	
 	&updatemp4file();
-
+	}else{
+		&writelog("ipodtranscode ERR ; Fail MAQ${mp4filenamestring}.MP4");
+	}
 }
 
 }else{ #デジタルかアナログか
@@ -383,21 +395,30 @@ my $outputfilename = $inputmpeg2 ;#フルパス
 my $thmfilename = "MAQ${mp4filenamestring}.THM";
 &writelog("ipodtranscode DEBUG thmfilename $thmfilename");
 
-system ("mplayer -ss 00:01:20 -vo jpeg:outdir=$pspdirname -ao null -sstep 1 -frames 3  -v 3 $outputfilename");
-
-&writelog("ipodtranscode DEBUG mplayer -ss 00:01:20 -vo jpeg:outdir=$pspdirname -ao null -sstep 1 -frames 3  -v 3 $outputfilename");
-
-if (-e "$pspdirname/$thmfilename"){
-$timestamp =`date "+%Y%m%d-%H%M%S"`;
-chomp $timestamp;
-	system("convert -crop 160x120+1+3 -resize 165x126\! $pspdirname/00000002.jpg $pspdirname/$thmfilename".$timestamp.".THM");
+#system ("mplayer -ss 00:01:20 -vo jpeg:outdir=$pspdirname -ao null -sstep 1 -frames 3  -v 3 $outputfilename");
+#
+#&writelog("ipodtranscode DEBUG mplayer -ss 00:01:20 -vo jpeg:outdir=$pspdirname -ao null -sstep 1 -frames 3  -v 3 $outputfilename");
+if($outputfilename =~ /.m2t$/){
+#ハイビジョンTS
+system ("mplayer -ss 00:01:20 -vo jpeg:outdir=$pspdirname -ao null -vf framestep=300step,scale=160:90,expand=160:120 -frames 1 $outputfilename");
+&writelog("ipodtranscode DEBUG mplayer -ss 00:01:20 -vo jpeg:outdir=$pspdirname -ao null -vf framestep=300step,scale=160:90,expand=160:120 -frames 1 $outputfilename");
 }else{
-	system("convert -crop 160x120+1+3 -resize 165x126\! $pspdirname/00000002.jpg $pspdirname/$thmfilename");
+#アナログ
+system ("mplayer -ss 00:01:20 -vo jpeg:outdir=$pspdirname -ao null -vf framestep=300step,scale=165:126,crop=160:120 -frames 1 $outputfilename");
+&writelog("ipodtranscode DEBUG mplayer -ss 00:01:20 -vo jpeg:outdir=$pspdirname -ao null -vf framestep=300step,scale=165:126,crop=160:120 -frames 1 $outputfilename");
 }
-&writelog("ipodtranscode DEBUG convert -crop 160x120+1+3 -resize 165x126\! $pspdirname/00000002.jpg $pspdirname/$thmfilename");
+#if (-e "$pspdirname/$thmfilename"){
+#	$timestamp = strftime("%Y%m%d-%H%M%S", localtime);
+#chomp $timestamp;
+#	system("convert -crop 160x120+1+3 -resize 165x126\! $pspdirname/00000002.jpg $pspdirname/$thmfilename".$timestamp.".THM");
+#}else{
+#	system("convert -crop 160x120+1+3 -resize 165x126\! $pspdirname/00000002.jpg $pspdirname/$thmfilename");
+#}
+#&writelog("ipodtranscode DEBUG convert -crop 160x120+1+3 -resize 165x126\! $pspdirname/00000002.jpg $pspdirname/$thmfilename");
 
-system("rm -rf $pspdirname/0000000*.jpg ");
-&writelog("ipodtranscode DEBUG rm -rf $pspdirname/0000000*.jpg");
+#system("rm -rf $pspdirname/0000000*.jpg ");
+#&writelog("ipodtranscode DEBUG rm -rf $pspdirname/0000000*.jpg");
+system("mv $pspdirname/00000001.jpg $pspdirname/$thmfilename");
 
 }#endsub makethumbnail
 
@@ -406,16 +427,14 @@ my $mp4filename = "MAQ${mp4filenamestring}.MP4";
 
 if (-e "${mp4outdir}MAQ${mp4filenamestring}.MP4"){
 # MP4ファイル名をPIDレコードに書き込み
-	$DBQuery =  "UPDATE foltia_subtitle SET PSPfilename = '$mp4filename' WHERE pid = '$pid' ";
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
-&writelog("ipodtranscode UPDATEsubtitleDB $DBQuery");
+	$sth = $dbh->prepare($stmt{'ipodtranscode.updatemp4file.1'});
+	$sth->execute($mp4filename, $pid);
+	&writelog("ipodtranscode UPDATEsubtitleDB $stmt{'ipodtranscode.updatemp4file.1'}");
 
 # MP4ファイル名をfoltia_mp4files挿入
-	$DBQuery = "insert into foltia_mp4files values ('$tid','$mp4filename') ";
-	 $sth = $dbh->prepare($DBQuery);
-	$sth->execute();
-&writelog("ipodtranscode UPDATEmp4DB $DBQuery");
+	$sth = $dbh->prepare($stmt{'ipodtranscode.updatemp4file.2'});
+	$sth->execute($tid, $mp4filename);
+	&writelog("ipodtranscode UPDATEmp4DB $stmt{'ipodtranscode.updatemp4file.2'}");
 
 &changefilestatus($pid,$FILESTATUSALLCOMPLETE);
 }else{
@@ -426,10 +445,8 @@ if (-e "${mp4outdir}MAQ${mp4filenamestring}.MP4"){
 }#updatemp4file
 
 sub counttranscodefiles(){
-my $DBQuery =  "SELECT count(*) FROM foltia_subtitle, foltia_program, foltia_m2pfiles 
-WHERE filestatus >= $FILESTATUSRECEND AND filestatus < $FILESTATUSTRANSCODECOMPLETE  AND foltia_program.tid = foltia_subtitle.TID AND foltia_program.PSP = 1  AND foltia_m2pfiles.m2pfilename = foltia_subtitle.m2pfilename  ";
-$sth = $dbh->prepare($DBQuery);
-$sth->execute();
+    $sth = $dbh->prepare($stmt{'ipodtranscode.counttranscodefiles.1'});
+    $sth->execute($FILESTATUSRECEND, $FILESTATUSTRANSCODECOMPLETE);
 my @titlecount= $sth->fetchrow_array;
 
 return ($titlecount[0]);

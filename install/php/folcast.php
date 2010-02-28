@@ -50,7 +50,7 @@ if (($tid >= 0 ) && ($tid != "")){
 
 $query = "
 SELECT  foltia_program.tid,foltia_program.title,
-foltia_subtitle.countno , foltia_subtitle.subtitle , foltia_subtitle.startdatetime, foltia_subtitle.pspfilename,foltia_subtitle.lengthmin,foltia_subtitle.enddatetime   FROM foltia_subtitle , foltia_program   WHERE \"pspfilename\" ~~ 'M%%'  AND foltia_program.tid = foltia_subtitle.tid AND foltia_program.tid = $tid   
+foltia_subtitle.countno , foltia_subtitle.subtitle , foltia_subtitle.startdatetime, foltia_subtitle.pspfilename,foltia_subtitle.lengthmin,foltia_subtitle.enddatetime   FROM foltia_subtitle , foltia_program   WHERE \"pspfilename\" LIKE 'M%%'  AND foltia_program.tid = foltia_subtitle.tid AND foltia_program.tid = $tid   
 ORDER BY \"enddatetime\" DESC 
 offset 0 limit  $max 
 	";
@@ -58,17 +58,18 @@ offset 0 limit  $max
 $titlequery = "
 SELECT  foltia_program.tid,foltia_program.title 
 FROM  foltia_program   
-WHERE foltia_program.tid = $tid   
+WHERE foltia_program.tid = ?   
 ";
-	$titlers = m_query($con, $query, "DBクエリに失敗しました");
-	$rowdata = pg_fetch_row($titlers, 0); 
+//	$titlers = m_query($con, $query, "DBクエリに失敗しました");
+	$titlers = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
+	$rowdata = $titlers->fetch();
 	$rsstitle = $rowdata[1];
 }else{
 
 $query = "
 SELECT  foltia_program.tid,foltia_program.title,
-foltia_subtitle.countno , foltia_subtitle.subtitle , foltia_subtitle.startdatetime, foltia_subtitle.pspfilename,foltia_subtitle.lengthmin,foltia_subtitle.enddatetime   FROM foltia_subtitle , foltia_program   WHERE \"pspfilename\" ~~ 'M%%'  AND foltia_program.tid = foltia_subtitle.tid ORDER BY \"enddatetime\" DESC 
-offset 0 limit  $max 
+foltia_subtitle.countno , foltia_subtitle.subtitle , foltia_subtitle.startdatetime, foltia_subtitle.pspfilename,foltia_subtitle.lengthmin,foltia_subtitle.enddatetime   FROM foltia_subtitle , foltia_program   WHERE \"pspfilename\" LIKE 'M%%'  AND foltia_program.tid = foltia_subtitle.tid ORDER BY \"enddatetime\" DESC 
+offset 0 limit  ? 
 	";
 	$rsstitle = "新規録画";
 }//if
@@ -95,16 +96,14 @@ $header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 $header = mb_convert_encoding($header,"UTF-8", "EUC-JP");
 print $header;
 
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$maxrows = pg_num_rows($rs);
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($max));
+$rowdata = $rs->fetch();
 
-if ($maxrows == 0) {
+if (! $rowdata) {
 				//die_exit("No items");	
 }else{
-
-for ($row = 0; $row < $maxrows; $row++) { 
-		$rowdata = pg_fetch_row($rs, $row);
-		
+	do {
 //$title = mb_convert_encoding($rowdata[1],"UTF-8", "EUC-JP");
 $tid =  $rowdata[0];
 $title = $rowdata[1];
@@ -162,7 +161,7 @@ $item ="    <item>
 $item = mb_convert_encoding($item,"UTF-8", "EUC-JP");
 print $item ;
 
-}//for
+	} while ($rowdata = $rs->fetch()); //do
 
 }//if
 		?>

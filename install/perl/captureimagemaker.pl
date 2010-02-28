@@ -13,7 +13,7 @@
 
 $path = $0;
 $path =~ s/captureimagemaker.pl$//i;
-if ($pwd  ne "./"){
+if ($path ne "./"){
 push( @INC, "$path");
 }
 
@@ -55,7 +55,7 @@ $countno =~ s/[^0-9]//ig;
 $date = $filename[2];
 $date =~ s/[^0-9]//ig;
 if ($date eq "" ){
-	$date =  `date  +%Y%m%d`
+    $date = strftime("%Y%m%d", localtime);
 }
 #	print "DATE:$date\n";
 
@@ -64,7 +64,7 @@ $time = $filename[3];
 $time = substr($time, 0, 4);
 $time =~ s/[^0-9]//ig;
 if ($time eq "" ){
-	$time =  `date  +%H%M`
+    $time =  strftime("%H%M", localtime);
 }
 #	print "TIME:$time\n";
 
@@ -118,10 +118,20 @@ unless (-e "$capimgdirname/$captureimgdir"){
 
 #　10秒ごとに
 if ($filename =~ /m2t$/){
-	&writelog("captureimagemaker DEBUG mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf scale=192:108 -ao null -sstep 9 -v 3 $recfolderpath/$filename");
-	system ("mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf scale=192:108 -ao null -sstep 9 -v 3 $recfolderpath/$filename");
+	&writelog("captureimagemaker DEBUG mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf scale=192:108 -ao null -sstep 9  $recfolderpath/$filename");
+	system ("mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf scale=192:108 -ao null -sstep 9  $recfolderpath/$filename");
+	if(-e "$capimgdirname/$captureimgdir/00000001.jpg" ){ #$capimgdirname/$captureimgdir/があったらなにもしない	
+	}else{ #空っぽなら再試行
+			&writelog("captureimagemaker DEBUG RETRY mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf framestep=300step,scale=192:108 -ao null $recfolderpath/$filename");
+		system ("mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf framestep=300step,scale=192:108 -ao null $recfolderpath/$filename");
+	}
+	
 }else{
 	&writelog("captureimagemaker DEBUG mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf crop=690:460:12:10,scale=160:120 -ao null -sstep 9 -v 3 $recfolderpath/$filename");
-	system ("mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf crop=690:460:12:10,scale=160:120 -ao null -sstep 9 -v 3 $recfolderpath/$filename");
+	system ("mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf crop=690:460:12:10,scale=160:120 -ao null -sstep 9 $recfolderpath/$filename");
+	if(-e "$capimgdirname/$captureimgdir/00000001.jpg" ){ #$capimgdirname/
+	}else{
+	system ("mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf framestep=300step,crop=690:460:12:10,scale=160:120 -ao null $recfolderpath/$filename");
+	}
 }
 
