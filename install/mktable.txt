@@ -160,13 +160,14 @@ INSERT INTO foltia_station VALUES (102, 'NHK-BS2', 0, 'BS11', '', '', '102', '',
 INSERT INTO foltia_station VALUES (103, 'NHK-BShi', 0, '', '', '', '103', '', '3003.ontvjapan.com',103,1);
 INSERT INTO foltia_station VALUES (409, 'BS日テレ', 0, '', '', '', '141', '', '3004.ontvjapan.com',141,1);
 INSERT INTO foltia_station VALUES (384, 'BS朝日', 0, '', '', '', '151', '', '3005.ontvjapan.com',151,1);
-INSERT INTO foltia_station VALUES (161, 'BS-i', 0, '', '', '', '161', '', '3006.ontvjapan.com',161,1);
+INSERT INTO foltia_station VALUES (161, 'BS-TBS', 0, '', '', '', '161', '', '3006.ontvjapan.com',161,1);
 INSERT INTO foltia_station VALUES (389, 'BS Japan', 0, '', '', '', '171', '','3007.ontvjapan.com',171,1);
 INSERT INTO foltia_station VALUES (381, 'BSフジ', 0, '', '', '', '181', '', '3008.ontvjapan.com',181,1);
 INSERT INTO foltia_station VALUES (191, 'WOWOW', 0, 'BS5', '', '', '191', '', '3009.ontvjapan.com',191,1);
 INSERT INTO foltia_station VALUES (420, 'WOWOW2', 0, '', '', '', '192', '', '3010.ontvjapan.com',192,1);
 INSERT INTO foltia_station VALUES (421, 'WOWOW3', 0, '', '', '', '193', '', '3011.ontvjapan.com',193,1);
-INSERT INTO foltia_station VALUES (468, 'BS11デジタル', 0, '', '', '', '211', '', '',211,1);
+INSERT INTO foltia_station VALUES (468, 'BS11デジタル', 0, '', '', '', '211', '', '3013.ontvjapan.com',211,1);
+INSERT INTO foltia_station VALUES (469, 'Twellv', 0, '', '', '', '222', '', '3014.ontvjapan.com',222,1); 
 INSERT INTO foltia_station VALUES (408, 'ファミリー劇場', 0, '', '', '', '751', '', '1015.ontvjapan.com',NULL,NULL);
 INSERT INTO foltia_station VALUES (397, 'カートゥーンネットワーク', 0, '', '', '', '780', '', '1046.ontvjapan.com',NULL,NULL);
 INSERT INTO foltia_station VALUES (263, 'アニマックス', 0, '', '', '', '782', '', '1047.ontvjapan.com',NULL,NULL);
