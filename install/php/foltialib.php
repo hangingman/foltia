@@ -159,7 +159,7 @@ function m_query($dbh, $query, $errmessage) {
 		}
 	}
 /* SQL 文を実行 */
-function sql_query($dbh, $query, $errmessage,$paramarray) {
+function sql_query($dbh, $query, $errmessage,$paramarray=null) {
 	try {
 		$rtn = $dbh->prepare("$query");
 		$rtn->execute($paramarray);
