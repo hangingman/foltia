@@ -238,6 +238,10 @@ UNION
 SELECT DISTINCT  stationid,stationname,stationrecch ,digitalch 
 FROM  foltia_station 
 WHERE digitalch > 0 
+UNION
+SELECT DISTINCT  stationid,stationname,stationrecch ,digitalch 
+FROM  foltia_station 
+WHERE stationrecch = -2 
 ORDER BY x ASC";
 
 $stations = sql_query($con, $query, "DBクエリに失敗しました");
@@ -247,6 +251,8 @@ if ($rowdata) {
 			   do {
 			if ($recstid == $rowdata[0]){
 			print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" checked />  $rowdata[1] ($rowdata[2]ch / $rowdata[3]ch)　\n";
+			}elseif( $rowdata[2] == -2){
+			print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" checked />  $rowdata[1] (<!-- $rowdata[2]ch / $rowdata[3]ch -->RADIKO)　\n";
 			}else{
 				print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" />  $rowdata[1] ($rowdata[2]ch / $rowdata[3]ch)　\n";
 			}

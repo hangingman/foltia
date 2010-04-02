@@ -31,7 +31,7 @@ if ($fname eq "" ){
 }
 
 #ファイル名正当性チェック
-if ($fname =~ /.m2p$|.m2t$/){
+if ($fname =~ /.m2p$|.m2t$|.aac$/){
 
 }else{
 #	print "deletemovie invalid filetype.\n";

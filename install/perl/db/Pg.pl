@@ -53,6 +53,7 @@
 'recwrap.5' => "UPDATE foltia_subtitle SET PSPfilename = ? WHERE pid = ?",
 'recwrap.6' => "INSERT into foltia_mp4files VALUES (?, ?)",
 'recwrap.7' => "SELECT foltia_subtitle.tid,foltia_subtitle.countno,foltia_subtitle.subtitle,foltia_subtitle.startdatetime ,foltia_subtitle.enddatetime ,foltia_subtitle.lengthmin ,foltia_tvrecord.bitrate , foltia_subtitle.startoffset , foltia_subtitle.pid ,foltia_tvrecord.digital FROM foltia_subtitle ,foltia_tvrecord WHERE foltia_tvrecord.tid = foltia_subtitle.tid AND foltia_tvrecord.tid = ? AND foltia_subtitle.startdatetime = ? AND foltia_tvrecord.digital = 1",
+'recwrap.8' => "SELECT stationid,stationname,stationrecch,tunertype FROM foltia_station WHERE stationid = ? ",
 
 'schedulecheck.1' => "SELECT count(*) FROM foltia_tvrecord",
 'schedulecheck.2' => "SELECT tid ,stationid FROM foltia_tvrecord",

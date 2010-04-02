@@ -30,13 +30,19 @@ $dbh->{AutoCommit} = 0;
 #　ひとまず消す
 $sth = $dbh->prepare($stmt{'updatem2pfiletable.1'});
 	$sth->execute();
-
 while ($file = glob("$recfolderpath/*.m2?")) {
 $file =~ s/$recfolderpath\///;
     $sth = $dbh->prepare($stmt{'updatem2pfiletable.2'});
     $sth->execute($file);
 # print "$file\n";
 }#while
+while ($file = glob("$recfolderpath/*.aac")) {
+$file =~ s/$recfolderpath\///;
+    $sth = $dbh->prepare($stmt{'updatem2pfiletable.2'});
+    $sth->execute($file);
+# print "$file\n";
+}#while
+
 $oserr = $dbh->commit;
 
 # foltia_mp4files

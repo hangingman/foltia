@@ -54,6 +54,9 @@ if ($usedigital == 1){
 }else{
 	$extension = ".m2p";#MPEG2の拡張子
 }
+if ($recch == -2 ){ #ラジオ局
+	$extension = ".aac";#MPEG2の拡張子
+}
 
 $outputfile = strftime("%Y%m%d-%H%M", localtime(time + 60));
 chomp($outputfile);
@@ -70,6 +73,31 @@ if ($tid == 0){
 		$mp4newstylefilename = "-" . $tid ."-".$countno."-".$outputfile;
 	}
 }
+
+if ($recch == -2 ){ #ラジオ局
+# stationIDからradiko識別子を取得
+$sth = $dbh->prepare($stmt{'recwrap.8'});
+$sth->execute($stationid);
+ @stationline= $sth->fetchrow_array;
+$radikostationname = $stationline[3];
+
+$oserr = system("$toolpath/perl/digitalradiorecording.pl $radikostationname $reclength $outputfilename");
+$oserr = $oserr / 256;
+&writelog("recwrap DEBUG radiko rec finished. $oserr");
+
+# aacファイル名をfoltia_subtitlePIDレコードに書き込み
+$sth = $dbh->prepare($stmt{'recwrap.1'});
+$sth->execute($outputfilename, $pid);
+&writelog("recwrap DEBUG UPDATEDB $stmt{'recwrap.1'}");
+&changefilestatus($pid,$FILESTATUSTRANSCODEMP4BOX);
+
+# aacファイル名をfoltia_m2pfilesPIDレコードに書き込み
+$sth = $dbh->prepare($stmt{'recwrap.2'});
+$sth->execute($outputfilename);
+&writelog("recwrap DEBUG UPDATEDB $stmt{'recwrap.2'}");
+
+
+}else{#非ラジオ局なら
 
 if ($usedigital == 1){
 #デジタルなら
@@ -95,7 +123,7 @@ if ($oserr == 1){
 &writelog("recwrap ABORT:ERR 3");
 exit ;
 }
-}else{
+}else{ # NOT $usedigital == 1
 #リモコン操作
 # $haveirdaunit = 1;リモコンつないでるかどうか確認
 if ($haveirdaunit == 1){
@@ -175,7 +203,7 @@ if (-e "$toolpath/perl/captureimagemaker.pl"){
 	system ("$toolpath/perl/captureimagemaker.pl $outputfilename");
 &changefilestatus($pid,$FILESTATUSCAPEND);
 }
-
+}#非ラジオ局
 
 # MPEG4 ------------------------------------------------------
 #MPEG4トラコン必要かどうか
@@ -183,9 +211,9 @@ $sth = $dbh->prepare($stmt{'recwrap.3'});
 $sth->execute($tid);
  @psptrcn= $sth->fetchrow_array;
 if ($psptrcn[0]  == 1 ){#トラコン番組
-&writelog("recwrap Launch ipodtranscode.pl");
-exec ("$toolpath/perl/ipodtranscode.pl");
-exit;
+	&writelog("recwrap Launch ipodtranscode.pl");
+	exec ("$toolpath/perl/ipodtranscode.pl");
+	exit;
 }#PSPトラコンあり
 
 sub continuousrecordingcheck(){

@@ -81,6 +81,7 @@ foreach ($delete as $fName) {
 
 		$filesplit = split("-",$fName);
 	
+/*
 if ($filesplit[1] == ""){
 $query = "
 SELECT 
@@ -89,34 +90,35 @@ FROM foltia_subtitle , foltia_program
 WHERE foltia_program.tid = foltia_subtitle.tid  
  AND foltia_subtitle.tid = ? 
 ";
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0]));
 				$rall = $rs->fetchAll();
-				$rowdata = $rall[$row];
-//print" $fName./$rowdata[1]//$rowdata[2]<BR>\n";
+				//$rowdata = $rall[$row];
+				$rowdata = $rall[0];
 $title = $rowdata[1];
 $subtitle = "";
 $count = "";
-}else{
+*/
+//}else{
 
 $query = "
-SELECT 
-foltia_program.tid,foltia_program.title,foltia_subtitle.countno,foltia_subtitle.subtitle  
-FROM foltia_subtitle , foltia_program   
-WHERE foltia_program.tid = foltia_subtitle.tid  
- AND foltia_subtitle.tid = ? 
- AND foltia_subtitle.countno = ? 
+SELECT foltia_program.tid,foltia_program.title,foltia_subtitle.countno,foltia_subtitle.subtitle 
+FROM foltia_subtitle , foltia_program 
+WHERE foltia_program.tid = foltia_subtitle.tid 
+AND foltia_subtitle.m2pfilename =  ? 
 ";
+
 //$rs = m_query($con, $query, "DBクエリに失敗しました");
-$rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0] ,$filesplit[1]));
+//$rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0] ,$filesplit[1]));
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($fName));
 				$rall = $rs->fetchAll();
-				$rowdata = $rall[$row];
+				//$rowdata = $rall[$row];
+				$rowdata = $rall[0];
 //print" $fName./$rowdata[1]/$rowdata[2]/$rowdata[3]<BR>\n";
 $title = $rowdata[1];
 $count = $rowdata[2];
 $subtitle = $rowdata[3];
 
-}//end if 話数がNULL
+//}//end if 話数がNULL
 
 $tid = htmlspecialchars($rowdata[0]);
 $title = htmlspecialchars($title);
@@ -126,7 +128,15 @@ $subtitle = htmlspecialchars($subtitle);
 print "
 <tr>
 <td>$fName<br></td>
-<td><a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a></td>
+<td>";
+
+if ($tid > 0 ){
+	print "<a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a>";
+}else{
+	print "$title";
+}
+
+print "</td>
 <td>$count<br></td>
 <td>$subtitle<br></td>
 </tr>\n

@@ -133,14 +133,11 @@ if ($filestatus <= $FILESTATUSCAPEND){
 if ($filestatus <= $FILESTATUSWAITINGTRANSCODE){
 }
 
-
 $filenamebody = $inputmpeg2 ;
-$filenamebody =~ s/.m2t$|.ts$|.m2p$|.mpg$//gi;
+$filenamebody =~ s/.m2t$|.ts$|.m2p$|.mpg$|.aac$//gi;
 
 #デジタルかアナログか
-if ($inputmpeg2 =~ /m2t$|ts$/i){
-	#print "MPEG2-TS\n";
-
+if ($inputmpeg2 =~ /m2t$|ts$|aac$/i){
 
 if ($filestatus <= $FILESTATUSTRANSCODETSSPLITTING){
 		unlink("${filenamebody}_tss.m2t");
@@ -236,21 +233,32 @@ if ($filestatus <= $FILESTATUSTRANSCODEAAC){
 
 }
 if ($filestatus <= $FILESTATUSTRANSCODEMP4BOX){
+
+unlink("${filenamebody}.base.mp4");
+
+#デジタルラジオなら
+if ($inputmpeg2 =~ /aac$/i){
+	if (-e "$toolpath/perl/tool/MP4Box"){
+		&writelog("ipodtranscode MP4Box $filenamebody");
+		system ("cd $recfolderpath ;$toolpath/perl/tool/MP4Box -add $filenamebody.aac  -new $filenamebody.base.mp4");
+	$exit_value = $? >> 8;
+	$signal_num = $? & 127;
+	$dumped_core = $? & 128;
+	&writelog("ipodtranscode DEBUG MP4Box -add $filenamebody.aac  -new $filenamebody.base.mp4:$exit_value:$signal_num:$dumped_core");
+	}else{
+		&writelog("ipodtranscode WARN; Pls. install $toolpath/perl/tool/MP4Box");
+	}
+}else{
 	# MP4ビルド
-	unlink("${filenamebody}.base.mp4");
 	if (-e "$toolpath/perl/tool/MP4Box"){
 		&changefilestatus($pid,$FILESTATUSTRANSCODEMP4BOX);
 		&writelog("ipodtranscode MP4Box $filenamebody");
-#			system ("cd $recfolderpath ; MP4Box -fps 29.97 -add $filenamebody.264 -new $filenamebody.base.mp4");
-			system ("cd $recfolderpath ;$toolpath/perl/tool/MP4Box -fps 29.97 -add $filenamebody.264 -new $filenamebody.base.mp4");
+		system ("cd $recfolderpath ;$toolpath/perl/tool/MP4Box -fps 29.97 -add $filenamebody.264 -new $filenamebody.base.mp4");
 	$exit_value = $? >> 8;
 	$signal_num = $? & 127;
 	$dumped_core = $? & 128;
 	&writelog("ipodtranscode DEBUG MP4Box -fps 29.97 -add $filenamebody.264 -new $filenamebody.base.mp4:$exit_value:$signal_num:$dumped_core");
-
-	
 		if (-e "$filenamebody.base.mp4"){
-#		system ("cd $recfolderpath ; MP4Box -add $filenamebody.aac $filenamebody.base.mp4");
 		system ("cd $recfolderpath ;$toolpath/perl/tool/MP4Box -add $filenamebody.aac $filenamebody.base.mp4");
 	$exit_value = $? >> 8;
 	$signal_num = $? & 127;
@@ -264,6 +272,9 @@ if ($filestatus <= $FILESTATUSTRANSCODEMP4BOX){
 	}else{
 		&writelog("ipodtranscode WARN; Pls. install $toolpath/perl/tool/MP4Box");
 	}
+unlink("$filenamebody.aac");
+}#endif #デジタルラジオなら
+	
 #}
 
 #if ($filestatus <= $FILESTATUSTRANSCODEATOM){
@@ -298,7 +309,6 @@ if ($filestatus <= $FILESTATUSTRANSCODECOMPLETE){
 	unlink("${filenamebody}_tss.m2t");
 	unlink("$filenamebody.264");
 	unlink("$filenamebody.wav");
-	unlink("$filenamebody.aac");
 	unlink("$filenamebody.base.mp4");
 	
 	&updatemp4file();
