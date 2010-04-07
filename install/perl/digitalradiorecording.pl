@@ -112,13 +112,24 @@ if ( -e "$outputfile" ){
 
 sub calldigitalrecorder{
 
-if  (-e "$toolpath/perl/tool/ffmpeg"){
-	
+#if  (-e "$toolpath/perl/tool/ffmpeg"){
+#2010/4/7 radikoに対策されたのでffmpeg直接受信できなくなった
 #./ffmpeg -i rtmp://radiko.smartstream.ne.jp:1935/QRR/_defInst_/simul-stream -t 180 -acodec copy ~/php/tv/qrr.aac
-&writelog("digitalradiorecording :DEBUG :$toolpath/perl/tool/ffmpeg -y -i rtmp://radiko.smartstream.ne.jp:1935/$stationname/_defInst_/simul-stream -t $reclengthsec -acodec copy $outputfile.");
+#&writelog("digitalradiorecording :DEBUG :$toolpath/perl/tool/ffmpeg -y -i rtmp://radiko.smartstream.ne.jp:1935/$stationname/_defInst_/simul-stream -t $reclengthsec -acodec copy $outputfile.");
+#system("$toolpath/perl/tool/ffmpeg -y -i rtmp://radiko.smartstream.ne.jp:1935/$stationname/_defInst_/simul-stream -t $reclengthsec -acodec copy $outputfile");
 
-system("$toolpath/perl/tool/ffmpeg -y -i rtmp://radiko.smartstream.ne.jp:1935/$stationname/_defInst_/simul-stream -t $reclengthsec -acodec copy $outputfile");
+if  (-e "$toolpath/perl/tool/rtmpdump"){
+#./rtmpdump -y "simul-stream" -n "radiko.smartstream.ne.jp" -c 1935  -p "http://radiko.jp/player/player.html#QRR" -a "QRR/_defInst_" -f "WIN 10,0,45,2" -v -B 180 -o joqr.flv
 
+&writelog("digitalradiorecording :DEBUG :$toolpath/perl/tool/rtmpdump -y \"simul-stream\" -n \"radiko.smartstream.ne.jp\" -c 1935  -p \"http://radiko.jp/player/player.html#${stationname}\" -a \"$stationname/_defInst_\" -f \"WIN 10,0,45,2\" -v -B $reclengthsec -o ${outputfile}.flv");
+
+system("$toolpath/perl/tool/rtmpdump -y \"simul-stream\" -n \"radiko.smartstream.ne.jp\" -c 1935  -p \"http://radiko.jp/player/player.html#${stationname}\" -a \"$stationname/_defInst_\" -f \"WIN 10,0,45,2\" -v -B $reclengthsec -o ${outputfile}.flv");
+
+&writelog("digitalradiorecording :DEBUG :ffmpeg -y -i ${outputfile}.flv -vn -acodec copy $outputfile");
+
+system("ffmpeg -y -i ${outputfile}.flv -vn -acodec copy $outputfile");
+
+unlink("${outputfile}.flv");
 }else{
 	&writelog("digitalradiorecording :ABORT :File not found,recordable ffmpeg on $toolpath/perl/tool/ffmpeg. Show http://d.hatena.ne.jp/nazodane/20100315/1268646192 ");
 	exit 1;

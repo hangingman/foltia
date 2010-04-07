@@ -369,7 +369,18 @@ if ($bandtype == 0){
 		# b6 # Star Channel
 
 }elsif($bandtype == 2){
-# 110度CSよくわかんない
+# recpt1でのみ動作確認
+		if ($recch == 333) {
+			$recch = "CS16";#333ch：アニメシアターX(AT-X) 
+		}elsif($recch == 330){
+			$recch = "CS22";#330ch：キッズステーション 
+		}elsif($recch == 332){
+			$recch = "CS20";#332ch：アニマックス 
+		}else{
+			$recch = "CS16";#333ch：アニメシアターX(AT-X) 
+		}
+
+
 }else{
 	&writelog("digitaltvrecording :ERROR :Unsupported and type (digital CS).");
 	exit 3;
@@ -378,8 +389,14 @@ if ($bandtype == 0){
 # PT1
 # b25,recpt1があるか確認
 	if  (-e "$toolpath/perl/tool/recpt1"){
+		if ($bandtype >= 1){ #BS/CSなら
+		#[foltia@velvia tool]$ ./recpt1 --b25 --sid 333 CS16 180 ~/php/tv/atxtest.m2t
+		&writelog("digitaltvrecording DEBUGrecpt1 --b25 --sid $originalrecch  $recch $reclengthsec $outputfile   ");
+		$oserr = system("$toolpath/perl/tool/recpt1 --b25 --sid $originalrecch  $recch $reclengthsec $outputfile  ");
+		}else{ 
 		&writelog("digitaltvrecording DEBUG recpt1 --b25  $originalrecch $reclengthsec $outputfile  ");
 		$oserr = system("$toolpath/perl/tool/recpt1 --b25  $originalrecch $reclengthsec $outputfile  ");
+		}
 		$oserr = $oserr >> 8;
 			if ($oserr > 0){
 			&writelog("digitaltvrecording :ERROR :PT1 is BUSY.$oserr");
