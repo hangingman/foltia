@@ -123,7 +123,8 @@ if  (-e "$toolpath/perl/tool/rtmpdump"){
 
 &writelog("digitalradiorecording :DEBUG :$toolpath/perl/tool/rtmpdump -y \"simul-stream\" -n \"radiko.smartstream.ne.jp\" -c 1935  -p \"http://radiko.jp/player/player.html#${stationname}\" -a \"$stationname/_defInst_\" -f \"WIN 10,0,45,2\" -v -B $reclengthsec -o ${outputfile}.flv");
 
-system("$toolpath/perl/tool/rtmpdump -y \"simul-stream\" -n \"radiko.smartstream.ne.jp\" -c 1935  -p \"http://radiko.jp/player/player.html#${stationname}\" -a \"$stationname/_defInst_\" -f \"WIN 10,0,45,2\" -v -B $reclengthsec -o ${outputfile}.flv");
+#system("$toolpath/perl/tool/rtmpdump -y \"simul-stream\" -n \"radiko.smartstream.ne.jp\" -c 1935  -p \"http://radiko.jp/player/player.html#${stationname}\" -a \"$stationname/_defInst_\" -f \"WIN 10,0,45,2\" -v -B $reclengthsec -o ${outputfile}.flv");
+system("$toolpath/perl/tool/rtmpdump  -r \"rtmpe://radiko.smartstream.ne.jp:1935/$stationname/_defInst_/simul-stream\" -p \"http://radiko.jp/player/player.html#${stationname}\" -f \"WIN 10,0,45,2\" -v -B $reclengthsec -o ${outputfile}.flv");
 
 &writelog("digitalradiorecording :DEBUG :ffmpeg -y -i ${outputfile}.flv -vn -acodec copy $outputfile");
 
