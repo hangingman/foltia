@@ -52,7 +52,7 @@ $query = "
 SELECT  foltia_program.tid,foltia_program.title,
 foltia_subtitle.countno , foltia_subtitle.subtitle , foltia_subtitle.startdatetime, foltia_subtitle.pspfilename,foltia_subtitle.lengthmin,foltia_subtitle.enddatetime   FROM foltia_subtitle , foltia_program   WHERE \"pspfilename\" LIKE 'M%%'  AND foltia_program.tid = foltia_subtitle.tid AND foltia_program.tid = $tid   
 ORDER BY \"enddatetime\" DESC 
-offset 0 limit  $max 
+limit  $max offset 0 
 	";
 
 $titlequery = "
