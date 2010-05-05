@@ -67,7 +67,7 @@ printhtmlpageheader();
   <hr size="4">
 <p align="left">全番組リストを表示します。</p>
 
-<?
+<?php
 		/* フィールド数 */
 $maxcols = $rs->columnCount();
 		?>

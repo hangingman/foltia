@@ -107,7 +107,7 @@ printhtmlpageheader();
   <hr size="4">
 <p align="left">録画予約番組放映予定と予約番組名を表示します。</p>
 
-<?
+<?php
      $rowdata = $rs->fetch();
      if (! $rowdata) {
 		print "番組データがありません<BR>\n";			

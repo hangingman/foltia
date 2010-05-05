@@ -91,7 +91,7 @@ print "			<th align=\"left\">キャプ</th>\n";
 	<tbody>
 
 
-<?
+<?php
 $list = getgetform('list');
 
 //旧仕様
