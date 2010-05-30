@@ -100,10 +100,13 @@ WHERE stationid = ? ";
 //	$stationvalid = m_query($con, $query, "DBクエリに失敗しました");
 	$stationvalid = sql_query($con, $query, "DBクエリに失敗しました",array($recstid));
 		$recstationname = $stationvalid->fetch();
-		if (! $recstationname) {
+		if (!is_array($recstationname) || empty($recstationname)) {
 		$errflag = 3;
 		$errmsg = "放送局設定が異常です。";
 	}
+}else{
+	$errflag = 2;
+	$errmsg = "録画する局を設定してください。";
 }
 //デジタル優先
 /*if ($usedigital == 1){

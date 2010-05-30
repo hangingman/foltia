@@ -74,9 +74,10 @@ foltia_subtitle.pid = ?
 
 //	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($pid));
-$rowdata = $rs->fetch();
-if (! $rowdate) {
-		die_exit("登録番組がありません<BR>");
+	$rowdata = $rs->fetch();
+
+		if (!is_array($rowdata) || empty($rowdata)) {
+			die_exit("登録番組がありません<BR>");
 		}
 
 		$pid = htmlspecialchars($rowdata[0]);
