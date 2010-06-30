@@ -96,7 +96,7 @@ $list = getgetform('list');
 
 //旧仕様
 if($list == "raw"){
-exec ("ls -t  $recfolderpath/*.m2?", $m2pfiles);
+exec ("ls -t  $recfolderpath/*.???", $m2pfiles);
 
 
 foreach($m2pfiles as $pathfName) {
@@ -105,7 +105,7 @@ $fName = array_pop($fNametmp);
 //print "FILENAME:$fName<BR>\n";
 
         if(($fName == ".") or ($fName == "..") ){ continue; }
-	if (ereg(".m2.+", $fName)){
+	if ((ereg(".m2.+", $fName))|| (ereg(".aac", $fName))){
 		$filesplit = split("-",$fName);
 	
 if ($filesplit[1] == ""){
@@ -119,7 +119,7 @@ WHERE foltia_program.tid = foltia_subtitle.tid
 //$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0]));
 				$rall = $rs->fetchAll();
-				$rowdata = $rall[$row];
+				$rowdata = $rall[0];
 //print" $fName./$rowdata[1]//$rowdata[2]<BR>\n";
 $title = $rowdata[1];
 $subtitle = "";
@@ -137,7 +137,7 @@ WHERE foltia_program.tid = foltia_subtitle.tid
 //$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0],$filesplit[1]));
 				$rall = $rs->fetchAll();
-				$rowdata = $rall[$row];
+				$rowdata = $rall[0];
 //print" $fName./$rowdata[1]/$rowdata[2]/$rowdata[3]<BR>\n";
 $title = $rowdata[1];
 $count = $rowdata[2];
