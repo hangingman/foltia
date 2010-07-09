@@ -100,6 +100,8 @@ WHERE stationid = ? ";
 //	$stationvalid = m_query($con, $query, "DBクエリに失敗しました");
 	$stationvalid = sql_query($con, $query, "DBクエリに失敗しました",array($recstid));
 		$recstationname = $stationvalid->fetch();
+		$stationvalid->closeCursor();
+
 		if (!is_array($recstationname) || empty($recstationname)) {
 		$errflag = 3;
 		$errmsg = "放送局設定が異常です。";
@@ -130,6 +132,7 @@ $query = "SELECT min(pid) FROM  foltia_subtitle ";
 //	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました");
 	$rowdata = $rs->fetch();
+	$rs->closeCursor();
 	if (! $rowdata) {
 		$insertpid = -1 ;
 	}else{
@@ -145,6 +148,7 @@ $query = "SELECT max(countno) FROM  foltia_subtitle WHERE tid = 0";
 //	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました");
 			$rowdata = $rs->fetch();
+			$rs->closeCursor();
 			if (! $rowdata) {
 	$nextcno = 1 ;
 	}else{
@@ -174,21 +178,6 @@ startdatetime ,enddatetime ,startoffset , lengthmin , epgaddedby )
 	//echo("$toolpath/perl/addatq.pl $tid $station");
 	exec("$toolpath/perl/addatq.pl 0 0");
 	$oserr = system("$toolpath/perl/addatq.pl 0 0");
-	//---------------------------------------------------
-			if ($oserr){
-			print "[DEBUG]$oserr 「$toolpath/perl/addatq.pl 0 0」<br>\n";
-		}else{
-			print "[DEBUG]exec addatq.pl false 「$toolpath/perl/addatq.pl 0 0」<br>\n";
-			
-			$oserr = system("$toolpath/perl/perltestscript.pl");
-			if ($oserr){
-				print "[DEBUG]exec perltestscript.pl $oserr<br>\n";
-			}else{
-				print "[DEBUG]exec perltestscript.pl false <br>\n";
-			}
-			
-		}
-	//-----------------------------------------------------
 	}else{
 		print "EPG予約を行う権限がありません。";
 	}// end if $userclass <= 2
@@ -263,6 +252,7 @@ if ($rowdata) {
 }else{
 print "放送局データベースが正しくセットアップされていません。録画可能局がありません";
 }
+$stations->closeCursor();
 //外部入力チャンネル
 $query = "
 SELECT stationid as x ,stationname,stationrecch 
@@ -285,6 +275,7 @@ if ($rowdata) {
 		}
 	} while ($rowdata = $stations->fetch());
 }
+$stations->closeCursor();
 /*
 print "<p>デジタル録画を優先:";
 
