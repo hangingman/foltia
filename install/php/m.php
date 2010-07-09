@@ -176,7 +176,7 @@ startdatetime ,enddatetime ,startoffset , lengthmin , epgaddedby )
 	//キュー入れプログラムをキック
 	//引数　TID チャンネルID
 	//echo("$toolpath/perl/addatq.pl $tid $station");
-	exec("$toolpath/perl/addatq.pl 0 0");
+	//exec("$toolpath/perl/addatq.pl 0 0");
 	$oserr = system("$toolpath/perl/addatq.pl 0 0");
 	}else{
 		print "EPG予約を行う権限がありません。";
