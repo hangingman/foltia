@@ -39,14 +39,17 @@ exit;
 &writelog("getxml2db  Normal launch.");
 }
 
-if ($ARGV[0]  eq "long"){
-	$uri="http://cal.syoboi.jp/cal_chk.php";
-	#$uri="http://syobocal.orz.hm/cal_chk.php";
-	&writelog("getxml2db  use long mode.");
-}else{
-	$uri="http://cal.syoboi.jp/cal_chk.xml";
-	#$uri="http://syobocal.orz.hm/cal_chk.xml";
-}
+# http://sites.google.com/site/syobocal/spec/cal_chk-php
+#if ($ARGV[0]  eq "long"){
+#	$uri="http://cal.syoboi.jp/cal_chk.php";
+#	#$uri="http://syobocal.orz.hm/cal_chk.php";
+#	&writelog("getxml2db  use long mode.");
+#}else{
+#	$uri="http://cal.syoboi.jp/cal_chk.xml";
+#	#$uri="http://syobocal.orz.hm/cal_chk.xml";
+#}
+$uri = "http://cal.syoboi.jp/cal_chk.php?days=";
+$uri .= ($ARGV[0] eq "long")? 14: 7;
 
 $dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
@@ -70,8 +73,11 @@ close(SHOBO);
 #my (@line) = split(/\n/, $content);
 
 foreach(@line){
+s/\xef\xbd\x9e/\xe3\x80\x9c/g; #wavedash
+s/\xef\xbc\x8d/\xe2\x88\x92/g; #hyphenminus
+s/&#([0-9A-Fa-f]{2,6});/(chr($1))/eg; #'遊戯王5D&#039;s'とかの数値参照対応を
 
-Jcode::convert(\$_,'euc');
+Jcode::convert(\$_,'euc','utf8'); 
 
 #<ProgItem PID="21543" TID="528" StTime="20041114213000" EdTime="20041114220000" ChName="AT-X" Count="4" StOffset="0" SubTitle="いやだよ、サヨナラ…" Title="おとぎストーリー 天使のしっぽ" ProgComment=""/>
 if (/^<ProgItem /){
@@ -95,7 +101,7 @@ s/(\w+)=/\$item{$1}=/gio;#by foltiaBBS
 #$item{Title}='おとぎストーリー 天使のしっぽ';
 #$item{ProgComment}='';
 eval("$_");
-Jcode::convert(\$item{Title},'euc');
+#Jcode::convert(\$item{Title},'euc');
 
 $programtitlename = $item{Title};
 $programtitlename =~ s/\&lt\;/</gi;
@@ -104,8 +110,8 @@ $programtitlename =~ s/\&amp\;/\&/gi;
 #	$programtitle = $dbh->quote($programtitlename);
 	$programtitle = $programtitlename;
 
-Jcode::convert(\$item{ChName},'euc');
-Jcode::convert(\$item{SubTitle},'euc');
+#Jcode::convert(\$item{ChName},'euc');
+#Jcode::convert(\$item{SubTitle},'euc');
 
 #$programSubTitle = $dbh->quote($item{SubTitle});
 $programSubTitle = $item{SubTitle};
