@@ -219,7 +219,7 @@ if ($psptrcn[0]  == 1 ){#トラコン番組
 sub continuousrecordingcheck(){
     my $now = time() + 60 * 2;
 &writelog("recwrap DEBUG continuousrecordingcheck() now $now");
-my @processes =`ps ax | grep recfriio`;
+my @processes =`ps ax | grep -e recpt1 -e recfriio`; #foltiaBBS もうすぐ終了する番組のプロセスをkill 投稿日 2010年08月05日03時19分33秒 投稿者 Nis 
 
 my $psline = "";
 my @processline = "";
@@ -227,7 +227,7 @@ my $pid = "";
 my @pid;
 my $sth;
 foreach (@processes){
-	if (/friiodetect/) {
+	if (/recpt1|friiodetect/) {
 		if (/^.[0-9]*\s/){
 			push(@pid, $&);
 		}#if
