@@ -66,23 +66,27 @@ $startmin =   substr($start,10,2);
 print "($startyear/$startmonth/$startday $starthour:$startmin-)<BR>\n";
 
 $yesterday = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday -1 , $startyear));
+$dayyesterday = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday -1 , $startyear));
 $today0400 = date ("YmdHi",mktime(4 , 0 , 0, $startmonth , $startday  , $startyear));
+$today0800 = date ("YmdHi",mktime(8 , 0 , 0, $startmonth , $startday  , $startyear));
 $today1200 = date ("YmdHi",mktime(12 , 0 , 0, $startmonth , $startday , $startyear));
+$today1600 = date ("YmdHi",mktime(16 , 0 , 0, $startmonth , $startday , $startyear));
 $today2000 = date ("YmdHi",mktime(20 , 0 , 0, $startmonth , $startday , $startyear));
+$today2359 = date ("YmdHi",mktime(23 , 59 , 0, $startmonth , $startday , $startyear));
 $day1after = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday +1 , $startyear));
-$day1 = date ("m/d",mktime($starthour , 0 , 0, $startmonth , $startday +1 , $startyear));
+$day1 = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday +1 , $startyear));
 $day2after = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday +2 , $startyear));
-$day2 = date ("m/d",mktime($starthour , 0 , 0, $startmonth , $startday +2 , $startyear));
+$day2 = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday +2 , $startyear));
 $day3after = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday +3 , $startyear));
-$day3 = date ("m/d",mktime($starthour , 0 , 0, $startmonth , $startday +3 , $startyear));
+$day3 = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday +3 , $startyear));
 $day4after = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday +4 , $startyear));
-$day4 = date ("m/d",mktime($starthour , 0 , 0, $startmonth , $startday +4 , $startyear));
+$day4 = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday +4 , $startyear));
 $day5after = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday +5 , $startyear));
-$day5 = date ("m/d",mktime($starthour , 0 , 0, $startmonth , $startday +5 , $startyear));
+$day5 = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday +5 , $startyear));
 $day6after = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday +6 , $startyear));
-$day6 = date ("m/d",mktime($starthour , 0 , 0, $startmonth , $startday +6 , $startyear));
+$day6 = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday +6 , $startyear));
 $day7after = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday +7 , $startyear));
-$day7 = date ("m/d",mktime($starthour , 0 , 0, $startmonth , $startday +7 , $startyear));
+$day7 = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday +7 , $startyear));
 
 
 
@@ -114,7 +118,7 @@ if (($page == "")|| ($page <= 0) ){
 }
 
 
-print "←<A HREF=\"./viewepg.php?p=$page&start=$yesterday\">前の日</A>　<A HREF=\"./viewepg.php\">現在</A>　当日(<A HREF=\"./viewepg.php?p=$page&start=$today0400\">4:00</A>　<A HREF=\"./viewepg.php?p=$page&start=$today1200\">12:00</A>　<A HREF=\"./viewepg.php?p=$page&start=$today2000\">20:00</A>)　<A HREF=\"./viewepg.php?p=$page&start=$day1after\">次の日</A>　<A HREF=\"./viewepg.php?p=$page&start=$day2after\">$day2</A>　<A HREF=\"./viewepg.php?p=$page&start=$day3after\">$day3</A>　<A HREF=\"./viewepg.php?p=$page&start=$day4after\">$day4</A>　<A HREF=\"./viewepg.php?p=$page&start=$day5after\">$day5</A>　<A HREF=\"./viewepg.php?p=$page&start=$day6after\">$day6</A>　<A HREF=\"./viewepg.php?p=$page&start=$day7after\">$day7</A>→<BR>\n";
+print "←<A HREF=\"./viewepg.php?p=$page&start=$yesterday\">$dayyesterday(前日)</A>　<A HREF=\"./viewepg.php\">現在</A>　当日(<A HREF=\"./viewepg.php?p=$page&start=$today0400\">4:00</A>　<A HREF=\"./viewepg.php?p=$page&start=$today0800\">8:00</A>　<A HREF=\"./viewepg.php?p=$page&start=$today1200\">12:00</A>　<A HREF=\"./viewepg.php?p=$page&start=$today1600\">16:00</A>　<A HREF=\"./viewepg.php?p=$page&start=$today2000\">20:00</A>　<A HREF=\"./viewepg.php?p=$page&start=$today2359\">24:00</A>)　<A HREF=\"./viewepg.php?p=$page&start=$day1after\">$day1(翌日)</A>　<A HREF=\"./viewepg.php?p=$page&start=$day2after\">$day2</A>　<A HREF=\"./viewepg.php?p=$page&start=$day3after\">$day3</A>　<A HREF=\"./viewepg.php?p=$page&start=$day4after\">$day4</A>　<A HREF=\"./viewepg.php?p=$page&start=$day5after\">$day5</A>　<A HREF=\"./viewepg.php?p=$page&start=$day6after\">$day6</A>　<A HREF=\"./viewepg.php?p=$page&start=$day7after\">$day7</A>→<BR>\n";
 
 
 if ($maxrows > $maxdisplay){
@@ -126,10 +130,14 @@ if ($page > 1){
 }
 
 print " $page / $pages (放送局) ";
+for ($i=1;$i<=$pages;$i++){
+	print "<a href = \"./viewepg.php?p=$i&start=$start\">$i</a>・";
+}
+
 
 if ($page < $pages){
 	$nextpage = $page + 1;
-	print "<a href = \"./viewepg.php?p=$nextpage&start=$start\">→</A>";
+	print "<a href = \"./viewepg.php?p=$nextpage&start=$start\">→</a>";
 }
 }
 //ココから新コード
@@ -157,7 +165,7 @@ FROM foltia_epg
 WHERE foltia_epg.ontvchannel in (
 	SELECT ontvcode 
 	FROM foltia_station 
-	WHERE \"ontvcode\" LIKE '%ontvjapan%'  
+	WHERE \"ontvcode\" LIKE '%ontvjapan%' 
 	ORDER BY stationid ASC , stationrecch 
 	LIMIT ? OFFSET ?
 	)

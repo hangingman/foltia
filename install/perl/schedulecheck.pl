@@ -52,5 +52,6 @@ system ("$toolpath/perl/addatq.pl $tid $stationid  ");
 
 }#while
 
-
+#EPG¹¹¿·
+system("$toolpath/perl/epgimport.pl");
 }

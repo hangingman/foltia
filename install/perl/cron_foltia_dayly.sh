@@ -9,9 +9,12 @@
 # DCC-JPL Japan/foltia project
 #
 
-# XMLTVをつかってEPG番組表インポート
+#デジタル放送から一週間分のEPGを取得
+/home/foltia/perl/epgimport.pl long
+
+# XMLTVをつかってEPG番組表インポート(アナログ専用旧仕様)
 #
-/usr/bin/perl  /usr/bin/tv_grab_jp | /home/foltia/perl/xmltv2foltia.pl
+#/usr/bin/perl  /usr/bin/tv_grab_jp | /home/foltia/perl/xmltv2foltia.pl
 # 2つの局設定使うような場合
 #/usr/bin/perl  /usr/bin/tv_grab_jp --config-file ~/.xmltv/tv_grab_jp.conf.jcom  | /home/foltia/perl/xmltv2foltia.pl
 #/usr/bin/perl  /usr/bin/tv_grab_jp --config-file ~/.xmltv/tv_grab_jp.conf.tvk  | /home/foltia/perl/xmltv2foltia.pl

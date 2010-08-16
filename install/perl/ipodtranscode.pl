@@ -305,16 +305,17 @@ if ($filestatus <= $FILESTATUSTRANSCODECOMPLETE){
 	if (-e "${mp4outdir}MAQ${mp4filenamestring}.MP4"){
 	# 中間ファイル消す
 	&changefilestatus($pid,$FILESTATUSTRANSCODECOMPLETE);
+	&updatemp4file();
+	}else{
+		&writelog("ipodtranscode ERR ; Fail.Giving up!  MAQ${mp4filenamestring}.MP4");
+		&changefilestatus($pid,999);
+	}
 	unlink("${filenamebody}_HD.m2t");
 	unlink("${filenamebody}_tss.m2t");
 	unlink("$filenamebody.264");
 	unlink("$filenamebody.wav");
 	unlink("$filenamebody.base.mp4");
-	
-	&updatemp4file();
-	}else{
-		&writelog("ipodtranscode ERR ; Fail MAQ${mp4filenamestring}.MP4");
-	}
+
 }
 
 }else{ #デジタルかアナログか

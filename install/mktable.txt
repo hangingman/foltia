@@ -61,7 +61,7 @@ GRANT ALL on "foltia_tvrecord" to "foltia";
 
 drop table foltia_epg;
 create table foltia_epg (
-epgid int8   PRIMARY KEY,
+epgid int8   PRIMARY KEY SERIAL,
 startdatetime int8,
 enddatetime int8,
 lengthmin int8 ,
@@ -171,7 +171,7 @@ INSERT INTO foltia_station VALUES (469, 'Twellv', 0, '', '', '', '222', '', '301
 INSERT INTO foltia_station VALUES (408, 'ファミリー劇場', 0, '', '', '', '751', '', '1015.ontvjapan.com',NULL,NULL);
 INSERT INTO foltia_station VALUES (397, 'カートゥーンネットワーク', 0, '', '', '', '780', '', '1046.ontvjapan.com',NULL,NULL);
 INSERT INTO foltia_station VALUES (263, 'アニマックス', 0, '', '', '', '782', '', '1047.ontvjapan.com',NULL,NULL);
-INSERT INTO foltia_station VALUES (261, 'キッズステーション', 0, '', '', 'c', '781', '', '1045.ontvjapan.com',NULL,NULL);
+INSERT INTO foltia_station VALUES (261, 'キッズステーション', 0, '', '', 'c', '335', '', '1045.ontvjapan.com',NULL,NULL);
 INSERT INTO foltia_station VALUES (449, 'ディスカバリーチャンネル', 0, '', '', '', '796', '', '1062.ontvjapan.com',NULL,NULL);
 INSERT INTO foltia_station VALUES (448, 'MONDO21', 0, '', '', '', '722', '', '1049.ontvjapan.com',NULL,NULL);
 INSERT INTO foltia_station VALUES (401, 'チャンネルNECO', 0, '', '', '', '750', '', '1008.ontvjapan.com',NULL,NULL);

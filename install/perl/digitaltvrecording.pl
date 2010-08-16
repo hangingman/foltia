@@ -31,7 +31,7 @@ push( @INC, "$path");
 #tvConfig.pl -------------------------------
 $extendrecendsec = 10;							#recording end second. 
 #$startupsleeptime = 52;					#process wait(MAX60sec)
-$startupsleeptime = 27;					#process wait(MAX60sec)
+$startupsleeptime = 32;					#process wait(MAX60sec)
 #-------------------------------
 
 require 'foltialib.pl';
@@ -372,8 +372,10 @@ if ($bandtype == 0){
 # recpt1でのみ動作確認
 		if ($recch == 333) {
 			$recch = "CS16";#333ch：アニメシアターX(AT-X) 
-		}elsif($recch == 330){
-			$recch = "CS22";#330ch：キッズステーション 
+		#}elsif($recch == 330){
+		#	$recch = "CS22";#330ch：キッズステーション #HD化により2010/4変更 
+		}elsif($recch == 335){
+			$recch = "CS8";#335ch：キッズステーション HD
 		}elsif($recch == 332){
 			$recch = "CS20";#332ch：アニマックス 
 		}else{

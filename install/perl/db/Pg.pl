@@ -26,6 +26,7 @@
 'foltialib.getpidbympegfilename.1' => "SELECT pid FROM foltia_subtitle WHERE m2pfilename = ? LIMIT 1",
 'foltialib.changefilestatus.1' => "UPDATE foltia_subtitle SET filestatus = ?, lastupdate = now() WHERE pid = ?",
 'foltialib.getfilestatus.1' => "SELECT filestatus FROM foltia_subtitle WHERE pid = ?",
+'foltialib.pid2sid.1' => "SELECT stationid FROM foltia_subtitle WHERE pid = ?",
 
 'getxml2db.1' => "SELECT count(*) FROM foltia_program WHERE tid = ?",
 'getxml2db.2' => "INSERT into foltia_program VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,  ?, ?)",
@@ -71,9 +72,39 @@
 'updatem2pfiletable.3' => "DELETE FROM foltia_mp4files",
 'updatem2pfiletable.4' => "INSERT into foltia_mp4files values (?, ?)",
 
-'xmltv2foltia.chkerase.1' => "DELETE FROM foltia_epg WHERE startdatetime > ? AND ontvchannel = ?",
-'xmltv2foltia.registdb.1' => "SELECT max(epgid) FROM foltia_epg",
-'xmltv2foltia.registdb.2' => "INSERT INTO foltia_epg VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+'xmltv2foltia.replaceepg.1' => "SELECT * FROM foltia_epg WHERE enddatetime > ? AND startdatetime < ? AND ontvchannel = ?",
+'xmltv2foltia.commitdb.1' => "DELETE FROM foltia_epg WHERE epgid = ?",
+'xmltv2foltia.commitdb.2' => "INSERT INTO foltia_epg VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)" ,
+
+'epgimport.1' => "SELECT count(*) FROM foltia_station WHERE stationid = ?" ,
+'epgimport.2' => "SELECT digitalch,ontvcode FROM foltia_station WHERE stationid = ?" ,
+'epgimport.3' => "SELECT digitalch,ontvcode FROM foltia_station WHERE ontvcode is not NULL AND digitalch >= 13 AND digitalch <= 62 ORDER BY digitalch ASC" ,
+'epgimport.4' => "SELECT count(*) FROM foltia_station WHERE ontvcode is not NULL AND digitalch >= 100 AND digitalch <= 222 ORDER BY digitalch ASC" ,
+'epgimport.5' => "SELECT count(*) FROM foltia_station WHERE ontvcode is not NULL AND digitalch >= 223 ORDER BY digitalch ASC" ,
+'epgimport.6' => "SELECT 
+ foltia_program.tid, stationname, foltia_program.title,
+ foltia_subtitle.countno, foltia_subtitle.subtitle,
+ foltia_subtitle.startdatetime as x, foltia_subtitle.lengthmin,
+ foltia_tvrecord.bitrate, foltia_subtitle.startoffset,
+ foltia_subtitle.pid, foltia_subtitle.epgaddedby,
+foltia_tvrecord.digital 
+FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
+WHERE foltia_tvrecord.tid = foltia_program.tid AND foltia_tvrecord.stationid = foltia_station .stationid AND foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid
+AND foltia_subtitle.enddatetime >= ? AND foltia_subtitle.startdatetime < ? 
+UNION 
+SELECT 
+ foltia_program.tid, stationname, foltia_program.title,
+ foltia_subtitle.countno, foltia_subtitle.subtitle,
+ foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
+ foltia_tvrecord.bitrate,  foltia_subtitle.startoffset,
+ foltia_subtitle.pid,  foltia_subtitle.epgaddedby,
+foltia_tvrecord.digital 
+FROM foltia_tvrecord
+LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
+LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
+LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
+WHERE foltia_tvrecord.stationid = 0 AND
+ foltia_subtitle.enddatetime >= ? AND foltia_subtitle.startdatetime < ? " ,
 
 );
 

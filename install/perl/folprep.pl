@@ -28,21 +28,29 @@ push( @INC, "$path");
 
 require "foltialib.pl";
 
-#XMLゲット & DB更新
-system("$toolpath/perl/getxml2db.pl");
+
+#PID探し
+my $pid = $ARGV[0];
 
 #引き数がアルか?
-$pid = $ARGV[0] ;
 if ($pid eq "" ){
 	#引き数なし出実行されたら、終了
 	print "usage;folprep.pl <PID>\n";
 	exit;
 }
 
-#PID探し
-$pid = $ARGV[0];
+my $stationid = "";
+if ($pid <= 0){
+	#EPG更新 & DB更新
+	$dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
+	$stationid = &pid2sid($pid);
+	system("$toolpath/perl/epgimport.pl $stationid");
+}else{
+	#XMLゲット & DB更新
+	system("$toolpath/perl/getxml2db.pl");
+}
 
 #キュー再投入
-	&writelog("folprep  $toolpath/perl/addpidatq.pl $pid");
+&writelog("folprep  $toolpath/perl/addpidatq.pl $pid");
 system("$toolpath/perl/addpidatq.pl $pid");
 

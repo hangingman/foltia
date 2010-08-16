@@ -380,9 +380,22 @@ unless (-e $pspdirname ){
 return ("$pspdirname");
 }#endsub makemp4dir
 
+sub pid2sid{
+#番組IDからStation IDを取得
+my $pid = $_[0];
+my $sth;
+    $sth = $dbh->prepare($stmt{'foltialib.pid2sid.1'});
+    $sth->execute($pid);
+my @statusinfo = $sth->fetchrow_array;
+my $sid  = $statusinfo[0];
 
+if ($sid eq ""){
+	return  0 ;
+}else{
+	return $sid;
+}
 
-
+}#end sub pid2sid
 
 
 

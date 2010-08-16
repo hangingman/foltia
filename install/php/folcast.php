@@ -51,9 +51,9 @@ if (($tid >= 0 ) && ($tid != "")){
 $query = "
 SELECT  foltia_program.tid,foltia_program.title,
 foltia_subtitle.countno , foltia_subtitle.subtitle , foltia_subtitle.startdatetime, foltia_subtitle.pspfilename,foltia_subtitle.lengthmin,foltia_subtitle.enddatetime   FROM foltia_subtitle , foltia_program   WHERE \"pspfilename\" LIKE 'M%%'  AND foltia_program.tid = foltia_subtitle.tid AND foltia_program.tid = $tid   
-ORDER BY \"enddatetime\" DESC 
-limit  $max offset 0 
-	";
+ORDER BY enddatetime DESC 
+ limit ? offset 0 
+";
 
 $titlequery = "
 SELECT  foltia_program.tid,foltia_program.title 
@@ -62,15 +62,19 @@ WHERE foltia_program.tid = ?
 ";
 //	$titlers = m_query($con, $query, "DBクエリに失敗しました");
 	$titlers = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
+//	$titlers = sql_query($con, $titlequery, "DBクエリに失敗しました",array($tid));
 	$rowdata = $titlers->fetch();
 	$rsstitle = $rowdata[1];
 }else{
 
 $query = "
 SELECT  foltia_program.tid,foltia_program.title,
-foltia_subtitle.countno , foltia_subtitle.subtitle , foltia_subtitle.startdatetime, foltia_subtitle.pspfilename,foltia_subtitle.lengthmin,foltia_subtitle.enddatetime   FROM foltia_subtitle , foltia_program   WHERE \"pspfilename\" LIKE 'M%%'  AND foltia_program.tid = foltia_subtitle.tid ORDER BY \"enddatetime\" DESC 
-offset 0 limit  ? 
+foltia_subtitle.countno , foltia_subtitle.subtitle , foltia_subtitle.startdatetime, foltia_subtitle.pspfilename,foltia_subtitle.lengthmin,foltia_subtitle.enddatetime   FROM foltia_subtitle , foltia_program   WHERE \"pspfilename\" LIKE 'M%%'  AND foltia_program.tid = foltia_subtitle.tid ORDER BY enddatetime DESC 
+limit  ? offset 0 
 	";
+
+
+
 	$rsstitle = "新規録画";
 }//if
 
