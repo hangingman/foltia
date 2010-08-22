@@ -88,8 +88,13 @@ if ($stationid > 0){
 	@data = $sth->fetchrow_array();
 	$channel = $data[0];
 	$ontvcode = $data[1];
-	&writelog("epgimport DEBUG Single station mode (ch:$channel / $ontvcode).");
-	}
+	if ($channel > 0){
+		&writelog("epgimport DEBUG Single station mode (ch:$channel / $ontvcode).");
+	}else{#ラジオ局などの場合
+		&writelog("epgimport ABORT SID $stationid is not Digital TV ch.");
+		exit;
+	}#endif ラジオ局かどうか
+	}#end unless($data[0] == 1
 }#endif $stationid > 0
 
 #地デジ----------------------------------------
