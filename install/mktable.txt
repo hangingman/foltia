@@ -61,7 +61,7 @@ GRANT ALL on "foltia_tvrecord" to "foltia";
 
 drop table foltia_epg;
 create table foltia_epg (
-epgid int8   PRIMARY KEY SERIAL,
+epgid BIGSERIAL PRIMARY KEY ,
 startdatetime int8,
 enddatetime int8,
 lengthmin int8 ,

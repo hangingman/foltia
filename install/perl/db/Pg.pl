@@ -74,8 +74,7 @@
 
 'xmltv2foltia.replaceepg.1' => "SELECT * FROM foltia_epg WHERE enddatetime > ? AND startdatetime < ? AND ontvchannel = ?",
 'xmltv2foltia.commitdb.1' => "DELETE FROM foltia_epg WHERE epgid = ?",
-'xmltv2foltia.commitdb.2' => "INSERT INTO foltia_epg VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)" ,
-
+'xmltv2foltia.commitdb.2' => "INSERT INTO foltia_epg VALUES ( nextval('foltia_epg_epgid_seq'), ?, ?, ?, ?, ?, ?, ?)" ,
 'epgimport.1' => "SELECT count(*) FROM foltia_station WHERE stationid = ?" ,
 'epgimport.2' => "SELECT digitalch,ontvcode FROM foltia_station WHERE stationid = ?" ,
 'epgimport.3' => "SELECT digitalch,ontvcode FROM foltia_station WHERE ontvcode is not NULL AND digitalch >= 13 AND digitalch <= 62 ORDER BY digitalch ASC" ,
