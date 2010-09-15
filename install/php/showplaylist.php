@@ -100,14 +100,16 @@ exec ("ls -t  $recfolderpath/*.???", $m2pfiles);
 
 
 foreach($m2pfiles as $pathfName) {
+
 $fNametmp = split("/",$pathfName);
 $fName = array_pop($fNametmp);
 //print "FILENAME:$fName<BR>\n";
 
-        if(($fName == ".") or ($fName == "..") ){ continue; }
-	if ((ereg(".m2.+", $fName))|| (ereg(".aac", $fName))){
-		$filesplit = split("-",$fName);
-	
+if(($fName == ".") or ($fName == "..") ){ continue; }
+if ((ereg(".m2.+", $fName))|| (ereg(".aac", $fName))){
+	$filesplit = split("-",$fName);
+
+if (preg_match("/^\d+$/", $filesplit[0])) {//	print "File is looks like good:preg<br>\n";
 if ($filesplit[1] == ""){
 $query = "
 SELECT 
@@ -124,6 +126,7 @@ $rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0]));
 $title = $rowdata[1];
 $subtitle = "";
 $count = "";
+
 }else{
 
 $query = "
@@ -164,6 +167,10 @@ print "
 
 print "</tr>\n
 ";
+}else{
+	//print "File is looks like BAD:preg<br>\n";
+}//
+
 }//ereg 
 }//foreach
 print "	</tbody>\n</table>\n</FORM>\n</body>\n</html>\n";
