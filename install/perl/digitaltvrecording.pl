@@ -4,7 +4,7 @@
 # http://www.dcc-jpl.com/soft/foltia/
 #
 #digitaltvrecording.pl
-# friioをはじめとするデジタル録画プログラムを呼びだす録画モジュール。
+# PT1,PT2,friioをはじめとするデジタル録画プログラムを呼びだす録画モジュール。
 #
 #usage digitaltvrecording.pl bandtype ch length(sec) [stationid] [sleeptype] [filename] [TID] [NO] [unittype]
 #引数
@@ -133,195 +133,7 @@ if ( -e "$outputfile" ){
 
 }#end prepare
 
-sub calldigitalrecorderOld{
-#
-#
-#いまんところ白friioと黒friioのみ
-#
-#
-my $oserr = 0;
 
-if ($bandtype == 0){
-# 地デジ friio
-# b25,recfriioがあるか確認
-	if ((-e "$toolpath/perl/tool/b25") && (-e "$toolpath/perl/tool/recfriio")){
-	my $friiofifo = "$outputpath"."fifo-friio-"."$outputfilewithoutpath";
-	my $b25fifo = "$outputpath"."fifo-b25-"."$outputfilewithoutpath";
-	
-		if ((-e "$friiofifo") || (-e "$b25fifo")){
-			&writelog("digitaltvrecording :ABORT :fifo is exist. It may be overwrite recording.");
-			exit 1;
-		}else{ 
-		system ("mkfifo $friiofifo $b25fifo");
-		# mkfifo fifo-friio-9999-01-20080810.m2t  fifo-b25-9999-01-20080810.m2t 
-		&writelog("digitaltvrecording DEBUG mkfifo $friiofifo $b25fifo: $?.");
-	# /home/foltia/perl/recfriio 27 30 ./fifo-friio-9999-01-20080810.m2t & /home/foltia/perl/b25 ./fifo-friio-9999-01-20080810.m2t  ./fifo-b25-9999-01-20080810.m2t & dd if=./fifo-b25-9999-01-20080810.m2t  of=/home/foltia/php/tv/9999-01-20080810.m2t bs=1M skip=10
-#		system("$toolpath/perl/tool/recfriio $recch $reclengthsec $friiofifo & ");
-#		system("$toolpath/perl/tool/b25 $friiofifo $b25fifo &");
-#		system("dd if=$b25fifo  of=$outputfile bs=1M skip=10");
-		&writelog("digitaltvrecording DEBUG $toolpath/perl/tool/recfriio $recch $reclengthsec $friiofifo & dd if=$friiofifo  of=$b25fifo bs=1M skip=10 & $toolpath/perl/tool/b25 $b25fifo $outputfile: $?.");
-		system("dd if=$friiofifo  of=$b25fifo bs=1M skip=10 & $toolpath/perl/tool/b25 $b25fifo $outputfile &");
-		$oserr = system("$toolpath/perl/tool/recfriio $recch $reclengthsec $friiofifo  ");
-		$oserr = $oserr >> 8;
-		system ("rm -rf $friiofifo $b25fifo");
-		&writelog("digitaltvrecording DEBUG rm -rf $friiofifo $b25fifo: $?.");
-			if ($oserr > 0){
-			# 		print "RECFRIIO RETURNS:$oserr\n";
-			&writelog("digitaltvrecording :ERROR :friio is BUSY.");
-			# kill dd
-			$ddpid = `ps a | grep $friiofifo | grep -v grep`;
-			@ddpid = split(/ /,$ddpid);
-			$ddpid = $ddpid[0];
-			chomp($ddpid);
-			$killcmd = "kill ".$ddpid;
-			system($killcmd);
-			&writelog("digitaltvrecording :DEBUG dd killed:$killcmd");
-
-			#kill b25
-			$b25pid = `ps a | grep $b25fifo |   grep -v grep`;
-			@b25pid = split(/ /,$b25pid);
-			$b25pid = $b25pid[0];
-			chomp($b25pid);
-			$killcmd = "kill ".$b25pid;
-			system($killcmd);
-			&writelog("digitaltvrecording :DEBUG b25 killed:$killcmd");
-
-			system ("rm -rf $outputfile");
-
-			exit 2;
-			}
-		}
-	}else{ # エラー b25とrecfriioがありません
-		&writelog("digitaltvrecording :ERROR :recfriio or b25 not found. You must install $toolpath/perl/tool/b25 and $toolpath/perl/tool/recfriio.");
-	exit 1;
-	}
-
-}elsif($bandtype == 1){
-
-# BS/CS friio
-# b25,recfriioがあるか確認
-	if ((-e "$toolpath/perl/tool/b25") && (-e "$toolpath/perl/tool/recfriiobs")){
-	my $friiofifo = "$outputpath"."fifo-friioBS-"."$outputfilewithoutpath";
-	my $b25fifo = "$outputpath"."fifo-b25-"."$outputfilewithoutpath";
-	
-		if ((-e "$friiofifo") || (-e "$b25fifo")){
-			&writelog("digitaltvrecording :ABORT :fifo is exist. It may be overwrite recording.");
-			exit 1;
-		}else{ 
-		system ("mkfifo $friiofifo $b25fifo");
-		&writelog("digitaltvrecording DEBUG mkfifo $friiofifo $b25fifo: $?.");
-		#recfriiobs用チャンネルリマップ
-		if ($recch == 101) {
-			$bssplitflag = $recch;
-			$recch = 22;#22 : NHK BS1/BS2 
-		}elsif($recch == 102){
-			$bssplitflag = $recch;
-			$recch = 22;#22 : NHK BS1/BS2 
-		}elsif($recch == 103){
-			$recch = 23;#23 : NHK hi  
-		}elsif($recch == 141){
-			$recch = 20;# 20 : BS-NTV  
-		}elsif($recch == 151){
-			$recch = 13;#13 : BS-Asahi 
-		}elsif($recch == 161){
-			$recch = 14;#14 : BS-i  
-		}elsif($recch == 171){
-			$recch = 16;#16 : BS-Japan 
-		}elsif($recch == 181){
-			$recch = 21;#21 : BS-Fuji 
-		}elsif($recch == 191){
-			$recch = 15;#15 : WOWOW 
-		}elsif($recch == 192){
-			$recch = 15;#15 : WOWOW 
-		}elsif($recch == 193){
-			$recch = 15;#15 : WOWOW 
-		}elsif($recch == 211){
-			$recch = 17;#17 : BS11  
-		}else{
-			$recch = 19;#19 : TwellV 
-		}
-		&writelog("digitaltvrecording DEBUG $toolpath/perl/tool/recfriiobs $recch $reclengthsec $friiofifo & dd if=$friiofifo  of=$b25fifo bs=1M skip=10 & $toolpath/perl/tool/b25 $b25fifo $outputfile : $?.");
-		system("dd if=$friiofifo  of=$b25fifo bs=1M skip=10 & $toolpath/perl/tool/b25 $b25fifo $outputfile  &");
-		$oserr = system("$toolpath/perl/tool/recfriiobs $recch $reclengthsec $friiofifo  ");
-		$oserr = $oserr >> 8;
-
-		system ("rm -rf $friiofifo $b25fifo");
-		&writelog("digitaltvrecording DEBUG rm -rf $friiofifo $b25fifo: $?.");
-			if ($oserr > 0){
-			# 		print "RECFRIIO RETURNS:$oserr\n";
-			&writelog("digitaltvrecording :ERROR :friioBS is BUSY.");
-			# kill dd
-			$ddpid = `ps a | grep $friiofifo | grep -v grep`;
-			@ddpid = split(/ /,$ddpid);
-			$ddpid = $ddpid[0];
-			chomp($ddpid);
-			$killcmd = "kill ".$ddpid;
-			system($killcmd);
-			&writelog("digitaltvrecording :DEBUG dd killed:$killcmd");
-
-			#kill b25
-			$b25pid = `ps a | grep $b25fifo |   grep -v grep`;
-			@b25pid = split(/ /,$b25pid);
-			$b25pid = $b25pid[0];
-			chomp($b25pid);
-			$killcmd = "kill ".$b25pid;
-			system($killcmd);
-			&writelog("digitaltvrecording :DEBUG b25 killed:$killcmd");
-
-			system ("rm -rf $outputfile");
-
-			exit 2;
-			}
-		
-		#BS1/BS2などのスプリットを
-		if ($bssplitflag == 101){
-			if (-e "$toolpath/perl/tool/TsSplitter.exe"){
-			# BS1		
-			system("wine $toolpath/perl/tool/TsSplitter.exe  -EIT -ECM  -EMM  -OUT \"$outputpath\" -HD  -SD2 -SD3 -1SEG  -LOGFILE -WAIT2 $outputfile");
-			$splitfile = $outputfile;
-			$splitfile =~ s/\.m2t$/_SD1.m2t/;
-				if (-e "$splitfile"){
-				system("rm -rf $outputfile ; mv $splitfile $outputfile");
-				&writelog("digitaltvrecording DEBUG rm -rf $outputfile ; mv $splitfile $outputfile: $?.");
-				}else{
-				&writelog("digitaltvrecording ERROR File not found:$splitfile.");
-				}
-			}else{
-			&writelog("digitaltvrecording ERROR $toolpath/perl/tool/TsSplitter.exe not found.");
-			}
-		}elsif($bssplitflag == 102){
-			if (-e "$toolpath/perl/tool/TsSplitter.exe"){
-			# BS2		
-			system("wine $toolpath/perl/tool/TsSplitter.exe  -EIT -ECM  -EMM  -OUT \"$outputpath\" -HD  -SD1 -SD3 -1SEG  -LOGFILE -WAIT2 $outputfile");
-			$splitfile = $outputfile;
-			$splitfile =~ s/\.m2t$/_SD2.m2t/;
-				if (-e "$splitfile"){
-				system("rm -rf $outputfile ; mv $splitfile $outputfile");
-				&writelog("digitaltvrecording DEBUG rm -rf $outputfile ; mv $splitfile $outputfile: $?.");
-				}else{
-				&writelog("digitaltvrecording ERROR File not found:$splitfile.");
-				}
-			}else{
-			&writelog("digitaltvrecording ERROR $toolpath/perl/tool/TsSplitter.exe not found.");
-			}
-		}else{
-			&writelog("digitaltvrecording DEBUG not split TS.$bssplitflag");
-		}# endif #BS1/BS2などのスプリットを
-		
-		}
-	}else{ # エラー b25とrecfriioがありません
-		&writelog("digitaltvrecording :ERROR :recfriiobs or b25 not found. You must install $toolpath/perl/tool/b25 and $toolpath/perl/tool/recfriiobs.");
-	exit 1;
-	}
-}elsif($bandtype == 2){
-}else{
-	&writelog("digitaltvrecording :ERROR :Unsupported and type (digital CS).");
-	exit 3;
-}
-
-
-
-}#end calldigitalrecorderOld
 #------------------------------------------------------------------------------------
 #
 sub calldigitalrecorder{
@@ -331,9 +143,11 @@ sub calldigitalrecorder{
 #
 my $oserr = 0;
 my $originalrecch = $recch;
+my $pt1recch =  $recch;
 my $errorflag = 0;
 if ($bandtype == 0){
 # 地デジ friio
+
 }elsif($bandtype == 1){
 # BS/CS friio
 		#recfriiobs用チャンネルリマップ
@@ -361,27 +175,150 @@ if ($bandtype == 0){
 			$recch = "b3";#15 : WOWOW 
 		}elsif($recch == 193){
 			$recch = "b3";#15 : WOWOW 
+		}elsif($recch == 200){
+			$recch = "b6";# b6 # Star Channel
 		}elsif($recch == 211){
 			$recch = "b5";#17 : BS11  
 		}else{
 			$recch = "b7";#19 : TwellV 
 		}
-		# b6 # Star Channel
+#PT1はそのまま通る
 
 }elsif($bandtype == 2){
 # recpt1でのみ動作確認
-		if ($recch == 333) {
-			$recch = "CS16";#333ch：アニメシアターX(AT-X) 
-		#}elsif($recch == 330){
-		#	$recch = "CS22";#330ch：キッズステーション #HD化により2010/4変更 
-		}elsif($recch == 335){
-			$recch = "CS8";#335ch：キッズステーション HD
-		}elsif($recch == 332){
-			$recch = "CS20";#332ch：アニマックス 
-		}else{
-			$recch = "CS16";#333ch：アニメシアターX(AT-X) 
-		}
-
+		if($recch == 335){
+		$pt1recch = "CS8";#335ch：キッズステーション HD
+	}elsif($recch == 237){
+		$pt1recch = "CS2";#237ch：スター・チャンネル プラス
+	}elsif($recch == 239){
+		$pt1recch = "CS2";#239ch：日本映画専門チャンネルHD
+	}elsif($recch == 306){
+		$pt1recch = "CS2";#306ch：フジテレビCSHD
+	}elsif($recch == 100){
+		$pt1recch = "CS4";#100ch：e2プロモ
+	}elsif($recch == 256){
+		$pt1recch = "CS4";#256ch：J sports ESPN
+	}elsif($recch == 312){
+		$pt1recch = "CS4";#312ch：FOX
+	}elsif($recch == 322){
+		$pt1recch = "CS4";#322ch：スペースシャワーTV
+	}elsif($recch == 331){
+		$pt1recch = "CS4";#331ch：カートゥーンネットワーク
+	}elsif($recch == 194){
+		$pt1recch = "CS4";#194ch：インターローカルTV
+	}elsif($recch == 334){
+		$pt1recch = "CS4";#334ch：トゥーン・ディズニー
+	}elsif($recch == 221){
+		$pt1recch = "CS6";#221ch：東映チャンネル 
+	}elsif($recch == 222){
+		$pt1recch = "CS6";#222ch：衛星劇場
+	}elsif($recch == 223){
+		$pt1recch = "CS6";#223ch：チャンネルNECO
+	}elsif($recch == 224){
+		$pt1recch = "CS6";#224ch：洋画★シネフィル・イマジカ
+	}elsif($recch == 292){
+		$pt1recch = "CS6";#292ch：時代劇専門チャンネル
+	}elsif($recch == 238){
+		$pt1recch = "CS6";#238ch：スター・チャンネル クラシック
+	}elsif($recch == 310){
+		$pt1recch = "CS6";#310ch：スーパー！ドラマTV
+	}elsif($recch == 311){
+		$pt1recch = "CS6";#311ch：AXN
+	}elsif($recch == 343){
+		$pt1recch = "CS6";#343ch：ナショナルジオグラフィックチャンネル
+	}elsif($recch == 055){
+		$pt1recch = "CS8";#055ch：ショップ チャンネル
+	}elsif($recch == 228){
+		$pt1recch = "CS10";#228ch：ザ・シネマ
+	}elsif($recch == 800){
+		$pt1recch = "CS10";#800ch：スカチャンHD800
+	}elsif($recch == 801){
+		$pt1recch = "CS10";#801ch：スカチャン801
+	}elsif($recch == 802){
+		$pt1recch = "CS10";#802ch：スカチャン802
+	}elsif($recch == 260){
+		$pt1recch = "CS12";#260ch：ザ・ゴルフ・チャンネル
+	}elsif($recch == 303){
+		$pt1recch = "CS12";#303ch：テレ朝チャンネル
+	}elsif($recch == 323){
+		$pt1recch = "CS12";#323ch：MTV 324ch：大人の音楽専門TV◆ミュージック・エア
+	}elsif($recch == 352){
+		$pt1recch = "CS12";#352ch：朝日ニュースター
+	}elsif($recch == 353){
+		$pt1recch = "CS12";#353ch：BBCワールドニュース
+	}elsif($recch == 354){
+		$pt1recch = "CS12";#354ch：CNNj
+	}elsif($recch == 361){
+		$pt1recch = "CS12";#361ch：ジャスト・アイ インフォメーション
+	}elsif($recch == 251){
+		$pt1recch = "CS14";#251ch：J sports 1
+	}elsif($recch == 252){
+		$pt1recch = "CS14";#252ch：J sports 2
+	}elsif($recch == 253){
+		$pt1recch = "CS14";#253ch：J sports Plus
+	}elsif($recch == 254){
+		$pt1recch = "CS14";#254ch：GAORA
+	}elsif($recch == 255){
+		$pt1recch = "CS14";#255ch：スカイ・Asports＋
+	}elsif($recch == 305){
+		$pt1recch = "CS16";#305ch：チャンネル銀河
+	}elsif($recch == 333){
+		$pt1recch = "CS16";#333ch：アニメシアターX(AT-X)
+	}elsif($recch == 342){
+		$pt1recch = "CS16";#342ch：ヒストリーチャンネル
+	}elsif($recch == 290){
+		$pt1recch = "CS16";#290ch：TAKARAZUKA SKYSTAGE
+	}elsif($recch == 803){
+		$pt1recch = "CS16";#803ch：スカチャン803
+	}elsif($recch == 804){
+		$pt1recch = "CS16";#804ch：スカチャン804
+	}elsif($recch == 240){
+		$pt1recch = "CS18";#240ch：ムービープラスHD
+	}elsif($recch == 262){
+		$pt1recch = "CS18";#262ch：ゴルフネットワーク
+	}elsif($recch == 314){
+		$pt1recch = "CS18";#314ch：LaLa HDHV
+	}elsif($recch == 258){
+		$pt1recch = "CS20";#258ch：フジテレビ739
+	}elsif($recch == 302){
+		$pt1recch = "CS20";#302ch：フジテレビ721
+	}elsif($recch == 332){
+		$pt1recch = "CS20";#332ch：アニマックス
+	}elsif($recch == 340){
+		$pt1recch = "CS20";#340ch：ディスカバリーチャンネル
+	}elsif($recch == 341){
+		$pt1recch = "CS20";#341ch：アニマルプラネット
+	}elsif($recch == 160){
+		$pt1recch = "CS22";#160ch：C-TBSウェルカムチャンネル
+	}elsif($recch == 161){
+		$pt1recch = "CS22";#161ch：QVC
+	}elsif($recch == 185){
+		$pt1recch = "CS22";#185ch：プライム365.TV
+	}elsif($recch == 293){
+		$pt1recch = "CS22";#293ch：ファミリー劇場
+	}elsif($recch == 301){
+		$pt1recch = "CS22";#301ch：TBSチャンネル
+	}elsif($recch == 304){
+		$pt1recch = "CS22";#304ch：ディズニー・チャンネル
+	}elsif($recch == 325){
+		$pt1recch = "CS22";#325ch：MUSIC ON! TV
+	#}elsif($recch == 330){
+	#	$pt1recch = "CS22";#330ch：キッズステーション  #HD化により2010/4変更
+	}elsif($recch == 351){
+		$pt1recch = "CS22";#351ch：TBSニュースバード
+	}elsif($recch == 257){
+		$pt1recch = "CS24";#ch：日テレG+
+	}elsif($recch == 291){
+		$pt1recch = "CS24";#ch：fashiontv
+	}elsif($recch == 300){
+		$pt1recch = "CS24";#ch：日テレプラス
+	}elsif($recch == 320){
+		$pt1recch = "CS24";#ch：安らぎの音楽と風景／エコミュージックTV
+	}elsif($recch == 321){
+		$pt1recch = "CS24";#ch：MusicJapan TV
+	}elsif($recch == 350){
+		$pt1recch = "CS24";#ch：日テレNEWS24
+	}# end if CSリマップ
 
 }else{
 	&writelog("digitaltvrecording :ERROR :Unsupported and type (digital CS).");
@@ -392,10 +329,9 @@ if ($bandtype == 0){
 # b25,recpt1があるか確認
 	if  (-e "$toolpath/perl/tool/recpt1"){
 		if ($bandtype >= 1){ #BS/CSなら
-		#[foltia@velvia tool]$ ./recpt1 --b25 --sid 333 CS16 180 ~/php/tv/atxtest.m2t
-		&writelog("digitaltvrecording DEBUGrecpt1 --b25 --sid $originalrecch  $recch $reclengthsec $outputfile   ");
-		$oserr = system("$toolpath/perl/tool/recpt1 --b25 --sid $originalrecch  $recch $reclengthsec $outputfile  ");
-		}else{ 
+		&writelog("digitaltvrecording DEBUG recpt1 --b25 --sid $originalrecch  $pt1recch $reclengthsec $outputfile   ");
+		$oserr = system("$toolpath/perl/tool/recpt1 --b25 --sid $originalrecch $pt1recch $reclengthsec $outputfile  ");
+		}else{ #地デジ
 		&writelog("digitaltvrecording DEBUG recpt1 --b25  $originalrecch $reclengthsec $outputfile  ");
 		$oserr = system("$toolpath/perl/tool/recpt1 --b25  $originalrecch $reclengthsec $outputfile  ");
 		}
@@ -426,11 +362,6 @@ if ($errorflag >= 1 ){
 			&writelog("digitaltvrecording :ERROR :friio is BUSY.$oserr");
 			exit 2;
 			}
-	}else{ # エラー recfriioがありません
-		&writelog("digitaltvrecording :ERROR :recfriio  not found. You must install $toolpath/perl/tool/b25 and $toolpath/perl/tool/recfriio.");
-	exit 1;
-	}
-}#end if errorflag
 
 #BS1/BS2などのスプリットを
 if ($bssplitflag == 101){
@@ -467,6 +398,11 @@ if ($bssplitflag == 101){
 	&writelog("digitaltvrecording DEBUG not split TS.$bssplitflag");
 }# endif #BS1/BS2などのスプリットを
 
+	}else{ # エラー recfriioがありません
+		&writelog("digitaltvrecording :ERROR :recfriio  not found. You must install $toolpath/perl/tool/b25 and $toolpath/perl/tool/recfriio.");
+	exit 1;
+	}
+}#end if errorflag
 }#end calldigitalrecorder
 
 

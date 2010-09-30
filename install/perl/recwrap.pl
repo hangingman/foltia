@@ -62,8 +62,13 @@ $outputfile = strftime("%Y%m%d-%H%M", localtime(time + 60));
 chomp($outputfile);
 
 if ($tid == 0){
+	if ($usedigital == 1){
+		$outputfilename = "0--".$outputfile."-".$digitalch.$extension;
+		$mp4newstylefilename = "-0--".$outputfile."-".$digitalch;
+	}else{
 		$outputfilename = "0--".$outputfile."-".$recch.$extension;
 		$mp4newstylefilename = "-0--".$outputfile."-".$recch;
+	}
 }else{
 	if ($countno == 0){
 		$outputfilename = $tid ."--".$outputfile.$extension;
