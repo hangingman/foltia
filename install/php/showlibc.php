@@ -221,7 +221,7 @@ print "<li><a href=\"http://$serverfqdn/$httpmediamappath/$tid.localized/mp4/$fN
 
 }else{
 print "  <tr>
-    <td rowspan=\"4\" width=\"170\"><a href = \"$httpmediamappath/$tid.localized/mp4/$fName\" target=\"_blank\"><img src = \"$imgsrcuri\" width=\"160\" height=\"120\"></a></td>
+    <td rowspan=\"4\" width=\"170\"><a href=\"./mp4player.php?p=$pid\" target=\"_blank\"><img src = \"$imgsrcuri\" width=\"160\" height=\"120\"></a></td>
     <td>$count</td>
   </tr>
   <tr>
