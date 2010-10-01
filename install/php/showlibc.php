@@ -62,6 +62,17 @@ if ($tid == "") {
 		printhtmlpageheader();
 		die_exit("再生可能番組がありません<BR>");
 	}
+
+
+//////////////////////////////////////////////////////////
+//１ページの表示レコード数
+$lim = 52;
+//クエリ取得
+$p = getgetnumform(p);
+//ページ取得の計算
+list($st,$p,$p2) = number_page($p,$lim);
+///////////////////////////////////////////////////////////
+
 $now = date("YmdHi");   
 
 $query = "
@@ -87,6 +98,7 @@ $title =  htmlspecialchars($title) ;
 print "<title>foltia:Lib $tid:$title</title></head>";
 $serveruri = getserveruri();
 
+
 if(ereg("iPhone",$useragent)){
 	print "<body onclick=\"console.log('Hello', event.target);\">
     <div class=\"toolbar\">
@@ -106,7 +118,6 @@ print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">録画ライブラリ番組
 if ($tid == 0){
 print "$title 【<A HREF = \"./folcast.php?tid=$tid\">この番組のFolcast</A> [<a href=\"itpc://$serveruri/folcast.php?tid=$tid\">iTunesに登録</a>】 <br>\n";
 }else{
-
 print "<a href=\"http://cal.syoboi.jp/tid/" .
 				     htmlspecialchars($tid)  . "\" target=\"_blank\">$title</a> 【<A HREF = \"./folcast.php?tid=$tid\">この番組のFolcast</A> [<a href=\"itpc://$serveruri/folcast.php?tid=$tid\">iTunesに登録</a>]】 <br>\n";
 }
@@ -127,6 +138,33 @@ if (file_exists("./selectcaptureimage.php") ) {
 }
 $serverfqdn = getserverfqdn();
 
+//Autopager
+echo "<div id=contents class=autopagerize_page_element />";
+
+/////////////////////////////////////////////////////////
+//レコード総数取得
+    $query = "
+SELECT
+COUNT(*) AS cnt
+FROM foltia_mp4files
+LEFT JOIN foltia_subtitle
+ON   foltia_mp4files.mp4filename = foltia_subtitle.pspfilename
+LEFT JOIN foltia_program
+ON foltia_mp4files.tid = foltia_program.tid
+WHERE foltia_mp4files.tid = ?  
+";
+
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
+$rowdata = $rs->fetch();
+$dtcnt = htmlspecialchars($rowdata[0]);
+//echo $dtcnt;
+//
+if (! $rowdata) {
+        die_exit("番組データがありません。<BR>");
+}//endif
+
+//////////////////////////////////////////////////////////
+//レコード表示
 $query = "
 SELECT 
 foltia_program.tid,
@@ -144,6 +182,7 @@ LEFT JOIN foltia_program
 ON foltia_mp4files.tid = foltia_program.tid 
 WHERE foltia_mp4files.tid = ?  
 ORDER BY \"startdatetime\" ASC
+LIMIT $lim OFFSET $st
 ";
 
 $rs = "";
@@ -253,6 +292,13 @@ if(ereg("iPhone",$useragent)){
 }else{
 	print "</tbody></table>\n";
 }
+
+//////////////////////////////////////////////
+//クエリ代入
+$query_st =  $tid;
+//Autopager処理とページのリンク表示
+page_display($query_st,$p,$p2,$lim,$dtcnt,"");
+//////////////////////////////////////////////
 ?>
 </body>
 </html>

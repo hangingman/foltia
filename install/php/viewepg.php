@@ -46,6 +46,8 @@ if ($start == ""){
 }else{
   $start = ereg_replace( "[^0-9]", "", $start); 
 }
+
+
 ?>
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
 <div align="center">
@@ -58,36 +60,65 @@ printhtmlpageheader();
 <p align="left">EPG番組表を表示します。
 <?php 
 
+///////////////////////////////////////////////////////////////////////////
+//現在の日付情報取得
+$begin =  date("YmdHi");
+$beginyear =   substr($begin,0,4);
+$beginmonth =   substr($begin,4,2);
+$beginday =   substr($begin,6,2);
+$beginhour =   substr($begin,8,2);
+$beginmin =   substr($begin,10,2);
+///////////////////////////////////////////////////////////////////////////
+
 $startyear =   substr($start,0,4);
 $startmonth =   substr($start,4,2);
 $startday =   substr($start,6,2);
 $starthour =   substr($start,8,2);
 $startmin =   substr($start,10,2);
-print "($startyear/$startmonth/$startday $starthour:$startmin-)<BR>\n";
+$day_of_the_week = date ("(D)",mktime($starthour , 0 , 0, $startmonth , $startday  , $startyear));
+
+print "($startyear/$startmonth/$startday $day_of_the_week $starthour:$startmin-)<BR>\n";
+
 
 $yesterday = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday -1 , $startyear));
 $dayyesterday = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday -1 , $startyear));
+
+/////////////////////////////////////////////////////////// 
+//時刻の隣の【翌日】の変数
+$tomorrow  = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday +1 , $startyear));   
+/////////////////////////////////////////////////////////// 
+//EPG番組表を取得しますのとなりの日付の【曜日】の変数
+$daytomorrow  = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday +1 , $startyear));
+///////////////////////////////////////////////////////////
+
+
 $today0400 = date ("YmdHi",mktime(4 , 0 , 0, $startmonth , $startday  , $startyear));
 $today0800 = date ("YmdHi",mktime(8 , 0 , 0, $startmonth , $startday  , $startyear));
 $today1200 = date ("YmdHi",mktime(12 , 0 , 0, $startmonth , $startday , $startyear));
 $today1600 = date ("YmdHi",mktime(16 , 0 , 0, $startmonth , $startday , $startyear));
 $today2000 = date ("YmdHi",mktime(20 , 0 , 0, $startmonth , $startday , $startyear));
 $today2359 = date ("YmdHi",mktime(23 , 59 , 0, $startmonth , $startday , $startyear));
-$day1after = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday +1 , $startyear));
-$day1 = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday +1 , $startyear));
-$day2after = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday +2 , $startyear));
-$day2 = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday +2 , $startyear));
-$day3after = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday +3 , $startyear));
-$day3 = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday +3 , $startyear));
-$day4after = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday +4 , $startyear));
-$day4 = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday +4 , $startyear));
-$day5after = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday +5 , $startyear));
-$day5 = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday +5 , $startyear));
-$day6after = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday +6 , $startyear));
-$day6 = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday +6 , $startyear));
-$day7after = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday +7 , $startyear));
-$day7 = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday +7 , $startyear));
 
+
+///////////////////////////////////////////////////////////////////
+//１週間分のページのリンクの変数
+$day0after = date ("YmdHi",mktime($beginhour , 0 , 0, $beginmonth , $beginday  , $beginyear));
+$day0 = date ("m/d(D)",mktime($beginhour , 0 , 0, $beginmonth , $beginday  , $beginyear));
+$day1after = date ("YmdHi",mktime($beginhour , 0 , 0, $beginmonth , $beginday +1 , $beginyear));
+$day1 = date ("m/d(D)",mktime($beginhour , 0 , 0, $beginmonth , $beginday +1 , $beginyear));
+$day2after = date ("YmdHi",mktime($beginhour , 0 , 0, $beginmonth , $beginday +2 , $beginyear));
+$day2 = date ("m/d(D)",mktime($beginhour , 0 , 0, $beginmonth , $beginday +2 , $beginyear));
+$day3after = date ("YmdHi",mktime($beginhour , 0 , 0, $beginmonth , $beginday +3 , $beginyear));
+$day3 = date ("m/d(D)",mktime($beginhour , 0 , 0, $beginmonth , $beginday +3 , $beginyear));
+$day4after = date ("YmdHi",mktime($beginhour , 0 , 0, $beginmonth , $beginday +4 , $beginyear));
+$day4 = date ("m/d(D)",mktime($beginhour , 0 , 0, $beginmonth , $beginday +4 , $beginyear));
+$day5after = date ("YmdHi",mktime($beginhour , 0 , 0, $beginmonth , $beginday +5 , $beginyear));
+$day5 = date ("m/d(D)",mktime($beginhour , 0 , 0, $beginmonth , $beginday +5 , $beginyear));
+$day6after = date ("YmdHi",mktime($beginhour , 0 , 0, $beginmonth , $beginday +6 , $beginyear));
+$day6 = date ("m/d(D)",mktime($beginhour , 0 , 0, $beginmonth , $beginday +6 , $beginyear));
+$day7after = date ("YmdHi",mktime($beginhour , 0 , 0, $beginmonth , $beginday +7 , $beginyear));
+$day7 = date ("m/d(D)",mktime($beginhour , 0 , 0, $beginmonth , $beginday +7 , $beginyear));
+///////////////////////////////////////////////////////////////////
 
 
 //表示局選定
@@ -118,8 +149,31 @@ if (($page == "")|| ($page <= 0) ){
 }
 
 
-print "←<A HREF=\"./viewepg.php?p=$page&start=$yesterday\">$dayyesterday(前日)</A>　<A HREF=\"./viewepg.php\">現在</A>　当日(<A HREF=\"./viewepg.php?p=$page&start=$today0400\">4:00</A>　<A HREF=\"./viewepg.php?p=$page&start=$today0800\">8:00</A>　<A HREF=\"./viewepg.php?p=$page&start=$today1200\">12:00</A>　<A HREF=\"./viewepg.php?p=$page&start=$today1600\">16:00</A>　<A HREF=\"./viewepg.php?p=$page&start=$today2000\">20:00</A>　<A HREF=\"./viewepg.php?p=$page&start=$today2359\">24:00</A>)　<A HREF=\"./viewepg.php?p=$page&start=$day1after\">$day1(翌日)</A>　<A HREF=\"./viewepg.php?p=$page&start=$day2after\">$day2</A>　<A HREF=\"./viewepg.php?p=$page&start=$day3after\">$day3</A>　<A HREF=\"./viewepg.php?p=$page&start=$day4after\">$day4</A>　<A HREF=\"./viewepg.php?p=$page&start=$day5after\">$day5</A>　<A HREF=\"./viewepg.php?p=$page&start=$day6after\">$day6</A>　<A HREF=\"./viewepg.php?p=$page&start=$day7after\">$day7</A>→<BR>\n";
+/////////////////////////////////////////////////////////////////
+//表示部分
+print "
 
+[<A HREF=\"./viewepg.php\">現在</A>] | 
+<A HREF=\"./viewepg.php?p=$page&start=$yesterday\">$dayyesterday [前日]</A> | 
+当日(
+<A HREF=\"./viewepg.php?p=$page&start=$today0400\">4:00</A>　
+<A HREF=\"./viewepg.php?p=$page&start=$today0800\">8:00</A>　
+<A HREF=\"./viewepg.php?p=$page&start=$today1200\">12:00</A>　
+<A HREF=\"./viewepg.php?p=$page&start=$today1600\">16:00</A>　
+<A HREF=\"./viewepg.php?p=$page&start=$today2000\">20:00</A>　
+<A HREF=\"./viewepg.php?p=$page&start=$today2359\">24:00</A>) | 
+<A HREF=\"./viewepg.php?p=$page&start=$tomorrow\">$daytomorrow [翌日]</A>
+<br>
+ | 
+<A HREF=\"./viewepg.php?p=$page&start=$day0after\">$day0</A> | 
+<A HREF=\"./viewepg.php?p=$page&start=$day1after\">$day1</A> | 
+<A HREF=\"./viewepg.php?p=$page&start=$day2after\">$day2</A> | 
+<A HREF=\"./viewepg.php?p=$page&start=$day3after\">$day3</A> | 
+<A HREF=\"./viewepg.php?p=$page&start=$day4after\">$day4</A> | 
+<A HREF=\"./viewepg.php?p=$page&start=$day5after\">$day5</A> | 
+<A HREF=\"./viewepg.php?p=$page&start=$day6after\">$day6</A> | 
+<A HREF=\"./viewepg.php?p=$page&start=$day7after\">$day7</A> | <BR>\n";
+///////////////////////////////////////////////////////////////////
 
 if ($maxrows > $maxdisplay){
 //複数ページ
@@ -304,6 +358,7 @@ for ($l = 0 ;$l <  $colmnums; $l++){
 	print "</tr>\n";
 }
 print "</table>\n";
+
  ?>
 
 <hr>

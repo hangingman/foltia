@@ -52,47 +52,73 @@ warndiskfreearea();
 print "<title>foltia:recorded file list</title>
 </head>";
 
+
+/////////////////////////////////////////////////??????
+//１ページの表示レコード数
+$lim = 300;
+//クエリ取得
+$p = getgetnumform(p);
+//ページ取得の計算
+list($st,$p,$p2) = number_page($p,$lim);
+//////////////////////////////////////////////////????
+
 $now = date("YmdHi");   
 ?>
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
 <div align="center">
+
 <?php 
 	printhtmlpageheader();
 ?>
+
   <p align="left"><font color="#494949" size="6">録画一覧表示</font></p>
   <hr size="4">
 <p align="left">再生可能番組リストを表示します。<br>
+
 <?php
 if ($demomode){
 }else{
 	printdiskusage();
 	printtrcnprocesses();
 }
+
+
+//////////////////////////////////////////
+//クエリ取得
+$list = getgetform('list');
+//Autopager
+echo "<div id=contents class=autopagerize_page_element />";
+//////////////////////////////////////////
+
+
 ?>
 <form name="deletemovie" method="POST" action="./deletemovie.php"> 
 <p align="left"><input type="submit" value="項目削除" ></p>
 
   <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
-	<thead>
-		<tr>
+	<thead> 
+		<tr> 
 			<th align="left">削除</th>
 			<th align="left"><A HREF="./showplaylist.php">ファイル名</A></th>
 			<th align="left"><A HREF="./showplaylist.php?list=title">タイトル</A></th>
 			<th align="left">話数</th>
 			<th align="left">サブタイ</th>
+
 <?php
 if (file_exists("./selectcaptureimage.php") ) {
 print "			<th align=\"left\">キャプ</th>\n";
 }
 ?>
 		</tr>
-	</thead>
+	</thead> 
 
 	<tbody>
 
 
+
 <?php
-$list = getgetform('list');
+
+//$list = getgetform('list');
 
 //旧仕様
 if($list == "raw"){
@@ -175,6 +201,7 @@ print "</tr>\n
 }//foreach
 print "	</tbody>\n</table>\n</FORM>\n</body>\n</html>\n";
 exit;
+
 }elseif ($list== "title"){//新仕様
 $query = "
 SELECT 
@@ -188,7 +215,7 @@ FROM foltia_subtitle , foltia_program , foltia_m2pfiles
 WHERE foltia_program.tid = foltia_subtitle.tid  
  AND foltia_subtitle.m2pfilename = foltia_m2pfiles.m2pfilename 
 ORDER BY foltia_subtitle.tid  DESC , foltia_subtitle.startdatetime  ASC 
-
+LIMIT $lim OFFSET $st
 
 ";
 }else{
@@ -204,13 +231,33 @@ FROM foltia_subtitle , foltia_program , foltia_m2pfiles
 WHERE foltia_program.tid = foltia_subtitle.tid  
  AND foltia_subtitle.m2pfilename = foltia_m2pfiles.m2pfilename 
 ORDER BY foltia_subtitle.startdatetime DESC 
+LIMIT $lim OFFSET $st
 ";
 }
 
 //$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました");
 $rowdata = $rs->fetch();
+
+/////////////////////////////////////////
+//テーブルの総数取得
+       $query2 = "
+SELECT COUNT(*) AS cnt FROM foltia_subtitle , foltia_program , foltia_m2pfiles
+WHERE foltia_program.tid = foltia_subtitle.tid
+ AND foltia_subtitle.m2pfilename = foltia_m2pfiles.m2pfilename
+        ";
+$rs2 = sql_query($con, $query2, "DB\?\ｨ\e?E?oCO???T????");
+$rowdata2 = $rs2->fetch();
+          if (! $rowdata2) {
+                die_exit("番組データがありません<BR>");
+          }
+//1O?o?eAA
+$dtcnt =  $rowdata2[0];
+
+/////////////////////////////////////////
+
 if ($rowdata) {
+
 	do {
 $tid = htmlspecialchars($rowdata[0]);
 $title = htmlspecialchars($rowdata[1]);
@@ -219,6 +266,7 @@ $subtitle = htmlspecialchars($rowdata[3]);
 $fName  = htmlspecialchars($rowdata[4]);
 $pid  = htmlspecialchars($rowdata[5]);
 //--
+
 print "
 <tr>
 <td><INPUT TYPE='checkbox' NAME='delete[]' VALUE='$fName'><br></td>";
@@ -237,14 +285,21 @@ print"<td>$title</td>
 <td>$count<br></td>
 <td>$subtitle<br></td>";
 }
+
 	if (file_exists("./selectcaptureimage.php") ) {
 	$capimgpath = preg_replace("/.m2.+/", "", $fName);
 	print "			<td align=\"left\"><a href=\"./selectcaptureimage.php?pid=$pid\">キャプ</a></td>\n";
 	}
+
 print "</tr>\n
 ";
+
+//}
+
+
 	} while ($rowdata = $rs->fetch());
 }else{
+
 print "
 <tr>
 <td COLSPAN=\"5\">ファイルがありません</td>
@@ -258,8 +313,17 @@ print "</tbody>
 </table>
 </FORM>\n";
 
+//////////////////////////////////////////////////////////////////////
+//クエリ代入
+$query_st = $list;
+//Autopageing処理とページのリンクを表示
+list($p2,$page) = page_display($query_st,$p,$p2,$lim,$dtcnt,"");
+//////////////////////////////////////////////////////////////////////
+
+//midokubangumi no title dake hyouji
 //番組ソートの時、未読番組のタイトルだけ表示
-if ($list== "title"){
+if ($list== "title" && $p2 > $page){
+
 $query = "
 SELECT distinct
 foltia_program.tid,
@@ -289,7 +353,6 @@ print "<hr>
 		do {
 $tid = htmlspecialchars($rowdata[0]);
 $title = htmlspecialchars($rowdata[1]);
-
 print "<tr><td>$tid</td><td>$title</td></tr>\n";
 
 		} while ($rowdata = $rs->fetch());
@@ -297,8 +360,8 @@ print "</tbody></table>\n";
 }//if maxrows
 }//if title
 
+
 ?>
-	
 
 </body>
 </html>

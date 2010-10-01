@@ -19,6 +19,7 @@ titlelist.php
 include("./foltialib.php");
 $con = m_connect();
 
+
 if ($useenvironmentpolicy == 1){
 if (!isset($_SERVER['PHP_AUTH_USER'])) {
     header("WWW-Authenticate: Basic realm=\"foltia\"");
@@ -41,7 +42,17 @@ login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
 </head>
 
 <?php
-$now = date("YmdHi");   
+
+//////////////////////////////////////////////////////////
+//１ページの表示レコード数
+$lim = 1000;
+//クエリ取得
+$p = getgetnumform(p);
+//ページ取得の計算
+list($st,$p,$p2) = number_page($p,$lim);
+///////////////////////////////////////////////////////////
+
+	$now = date("YmdHi");   
 
 	$query = "
 SELECT 
@@ -49,17 +60,31 @@ foltia_program.tid,
 foltia_program .title 
 FROM  foltia_program 
 ORDER BY foltia_program.tid  DESC
+LIMIT $lim OFFSET $st
 	";
 //	$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました");
 $rowdata = $rs->fetch();
-if (! $rowdata) {
-		die_exit("番組データがありません<BR>");
-		}
+          if (! $rowdata) {
+                die_exit("番組データがありません<BR>");
+                }
+
+	$query2 = "
+SELECT COUNT(*) AS cnt FROM foltia_program 
+	";
+$rs2 = sql_query($con, $query2, "DBクエリに失敗しました");
+$rowdata2 = $rs2->fetch();
+          if (! $rowdata2) {
+                die_exit("番組データがありません<BR>");
+          }
+//行数取得
+$dtcnt =  $rowdata2[0];
+
 ?>
 
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
 <div align="center">
+
 <?php 
 printhtmlpageheader();
 ?>
@@ -70,7 +95,11 @@ printhtmlpageheader();
 <?php
 		/* フィールド数 */
 $maxcols = $rs->columnCount();
-		?>
+	
+//Autopager 
+echo "<div id=contents class=autopagerize_page_element />";
+?>
+
   <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
 	<thead>
 		<tr>
@@ -79,28 +108,39 @@ $maxcols = $rs->columnCount();
 			<th align="left">MPEG4リンク</th>
 		</tr>
 	</thead>
-
+	
 	<tbody>
 		<?php
 			/* テーブルのデータを出力 */
-    do {
+
+  do {
 				echo("<tr>\n");
 
 				//TID
 					echo("<td><a href=\"reserveprogram.php?tid=" .
-				     htmlspecialchars($rowdata[0])  . "\">" .
-				     htmlspecialchars($rowdata[0]) . "</a></td>\n");
+					htmlspecialchars($rowdata[0])  . "\">" .
+					htmlspecialchars($rowdata[0]) . "</a></td>\n");
 				      //タイトル
-				     echo("<td><a href=\"http://cal.syoboi.jp/progedit.php?TID=" .
-				     htmlspecialchars($rowdata[0])  . "\" target=\"_blank\">" .
-				     htmlspecialchars($rowdata[1]) . "</a></td>\n");
+				        echo("<td><a href=\"http://cal.syoboi.jp/progedit.php?TID=" .
+					htmlspecialchars($rowdata[0])  . "\" target=\"_blank\">" .
+					htmlspecialchars($rowdata[1]) . "</a></td>\n");
 					print "<td><A HREF = \"showlibc.php?tid=".htmlspecialchars($rowdata[0])."\">mp4</A></td>\n";
+
 				echo("</tr>\n");
     } while ($rowdata = $rs->fetch());
+
 		?>
+
 	</tbody>
 </table>
 
+<?php
 
+/////////////////////////////////////////////////////////
+//Autopageing処理とページのリンクを表示
+page_display("",$p,$p2,$lim,$dtcnt,"");
+////////////////////////////////////////////////////////
+
+?>
 </body>
 </html>

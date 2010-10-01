@@ -29,6 +29,7 @@ if ($useenvironmentpolicy == 1){
 	}
 }//end if login
 
+
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -55,6 +56,16 @@ print "<meta http-equiv=\"Content-Style-Type\" content=\"text/css\">
 </head>
 
 <?php
+
+///////////////////////////////////////////////////////////
+//１ページの表示レコード数
+$lim = 300;	
+//クエリ取得
+$p = getgetnumform(p);
+//ページ取得の計算
+list($st,$p,$p2) = number_page($p,$lim);
+///////////////////////////////////////////////////////////
+
 $now = date("YmdHi");  
 if(ereg("iPhone",$useragent)){
 	print "<body onclick=\"console.log('Hello', event.target);\">
@@ -74,6 +85,28 @@ print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">録画ライブラリ表示
 ";
 } 
 
+////////////////////////////////////////////////////////
+//レコードの総数取得
+$query = "
+SELECT
+COUNT(DISTINCT tid) 
+FROM   foltia_mp4files 
+";
+
+$rs = sql_query($con, $query, "DBクエリに失敗しました");
+$rowdata = $rs->fetch();
+$dtcnt = htmlspecialchars($rowdata[0]);
+//echo $dtcnt;
+//
+if (! $rowdata) {
+	die_exit("番組データがありません<BR>");
+}
+
+////////////////////////////////////////////////////////
+
+//Autopager
+echo "<div id=contents class=autopagerize_page_element />";
+
 //新仕様 /* 2006/10/26 */
 $query = "
 SELECT foltia_mp4files.tid,foltia_program.title , count(foltia_mp4files.mp4filename) 
@@ -81,15 +114,19 @@ FROM   foltia_mp4files ,  foltia_program
 WHERE  foltia_program.tid = foltia_mp4files.tid  
 GROUP BY foltia_mp4files.tid ,foltia_program.title 
 ORDER BY foltia_mp4files.tid DESC
+LIMIT $lim OFFSET $st
 ";
+
 
 //$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました");
 $rowdata = $rs->fetch();
+
 if ($rowdata) {
 if(ereg("iPhone",$useragent)){
 	print "<ul id=\"home\" title=\"録画ライブラリ表示\" selected=\"true\">";
 }else{
+
 print "
   <table BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"2\" WIDTH=\"100%\">
 	<thead>
@@ -102,13 +139,16 @@ print "
 	</thead>
 	<tbody>
 ";
+
 }
+
 	do {
 $title = $rowdata[1];
 $counts = $rowdata[2];
 $tid = htmlspecialchars($rowdata[0]);
 $title = htmlspecialchars($title);
 $counts = htmlspecialchars($counts);
+
 
 if(ereg("iPhone",$useragent)){
 print "<li><a href=\"showlibc.php?tid=$tid\" target=\"_self\">$title</a></li>\n";
@@ -130,6 +170,14 @@ if(ereg("iPhone",$useragent)){
 print "
 	</tbody>
 </table>
+
+";
+////////////////////////////////////////////////////////////////
+//Autopageing処理とページのリンクを表示
+page_display("",$p,$p2,$lim,$dtcnt,"");
+///////////////////////////////////////////////////////////////
+
+print "
 </body>
 </html>
 ";
@@ -139,6 +187,10 @@ print "
 print "録画ファイルが存在しません。</body></html>";
 
 }//end if
+
+
+
+
 /*
 //旧仕様
 //ディレクトリからファイル一覧を取得

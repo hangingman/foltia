@@ -52,6 +52,16 @@ print "<title>foltia:放映予定</title>
 
 }//end function printtitle()
 
+
+//////////////////////////
+//ページの表示レコード数
+$lim = 300;		
+//クエリ取得
+$p = getgetnumform(p);
+//ページ取得の計算
+list($st,$p,$p2) = number_page($p,$lim);
+////////////////////////////
+
 //同一番組他局検索
 $query = "
 SELECT
@@ -131,7 +141,6 @@ LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
 LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
 WHERE foltia_tvrecord.stationid = 0 AND
  foltia_subtitle.enddatetime >= ? ORDER BY x ASC
-LIMIT 1000
 	";
 $reservedrs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$now));
 
@@ -172,7 +181,9 @@ WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = fo
 ORDER BY foltia_subtitle.startdatetime  ASC 
 LIMIT 1000
 	";
+
 }else{
+
 $query = "
 	SELECT 
  foltia_program.tid, stationname, foltia_program.title,
@@ -185,6 +196,30 @@ WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = fo
 ORDER BY foltia_subtitle.startdatetime  ASC 
 LIMIT 1000
 	";
+
+/////////////////////////////////////////////////////////////
+//レコード総数取得
+$query = "
+	SELECT
+COUNT(*) AS cnt 
+FROM foltia_subtitle , foltia_program ,foltia_station  
+WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
+ AND foltia_subtitle.enddatetime >= ?  
+LIMIT 1000 
+	";
+
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($now));
+$rowdata = $rs->fetch();
+
+$dtcnt = htmlspecialchars($rowdata[0]);
+//	echo $dtcnt;
+
+if (! $rowdata) {
+	die_exit("番組データがありません<BR>");
+}//endif
+////////////////////////////////////////////////////////////
+
+//レコード表示
 $query = "
 	SELECT 
  foltia_program.tid, stationname, foltia_program.title,
@@ -195,13 +230,19 @@ FROM foltia_subtitle , foltia_program ,foltia_station
 WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
  AND foltia_subtitle.enddatetime >= ?  
 ORDER BY foltia_subtitle.startdatetime  ASC 
-LIMIT 1000
+LIMIT $lim OFFSET $st 
 	";
+
+
+/////////////////////////////////////////////////////////////////
+
 }//end if
 
 //$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($now));
 $rowdata = $rs->fetch();
+//
+//
 if (! $rowdata) {
 header("Status: 404 Not Found",TRUE,404);
 printtitle();
@@ -210,6 +251,7 @@ print "<body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#0000
 printhtmlpageheader();
 print "<hr size=\"4\">\n";
 		die_exit("番組データがありません<BR>");
+
 }//endif
 
 printtitle();
@@ -234,6 +276,10 @@ if ($mode == "new"){
 <?php
 		/* フィールド数 */
     $maxcols = $rs->columnCount();
+
+//Autopager
+echo "<div id=contents class=autopagerize_page_element />";
+
 		?>
   <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
 	<thead>
@@ -245,7 +291,6 @@ if ($mode == "new"){
 			<th align="left">サブタイトル</th>
 			<th align="left">開始時刻(ズレ)</th>
 			<th align="left">総尺</th>
-
 		</tr>
 	</thead>
 
@@ -302,11 +347,18 @@ $subtitle =  htmlspecialchars($rowdata[4]);
 					echo("<td>".htmlspecialchars($rowdata[6])."<br></td>\n");
 
 				echo("</tr>\n");
-     } while ($rowdata = $rs->fetch());
+     
+	} while ($rowdata = $rs->fetch());
 		?>
 	</tbody>
 </table>
 
+<?php
+/////////////////////////////////////////////////
+//Autopageing処理とページのリンクを表示
+page_display("",$p,$p2,$lim,$dtcnt,$mode);
+/////////////////////////////////////////////////
+?>
 
 </body>
 </html>

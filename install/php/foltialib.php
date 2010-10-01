@@ -730,4 +730,80 @@ WHERE foltia_envpolicy.memberid  = '$memberid'
 
 }//end function getmemberid2name
 
+
+
+function number_page($p,$lim){
+//Autopager・ページリンクで使用している関数
+//下記は関数をしているファイル名
+//index.php  showplaylist.php  titlelist.php  showlib.php  showlibc.php
+///////////////////////////////////////////////////////////////////////////
+// ページ数の計算関係
+// 第１引数 : $p       : 現在のページ数
+// 第２引数 : $lim     : １ページあたりに表示するレコード数
+///////////////////////////////////////////////////////////////////////////
+
+	if($p == 0){
+		$p2 = 2;        //$p2の初期値設定
+	}else{
+		$p2 = $p;       //次のページ数の値を$p2に代入する
+		$p2++;
+	}
+
+	if($p < 1){
+		$p = 1;
+	}
+	//表示するページの値を取得
+	$st = ($p -1) * $lim;
+
+	//
+	return array($st,$p,$p2);
+}//end number_page
+
+
+function page_display($query_st,$p,$p2,$lim,$dtcnt,$mode){
+//Autopager・ページリンクで使用している関数
+//下記は関数を使用しているファイル名
+//index.php　showplaylist.php　titlelist.php　showlib.php　showlibc.php
+/////////////////////////////////////////////////////////////////////////////
+// Autopager処理とページのリンクの表示
+// 第１引数 ： $query_st        : クエリの値
+// 第２引数 ： $p            : 現在のページ数の値
+// 第３引数 ： $p2           : 次のページ数の値
+// 第４引数 ： $lim          : 1ページあたりに表示するレコード数
+// 第５引数 ： $dtcnt        : レコードの総数
+// 第６引数 ： $mode         :【新番組】mode=newのときにリンクページを表示させないフラグ(index.phpのみで使用)
+////////////////////////////////////////////////////////////////////////////
+	if($query_st == ""){
+        //ページ総数取得
+        $page = ceil($dtcnt / $lim);
+		//$modeのif文は【新番組】の画面のみで使用
+		if($mode == ''){
+			echo "$p/$page";         //  現在のページ数/ページ総数
+		}
+        //ページのリンク表示
+        for($i=1;$i <= $page; $i++){
+            print("<a href=\"".$_SERVER["PHP_SELF"]."?p=$i\" > $i </a>");
+        }
+        //Autopageingの処理
+        if($page >= $p2 ){
+            print("<a rel=next href=\"".$_SERVER["PHP_SELF"]."?p=$p2\" > </a>");
+        }
+	}else{      //query_stに値が入っていれば
+		$query_st = $_SERVER['QUERY_STRING'];
+        $page = ceil($dtcnt / $lim);
+        echo "$p/$page";
+        //ページのリンク表示
+        for($i=1;$i <= $page; $i++){
+			$query_st =  preg_replace('/p=[0-9]+&/','',$query_st);    //p=0〜9&を空欄にする正規表現
+            print("<a href=\"".$_SERVER["PHP_SELF"]."?p=$i&$query_st\" > $i </a>");
+        }
+        //Autopageingの処理
+        if($page >= $p2 ){
+			$query_st =  preg_replace('/p=[0-9]+&/','',$query_st);
+            print("<a rel=next href=\"".$_SERVER["PHP_SELF"]."?p=$p2&$query_st\" > </a>");
+		}
+	}
+    return array($p2,$page);
+}// end page_display
+
 ?>
