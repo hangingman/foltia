@@ -15,12 +15,12 @@
 #
 #
 
-use LWP::Simple;
+#use LWP::Simple;
 #use Encode qw(from_to);
 #use encoding 'euc-jp', STDIN=>'utf8', STDOUT=>'euc-jp' ; # 標準入力:utf8 
 # http://www.lr.pi.titech.ac.jp/~abekawa/perl/perl_unicode.html
 use Jcode;
-use Data::Dumper; 
+#use Data::Dumper; 
 use Time::Local;
 use DBI;
 use DBD::Pg;
@@ -223,9 +223,8 @@ my @data = ();
 $foltiastarttime = substr($foltiastarttime,0,12); # 12桁　200508072254
 $foltiaendtime   = substr($foltiaendtime,0,12); # 12桁　200508072355
 
-#$sth = $dbh->prepare($stmt{'xmltv2foltia.replaceepg.1'});
+$sth = $dbh->prepare($stmt{'xmltv2foltia.replaceepg.1'});
 my $now = &epoch2foldate(time());
-$sth = $dbh->prepare( "SELECT * FROM foltia_epg WHERE enddatetime > ? AND startdatetime < ? AND ontvchannel = ? AND startdatetime > ?");
 $sth->execute($foltiastarttime , $foltiaendtime , $ontvepgchannel,$now);
 
 while (@data = $sth->fetchrow_array()) {
@@ -280,7 +279,6 @@ push (@category,$category);
 
 sub commitdb{
 $dbh->{AutoCommit} = 0;
-$dbh->do('BEGIN');
 #print Dumper(\@dbarray);
 my $loopcount = @foltiastarttime;
 my $i = 0;
@@ -297,7 +295,7 @@ for ($i=0;$i<$loopcount;$i++){
 	$sth->execute( $foltiastarttime[$i],$foltiaendtime[$i], $lengthmin[$i], $channel[$i], $title[$i], $desc[$i], $category[$i]) || warn "error: $foltiastarttime, $foltiaendtime, $lengthmin, $channel, $title, $desc, $category\n";
 #&writelog("xmltv2foltia DEBUG : INSERT INTO foltia_epg VALUES ( NULL , $foltiastarttime[$i],$foltiaendtime[$i], $lengthmin[$i], $channel[$i], $title[$i], $desc[$i], $category[$i])");
 }# end for
-$dbh->do('COMMIT');
+$dbh->commit;
 $dbh->{AutoCommit} = 1;
 }#end sub commitdb
 
