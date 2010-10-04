@@ -18,7 +18,7 @@ start:表示タイムスタンプ(Ex.200512281558)
 
 include("./foltialib.php");
 $con = m_connect();
-
+$epgviewstyle = 1;// 0だと終了時刻も表示
 if ($useenvironmentpolicy == 1){
 	if (!isset($_SERVER['PHP_AUTH_USER'])) {
 	    header("WWW-Authenticate: Basic realm=\"foltia\"");
@@ -151,7 +151,7 @@ if (($page == "")|| ($page <= 0) ){
 
 /////////////////////////////////////////////////////////////////
 //表示部分
-print "
+$navigationbar =  "
 
 [<A HREF=\"./viewepg.php\">現在</A>] | 
 <A HREF=\"./viewepg.php?p=$page&start=$yesterday\">$dayyesterday [前日]</A> | 
@@ -173,6 +173,7 @@ print "
 <A HREF=\"./viewepg.php?p=$page&start=$day5after\">$day5</A> | 
 <A HREF=\"./viewepg.php?p=$page&start=$day6after\">$day6</A> | 
 <A HREF=\"./viewepg.php?p=$page&start=$day7after\">$day7</A> | <BR>\n";
+print "$navigationbar";
 ///////////////////////////////////////////////////////////////////
 
 if ($maxrows > $maxdisplay){
@@ -273,6 +274,14 @@ $title = $stationrowdata[3];
 $title = htmlspecialchars(z2h($title));
 $desc = $stationrowdata[4];
 $desc = htmlspecialchars(z2h($desc));
+
+if ($epgviewstyle){
+$desc=$desc ."<br><br><!-- ". htmlspecialchars(foldate2print($stationrowdata[1])) ."-->";
+}else{
+$desc=$desc ."<br><br>". htmlspecialchars(foldate2print($stationrowdata[1])) ;
+}
+
+
 $height =  htmlspecialchars($stationrowdata[2]) * 3;
 $epgid =  htmlspecialchars($stationrowdata[7]);
 $epgcategory = htmlspecialchars($stationrowdata[8]);
@@ -359,8 +368,8 @@ for ($l = 0 ;$l <  $colmnums; $l++){
 }
 print "</table>\n";
 
- ?>
-
+print "<p align=\"left\"> $navigationbar </p>";
+?>
 <hr>
 凡例
 <table>
