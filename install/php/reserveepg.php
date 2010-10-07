@@ -200,6 +200,7 @@ print "<table width=\"100%\" border=\"0\">
 	
 </table>
 
+<input type=\"hidden\" name=\"epgid\" value=\"$epgid\" />
 <input type=\"hidden\" name=\"stationid\" value=\"$stationid\" />
 <input type=\"hidden\" name=\"subtitle\" value=\"$progname $progdesc\" />
 <input type=\"hidden\" name=\"startdatetime\" value=\"$startfoltime\" />

@@ -126,8 +126,8 @@ if(/<channel/){
 	s/^[\s]*//gio;
 	chomp();
 	$item{title}  = &removetag($_);
-	$item{title} =~ s/¡Ú.*¡Û//g;#¡Ú²ò¡Û¤È¤«
-	$item{title} =~ s/\[.*\]//g;#[Æó]¤È¤« 
+	$item{title} =~ s/¡Ú.*?¡Û//g;#¡Ú²ò¡Û¤È¤«
+	$item{title} =~ s/\[.*?\]//g;#[Æó]¤È¤« 
 	#print Dumper($_) ;
 	#print "$result  \n";
 
@@ -231,6 +231,15 @@ while (@data = $sth->fetchrow_array()) {
 	push(@deleteepgid,$data[0]);
 	#&writelog("xmltv2foltia DEBUG push(\@deleteepgid,$data[0]);");
 }#end while 
+
+#¾å½ñ¤­¤ò¾Ã¤¹
+$sth = $dbh->prepare($stmt{'xmltv2foltia.replaceepg.2'});
+$sth->execute($foltiastarttime , $foltiaendtime , $ontvepgchannel);
+while (@data = $sth->fetchrow_array()) {
+	push(@deleteepgid,$data[0]);
+	#&writelog("xmltv2foltia DEBUG push(\@deleteepgid,$data[0]);");
+}#end while 
+
 }#endsub replaceepg
 
 sub registdb{
@@ -240,6 +249,10 @@ my $channel = $_[2];
 my $title = $_[3];
 my $desc = $_[4];
 my $category = $_[5];
+
+#Encode::JP::H2Z::z2h(\$string);
+$title = jcode($title)->tr('£Á-£Ú£á-£ú£°-£¹¡ª¡ô¡ð¡ó¡õ¡Ê¡Ë¡ö¡Ü¡¤¡Ý¡¥¡¿¡§¡¨¡ã¡á¡ä¡©¡÷¡Î¡À¡Ï¡°¡²¡®¡Ð¡Ã¡Ñ','A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|}');
+$desc = jcode($desc)->tr('£Á-£Ú£á-£ú£°-£¹¡ª¡ô¡ð¡ó¡õ¡Ê¡Ë¡ö¡Ü¡¤¡Ý¡¥¡¿¡§¡¨¡ã¡á¡ä¡©¡÷¡Î¡À¡Ï¡°¡²¡®¡Ð¡Ã¡Ñ','A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|}');
 
 #&writelog("xmltv2foltia DEBUG $foltiastarttime:$foltiaendtime");
 $foltiastarttime = substr($foltiastarttime,0,12);
@@ -287,13 +300,13 @@ my $i = 0;
 foreach $delid (@deleteepgid){
 	$sth = $dbh->prepare($stmt{'xmltv2foltia.commitdb.1'});
 	$sth->execute( $delid ) || warn "$delid\n";
-#	&writelog("xmltv2foltia DEBUG : DELETE FROM foltia_epg WHERE epgid = $delid");
+	#&writelog("xmltv2foltia DEBUG $stmt{'xmltv2foltia.commitdb.1'}/$delid");
 }
 #ÄÉ²Ã
 for ($i=0;$i<$loopcount;$i++){
 	$sth = $dbh->prepare($stmt{'xmltv2foltia.commitdb.2'});
 	$sth->execute( $foltiastarttime[$i],$foltiaendtime[$i], $lengthmin[$i], $channel[$i], $title[$i], $desc[$i], $category[$i]) || warn "error: $foltiastarttime, $foltiaendtime, $lengthmin, $channel, $title, $desc, $category\n";
-#&writelog("xmltv2foltia DEBUG : INSERT INTO foltia_epg VALUES ( NULL , $foltiastarttime[$i],$foltiaendtime[$i], $lengthmin[$i], $channel[$i], $title[$i], $desc[$i], $category[$i])");
+	#&writelog("xmltv2foltia DEBUG $stmt{'xmltv2foltia.commitdb.2'}/$foltiastarttime[$i],$foltiaendtime[$i], $lengthmin[$i], $channel[$i], $title[$i], $desc[$i], $category[$i]");
 }# end for
 $dbh->commit;
 $dbh->{AutoCommit} = 1;

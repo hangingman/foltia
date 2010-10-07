@@ -73,6 +73,7 @@
 'updatem2pfiletable.4' => "INSERT into foltia_mp4files values (?, ?)",
 
 'xmltv2foltia.replaceepg.1' => "SELECT * FROM foltia_epg WHERE enddatetime > ? AND startdatetime < ? AND ontvchannel = ? AND startdatetime > ?",
+'xmltv2foltia.replaceepg.2' => "SELECT * FROM foltia_epg WHERE startdatetime = ? AND enddatetime = ? AND ontvchannel = ? ",
 'xmltv2foltia.commitdb.1' => "DELETE FROM foltia_epg WHERE epgid = ?",
 'xmltv2foltia.commitdb.2' => "INSERT INTO foltia_epg VALUES ( nextval('foltia_epg_epgid_seq'), ?, ?, ?, ?, ?, ?, ?)" ,
 'epgimport.1' => "SELECT count(*) FROM foltia_station WHERE stationid = ?" ,

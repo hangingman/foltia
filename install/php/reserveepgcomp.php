@@ -51,19 +51,41 @@ login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
   <hr size="4">
 <?php
 
-$stationid = getnumform(stationid);
+/* $stationid = getnumform(stationid);
 $subtitle = getform(subtitle);
 $startdatetime = getnumform(startdatetime);
 $enddatetime = getnumform(enddatetime);
-$lengthmin = getnumform(lengthmin);
+$lengthmin = getnumform(lengthmin); */
+$epgid = getnumform(epgid);
 
-		if ($stationid == "" || $startdatetime < 0 ||  $enddatetime < 0 || $lengthmin < 0) {
+		if ($epgid == "" ) {
 		print "	<title>foltia:EPG予約:Error</title></head>\n";
 		die_exit("登録番組がありません<BR>");
 		}
 print "	<title>foltia:EPG予約:完了</title>
 </head>\n";
 $now = date("YmdHi");   
+//タイトル取得
+	$query = "
+	SELECT epgid,startdatetime,enddatetime,lengthmin, ontvchannel,epgtitle,epgdesc,epgcategory , 
+	stationname , stationrecch ,stationid 
+	FROM foltia_epg , foltia_station 
+	WHERE epgid = ? AND foltia_station.ontvcode = foltia_epg.ontvchannel
+	";
+	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($epgid));
+$rowdata = $rs->fetch();
+if (! $rowdata) {
+		die_exit("登録番組がありません。もう一度EPGに戻り操作して下さい。<BR>");
+}else{
+$stationid = $rowdata[10];
+$subtitle = $rowdata[5] . $rowdata[6];
+$startdatetime = $rowdata[1];
+$enddatetime = $rowdata[2];
+$lengthmin = $rowdata[3];
+}
+
+
+
 // - DB登録作業
 
 //時刻検査
@@ -146,15 +168,13 @@ print "時刻が不正なために予約できませんでした。 <br>";
 }
 
 
-print "<table width=\"100%\" border=\"0\">
-    <tr><td>放送開始</td><td>$startdatetime</td></tr>
-    <tr><td>放送終了</td><td>$enddatetime</td></tr>
-    <tr><td>局コード</td><td>$stationid</td></tr>
-    <tr><td>尺(分)</td><td>$lengthmin</td></tr>
-    <tr><td>番組名</td><td>$subtitle</td></tr>
-	
-</tbody>
-</table>";
+print "<table width=\"100%\" border=\"0\">\n";
+print "<tr><td>放送開始</td><td>".htmlspecialchars($startdatetime)."</td></tr>";
+print "<tr><td>放送終了</td><td>".htmlspecialchars($enddatetime)."</td></tr>\n";
+print "<tr><td>局コード</td><td>".htmlspecialchars($stationid)."</td></tr>\n";
+print "<tr><td>尺(分)</td><td>".htmlspecialchars($lengthmin)."</td></tr>\n";
+print "<tr><td>番組名</td><td>".htmlspecialchars($subtitle)."</td></tr>\n";
+print "</tbody>\n</table>";
 
 ?>
 </body>
