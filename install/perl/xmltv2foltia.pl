@@ -258,7 +258,7 @@ $desc = jcode($desc)->tr('£Á-£Ú£á-£ú£°-£¹¡ª¡ô¡ð¡ó¡õ¡Ê¡Ë¡ö¡Ü¡¤¡Ý¡¥¡¿¡§¡¨¡ã¡á¡ä¡©¡
 $foltiastarttime = substr($foltiastarttime,0,12);
 $foltiaendtime = substr($foltiaendtime,0,12);
 
-if($foltiaendtime > $todaytime){
+#if($foltiaendtime > $todaytime){#ÅÅÇÈ¤Ë¾è¤Ã¤Æ¤­¤¿¾ðÊó¤ÏÌµ¾ò·ï¹¹¿·
 # epgid¤ÏAUTOINCREMENT¤ËÊÑ¹¹¤·¤¿ #2010/8/10 
 #	$sth = $dbh->prepare($stmt{'xmltv2foltia.registdb.1'});
 #		$sth->execute();
@@ -284,9 +284,9 @@ push (@category,$category);
 #	$sth = $dbh->prepare($stmt{'xmltv2foltia.registdb.2'});
 #	$sth->execute($newepgid, $foltiastarttime, $foltiaendtime, $lengthmin, $channel, $title, $desc, $category) || warn "error: $newepgid, $foltiastarttime, $foltiaendtime, $lengthmin, $channel, $title, $desc, $category\n";
 # &writelog("xmltv2foltia DEBUG $DBQuery");
-}else{
+#}else{
 #&writelog("xmltv2foltia DEBUG SKIP $foltiastarttime:$foltiaendtime");
-}#Ì¤Íè¤¸¤ã¤Ê¤±¤ì¤ÐÁÞÆþ¤·¤Ê¤¤
+#}#Ì¤Íè¤¸¤ã¤Ê¤±¤ì¤ÐÁÞÆþ¤·¤Ê¤¤
 
 }#end sub registdb
 
