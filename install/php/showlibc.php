@@ -63,10 +63,13 @@ if ($tid == "") {
 		die_exit("再生可能番組がありません<BR>");
 	}
 
+?>
 
+
+<?php
 //////////////////////////////////////////////////////////
 //１ページの表示レコード数
-$lim = 52;
+$lim = 53;
 //クエリ取得
 $p = getgetnumform(p);
 //ページ取得の計算
@@ -116,10 +119,12 @@ print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">録画ライブラリ番組
   <hr size=\"4\">
 <p align=\"left\">再生可能ムービーを表示します。<br>";
 if ($tid == 0){
-print "$title 【<A HREF = \"./folcast.php?tid=$tid\">この番組のFolcast</A> [<a href=\"itpc://$serveruri/folcast.php?tid=$tid\">iTunesに登録</a>】 <br>\n";
+print "$title 【<A HREF = \"./folcast.php?tid=$tid\">この番組のFolcast</A> ［<a href=\"itpc://$serveruri/folcast.php?tid=$tid\">iTunesに登録</a>］】 <br>\n";
 }else{
 print "<a href=\"http://cal.syoboi.jp/tid/" .
-				     htmlspecialchars($tid)  . "\" target=\"_blank\">$title</a> 【<A HREF = \"./folcast.php?tid=$tid\">この番組のFolcast</A> [<a href=\"itpc://$serveruri/folcast.php?tid=$tid\">iTunesに登録</a>]】 <br>\n";
+				     htmlspecialchars($tid)  . "\" target=\"_blank\">$title</a> 
+【<A HREF = \"./folcast.php?tid=$tid\">この番組のFolcast</A> 
+［<a href=\"itpc://$serveruri/folcast.php?tid=$tid\">iTunesに登録</a>］】 <br>\n";
 }
 }// endif if(ereg("iPhone",$useragent))
 
@@ -138,8 +143,16 @@ if (file_exists("./selectcaptureimage.php") ) {
 }
 $serverfqdn = getserverfqdn();
 
+
 //Autopager
 echo "<div id=contents class=autopagerize_page_element />";
+?>
+
+<form name="deletemovie" method="POST" action="./deletemovie.php">
+<p align="left"><input type="submit" value="項目削除" ></p>
+
+
+<?php
 
 /////////////////////////////////////////////////////////
 //レコード総数取得
@@ -198,6 +211,7 @@ print "
 	<tbody>
 ";
 }
+
 	do {
 $title = $rowdata[1];
 
@@ -220,6 +234,7 @@ $subtitle = htmlspecialchars($subtitle);
 $onairdate = htmlspecialchars($onairdate);
 $pid = htmlspecialchars($rowdata[6]);
 $fName = htmlspecialchars($rowdata[7]);
+
 if (ereg(".MP4", $fName)){
 	$thumbnail = $fName;
 	$thumbnail = ereg_replace(".MP4", ".THM", $thumbnail);
@@ -270,14 +285,20 @@ print "  <tr>
 	}else{
 	print "\n    <td><a href = \"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$subtitle</a></td>";
 	}//if
+
+
 print "  </tr>
   <tr>
     <td>$onairdate</td>
   </tr>
   <tr>
-    <td><a href =\"$httpmediamappath/$tid.localized/mp4/$fName\" target=\"_blank\">$fName</A> / <a href=\"./mp4player.php?p=$pid\" target=\"_blank\">Player</a> / <script language=\"JavaScript\" type=\"text/javascript\">QT_WriteOBJECT_XHTML('http://g.hatena.ne.jp/images/podcasting.gif','16','16','','controller','FALSE','href','http://$serverfqdn/$httpmediamappath/$tid.localized/mp4/$fName','target','QuickTimePlayer','type','video/mp4');</script> $caplink</td>
+    <td><INPUT TYPE='checkbox' NAME='delete[]' VALUE='$fName'>削除 /
+	<a href =\"$httpmediamappath/$tid.localized/mp4/$fName\" target=\"_blank\">$fName</A> / 
+	<a href=\"./mp4player.php?p=$pid\" target=\"_blank\">Player</a> / 
+        <script language=\"JavaScript\" type=\"text/javascript\">QT_WriteOBJECT_XHTML('http://g.hatena.ne.jp/images/podcasting.gif','16','16','','controller','FALSE','href','http://$serverfqdn/$httpmediamappath/$tid.localized/mp4/$fName','target','QuickTimePlayer','type','video/mp4');</script> $caplink</td>
   </tr>
 ";
+
 
 }//endif iPhone
 
@@ -300,6 +321,7 @@ $query_st =  $tid;
 page_display($query_st,$p,$p2,$lim,$dtcnt,"");
 //////////////////////////////////////////////
 ?>
+
 </body>
 </html>
 

@@ -74,31 +74,60 @@ print "<p align=\"left\">次の番組を削除しました。</p>
 	</thead>
 	<tbody>";
 
-
-
-
 foreach ($delete as $fName) {
 
-		$filesplit = split("-",$fName);
-	
-/*
-if ($filesplit[1] == ""){
+if( preg_match('/.MP4$/',$fName)){   //拡張子がMP4なら録画ライブラリ番組個別表示での削除 (showlibc.php)
 $query = "
-SELECT 
-foltia_program.tid,foltia_program.title,foltia_subtitle.subtitle  
-FROM foltia_subtitle , foltia_program   
-WHERE foltia_program.tid = foltia_subtitle.tid  
- AND foltia_subtitle.tid = ? 
+SELECT
+foltia_subtitle.pspfilename,
+foltia_program.title,
+foltia_subtitle.countno,
+foltia_subtitle.subtitle
+FROM foltia_subtitle,foltia_program
+WHERE  foltia_subtitle.tid = foltia_program.tid AND  foltia_subtitle.pspfilename = ? 
+LIMIT 1";
+
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($fName));
+$rall = $rs->fetch();
+$rowdata = $rall[0];
+
+$title =  htmlspecialchars($rall[1]);
+$count =  htmlspecialchars($rall[2]);
+$subtitle =  htmlspecialchars($rall[3]);
+
+print "
+<tr>
+<td>$fName<br></td>
+<td>";
+
+if ($tid > 0 ){
+        print "<a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a>";
+}else{
+        print "$title";
+}
+
+print "</td>
+<td>$count<br></td>
+<td>$subtitle<br></td>
+</tr>\n
 ";
-$rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0]));
-				$rall = $rs->fetchAll();
-				//$rowdata = $rall[$row];
-				$rowdata = $rall[0];
-$title = $rowdata[1];
-$subtitle = "";
-$count = "";
-*/
-//}else{
+
+//DBから削除
+if ($demomode){
+}else{
+
+$query = "
+DELETE  FROM  foltia_mp4files
+WHERE mp4filename = ?
+";
+//$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($fName));
+
+//削除処理
+$oserr = system("$toolpath/perl/deletemovie.pl $fName");
+}//end if demomode
+
+}else{       //拡張子がMP4以外なら 録画一覧（録画順・番組順）の削除(showplaylist.php)
 
 $query = "
 SELECT foltia_program.tid,foltia_program.title,foltia_subtitle.countno,foltia_subtitle.subtitle 
@@ -111,14 +140,10 @@ AND foltia_subtitle.m2pfilename =  ?
 //$rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0] ,$filesplit[1]));
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($fName));
 				$rall = $rs->fetchAll();
-				//$rowdata = $rall[$row];
 				$rowdata = $rall[0];
-//print" $fName./$rowdata[1]/$rowdata[2]/$rowdata[3]<BR>\n";
 $title = $rowdata[1];
 $count = $rowdata[2];
 $subtitle = $rowdata[3];
-
-//}//end if 話数がNULL
 
 $tid = htmlspecialchars($rowdata[0]);
 $title = htmlspecialchars($title);
@@ -156,6 +181,8 @@ $rs = sql_query($con, $query, "DBクエリに失敗しました",array($fName));
 //削除処理
 $oserr = system("$toolpath/perl/deletemovie.pl $fName");
 }//end if demomode
+
+}//end if .MP4拡張子分岐
 
 }//foreach
 

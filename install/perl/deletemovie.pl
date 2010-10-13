@@ -13,6 +13,9 @@
 # DCC-JPL Japan/foltia project
 #
 #
+use DBI;
+use DBD::Pg;
+use DBD::SQLite;
 
 $path = $0;
 $path =~ s/deletemovie.pl$//i;
@@ -31,7 +34,7 @@ if ($fname eq "" ){
 }
 
 #ファイル名正当性チェック
-if ($fname =~ /.m2p$|.m2t$|.aac$/){
+if ($fname =~ /.m2p$|.m2t$|.MP4$|.aac$/){
 
 }else{
 #	print "deletemovie invalid filetype.\n";
@@ -39,10 +42,16 @@ if ($fname =~ /.m2p$|.m2t$|.aac$/){
 	exit (1);
 }
 
+#DB初期化
+$dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
+
 #ファイル存在チェック
-
+my $tid = &mp4filename2tid($fname);
+my $mp4dirname = &makemp4dir($tid);
 if (-e "$recfolderpath/$fname"){
-
+	$filemovepath = $recfolderpath;
+}elsif(-e "$mp4dirname/$fname"){
+	$filemovepath = $mp4dirname;
 }else{
 #	print "deletemovie file not found.$recfolderpath/$fname\n";
 	&writelog("deletemovie file not found:$fname.");
@@ -51,11 +60,11 @@ if (-e "$recfolderpath/$fname"){
 
 #既読削除処理 
 if ($rapidfiledelete  > 0){ #./mita/へ移動
-	system ("mv $recfolderpath/$fname $recfolderpath/mita/");
-	&writelog("deletemovie mv $recfolderpath/$fname $recfolderpath/mita/.");
+	system ("mv $filemovepath/$fname $recfolderpath/mita/");
+	&writelog("deletemovie mv filemovepath/$fname $recfolderpath/mita/.");
 }else{ #即時削除
-	system ("rm $recfolderpath/$fname ");
-	&writelog("deletemovie rm $recfolderpath/$fname ");
+	system ("rm $filemovepath/$fname ");
+	&writelog("deletemovie rm $filemovepath/$fname ");
 
 
 }

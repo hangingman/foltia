@@ -27,6 +27,7 @@
 'foltialib.changefilestatus.1' => "UPDATE foltia_subtitle SET filestatus = ?, lastupdate = now() WHERE pid = ?",
 'foltialib.getfilestatus.1' => "SELECT filestatus FROM foltia_subtitle WHERE pid = ?",
 'foltialib.pid2sid.1' => "SELECT stationid FROM foltia_subtitle WHERE pid = ?",
+'foltialib.mp4filename2tid.1' => "SELECT tid FROM foltia_subtitle WHERE PSPfilename = ?",
 
 'getxml2db.1' => "SELECT count(*) FROM foltia_program WHERE tid = ?",
 'getxml2db.2' => "INSERT into foltia_program VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,  ?, ?)",

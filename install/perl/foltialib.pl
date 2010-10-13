@@ -398,7 +398,22 @@ if ($sid eq ""){
 }#end sub pid2sid
 
 
+sub mp4filename2tid{
+#MPEG4ファイル名からTIDを得る
+my $mp4filename =  $_[0];
 
+my $sth;
+    $sth = $dbh->prepare($stmt{'foltialib.mp4filename2tid.1'});
+    $sth->execute($mp4filename);
+my @statusinfo = $sth->fetchrow_array;
+my $tid  = $statusinfo[0];
+
+if ($tid eq ""){
+	return  0 ;
+}else{
+	return $tid;
+}
+}#end sub mp4filename2tid
 
 
 
