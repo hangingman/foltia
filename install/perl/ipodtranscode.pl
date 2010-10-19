@@ -70,6 +70,8 @@ $aspect = $dbparam[4];# 16,1 (超額縁),4,3
 $countno = $dbparam[5];
 $mp4filenamestring = &mp4filenamestringbuild($pid);
 
+if (-e $inputmpeg2){#MPEG2ファイルが存在していれば
+
 &writelog("ipodtranscode DEBUG mp4filenamestring $mp4filenamestring");
 #展開ディレクトリ作成
 $pspdirname = &makemp4dir($tid);
@@ -144,7 +146,7 @@ if ($filestatus <= $FILESTATUSTRANSCODETSSPLITTING){
 		unlink("${filenamebody}_HD.m2t");
 }
 if ($filestatus <= $FILESTATUSTRANSCODEFFMPEG){
-
+	unlink("$filenamebody.264");
 	# H.264出力
 	$trcnmpegfile = $inputmpeg2 ;
 	# アスペクト比
@@ -157,21 +159,20 @@ if ($filestatus <= $FILESTATUSTRANSCODEFFMPEG){
 	}
 	# クオリティごとに
 	if (($trconqty eq "")||($trconqty == 1)){
-	$ffmpegencopt = " -s 360x202 -deinterlace -r 24.00 -vcodec libx264 -g 300 -b 330000 -level 13 -loop 1 -sc_threshold 60 -partp4x4 1 -rc_eq 'blurCplx^(1-qComp)' -refs 3 -maxrate 700000 -async 50 -f h264 $filenamebody.264";
+	$ffmpegencopt = " -threads 0 -s 360x202 -deinterlace -r 24.00 -vcodec libx264 -g 300 -b 330000 -level 13 -loop 1 -sc_threshold 60 -partp4x4 1 -rc_eq 'blurCplx^(1-qComp)' -refs 3 -maxrate 700000 -async 50 -f h264 $filenamebody.264";
 	}elsif($trconqty == 2){
 #	$ffmpegencopt = " -s 480x272 -deinterlace -r 29.97 -vcodec libx264 -g 300 -b 400000 -level 13 -loop 1 -sc_threshold 60 -partp4x4 1 -rc_eq 'blurCplx^(1-qComp)' -refs 3 -maxrate 700000 -async 50 -f h264 $filenamebody.264";
 # for ffmpeg 0.5 or later
-	$ffmpegencopt = " -s 480x272 -deinterlace -r 29.97 -vcodec libx264 -vpre default   -g 300 -b 400000 -level 13 -sc_threshold 60 -rc_eq 'blurCplx^(1-qComp)' -refs 3 -maxrate 700000 -async 50 -f h264 $filenamebody.264";
+	$ffmpegencopt = " -threads 0  -s 480x272 -deinterlace -r 29.97 -vcodec libx264 -vpre default   -g 300 -b 400000 -level 13 -sc_threshold 60 -rc_eq 'blurCplx^(1-qComp)' -refs 3 -maxrate 700000 -async 50 -f h264 $filenamebody.264";
 	}elsif($trconqty == 3){#640x352
 #	$ffmpegencopt = " -s 640x352 -deinterlace -r 29.97 -vcodec libx264 -g 100 -b 600000 -level 13 -loop 1 -sc_threshold 60 -partp4x4 1 -rc_eq 'blurCplx^(1-qComp)' -refs 3 -maxrate 700000 -async 50 -f h264 $filenamebody.264";
 # for ffmpeg 0.5 or later
-	$ffmpegencopt = " -s 640x352 -deinterlace -r 29.97 -vcodec libx264 -vpre default   -g 100 -b 600000 -level 13 -sc_threshold 60 -rc_eq 'blurCplx^(1-qComp)' -refs 3 -maxrate 700000 -async 50 -f h264 $filenamebody.264";
+	$ffmpegencopt = " -threads 0  -s 640x352 -deinterlace -r 29.97 -vcodec libx264 -vpre default   -g 100 -b 600000 -level 13 -sc_threshold 60 -rc_eq 'blurCplx^(1-qComp)' -refs 3 -maxrate 700000 -async 50 -f h264 $filenamebody.264";
 	}
 	&changefilestatus($pid,$FILESTATUSTRANSCODEFFMPEG);
-	&writelog("ipodtranscode ffmpeg $filenamebody.264");
-	system ("ffmpeg -y -i $trcnmpegfile $cropopt $ffmpegencopt");
-	
-	#もしエラーになったらTsSplitする
+#	&writelog("ipodtranscode ffmpeg $filenamebody.264");
+#	system ("ffmpeg -y -i $trcnmpegfile $cropopt $ffmpegencopt");
+#まずTsSplitする →ワンセグをソースにしてしまわないように
 	if (! -e "$filenamebody.264"){
 		&changefilestatus($pid,$FILESTATUSTRANSCODETSSPLITTING);
 		unlink("${filenamebody}_tss.m2t");
@@ -179,11 +180,10 @@ if ($filestatus <= $FILESTATUSTRANSCODEFFMPEG){
 		if (-e "$toolpath/perl/tool/tss.py"){
 		&writelog("ipodtranscode tss $inputmpeg2");
 		system("$toolpath/perl/tool/tss.py $inputmpeg2");
-		
 		}else{
 		# TsSplit
-		&writelog("ipodtranscode TsSplitter $inputmpeg2");
-		system("wine $toolpath/perl/tool/TsSplitter.exe  -EIT -ECM  -EMM -SD -1SEG -WAIT2 $inputmpeg2");
+#		&writelog("ipodtranscode TsSplitter $inputmpeg2");
+#		system("wine $toolpath/perl/tool/TsSplitter.exe  -EIT -ECM  -EMM -SD -1SEG -WAIT2 $inputmpeg2");
 		}
 		if(-e "${filenamebody}_tss.m2t"){
 		$trcnmpegfile = "${filenamebody}_tss.m2t";
@@ -191,8 +191,34 @@ if ($filestatus <= $FILESTATUSTRANSCODEFFMPEG){
 		$trcnmpegfile = "${filenamebody}_HD.m2t";
 		}else{
 		&writelog("ipodtranscode ERR NOT Exist ${filenamebody}_HD.m2t");
-		$trcnmpegfile = inputmpeg2 ;
+		$trcnmpegfile = $inputmpeg2 ;
 		}
+		#Splitファイルの確認
+		$trcnmpegfile = &validationsplitfile($inputmpeg2,$trcnmpegfile);
+		#tss.pyに失敗してたなら強制的にWINEでTsSplit.exe
+		if($trcnmpegfile eq $inputmpeg2){
+		
+		# TsSplit
+		&writelog("ipodtranscode WINE TsSplitter.exe $inputmpeg2");
+		system("wine $toolpath/perl/tool/TsSplitter.exe -EIT -ECM  -EMM -SD -1SEG -WAIT2 $inputmpeg2");
+		if (-e "${filenamebody}_HD.m2t"){
+			$trcnmpegfile = "${filenamebody}_HD.m2t";
+			#Splitファイルの確認
+			$trcnmpegfile = &validationsplitfile($inputmpeg2,$trcnmpegfile);
+#			if($trcnmpegfile ne $inputmpeg2){
+#			&changefilestatus($pid,$FILESTATUSTRANSCODEFFMPEG);
+#			&writelog("ipodtranscode ffmpeg retry ; WINE TsSplitter.exe $trcnmpegfile");
+#			system ("ffmpeg -y -i $trcnmpegfile $cropopt $ffmpegencopt");
+#			}else{
+#			&writelog("ipodtranscode WINE TsSplit.exe fail");
+#			}
+		}else{
+		&writelog("ipodtranscode WINE TsSplitter.exe ;Not exist ${filenamebody}_HD.m2t");
+		}#endif -e ${filenamebody}_HD.m2t
+		
+		}#endif $trcnmpegfile eq $inputmpeg2
+		
+		
 		#再ffmpeg
 		&changefilestatus($pid,$FILESTATUSTRANSCODEFFMPEG);
 		&writelog("ipodtranscode ffmpeg retry $filenamebody.264");
@@ -204,6 +230,16 @@ if ($filestatus <= $FILESTATUSTRANSCODEFFMPEG){
 		&changefilestatus($pid,$FILESTATUSTRANSCODEFFMPEG);
 		&writelog("ipodtranscode ffmpeg retry no crop $filenamebody.264");
 		system ("ffmpeg -y -i $trcnmpegfile $ffmpegencopt");
+	}
+	#強制的にWINEでTsSplit.exe
+	if (! -e "$filenamebody.264"){
+	}
+	#それでもエラーならsplitしてないファイルをターゲットに
+	if (! -e "$filenamebody.264"){
+		#再ffmpeg
+		&changefilestatus($pid,$FILESTATUSTRANSCODEFFMPEG);
+		&writelog("ipodtranscode ffmpeg retry No splited originalTS file $filenamebody.264");
+		system ("ffmpeg -y -i $inputmpeg2 $ffmpegencopt");
 	}
 }
 if ($filestatus <= $FILESTATUSTRANSCODEWAVE){
@@ -311,6 +347,17 @@ if ($filestatus <= $FILESTATUSTRANSCODECOMPLETE){
 		&changefilestatus($pid,999);
 	}
 	unlink("${filenamebody}_HD.m2t");
+# ConfigによってTSファイルは常にsplitした状態にするかどうか選択
+# B25失敗したときにここが走るとファイルぶっ壊れるので検証を入れる
+#
+#	if (-e "${filenamebody}_tss.m2t"){
+#		unlink("${filenamebody}.m2t");
+#		unless (rename "${filenamebody}_tss.m2t", "${filenamebody}.m2t") {
+#		&writelog("ipodtranscode WARNING RENAME FAILED ${filenamebody}_tss.m2t ${filenamebody}.m2t");
+#		}else{
+#		
+#		}
+#	}
 	unlink("${filenamebody}_tss.m2t");
 	unlink("$filenamebody.264");
 	unlink("$filenamebody.wav");
@@ -385,10 +432,17 @@ $counttranscodefiles = &counttranscodefiles();
 ############################
 #一回で終らせるように
 #exit;
+
+
+}else{#ファイルがなければ
+&writelog("ipodtranscode NO $inputmpeg2 file.Skip.");
+}#end if
+
 }# end while
 #残りファイルがゼロなら
 &writelog("ipodtranscode ALL COMPLETE");
 exit;
+
 
 #-----------------------------------------------------------------------
 sub mp4filenamestringbuild(){
@@ -463,4 +517,37 @@ my @titlecount= $sth->fetchrow_array;
 return ($titlecount[0]);
 
 
-}
+}#end sub counttranscodefiles
+
+
+sub validationsplitfile{
+my $inputmpeg2 = $_[0];
+my $trcnmpegfile = $_[1];
+
+		#Split結果確認
+		my $filesizeoriginal = -s $inputmpeg2 ;
+		my $filesizesplit = -s $trcnmpegfile;
+		my $validation = 0;
+		if ($filesizesplit  > 0){
+			$validation = $filesizeoriginal / $filesizesplit   ;
+			if ($validation > 2 ){
+				#print "Fail split may be fail.\n";
+				&writelog("ipodtranscode ERR File split may be fail: $filesizeoriginal:$filesizesplit");
+				$trcnmpegfile = $inputmpeg2 ;
+				unlink("${filenamebody}_tss.m2t");
+				unlink("${filenamebody}_HD.m2tt");
+				return ($trcnmpegfile);
+			}else{
+				#print "Fail split may be good.\n";
+				return ($trcnmpegfile);
+			}
+		}else{
+		#Fail
+		&writelog("ipodtranscode ERR File split may be fail: $filesizeoriginal:$filesizesplit");
+		$trcnmpegfile = $inputmpeg2 ;
+		unlink("${filenamebody}_tss.m2t");
+		unlink("${filenamebody}_HD.m2tt");
+		return ($trcnmpegfile);
+		}
+}#end sub validationsplitfile
+
