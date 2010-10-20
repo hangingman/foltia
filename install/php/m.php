@@ -210,14 +210,14 @@ print "時刻が不正なために予約できませんでした。 <br>";
 ?>
 <form id="record" name="record" method="get" action="./m.php" autocomplete="off">
   <p>放送日:
-    <input name="startdate" type="text" id="startdate" size="9" value="<?=$startdate?>" />
-  年月日 Ex.<?=$today?></p>
+    <input name="startdate" type="text" id="startdate" size="9" value="<?php print "$startdate"; ?>" />
+  年月日 Ex.<?php print "$today";?></p>
   <p>録画開始時刻:
-    <input name="starttime" type="text" id="starttime" size="5" value="<?=$starttime?>" />
-  時分 Ex.<?=$nowdate?>  </p>
+    <input name="starttime" type="text" id="starttime" size="5" value="<?php print "$starttime"; ?>" />
+  時分 Ex.<?php print "$nowdate"; ?>  </p>
   <p>
     録画尺:
-      <input name="lengthmin" type="text" id="lengthmin" size="4" value="<?=$lengthmin?>"/> 
+      <input name="lengthmin" type="text" id="lengthmin" size="4" value="<?php print "$lengthmin"; ?>"/> 
     分 (最長360分) </p>
 
   <p>録画局:
@@ -291,7 +291,7 @@ print "<input name="useditial" type="radio" value="1" />  する　
 */
 ?>
   <p>番組名:
-    <input name="pname" type="text" id="pname" value="<?=$pname ?>" />
+    <input name="pname" type="text" id="pname" value="<?php print "$pname"; ?>" />
   </p>
 <!-- <p  style='background-color: #DDDDFF'>
 繰り返し指定-毎週以下の曜日に録画:

@@ -330,7 +330,7 @@ AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' )
 
 <table>
 	<tr><td>アナログ重複表示</td><td><br /></td></tr>
-	<tr><td>エンコーダ数</td><td><?=$recunits ?></td></tr>
+	<tr><td>エンコーダ数</td><td><?php print "$recunits"; ?></td></tr>
 	<tr class="overwraped"><td>チューナー重複</td><td><br /></td></tr>
 	<tr class="exoverwraped"><td>外部入力重複</td><td><br /></td></tr>
 </table>

@@ -161,7 +161,7 @@ if (! $rowdata) {
       </select></td>
   </tr>
 </table>
-<input type="hidden" name="tid" value="<?=$tid?>">
+<input type="hidden" name="tid" value="<?php print "$tid"; ?>">
 </form>
 <p>&nbsp; </p>
 <p><br>

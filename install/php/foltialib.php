@@ -75,7 +75,7 @@ http://www.hizlab.net/app/
 	/* 終了関数の定義 */
 	function die_exit($message) {
 		?>
-		<p class="error"><?= $message ?></p>
+		<p class="error"><?php print "$message"; ?></p>
 		<div class="index"><a href="./">トップ</a></div>
 	</body>
 </html><?php
@@ -231,48 +231,7 @@ function sql_query($dbh, $query, $errmessage,$paramarray=null) {
 
 function m_viewdata($dbh, $code) {
 
-/*これ使ってないよね?
-
-	$query = "
-select p.code
-      ,p.name
-      ,p.email
-      ,p.pseudonym
-      ,s.name as job
-      ,p.profile
-      ,datetime(p.editdate) as editdate
-  from inet_profile p left join inet_job s on p.job = s.code
- where p.code = $code";
-	$rs = m_query($dbh, $query, "個人情報の取得に失敗しました。");
-	$rowdata = $rs->fetch();
-	if (! $rowdata) {
-			echo("<p class=\"msg\">データが存在しません</p>\n");
-			return FALSE;
-		}
-		
-		// フィールド数 
-	$maxcols = $rs->columnCount();
-		?>
-<table class="view" summary="データベース上のデータを表示" border="1">
-	<tr>
-	     <?php $meta = $rs->getColumnMeta(1); ?>
-	     <td class="name"><?= htmlspecialchars($meta["name"]) ?></td>
-		<td><a href="edit.php?q_code=<?= $rowdata[0] ?>"
-		     ><?= htmlspecialchars($rowdata[1]) ?></a></td>
-	</tr>
-	     <?php for ($col = 2; $col < $maxcols; $col++) {
-		$meta = $rs->getColumnMeta($col); ?>
-	<tr>
-	    <td class="name"><?= htmlspecialchars($meta["name"]) ?></td>
-		<td><?= htmlspecialchars($rowdata[$col]) ?></td>
-	</tr>
-	<?php } ?>
-</table>
-		<?php
-		// クエリーを解放 
-      $rs = null;
-		return TRUE;
-*/
+/*これ使ってないよね?*/
 	}
 	
 

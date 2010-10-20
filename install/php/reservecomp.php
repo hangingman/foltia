@@ -85,7 +85,7 @@ if (! $rowdata) {
   <p align="left"><font color="#494949" size="6">予約完了</font></p>
   <hr size="4">
 
-「<?=$title?>」を番組予約モードで予約しました。 <br>
+「<?php print "$title"; ?>」を番組予約モードで予約しました。 <br>
  <br>
 予約スケジュール <BR>
 

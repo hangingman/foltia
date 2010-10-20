@@ -127,9 +127,9 @@ print "<form name=\"deletereserve\" method=\"GET\" action=\"delreserve.php\">
     <td>ビットレート</td>
   </tr>
   <tr>
-    <td><?=$title?></td>
-    <td><?=$stationname?></td>
-    <td><?=$bitrate?></td>
+    <td><?php print"$title"; ?></td>
+    <td><?php print"$stationname"; ?></td>
+    <td><?php print"$bitrate"; ?></td>
 
   </tr>
 </table>
