@@ -267,6 +267,7 @@ $fName  = htmlspecialchars($rowdata[4]);
 $pid  = htmlspecialchars($rowdata[5]);
 //--
 
+
 print "
 <tr>
 <td><INPUT TYPE='checkbox' NAME='delete[]' VALUE='$fName'><br></td>";
@@ -319,10 +320,12 @@ $query_st = $list;
 //Autopageing処理とページのリンクを表示
 list($p2,$page) = page_display($query_st,$p,$p2,$lim,$dtcnt,"");
 //////////////////////////////////////////////////////////////////////
+print "</div>";	//Auto pager終わり
 
-//midokubangumi no title dake hyouji
+
 //番組ソートの時、未読番組のタイトルだけ表示
-if ($list== "title" && $p2 > $page){
+//if ($list== "title" && $p2 > $page){
+if ($list== "title"){
 
 $query = "
 SELECT distinct

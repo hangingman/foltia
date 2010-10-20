@@ -79,7 +79,7 @@ if ($tid == 0){
 
 ?>
 
-「<?=$title?>」を番組予約モードで録画予約します。 <br>
+「<?php print "$title" ?>」を番組予約モードで録画予約します。 <br>
 
   
 <form name="recordingsetting" method="GET" action="reservecomp.php">
