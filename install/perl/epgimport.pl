@@ -43,21 +43,31 @@ my $uset = "";
 my $usebs = "";
 my $usecs = "";
 my $stationid = "" ;
-my $rectime = "";
+my $rectime = 0;
+my $bsrectime = 0;
+my $cs1rectime = 0;
+my $cs2rectime = 0;
+
 
 #引き数がアルか?
 if ( $ARGV[0] eq "long" ){
 	#長期番組表取得
 	$rectime = 60;
 	$bsrectime = 120;
+	$cs1rectime = 60;
+	$cs2rectime = 60;
 }elsif( $ARGV[0] > 0 ){
 	$stationid = $ARGV[0]; 
 	$rectime = 3;
 	$bsrectime = 36;
+	$cs1rectime = 15;
+	$cs2rectime = 5;
 }else{
 	#短期番組表取得
 	$rectime = 3;
 	$bsrectime = 36;
+	$cs1rectime = 15;
+	$cs2rectime = 5;
 }
 #データ量比較
 #3秒   16350 Aug 10 16:21 __27-epg-short.xml
@@ -167,9 +177,7 @@ if ($usebs == 1){
 
 
 #CS----------------------------------------
-#CSは取得に時間がかかるがどうしようか
-#ひとまずlongモードのときだけ取得
-if ( $ARGV[0] eq "long" ){
+#if ( $ARGV[0] eq "long" ){ #短時間録画なら異常に重くはならないことを発見した
 #受信局確認
 if ($channel >= 223  ){#局指定があるなら
 	$usecs = 1;
@@ -188,23 +196,23 @@ if ($usecs == 1){
 	#print "$ontvcode $digitalch\n";
 	&chkrecordingschedule;
 	#print "$recpt1path $channela $bsrectime $recfolderpath/__$channela.m2t\n";
-	$oserr = `$recpt1path $channela $bsrectime $recfolderpath/__$channela.m2t`;
+	$oserr = `$recpt1path $channela $cs1rectime $recfolderpath/__$channela.m2t`;
 
 	$channelb = "CS24";
 	&chkrecordingschedule;
 	#print "$recpt1path $channelb $bsrectime $recfolderpath/__$channelb.m2t\n";
-	$oserr = `$recpt1path $channelb $bsrectime $recfolderpath/__$channelb.m2t`;
+	$oserr = `$recpt1path $channelb $cs2rectime $recfolderpath/__$channelb.m2t`;
 
 #時間のかかるepgdumpまとめてあとまわし
 	#print "nice -n 19 $epgdumppath/epgdump /CS $recfolderpath/__$channela.m2t $xmloutpath/__$channela-epg.xml\n";
-	$oserr = `nice -n 19 $epgdumppath/epgdump /CS $recfolderpath/__$channela.m2t $xmloutpath/__$channela-epg.xml`;
+	$oserr = `$epgdumppath/epgdump /CS $recfolderpath/__$channela.m2t $xmloutpath/__$channela-epg.xml`;
 	#print "cat $xmloutpath/__$channela-epg.xml | $toolpath/perl/xmltv2foltia.pl\n";
 	$oserr = `cat $xmloutpath/__$channela-epg.xml | $toolpath/perl/xmltv2foltia.pl`;
 	unlink "$recfolderpath/__$channela.m2t";
 	unlink "$xmloutpath/__$channela-epg.xml";
 
 	#print "nice -n 19 $epgdumppath/epgdump /CS $recfolderpath/__$channelb.m2t $xmloutpath/__$channelb-epg.xml\n";
-	$oserr = `nice -n 19 $epgdumppath/epgdump /CS $recfolderpath/__$channelb.m2t $xmloutpath/__$channelb-epg.xml`;
+	$oserr = `$epgdumppath/epgdump /CS $recfolderpath/__$channelb.m2t $xmloutpath/__$channelb-epg.xml`;
 	#print "cat $xmloutpath/__$channelb-epg.xml | $toolpath/perl/xmltv2foltia.pl\n";
 	$oserr = `cat $xmloutpath/__$channelb-epg.xml | $toolpath/perl/xmltv2foltia.pl`;
 	unlink "$recfolderpath/__$channelb.m2t";
@@ -212,11 +220,11 @@ if ($usecs == 1){
 }else{
 	&writelog("epgimport DEBUG Skip CS.");
 }#endif use 
-}else{
-	if ($channel >= 223  ){#局指定があるなら
-		&writelog("epgimport ERROR CS Station No. was ignored. CS EPG get long mode only.");
-	}
-}#end if long
+#}else{
+#	if ($channel >= 223  ){#局指定があるなら
+#		&writelog("epgimport ERROR CS Station No. was ignored. CS EPG get long mode only.");
+#	}
+#}#end if long
 
 
 sub chkrecordingschedule{
