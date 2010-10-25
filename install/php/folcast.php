@@ -64,7 +64,7 @@ WHERE foltia_program.tid = ?
 	$titlers = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
 //	$titlers = sql_query($con, $titlequery, "DBクエリに失敗しました",array($tid));
 	$rowdata = $titlers->fetch();
-	$rsstitle = $rowdata[1];
+	$rsstitle = htmlspecialchars($rowdata[1]);
 }else{
 
 $query = "
