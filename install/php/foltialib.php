@@ -765,4 +765,18 @@ function page_display($query_st,$p,$p2,$lim,$dtcnt,$mode){
     return array($p2,$page);
 }// end page_display
 
+function getnextstationid($con){
+//stationidの最大値を取得して+1する。
+$query2 = "SELECT max(stationid) FROM  foltia_station";
+$rs2 = sql_query($con, $query2, "DBクエリに失敗しました");
+$rowdata2 = $rs2->fetch();
+if (! $rowdata2) {      //レコードにデータが無い時、$id =1
+		$sid = 1 ;
+}else{                  //stationidの最大値を$idに入れて、+1する。
+		$sid = $rowdata2[0];
+		$sid ++ ;
+}
+return ($sid);
+}//end getnextstationid
+
 ?>

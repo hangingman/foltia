@@ -116,51 +116,53 @@ if ($oserr == 1){
 	&writelog("recwrap ABORT recfile exist. [$outputfilename] $digitalstationband $digitalch $reclength $stationid 0  $outputfilename $tid $countno");
 	exit;
 }elsif ($oserr == 2){
-	&writelog("recwrap ERR 2:friio busy;retry.");
+	&writelog("recwrap ERR 2:Device busy;retry.");
 	&continuousrecordingcheck;#もうすぐ終わる番組をkill
 	sleep(2);
 	$oserr = system("$toolpath/perl/digitaltvrecording.pl $digitalstationband $digitalch $reclength $stationid N $outputfilename $tid $countno friio");
 	$oserr = $oserr / 256;
 	if ($oserr == 2){
-	&writelog("recwrap ERR 2:friio busy;Giving up digital recording.");
+	&writelog("recwrap ERR 2:Device busy;Giving up digital recording.");
+		if ($recunits > 0 ){
+		}else{
+			exit;
+		}
 	}
 }elsif ($oserr == 3){
 &writelog("recwrap ABORT:ERR 3");
 exit ;
 }
 }else{ # NOT $usedigital == 1
-#リモコン操作
-# $haveirdaunit = 1;リモコンつないでるかどうか確認
-if ($haveirdaunit == 1){
-# 録画チャンネルが0なら
-	if ($recch == 0){
-# &つけて非同期でchangestbch.pl呼び出し
-	&writelog("recwrap Call Change STB CH :$pid");
-	system ("$toolpath/perl/changestbch.pl $pid &");
+	if ($recunits > 0 ){
+	#リモコン操作
+	# $haveirdaunit = 1;リモコンつないでるかどうか確認
+	if ($haveirdaunit == 1){
+	# 録画チャンネルが0なら
+		if ($recch == 0){
+	# &つけて非同期でchangestbch.pl呼び出し
+		&writelog("recwrap Call Change STB CH :$pid");
+		system ("$toolpath/perl/changestbch.pl $pid &");
+		}#end if
 	}#end if
-}#end if
-
-if($recch == -10){
-#非受信局なら
-	&writelog("recwrap Not recordable channel;exit:PID $pid");
-	exit;
-	}#end if
-# アナログ録画
-&writelog("recwrap RECSTART $recch $reclength 0 $outputfilename $bitrate $tid $countno $pid $usedigital $digitalstationband $digitalch");
-
-#録画
-#system("$toolpath/perl/tvrecording.pl $recch $reclength 0 $outputfile $bitrate $tid $countno");
-    $starttime = time();
-
-$oserr = system("$toolpath/perl/tvrecording.pl $recch $reclength 0 $outputfilename $bitrate $tid $countno");
-$oserr = $oserr / 256;
-if ($oserr == 1){
-	&writelog("recwrap ABORT recfile exist. [$outputfilename] $recch $reclength 0 0 $bitrate $tid $countno $pid");
-	exit;
-}
-
-}#endif #デジタル優先フラグ
-
+	
+	if($recch == -10){
+	#非受信局なら
+		&writelog("recwrap Not recordable channel;exit:PID $pid");
+		exit;
+		}#end if
+	# アナログ録画
+	&writelog("recwrap RECSTART $recch $reclength 0 $outputfilename $bitrate $tid $countno $pid $usedigital $digitalstationband $digitalch");
+	
+	#録画
+	#system("$toolpath/perl/tvrecording.pl $recch $reclength 0 $outputfile $bitrate $tid $countno");
+		$starttime = time();
+	
+	$oserr = system("$toolpath/perl/tvrecording.pl $recch $reclength 0 $outputfilename $bitrate $tid $countno");
+	$oserr = $oserr / 256;
+	if ($oserr == 1){
+		&writelog("recwrap ABORT recfile exist. [$outputfilename] $recch $reclength 0 0 $bitrate $tid $countno $pid");
+		exit;
+	}
 #デバイスビジーで即死してないか検出
 $now = time();
 	if ($now < $starttime + 100){ #録画プロセス起動してから100秒以内に戻ってきてたら
@@ -188,6 +190,9 @@ $oserr = $oserr / 256;
 	} # if 
 
 	&writelog("recwrap RECEND [$outputfilename] $recch $reclength 0 0 $bitrate $tid $countno $pid");
+
+	}#end if $recunits > 0
+}#endif #デジタル優先フラグ
 
 
 # m2pファイル名をPIDレコードに書き込み
@@ -284,6 +289,8 @@ foreach $pid (@pid){
 		#kill
 		system("kill $pid");
 		&writelog("recwrap recording process killed $pid/$endtimeepoch/$now");
+	}else{
+		&writelog("recwrap No processes killed: $endtimeepoch/$now");
 	}
 		}#endif m2t
 	}#foreach lsofoutput

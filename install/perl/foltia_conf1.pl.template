@@ -10,7 +10,7 @@
 
 #config section
 $toolpath = '/home/foltia'; #「perl」ディレクトリがあるPATH
-$recunits = '4';					#搭載エンコーダの数
+$recunits = 0;					#アナログキャプチャカード搭載エンコーダの数
 $recfolderpath = '/home/foltia/php/tv';		#録画ファイルを置くPATH
 $uhfbandtype = 1; # CATVなら1 UHF帯なら0 : 0=ntsc-bcast-jp 1=ntsc-cable-jp
 $rapidfiledelete =  1;#1なら削除ファイルは「mita」ディレクトリに移動。0なら即時削除

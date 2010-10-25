@@ -399,8 +399,9 @@ if ($bssplitflag == 101){
 }# endif #BS1/BS2などのスプリットを
 
 	}else{ # エラー recfriioがありません
-		&writelog("digitaltvrecording :ERROR :recfriio  not found. You must install $toolpath/perl/tool/b25 and $toolpath/perl/tool/recfriio.");
-	exit 1;
+		&writelog("digitaltvrecording :ERROR :recfriio  not found. You must install $toolpath/perl/tool/b25 and $toolpath/perl/tool/recfriio:$errorflag");
+	#exit 1;
+	exit $errorflag;
 	}
 }#end if errorflag
 }#end calldigitalrecorder
