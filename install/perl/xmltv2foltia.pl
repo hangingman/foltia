@@ -223,11 +223,8 @@ my @data = ();
 $foltiastarttime = substr($foltiastarttime,0,12); # 12·å¡¡200508072254
 $foltiaendtime   = substr($foltiaendtime,0,12); # 12·å¡¡200508072355
 
-#$sth = $dbh->prepare($stmt{'xmltv2foltia.replaceepg.1'});
-$sth = $dbh->prepare("SELECT * FROM foltia_epg WHERE enddatetime > ? AND startdatetime < ? AND ontvchannel = ?");
-
+$sth = $dbh->prepare($stmt{'xmltv2foltia.replaceepg.1'});
 my $now = &epoch2foldate(time());
-#$sth->execute($foltiastarttime , $foltiaendtime , $ontvepgchannel,$now);
 $sth->execute($foltiastarttime , $foltiaendtime , $ontvepgchannel);
 while (@data = $sth->fetchrow_array()) {
 	push(@deleteepgid,$data[0]);
