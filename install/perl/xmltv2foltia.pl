@@ -126,8 +126,15 @@ if(/<channel/){
 	s/^[\s]*//gio;
 	chomp();
 	$item{title}  = &removetag($_);
+	$titlebackup = $item{title};
 	$item{title} =~ s/¡Ú.*?¡Û//g;#¡Ú²ò¡Û¤È¤«
 	$item{title} =~ s/\[.*?\]//g;#[Æó]¤È¤« 
+#	$item{title} =~ s/¡Ú.??¡Û//g;#¡Ú²ò¡Û¤È¤«
+#	$item{title} =~ s/\[.??\]//g;#[Æó]¤È¤« 
+	if ($item{title} eq ""){
+		# WOWOW¤Ç<title lang="ja_JP">¡ÚÌµ¡Û</title>¤³¤ó¤Ê¥ß¥ËÈÖÁÈ¤¬¤¢¤ê¡¢¥¿¥¤¥È¥ë¶õÇò¤Ë¤Ê¤Ã¤Æ¤·¤Þ¤¦¤³¤È¤¬¤¢¤ë
+		$item{title} = $titlebackup;
+	}
 	#print Dumper($_) ;
 	#print "$result  \n";
 
@@ -170,6 +177,8 @@ if(/<channel/){
 	}elsif ($item{category} =~ /¥¢¥Ë¥á¡¦ÆÃ»£/){
 	$item{category} = "anime";
 	}elsif ($item{category} =~ /¤½¤ÎÂ¾/){
+	$item{category} = "etc";
+	}else{
 	$item{category} = "etc";
 	}
 	
@@ -250,8 +259,10 @@ my $desc = $_[4];
 my $category = $_[5];
 
 #Encode::JP::H2Z::z2h(\$string);
-$title = jcode($title)->tr('£Á-£Ú£á-£ú£°-£¹¡ª¡ô¡ð¡ó¡õ¡Ê¡Ë¡ö¡Ü¡¤¡Ý¡¥¡¿¡§¡¨¡ã¡á¡ä¡©¡÷¡Î¡À¡Ï¡°¡²¡®¡Ð¡Ã¡Ñ','A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|}');
-$desc = jcode($desc)->tr('£Á-£Ú£á-£ú£°-£¹¡ª¡ô¡ð¡ó¡õ¡Ê¡Ë¡ö¡Ü¡¤¡Ý¡¥¡¿¡§¡¨¡ã¡á¡ä¡©¡÷¡Î¡À¡Ï¡°¡²¡®¡Ð¡Ã¡Ñ','A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|}');
+$title = jcode($title)->tr('£Á-£Ú£á-£ú£°-£¹¡ª¡ô¡ð¡ó¡õ¡Ê¡Ë¡ö¡Ü¡¤¡Ý¡¥¡¿¡§¡¨¡ã¡á¡ä¡©¡÷¡Î¡À¡Ï¡°¡²¡®¡Ð¡Ã¡Ñ¡¡','A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|} ');
+$desc = jcode($desc)->tr('£Á-£Ú£á-£ú£°-£¹¡ª¡ô¡ð¡ó¡õ¡Ê¡Ë¡ö¡Ü¡¤¡Ý¡¥¡¿¡§¡¨¡ã¡á¡ä¡©¡÷¡Î¡À¡Ï¡°¡²¡®¡Ð¡Ã¡Ñ¡¡','A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|} ');
+#$title = jcode($title)->tr('£Á-£Ú£á-£ú£°-£¹¡ª¡ô¡ð¡ó¡õ¡Ê¡Ë¡ö¡Ü¡¤¡Ý¡¥¡¿¡§¡¨¡ã¡á¡ä¡©¡÷¡Î¡À¡Ï¡°¡²¡®¡Ð¡Ã¡Ñ','A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|}');
+#$desc = jcode($desc)->tr('£Á-£Ú£á-£ú£°-£¹¡ª¡ô¡ð¡ó¡õ¡Ê¡Ë¡ö¡Ü¡¤¡Ý¡¥¡¿¡§¡¨¡ã¡á¡ä¡©¡÷¡Î¡À¡Ï¡°¡²¡®¡Ð¡Ã¡Ñ','A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|}');
 
 #&writelog("xmltv2foltia DEBUG $foltiastarttime:$foltiaendtime");
 $foltiastarttime = substr($foltiastarttime,0,12);
