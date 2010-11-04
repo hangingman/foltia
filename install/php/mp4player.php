@@ -118,8 +118,8 @@ print "
 	  <source src=\"$mp4videofileurl\" type='video/mp4; codecs=\"avc1.42E01E, mp4a.40.2\"'>
       <!-- Flash Fallback. Use any flash video player here. Make sure to keep the vjs-flash-fallback class. -->
       <object class=\"vjs-flash-fallback\" width=\"480\" height=\"272\" type=\"application/x-shockwave-flash\"
-        data=\"http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf\">
-        <param name=\"movie\" value=\"http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf\" />
+        data=\"http://releases.flowplayer.org/swf/flowplayer-3.2.5.swf\">
+        <param name=\"movie\" value=\"http://releases.flowplayer.org/swf/flowplayer-3.2.5.swf\" />
         <param name=\"allowfullscreen\" value=\"true\" />
         <param name=\"flashvars\" value='config={\"clip\":{\"url\":\"$mp4videofileurl\",\"autoPlay\":false,\"autoBuffering\":true}}' />
         <!-- Image Fallback -->

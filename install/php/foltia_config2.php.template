@@ -16,7 +16,7 @@ foltia_config2.php
         $toolpath = "/home/foltia" ; //「php」ディレクトリがあるパス
 		$recfolderpath = '/home/foltia/php/tv';	//録画ファイルの保存先のパス。
 		$httpmediamappath = '/tv'; //ブラウザから見える録画ファイルのある位置。
-		$recunits = '4';					//搭載アナログキャプチャカードチャンネル数
+		$recunits = 0;					//搭載アナログキャプチャカードチャンネル数
 
 		$protectmode = 0; //未使用:(ブラウザからの予約削除を禁止するなどの保護モードで動作します)
 		$demomode = 0; //未使用:(ユーザインターフェイスだけ動作するデモモードで動作します)
