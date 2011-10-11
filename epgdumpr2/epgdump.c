@@ -53,12 +53,43 @@ static STATION bsSta[] = {
 	{ "BS-TBS", "3006.ontvjapan.com", 16401, 4, 161},
 	{ "BSジャパン", "3007.ontvjapan.com", 16433, 4, 171},
 	{ "BSフジ", "3008.ontvjapan.com", 16593, 4, 181},
-	{ "WOWOW", "3009.ontvjapan.com", 16432, 4, 191},
-	{ "WOWOW2", "3010.ontvjapan.com", 16432, 4, 192},
-	{ "WOWOW3", "3011.ontvjapan.com", 16432, 4, 193},
-	{ "スター・チャンネル", "3012.ontvjapan.com", 16529, 4, 200},
+//	{ "WOWOW", "3009.ontvjapan.com", 16432, 4, 191},
+//	{ "WOWOW2", "3010.ontvjapan.com", 16432, 4, 192},
+//	{ "WOWOW3", "3011.ontvjapan.com", 16432, 4, 193},
+	{ "WOWOWプライム", "3009.ontvjapan.com", 16432, 4, 191},
+	{ "WOWOWライブ", "4192.epgdata.ontvjapan", 17488, 4, 192},
+	{ "WOWOWシネマ", "4193.epgdata.ontvjapan", 17489, 4, 193},
+//	{ "スター・チャンネル", "3012.ontvjapan.com", 16529, 4, 200},
+	{ "スター・チャンネル1", "3012.ontvjapan.com", 16529, 4, 200},
+	{ "スター・チャンネル2", "4201.epgdata.ontvjapan", 17520, 4, 201},
+	{ "スター・チャンネル3", "4202.epgdata.ontvjapan", 17520, 4, 202},
 	{ "BS11", "3013.ontvjapan.com", 16528, 4, 211},
 	{ "TwellV", "3014.ontvjapan.com", 16530, 4, 222},
+	{ "放送大学1", "4231.epgdata.ontvjapan", 18098, 4, 231},
+	{ "放送大学2", "4232.epgdata.ontvjapan", 18098, 4, 232},
+	{ "放送大学3", "4233.epgdata.ontvjapan", 18098, 4, 233},
+	{ "グリーンチャンネル", "4234.epgdata.ontvjapan", 18224, 4, 234},
+	{ "BSアニマックス", "1047.ontvjapan.com", 18033, 4, 236},
+	{ "FOX bs238", "4238.epgdata.ontvjapan", 18096, 4, 238},
+	{ "BSスカパー！", "4241.epgdata.ontvjapan", 18097, 4, 241},
+	{ "J SPORTS 1", "4242.epgdata.ontvjapan", 18225, 4, 242},
+	{ "J SPORTS 2", "4243.epgdata.ontvjapan", 18226, 4, 243},
+	{ "J SPORTS 3", "4244.epgdata.ontvjapan", 18257, 4, 244},
+	{ "J SPORTS 4", "4245.epgdata.ontvjapan", 18258, 4, 245},
+	{ "BS釣りビジョン", "4251.epgdata.ontvjapan", 18288, 4, 251},
+	{ "IMAGICA BS", "4252.epgdata.ontvjapan", 18256, 4, 252},
+	{ "日本映画専門チャンネル", "4255.epgdata.ontvjapan", 18289, 4, 255},
+	{ "ディズニー・チャンネル", "1090.ontvjapan.com", 18034, 4, 256},
+	{ "D-Life", "4258.epgdata.ontvjapan", 18290, 4, 258},
+	{ "NHK総合テレビジョン（東京）", "4291.epgdata.ontvjapan", 17168, 4, 291},
+	{ "NHK教育テレビジョン（東京）", "4292.epgdata.ontvjapan", 17168, 4, 292},
+	{ "日本テレビ", "4294.epgdata.ontvjapan", 17169, 4, 294},
+	{ "テレビ朝日", "4295.epgdata.ontvjapan", 17169, 4, 295},
+	{ "TBSテレビ", "4296.epgdata.ontvjapan", 17169, 4, 296},
+	{ "テレビ東京", "4297.epgdata.ontvjapan", 17169, 4, 297},
+	{ "フジテレビ", "4298.epgdata.ontvjapan", 17168, 4, 298},
+	{ "放送大学ラジオ", "4531.epgdata.ontvjapan", 18098, 4, 531},
+	{ "WNI", "4910.ontvjapan.com", 16626, 4, 910},
 };
 
 static int bsStaCount = sizeof(bsSta) / sizeof (STATION);
@@ -67,20 +98,20 @@ static int bsStaCount = sizeof(bsSta) / sizeof (STATION);
 
 static STATION csSta[] = {
 	{ "スターｃｈプラス", "1002.ontvjapan.com", 24608, 6, 237},
-	{ "日本映画専門ｃｈＨＤ", "1086.ontvjapan.com", 24608, 6, 239},//フジテレビCSHD →
-	{ "フジテレビＮＥＸＴ", "306ch.epgdata.ontvjapan", 24608, 6, 306},
+	{ "日本映画専門ｃｈＨＤ", "1086.ontvjapan.com", 24608, 6, 239},
+	{ "フジテレビＮＥＸＴ", "306ch.epgdata.ontvjapan", 24608, 6, 306},//フジテレビCSHD →
 	{ "ショップチャンネル", "1059.ontvjapan.com", 24704, 6, 55},
 	{ "ザ・シネマ", "1217.ontvjapan.com", 24736, 6, 228},
 	{ "スカチャンＨＤ８００", "800ch.epgdata.ontvjapan", 24736, 6, 800},
 	{ "スカチャン８０１", "801ch.epgdata.ontvjapan", 24736, 6, 801},
 	{ "スカチャン８０２", "802ch.epgdata.ontvjapan", 24736, 6, 802},
 	{ "ｅ２プロモ", "100ch.epgdata.ontvjapan", 28736, 7, 100},
-	{ "インターローカルＴＶ", "194ch.epgdata.ontvjapan", 28736, 7, 194},
+//	{ "インターローカルＴＶ", "194ch.epgdata.ontvjapan", 28736, 7, 194},//廃止 2010/9/16/
 	{ "Ｊスポーツ　ＥＳＰＮ", "1025.ontvjapan.com", 28736, 7, 256},
 	{ "ＦＯＸ", "1016.ontvjapan.com", 28736, 7, 312},
 	{ "スペースシャワーＴＶ", "1018.ontvjapan.com", 28736, 7, 322},
 	{ "カートゥーン　ネット", "1046.ontvjapan.com", 28736, 7, 331},
-	{ "トゥーン・ディズニー", "1213.ontvjapan.com", 28736, 7, 334},
+	{ "ディズニーＸＤ", "1213.ontvjapan.com", 28736, 7, 334},//トゥーン・ディズニー →
 	{ "東映チャンネル", "1010.ontvjapan.com", 28768, 7, 221},
 	{ "衛星劇場", "1005.ontvjapan.com", 28768, 7, 222},
 	{ "チャンネルＮＥＣＯ", "1008.ontvjapan.com", 28768, 7, 223},
@@ -98,9 +129,10 @@ static STATION csSta[] = {
 	{ "朝日ニュースター", "1067.ontvjapan.com", 28864, 7, 352},
 	{ "ＢＢＣワールド", "1070.ontvjapan.com", 28864, 7, 353},
 	{ "ＣＮＮｊ", "1069.ontvjapan.com", 28864, 7, 354},
-	{ "ジャスト・アイ", "361ch.epgdata.ontvjapan", 28864, 7, 361},
-	{ "Ｊスポーツ　１", "1041.ontvjapan.com", 28896, 7, 251},
-	{ "Ｊスポーツ　２", "1042.ontvjapan.com", 28896, 7, 252},
+//	{ "ジャスト・アイ", "361ch.epgdata.ontvjapan", 28864, 7, 361},// 廃止 2011/8/31
+	{ "ホームドラマチャンネル", "294ch.epgdata.ontvjapan", 28736, 7, 294}, 
+//	{ "Ｊスポーツ　１", "1041.ontvjapan.com", 28896, 7, 251},// 2011/10/1 BSへ変更
+//	{ "Ｊスポーツ　２", "1042.ontvjapan.com", 28896, 7, 252},// 2011/10/1 BSへ変更
 	{ "ＪスポーツＰｌｕｓＨ", "1043.ontvjapan.com", 28896, 7, 253},
 	{ "ＧＡＯＲＡ", "1026.ontvjapan.com", 28896, 7, 254},
 	{ "ｓｋｙ・Ａスポーツ＋", "1040.ontvjapan.com", 28896, 7, 255},
@@ -116,7 +148,7 @@ static STATION csSta[] = {
 	{ "ＬａＬａ　ＨＤ", "1074.ontvjapan.com", 28960, 7, 314},
 	{ "フジテレビＯＮＥ", "1073.ontvjapan.com", 28992, 7, 307},//フジテレビ739→
 	{ "フジテレビＴＷＯ", "1072.ontvjapan.com", 28992, 7, 308},//フジテレビ721→
-	{ "アニマックス", "1047.ontvjapan.com", 28992, 7, 332},
+//	{ "アニマックス", "1047.ontvjapan.com", 28992, 7, 332},//BSアニマックスに移動
 	{ "ディスカバリー", "1062.ontvjapan.com", 28992, 7, 340},
 	{ "アニマルプラネット", "1193.ontvjapan.com", 28992, 7, 341},
 	{ "Ｃ-ＴＢＳウエルカム", "160ch.epgdata.ontvjapan", 29024, 7, 160},
@@ -128,13 +160,14 @@ static STATION csSta[] = {
 	{ "MUSIC ON! TV", "1022.ontvjapan.com", 29024, 7, 325},
 	{ "キッズステーションHD", "1045.ontvjapan.com", 29024, 7, 335},//HDに
 	{ "ＴＢＳニュースバード", "1076.ontvjapan.com", 29024, 7, 351},
-	{ "ＣＳ日本番組ガイド", "147ch.epgdata.ontvjapan", 29056, 7, 147},
-	{ "日テレＧ＋", "1068.ontvjapan.com", 29056, 7, 257},
-	{ "fashion TV", "5004.ontvjapan.com", 29056, 7, 291},
+//	{ "ＣＳ日本番組ガイド", "147ch.epgdata.ontvjapan", 29056, 7, 147},//廃止 2010/2/28
+	{ "日テレＧ＋ＨＤ", "1068.ontvjapan.com", 29056, 7, 257},//HD化
+//	{ "fashion TV", "5004.ontvjapan.com", 29056, 7, 291},//廃止 2009/3/31
 	{ "日テレプラス", "300ch.epgdata.ontvjapan", 29056, 7, 300},
-	{ "エコミュージックＴＶ", "1023.ontvjapan.com", 29056, 7, 320},
+//	{ "エコミュージックＴＶ", "1023.ontvjapan.com", 29056, 7, 320},//廃止	2009/3/31
 	{ "Music Japan TV", "1208.ontvjapan.com", 29056, 7, 321},
 	{ "日テレＮＥＷＳ２４", "2002.ontvjapan.com", 29056, 7, 350},
+	{ "旅チャンネル", "1052.ontvjapan.com", 29056, 7, 362},
 };
 
 static int csStaCount = sizeof(csSta) / sizeof (STATION);
