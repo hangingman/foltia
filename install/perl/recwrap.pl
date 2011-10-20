@@ -85,10 +85,50 @@ $sth = $dbh->prepare($stmt{'recwrap.8'});
 $sth->execute($stationid);
  @stationline= $sth->fetchrow_array;
 $radikostationname = $stationline[3];
-
+my $starttime = time();
+my $endepochtime = time() + $reclength;
+#録音
 $oserr = system("$toolpath/perl/digitalradiorecording.pl $radikostationname $reclength $outputfilename");
 $oserr = $oserr / 256;
 &writelog("recwrap DEBUG radiko rec finished. $oserr");
+#サーバビジーで即死してないか検出
+$now = time();
+if ($now < $endepochtime){ #終了予定より前に録音プロセスが戻ってきたなら
+&writelog("recwrap radiko rec failed,will be retry. NOW:$now PlanedEnd:$endepochtime");
+
+my $retrycounter = 0;
+my $waitsecsbase = 10; 
+my $waitsec ;
+my $waitsecsrand ;
+my $recfilepath;
+	while($now < $endepochtime){
+		if($retrycounter >= 15){
+			&writelog("recwrap radiko rec failed,Giving up.Max retry counter over.");
+			last;
+		}
+	$waitsecsrand = int(rand($waitsecsbase/2));
+	$waitsec = $waitsecsbase + $waitsecsrand ;
+	&writelog("recwrap DEBUG radiko rec retry waiting. $waitsec ($waitsecsbase + $waitsecsrand)");
+	sleep($waitsec);
+	&writelog("recwrap DEBUG retry start.");
+	$recfilepath = "$recfolderpath"."/"."$outputfilename";
+	if (-e $recfilepath ){
+		unlink("$recfilepath");
+		&writelog("recwrap DEBUG delete $recfilepath");
+	}
+	#録音
+	$oserr = system("$toolpath/perl/digitalradiorecording.pl $radikostationname $reclength $outputfilename N");#起動waitなしで
+	$oserr = $oserr / 256;
+	&writelog("recwrap DEBUG radiko rec retry finished. $oserr");
+
+	$retrycounter++;
+	if ($waitsecsbase < 600 ){ 
+		$waitsecsbase = $waitsecsbase * 2;
+	}
+	$now = time();
+	}# while
+} # if 
+
 
 # aacファイル名をfoltia_subtitlePIDレコードに書き込み
 $sth = $dbh->prepare($stmt{'recwrap.1'});
