@@ -165,7 +165,8 @@ static STATION csSta[] = {
 //	{ "fashion TV", "5004.ontvjapan.com", 29056, 7, 291},//廃止 2009/3/31
 	{ "日テレプラス", "300ch.epgdata.ontvjapan", 29056, 7, 300},
 //	{ "エコミュージックＴＶ", "1023.ontvjapan.com", 29056, 7, 320},//廃止	2009/3/31
-	{ "Music Japan TV", "1208.ontvjapan.com", 29056, 7, 321},
+//	{ "Music Japan TV", "1208.ontvjapan.com", 29056, 7, 321},//廃止 2012/3/31
+	{ "スペースシャワーＴＶ プラス", "321ch.epgdata.ontvjapan", 29056, 7, 321},
 	{ "日テレＮＥＷＳ２４", "2002.ontvjapan.com", 29056, 7, 350},
 	{ "旅チャンネル", "1052.ontvjapan.com", 29056, 7, 362},
 };
