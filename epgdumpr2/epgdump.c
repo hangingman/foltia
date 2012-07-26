@@ -161,7 +161,7 @@ static STATION csSta[] = {
 	
 //	{ "ディズニーチャンネル", "1090.ontvjapan.com", 29024, 7, 304},//BSへ変更
 	{ "MUSIC ON! TV", "1022.ontvjapan.com", 29024, 7, 325},
-	{ "キッズステーションHD", "1045.ontvjapan.com", 29024, 7, 335},//HDに
+	{ "キッズステーションHD", "1045.ontvjapan.com", 29024, 7, 330},//HDに
 	{ "ＴＢＳニュースバード", "1076.ontvjapan.com", 29024, 7, 351},
 //	{ "ＣＳ日本番組ガイド", "147ch.epgdata.ontvjapan", 29056, 7, 147},//廃止 2010/2/28
 	{ "日テレＧ＋ＨＤ", "1068.ontvjapan.com", 29056, 7, 257},//HD化
