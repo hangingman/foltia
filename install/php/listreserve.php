@@ -5,12 +5,12 @@
 
 listreserve.php
 
-ÌÜÅª
-Ï¿²èÍ½ÌóÈÖÁÈÊü±ÇÍ½Äê¤ÈÍ½ÌóÈÖÁÈÌ¾¤òÉ½¼¨¤·¤Ş¤¹¡£
+ç›®çš„
+éŒ²ç”»äºˆç´„ç•ªçµ„æ”¾æ˜ äºˆå®šã¨äºˆç´„ç•ªçµ„åã‚’è¡¨ç¤ºã—ã¾ã™ã€‚
 
-°ú¿ô
-r:Ï¿²è¥Ç¥Ğ¥¤¥¹¿ô
-startdate:ÆÃÄêÆüÉÕ¤«¤é¤ÎÍ½Ìó¾õ¶·¡£YYYYmmddHHii·Á¼°¤Ç¡£É½¼¨¿ô¤Ë¸ÂÄê¤«¤±¤Æ¤Ê¤¤¤Î¤Ç¥ì¥³¡¼¥É¿ô¤¬ÂçÎÌ¤Ë¤Ê¤ë¤È½Å¤¯¤Ê¤ë¤«¤âÃÎ¤ì¤Ş¤»¤ó¡£
+å¼•æ•°
+r:éŒ²ç”»ãƒ‡ãƒã‚¤ã‚¹æ•°
+startdate:ç‰¹å®šæ—¥ä»˜ã‹ã‚‰ã®äºˆç´„çŠ¶æ³ã€‚YYYYmmddHHiiå½¢å¼ã§ã€‚è¡¨ç¤ºæ•°ã«é™å®šã‹ã‘ã¦ãªã„ã®ã§ãƒ¬ã‚³ãƒ¼ãƒ‰æ•°ãŒå¤§é‡ã«ãªã‚‹ã¨é‡ããªã‚‹ã‹ã‚‚çŸ¥ã‚Œã¾ã›ã‚“ã€‚
 
 
  DCC-JPL Japan/foltia project
@@ -19,8 +19,8 @@ startdate:ÆÃÄêÆüÉÕ¤«¤é¤ÎÍ½Ìó¾õ¶·¡£YYYYmmddHHii·Á¼°¤Ç¡£É½¼¨¿ô¤Ë¸ÂÄê¤«¤±¤Æ¤Ê¤¤¤Î¤Ç
 History
 
 2009/5/1 
-½ÅÊ£Í½Ìó¸¡½Ğ½èÍı¤Î½¤Àµ http://www.dcc-jpl.com/foltia/ticket/7
-¥Ñ¥Ã¥ÁÅ¬ÍÑ
+é‡è¤‡äºˆç´„æ¤œå‡ºå‡¦ç†ã®ä¿®æ­£ http://www.dcc-jpl.com/foltia/ticket/7
+ãƒ‘ãƒƒãƒé©ç”¨
 */
 
 include("./foltialib.php");
@@ -86,10 +86,10 @@ WHERE foltia_tvrecord.stationid = 0 AND
  foltia_subtitle.enddatetime >= ? ORDER BY x ASC
 	";
 
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($now,$now));
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($now,$now));
 
-//¥Á¥å¡¼¥Ê¡¼¿ô
+//ãƒãƒ¥ãƒ¼ãƒŠãƒ¼æ•°
 if (getgetnumform(r) != ""){
 	$recunits = getgetnumform(r);
 }elseif($recunits == ""){
@@ -103,37 +103,37 @@ if (getgetnumform(r) != ""){
 <?php 
 printhtmlpageheader();
 ?>
-  <p align="left"><font color="#494949" size="6">Í½Ìó°ìÍ÷</font></p>
+  <p align="left"><font color="#494949" size="6">äºˆç´„ä¸€è¦§</font></p>
   <hr size="4">
-<p align="left">Ï¿²èÍ½ÌóÈÖÁÈÊü±ÇÍ½Äê¤ÈÍ½ÌóÈÖÁÈÌ¾¤òÉ½¼¨¤·¤Ş¤¹¡£</p>
+<p align="left">éŒ²ç”»äºˆç´„ç•ªçµ„æ”¾æ˜ äºˆå®šã¨äºˆç´„ç•ªçµ„åã‚’è¡¨ç¤ºã—ã¾ã™ã€‚</p>
 
 <?php
      $rowdata = $rs->fetch();
      if (! $rowdata) {
-		print "ÈÖÁÈ¥Ç¡¼¥¿¤¬¤¢¤ê¤Ş¤»¤ó<BR>\n";			
+		print "ç•ªçµ„ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Šã¾ã›ã‚“<BR>\n";			
 		}else{
-		/* ¥Õ¥£¡¼¥ë¥É¿ô */
+		/* ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æ•° */
 	     $maxcols = $rs->columnCount();
 		?>
   <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
 	<thead>
 		<tr>
 			<th align="left">TID</th>
-			<th align="left">Êü±Ç¶É</th>
-			<th align="left">¥¿¥¤¥È¥ë</th>
-			<th align="left">ÏÃ¿ô</th>
-			<th align="left">¥µ¥Ö¥¿¥¤¥È¥ë</th>
-			<th align="left">³«»Ï»ş¹ï(¥º¥ì)</th>
-			<th align="left">Áí¼Ü</th>
-			<th align="left">²è¼Á</th>
-			<th align="left">¥Ç¥¸¥¿¥ëÍ¥Àè</th>
+			<th align="left">æ”¾æ˜ å±€</th>
+			<th align="left">ã‚¿ã‚¤ãƒˆãƒ«</th>
+			<th align="left">è©±æ•°</th>
+			<th align="left">ã‚µãƒ–ã‚¿ã‚¤ãƒˆãƒ«</th>
+			<th align="left">é–‹å§‹æ™‚åˆ»(ã‚ºãƒ¬)</th>
+			<th align="left">ç·å°º</th>
+			<th align="left">ç”»è³ª</th>
+			<th align="left">ãƒ‡ã‚¸ã‚¿ãƒ«å„ªå…ˆ</th>
 
 		</tr>
 	</thead>
 
 	<tbody>
 		<?php
-			/* ¥Æ¡¼¥Ö¥ë¤Î¥Ç¡¼¥¿¤ò½ĞÎÏ */
+			/* ãƒ†ãƒ¼ãƒ–ãƒ«ã®ãƒ‡ãƒ¼ã‚¿ã‚’å‡ºåŠ› */
 		  do {
 				echo("<tr>\n");
 
@@ -144,12 +144,12 @@ $title = htmlspecialchars($rowdata[2]);
 $subtitle = htmlspecialchars($rowdata[4]);
 $dbepgaddedby = htmlspecialchars($rowdata[10]);
 
-//½ÅÊ£¸¡½Ğ
-//³«»Ï»ş¹ï $rowdata[5]
-//½ªÎ»»ş¹ï
+//é‡è¤‡æ¤œå‡º
+//é–‹å§‹æ™‚åˆ» $rowdata[5]
+//çµ‚äº†æ™‚åˆ»
 $endtime = calcendtime($rowdata[5],$rowdata[6]);
-//ÈÖÁÈ¤Î³«»Ï»ş¹ï¤è¤êÃÙ¤¤»ş¹ï¤Ë½ªÎ»¤·¡¢½ªÎ»»ş¹ï¤è¤êÁ°¤Ë¤Ï¤¸¤Ş¤ëÈÖÁÈ¤¬¤¢¤ë¤«¤É¤¦¤«
-//¥ª¥ó¥Ü¡¼¥É¥Á¥å¡¼¥Ê¡¼Ï¿²è
+//ç•ªçµ„ã®é–‹å§‹æ™‚åˆ»ã‚ˆã‚Šé…ã„æ™‚åˆ»ã«çµ‚äº†ã—ã€çµ‚äº†æ™‚åˆ»ã‚ˆã‚Šå‰ã«ã¯ã˜ã¾ã‚‹ç•ªçµ„ãŒã‚ã‚‹ã‹ã©ã†ã‹
+//ã‚ªãƒ³ãƒœãƒ¼ãƒ‰ãƒãƒ¥ãƒ¼ãƒŠãƒ¼éŒ²ç”»
 $query = "
 SELECT
  foltia_program.tid, stationname, foltia_program.title,
@@ -177,8 +177,8 @@ foltia_subtitle.enddatetime > ?
 AND foltia_subtitle.startdatetime < ?  
 ";
 	$rclass = "";
-//	$overlap = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$overlap = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($rowdata[5],$endtime,$rowdata[5],$endtime));
+//	$overlap = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$overlap = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($rowdata[5],$endtime,$rowdata[5],$endtime));
 			  $owrowall = $overlap->fetchAll();
 			  $overlapmaxrows = count($owrowall);
 	if ($overlapmaxrows > ($recunits) ){
@@ -191,7 +191,7 @@ AND foltia_subtitle.startdatetime < ?
 			
 			$owrend = calcendtime( $owrowdata['startdatetime'], $owrowdata['lengthmin'] );
 			$owtimeline[ $owrend ] = $owtimeline[ $owrend ] -1;
-			//Ãí°Õ: NULL ¤Ë¸º»»»Ò¤òÅ¬ÍÑ¤·¤Æ¤â²¿¤âµ¯¤³¤ê¤Ş¤»¤ó¤¬¡¢NULL ¤Ë²Ã»»»Ò¤ò Å¬ÍÑ¤¹¤ë¤È 1 ¤È¤Ê¤ê¤Ş¤¹¡£
+			//æ³¨æ„: NULL ã«æ¸›ç®—å­ã‚’é©ç”¨ã—ã¦ã‚‚ä½•ã‚‚èµ·ã“ã‚Šã¾ã›ã‚“ãŒã€NULL ã«åŠ ç®—å­ã‚’ é©ç”¨ã™ã‚‹ã¨ 1 ã¨ãªã‚Šã¾ã™ã€‚
 		}
 		
 		ksort ( $owtimeline );
@@ -207,8 +207,8 @@ AND foltia_subtitle.startdatetime < ?
 		}
 	}
 
-//³°Éô¥Á¥å¡¼¥Ê¡¼Ï¿²è
-$externalinputs = 1; //¸½¾õ°ì·ÏÅı¤Î¤ß
+//å¤–éƒ¨ãƒãƒ¥ãƒ¼ãƒŠãƒ¼éŒ²ç”»
+$externalinputs = 1; //ç¾çŠ¶ä¸€ç³»çµ±ã®ã¿
 $query = "
 SELECT
  foltia_program.tid, stationname, foltia_program.title,
@@ -237,8 +237,8 @@ foltia_subtitle.enddatetime > ?
 AND foltia_subtitle.startdatetime < ?  
 AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' ) 
 	";
-//	$eoverlap = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$eoverlap = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($rowdata[5], $endtime,$rowdata[5],  $endtime));
+//	$eoverlap = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$eoverlap = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($rowdata[5], $endtime,$rowdata[5],  $endtime));
 			  $eowrowall = $eoverlap->fetchAll();
 			  $eoverlapmaxrows = count($eowrowall);
 	if ($eoverlapmaxrows > ($externalinputs) ){
@@ -275,9 +275,9 @@ AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' )
 					print "<a href=\"reserveprogram.php?tid=$tid\">$tid</a>";
 					}
 					print "</td>\n";
-				     // Êü±Ç¶É
+				     // æ”¾æ˜ å±€
 				     echo("<td>".htmlspecialchars($rowdata[1])."<br></td>\n");
-				     // ¥¿¥¤¥È¥ë
+				     // ã‚¿ã‚¤ãƒˆãƒ«
 					print "<td>";
 					if ($tid == 0 ){
 					print "$title";
@@ -286,39 +286,39 @@ AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' )
 
 					}
 					print "</td>\n";
-					 // ÏÃ¿ô
+					 // è©±æ•°
 					echo("<td>".htmlspecialchars($rowdata[3])."<br></td>\n");
-					// ¥µ¥Ö¥¿¥¤
+					// ã‚µãƒ–ã‚¿ã‚¤
 					if ($pid > 0 ){
 					print "<td><a href=\"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$subtitle<br></td>\n";
 					}else{
 					//if ( $userclass <= 2){
 					if (($mymemberid == $dbepgaddedby)||($userclass <= 1)){
-						if ($userclass <= 1 ){//´ÉÍı¼Ô¤Ê¤é
+						if ($userclass <= 1 ){//ç®¡ç†è€…ãªã‚‰
 							$membername = getmemberid2name($con,$dbepgaddedby);
 							$membername = ":" . $membername ;
 						}else{
 						$membername = "";
 						}
-					print "<td>$subtitle [<a href=\"delepgp.php?pid=$pid\">Í½Ìó²ò½ü</a>$membername]<br></td>\n";
+					print "<td>$subtitle [<a href=\"delepgp.php?pid=$pid\">äºˆç´„è§£é™¤</a>$membername]<br></td>\n";
 					}else{
-					print "<td>$subtitle [²ò½üÉÔÇ½]<br></td>\n";
+					print "<td>$subtitle [è§£é™¤ä¸èƒ½]<br></td>\n";
 					}
 					}
-					// ³«»Ï»ş¹ï(¥º¥ì)
+					// é–‹å§‹æ™‚åˆ»(ã‚ºãƒ¬)
 					echo("<td>".htmlspecialchars(foldate2print($rowdata[5]))."<br>(".htmlspecialchars($rowdata[8]).")</td>\n");
-					// Áí¼Ü
+					// ç·å°º
 					echo("<td>".htmlspecialchars($rowdata[6])."<br></td>\n");
 					
-					//Ï¿²è¥ì¡¼¥È
+					//éŒ²ç”»ãƒ¬ãƒ¼ãƒˆ
 					echo("<td>".htmlspecialchars($rowdata[7])."<br></td>\n");
 					
-					//¥Ç¥¸¥¿¥ëÍ¥Àè
+					//ãƒ‡ã‚¸ã‚¿ãƒ«å„ªå…ˆ
 					echo("<td>");
 					if (htmlspecialchars($rowdata[11]) == 1){
-					print "¤¹¤ë";
+					print "ã™ã‚‹";
 					}else{
-					print "¤·¤Ê¤¤";
+					print "ã—ãªã„";
 					}
 					echo("<br></td>\n");
 				echo("</tr>\n");
@@ -329,10 +329,10 @@ AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' )
 
 
 <table>
-	<tr><td>¥¢¥Ê¥í¥°½ÅÊ£É½¼¨</td><td><br /></td></tr>
-	<tr><td>¥¨¥ó¥³¡¼¥À¿ô</td><td><?php print "$recunits"; ?></td></tr>
-	<tr class="overwraped"><td>¥Á¥å¡¼¥Ê¡¼½ÅÊ£</td><td><br /></td></tr>
-	<tr class="exoverwraped"><td>³°ÉôÆşÎÏ½ÅÊ£</td><td><br /></td></tr>
+	<tr><td>ã‚¢ãƒŠãƒ­ã‚°é‡è¤‡è¡¨ç¤º</td><td><br /></td></tr>
+	<tr><td>ã‚¨ãƒ³ã‚³ãƒ¼ãƒ€æ•°</td><td><?php print "$recunits"; ?></td></tr>
+	<tr class="overwraped"><td>ãƒãƒ¥ãƒ¼ãƒŠãƒ¼é‡è¤‡</td><td><br /></td></tr>
+	<tr class="exoverwraped"><td>å¤–éƒ¨å…¥åŠ›é‡è¤‡</td><td><br /></td></tr>
 </table>
 
 
@@ -347,79 +347,79 @@ FROM  foltia_tvrecord , foltia_program , foltia_station
 WHERE foltia_tvrecord.tid = foltia_program.tid  AND foltia_tvrecord.stationid = foltia_station .stationid 
 ORDER BY foltia_program.tid  DESC
 ";
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 $rowdata = $rs->fetch();			
 if (! $rowdata) {
-//¤Ê¤±¤ì¤Ğ¤Ê¤Ë¤â¤·¤Ê¤¤
+//ãªã‘ã‚Œã°ãªã«ã‚‚ã—ãªã„
 			
 		}else{
 	$maxcols = $rs->columnCount();
 
 ?>
-<p align="left">Ï¿²èÍ½ÌóÈÖÁÈ¥¿¥¤¥È¥ë¤òÉ½¼¨¤·¤Ş¤¹¡£</p>
+<p align="left">éŒ²ç”»äºˆç´„ç•ªçµ„ã‚¿ã‚¤ãƒˆãƒ«ã‚’è¡¨ç¤ºã—ã¾ã™ã€‚</p>
   <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
 	<thead>
 		<tr>
-			<th align="left">Í½Ìó²ò½ü</th>
+			<th align="left">äºˆç´„è§£é™¤</th>
 			<th align="left">TID</th>
-			<th align="left">Êü±Ç¶É</th>
-			<th align="left">¥¿¥¤¥È¥ë</th>
-			<th align="left">Ï¿²è¥ê¥¹¥È</th>
-			<th align="left">²è¼Á</th>
-			<th align="left">¥Ç¥¸¥¿¥ëÍ¥Àè</th>
+			<th align="left">æ”¾æ˜ å±€</th>
+			<th align="left">ã‚¿ã‚¤ãƒˆãƒ«</th>
+			<th align="left">éŒ²ç”»ãƒªã‚¹ãƒˆ</th>
+			<th align="left">ç”»è³ª</th>
+			<th align="left">ãƒ‡ã‚¸ã‚¿ãƒ«å„ªå…ˆ</th>
 
 		</tr>
 	</thead>
 
 	<tbody>
 		<?php
-			/* ¥Æ¡¼¥Ö¥ë¤Î¥Ç¡¼¥¿¤ò½ĞÎÏ */
+			/* ãƒ†ãƒ¼ãƒ–ãƒ«ã®ãƒ‡ãƒ¼ã‚¿ã‚’å‡ºåŠ› */
 	     do {
 				$tid = htmlspecialchars($rowdata[0]);
 				
 				if ($tid > 0){
 				echo("<tr>\n");
-				//Í½Ìó²ò½ü
+				//äºˆç´„è§£é™¤
 				if ( $userclass <= 1){
 					echo("<td><a href=\"delreserve.php?tid=$tid&sid=" .
-					htmlspecialchars($rowdata[4])  . "\">²ò½ü</a></td>\n");
+					htmlspecialchars($rowdata[4])  . "\">è§£é™¤</a></td>\n");
 				}else{
-				echo("<td>¡İ</td>");		
+				echo("<td>âˆ’</td>");		
 				}
 				//TID
 					echo("<td><a href=\"reserveprogram.php?tid=$tid\">$tid</a></td>\n");
-				     //Êü±Ç¶É
+				     //æ”¾æ˜ å±€
 				     echo("<td>".htmlspecialchars($rowdata[1])."<br></td>\n");
-				     //¥¿¥¤¥È¥ë
+				     //ã‚¿ã‚¤ãƒˆãƒ«
 				     echo("<td><a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">" .
 				     htmlspecialchars($rowdata[2]) . "</a></td>\n");
 
 					//MP4
 					echo("<td><a href=\"showlibc.php?tid=$tid\">mp4</a></td>\n");
-					//²è¼Á(¥¢¥Ê¥í¥°¥Ó¥Ã¥È¥ì¡¼¥È)
+					//ç”»è³ª(ã‚¢ãƒŠãƒ­ã‚°ãƒ“ãƒƒãƒˆãƒ¬ãƒ¼ãƒˆ)
 					echo("<td>".htmlspecialchars($rowdata[3])."<br></td>\n");
-					//¥Ç¥¸¥¿¥ëÍ¥Àè
+					//ãƒ‡ã‚¸ã‚¿ãƒ«å„ªå…ˆ
 					echo("<td>");
 					if (htmlspecialchars($rowdata[5]) == 1){
-					print "¤¹¤ë";
+					print "ã™ã‚‹";
 					}else{
-					print "¤·¤Ê¤¤";
+					print "ã—ãªã„";
 					}
 				echo("</tr>\n");
 				}else{
 				print "<tr>
-				<td>¡İ</td><td>0</td>
-				<td>[Á´¶É]<br></td>
-				<td>EPGÏ¿²è</td>
+				<td>âˆ’</td><td>0</td>
+				<td>[å…¨å±€]<br></td>
+				<td>EPGéŒ²ç”»</td>
 				<td><a href=\"showlibc.php?tid=0\">mp4</a></td>";
 				echo("<td>".htmlspecialchars($rowdata[3])."<br></td>");
-					//¥Ç¥¸¥¿¥ëÍ¥Àè
+					//ãƒ‡ã‚¸ã‚¿ãƒ«å„ªå…ˆ
 					echo("<td>");
 					if (htmlspecialchars($rowdata[5]) == 1){
-					print "¤¹¤ë";
+					print "ã™ã‚‹";
 					}else{
-					print "¤·¤Ê¤¤";
+					print "ã—ãªã„";
 					}
 				echo("\n</tr>");
 				}//if tid 0

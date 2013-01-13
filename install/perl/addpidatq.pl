@@ -5,14 +5,14 @@
 #
 #addpidatq.pl
 #
-#PID¼õ¤±¼è¤êatq¤ËÆş¤ì¤ë¡£folprep.pl¤«¤é¥­¥å¡¼ºÆÆşÎÏ¤Î¤¿¤á¤Ë»È¤ï¤ì¤ë
+#PIDå—ã‘å–ã‚Šatqã«å…¥ã‚Œã‚‹ã€‚folprep.plã‹ã‚‰ã‚­ãƒ¥ãƒ¼å†å…¥åŠ›ã®ãŸã‚ã«ä½¿ã‚ã‚Œã‚‹
 #
 # DCC-JPL Japan/foltia project
 #
 #
 
 use DBI;
-use DBD::Pg;
+
 use DBD::SQLite;
 use Schedule::At;
 use Time::Local;
@@ -26,16 +26,16 @@ push( @INC, "$path");
 require "foltialib.pl";
 
 
-#°ú¤­¿ô¤¬¥¢¥ë¤«?
+#å¼•ãæ•°ãŒã‚¢ãƒ«ã‹?
 $pid = $ARGV[0] ;
 if ($pid eq "" ){
-	#°ú¤­¿ô¤Ê¤·½Ğ¼Â¹Ô¤µ¤ì¤¿¤é¡¢½ªÎ»
+	#å¼•ãæ•°ãªã—å‡ºå®Ÿè¡Œã•ã‚ŒãŸã‚‰ã€çµ‚äº†
 	print "usage;addpidatq.pl <PID>\n";
 	exit;
 }
 
 
-#DB¸¡º÷(PID)
+#DBæ¤œç´¢(PID)
 $dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
 $sth = $dbh->prepare($stmt{'addpidatq.1'});
@@ -46,17 +46,17 @@ $sth->execute($pid);
     $sth = $dbh->prepare($stmt{'addpidatq.2'});
     $sth->execute($pid);
  @titlecount= $sth->fetchrow_array;
-$bitrate = $titlecount[0];#¥Ó¥Ã¥È¥ì¡¼¥È¼èÆÀ
+$bitrate = $titlecount[0];#ãƒ“ãƒƒãƒˆãƒ¬ãƒ¼ãƒˆå–å¾—
 if ($titlecount[1] >= 1){
-	$usedigital = $titlecount[1];#¥Ç¥¸¥¿¥ëÍ¥Àè¥Õ¥é¥°
+	$usedigital = $titlecount[1];#ãƒ‡ã‚¸ã‚¿ãƒ«å„ªå…ˆãƒ•ãƒ©ã‚°
 }else{
 	$usedigital = 0;
 }
 
-#PIDÃê½Ğ
+#PIDæŠ½å‡º
     $now = &epoch2foldate(time());
 
-#stationID¤«¤érecch
+#stationIDã‹ã‚‰recch
     $stationh = $dbh->prepare($stmt{'addpidatq.3'});
     $stationh->execute($pid);
     @stationl =  $stationh->fetchrow_array();
@@ -89,20 +89,20 @@ $lengthmin,
 $atid ) = $sth->fetchrow_array();
 # print "$pid ,$tid ,$stationid ,$countno,$subtitle,$startdatetime,$enddatetime,$startoffset ,$lengthmin,$atid \n";
 
-if($now< $startdatetime){#ÊüÁ÷¤¬Ì¤Íè¤ÎÆüÉÕ¤Ê¤é
-#¤â¤·¿·³«»Ï»ş¹ï¤¬15Ê¬°Ü¾ùÀè¤Ê¤éºÆ¥­¥å¡¼
+if($now< $startdatetime){#æ”¾é€ãŒæœªæ¥ã®æ—¥ä»˜ãªã‚‰
+#ã‚‚ã—æ–°é–‹å§‹æ™‚åˆ»ãŒ15åˆ†ç§»è­²å…ˆãªã‚‰å†ã‚­ãƒ¥ãƒ¼
 $startafter = &calclength($now,$startdatetime);
 &writelog("addpidatq DEBUG \$startafter $startafter \$now $now \$startdatetime $startdatetime");
 
 if ($startafter > 14 ){
 
-#¥­¥å¡¼ºï½ü
+#ã‚­ãƒ¥ãƒ¼å‰Šé™¤
  Schedule::At::remove ( TAG => "$pid"."_X");
 	&writelog("addpidatq remove que $pid");
 
 
-#¥­¥å¡¼Æş¤ì
-	#¥×¥í¥»¥¹µ¯Æ°»ş¹ï¤ÏÈÖÁÈ³«»Ï»ş¹ï¤Î-5Ê¬
+#ã‚­ãƒ¥ãƒ¼å…¥ã‚Œ
+	#ãƒ—ãƒ­ã‚»ã‚¹èµ·å‹•æ™‚åˆ»ã¯ç•ªçµ„é–‹å§‹æ™‚åˆ»ã®-5åˆ†
 $atdateparam = &calcatqparam(300);
 	Schedule::At::add (TIME => "$atdateparam", COMMAND => "$toolpath/perl/folprep.pl $pid" , TAG => "$pid"."_X");
 	&writelog("addpidatq TIME $atdateparam   COMMAND $toolpath/perl/folprep.pl $pid ");
@@ -110,7 +110,7 @@ $atdateparam = &calcatqparam(300);
 $atdateparam = &calcatqparam(60);
 $reclength = $lengthmin * 60;
 
-#¥­¥å¡¼ºï½ü
+#ã‚­ãƒ¥ãƒ¼å‰Šé™¤
  Schedule::At::remove ( TAG => "$pid"."_R");
 	&writelog("addpidatq remove que $pid");
 
@@ -121,11 +121,11 @@ if ($countno eq ""){
 Schedule::At::add (TIME => "$atdateparam", COMMAND => "$toolpath/perl/recwrap.pl $recch $reclength $bitrate $tid $countno $pid $stationid $usedigital $digitalstationband $digitalch" , TAG => "$pid"."_R");
 	&writelog("addpidatq TIME $atdateparam   COMMAND $toolpath/perl/recwrap.pl $recch $reclength $bitrate $tid $countno $pid $stationid $usedigital $digitalstationband $digitalch");
 
-}#end #¤â¤·¿·³«»Ï»ş¹ï¤¬15Ê¬°Ü¾ùÀè¤Ê¤éºÆ¥­¥å¡¼
+}#end #ã‚‚ã—æ–°é–‹å§‹æ™‚åˆ»ãŒ15åˆ†ç§»è­²å…ˆãªã‚‰å†ã‚­ãƒ¥ãƒ¼
 
 }else{
 &writelog("addpidatq drop:expire $pid $startafter $now $startdatetime");
-}#ÊüÁ÷¤¬Ì¤Íè¤ÎÆüÉÕ¤Ê¤é
+}#æ”¾é€ãŒæœªæ¥ã®æ—¥ä»˜ãªã‚‰
 
 }else{
 print "error record TID=$tid SID=$station $titlecount[0] match:$DBQuery\n";

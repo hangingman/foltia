@@ -5,12 +5,12 @@
 
 titlelist.php
 
-��Ū
-�����Ȱ�����ɽ�����ޤ���
-Ͽ��̵ͭ�ˤ�����餺������ݻ����Ƥ��������Ƥ�ɽ�����ޤ�
+目的
+全番組一覧を表示します。
+録画有無にかかわらず情報を保持しているもの全てを表示します
 
-����
-�ʤ�
+引数
+なし
 
  DCC-JPL Japan/foltia project
 
@@ -44,11 +44,11 @@ login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
 <?php
 
 //////////////////////////////////////////////////////////
-//���ڡ�����ɽ���쥳���ɿ�
+//１ページの表示レコード数
 $lim = 1000;
-//���������
+//クエリ取得
 $p = getgetnumform(p);
-//�ڡ��������η׻�
+//ページ取得の計算
 list($st,$p,$p2) = number_page($p,$lim);
 ///////////////////////////////////////////////////////////
 
@@ -62,22 +62,22 @@ FROM  foltia_program
 ORDER BY foltia_program.tid  DESC
 LIMIT $lim OFFSET $st
 	";
-//	$rs = m_query($con, $query, "DB������˼��Ԥ��ޤ���");
-$rs = sql_query($con, $query, "DB������˼��Ԥ��ޤ���");
+//	$rs = m_query($con, $query, "DBクエリに失敗しました");
+$rs = sql_query($con, $query, "DBクエリに失敗しました");
 $rowdata = $rs->fetch();
           if (! $rowdata) {
-                die_exit("���ȥǡ���������ޤ���<BR>");
+                die_exit("番組データがありません<BR>");
                 }
 
 	$query2 = "
 SELECT COUNT(*) AS cnt FROM foltia_program 
 	";
-$rs2 = sql_query($con, $query2, "DB������˼��Ԥ��ޤ���");
+$rs2 = sql_query($con, $query2, "DBクエリに失敗しました");
 $rowdata2 = $rs2->fetch();
           if (! $rowdata2) {
-                die_exit("���ȥǡ���������ޤ���<BR>");
+                die_exit("番組データがありません<BR>");
           }
-//�Կ�����
+//行数取得
 $dtcnt =  $rowdata2[0];
 
 ?>
@@ -88,12 +88,12 @@ $dtcnt =  $rowdata2[0];
 <?php 
 printhtmlpageheader();
 ?>
-  <p align="left"><font color="#494949" size="6">���Ȱ���</font></p>
+  <p align="left"><font color="#494949" size="6">番組一覧</font></p>
   <hr size="4">
-<p align="left">�����ȥꥹ�Ȥ�ɽ�����ޤ���</p>
+<p align="left">全番組リストを表示します。</p>
 
 <?php
-		/* �ե�����ɿ� */
+		/* フィールド数 */
 $maxcols = $rs->columnCount();
 	
 //Autopager 
@@ -104,14 +104,14 @@ echo "<div id=contents class=autopagerize_page_element />";
 	<thead>
 		<tr>
 			<th align="left">TID</th>
-			<th align="left">�����ȥ�</th>
-			<th align="left">MPEG4���</th>
+			<th align="left">タイトル</th>
+			<th align="left">MPEG4リンク</th>
 		</tr>
 	</thead>
 	
 	<tbody>
 		<?php
-			/* �ơ��֥�Υǡ�������� */
+			/* テーブルのデータを出力 */
 
   do {
 				echo("<tr>\n");
@@ -120,7 +120,7 @@ echo "<div id=contents class=autopagerize_page_element />";
 					echo("<td><a href=\"reserveprogram.php?tid=" .
 					htmlspecialchars($rowdata[0])  . "\">" .
 					htmlspecialchars($rowdata[0]) . "</a></td>\n");
-				      //�����ȥ�
+				      //タイトル
 				        echo("<td><a href=\"http://cal.syoboi.jp/progedit.php?TID=" .
 					htmlspecialchars($rowdata[0])  . "\" target=\"_blank\">" .
 					htmlspecialchars($rowdata[1]) . "</a></td>\n");
@@ -137,7 +137,7 @@ echo "<div id=contents class=autopagerize_page_element />";
 <?php
 
 /////////////////////////////////////////////////////////
-//Autopageing�����ȥڡ����Υ�󥯤�ɽ��
+//Autopageing処理とページのリンクを表示
 page_display("",$p,$p2,$lim,$dtcnt,"");
 ////////////////////////////////////////////////////////
 

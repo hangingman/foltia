@@ -3,65 +3,59 @@
 # Anime recording system foltia
 # http://www.dcc-jpl.com/soft/foltia/
 #
-#usage ;mklocalizeddir.pl [TID]
-# Mac OS X Localized¥Õ¥©¡¼¥Ş¥Ã¥È¤Ë½àµò¤·¤¿¹½Â¤¤ÎÏ¿²è¥Ç¥£¥ì¥¯¥È¥ê¤òºî¤ë¡£
-# »²¹Í:[Mac OS X 10.2¤Î¥í¡¼¥«¥é¥¤¥ºµ¡Ç½] http://msyk.net/macos/jaguar-localize/
+# usage ;mklocalizeddir.pl [TID]
+# Mac OS X Localizedãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«æº–æ‹ ã—ãŸæ§‹é€ ã®éŒ²ç”»ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ä½œã‚‹ã€‚
+# å‚è€ƒ:[Mac OS X 10.2ã®ãƒ­ãƒ¼ã‚«ãƒ©ã‚¤ã‚ºæ©Ÿèƒ½] http://msyk.net/macos/jaguar-localize/
 #
 # DCC-JPL Japan/foltia project
 #
 #
 
-
 use Jcode;
 use DBI;
-use DBD::Pg;
 use DBD::SQLite;
 
 $path = $0;
 $path =~ s/mklocalizeddir.pl$//i;
-if ($path ne "./"){
-push( @INC, "$path");
+if ($path ne "./") {
+  push( @INC, "$path");
 }
 require "foltialib.pl";
 
-#°ú¤­¿ô¤¬¥¢¥ë¤«?
+#å¼•ãæ•°ãŒã‚¢ãƒ«ã‹?
 $tid =  $ARGV[0] ;
-if ($tid eq "" ){
-	#°ú¤­¿ô¤Ê¤·½Ğ¼Â¹Ô¤µ¤ì¤¿¤é¡¢½ªÎ»
-	print "usage mklocalizeddir.pl [TID]\n";
-	exit;
+if ($tid eq "" ) {
+  #å¼•ãæ•°ãªã—å‡ºå®Ÿè¡Œã•ã‚ŒãŸã‚‰ã€çµ‚äº†
+  print "usage mklocalizeddir.pl [TID]\n";
+  exit;
 }
 
+#ãã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒãªã‘ã‚Œã°
+if (-e "$recfolderpath/$tid.localized") {
 
-#¤½¤Î¥Ç¥£¥ì¥¯¥È¥ê¤¬¤Ê¤±¤ì¤Ğ
-if (-e "$recfolderpath/$tid.localized"){
+} else {
+  #.localizedç”¨æ–‡å­—åˆ—å–å¾—
 
-}else{
+  #æ¥ç¶š
+  $dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
+  #æ¤œç´¢
+  $sth = $dbh->prepare($stmt{'mklocalizeddir.1'});
+  $sth->execute($tid);
+  @subticount= $sth->fetchrow_array;
+  $title = $subticount[0] ;
+  $titleeuc = $title ;
+  Jcode::convert(\$title , 'utf8', 'euc', "z");
 
-#.localizedÍÑÊ¸»úÎó¼èÆÀ
+  mkdir ("$recfolderpath/$tid.localized",0755);
+  mkdir ("$recfolderpath/$tid.localized/.localized",0755);
+  mkdir ("$recfolderpath/$tid.localized/mp4",0755);
+  mkdir ("$recfolderpath/$tid.localized/m2p",0755);
+  open (JASTRING,">$recfolderpath/$tid.localized/.localized/ja.strings")  || die "Cannot write ja.strings.\n";
+  print JASTRING "\"$tid\"=\"$title\";\n";
+  close(JASTRING);
 
-#ÀÜÂ³
-    $dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
+  &writelog("mklocalizeddir $tid $titleeuc");
 
-#¸¡º÷
-    $sth = $dbh->prepare($stmt{'mklocalizeddir.1'});
-    $sth->execute($tid);
- @subticount= $sth->fetchrow_array;
-$title = $subticount[0] ;
-$titleeuc = $title ;
- Jcode::convert(\$title , 'utf8', 'euc', "z");
-
-
-	mkdir ("$recfolderpath/$tid.localized",0755);
-	mkdir ("$recfolderpath/$tid.localized/.localized",0755);
-	mkdir ("$recfolderpath/$tid.localized/mp4",0755);
-	mkdir ("$recfolderpath/$tid.localized/m2p",0755);
-	open (JASTRING,">$recfolderpath/$tid.localized/.localized/ja.strings")  || die "Cannot write ja.strings.\n";
-	print JASTRING "\"$tid\"=\"$title\";\n";
-	close(JASTRING);
-
-&writelog("mklocalizeddir $tid $titleeuc");
-
-}#unless °ú¤­¿ô¤¬¥¢¥ë¤«?
+}#unless å¼•ãæ•°ãŒã‚¢ãƒ«ã‹?
 

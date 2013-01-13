@@ -5,11 +5,11 @@
 
 reserveepg.php
 
-ÌÜÅª
-EPGÏ¿²èÍ½Ìó¥Ú¡¼¥¸¤òÉ½¼¨¤·¤Ş¤¹¡£
+ç›®çš„
+EPGéŒ²ç”»äºˆç´„ãƒšãƒ¼ã‚¸ã‚’è¡¨ç¤ºã—ã¾ã™ã€‚
 
-°ú¿ô
-epgid:EPGÈÖÁÈID
+å¼•æ•°
+epgid:EPGç•ªçµ„ID
 
  DCC-JPL Japan/foltia project
 
@@ -41,27 +41,27 @@ if ($useenvironmentpolicy == 1){
   
 $epgid = getgetnumform(epgid);
 		if ($epgid == "") {
-		print "	<title>foltia:EPGÍ½Ìó:Error</title></head>\n";
-		die_exit("ÅĞÏ¿ÈÖÁÈ¤¬¤¢¤ê¤Ş¤»¤ó<BR>");
+		print "	<title>foltia:EPGäºˆç´„:Error</title></head>\n";
+		die_exit("ç™»éŒ²ç•ªçµ„ãŒã‚ã‚Šã¾ã›ã‚“<BR>");
 		}
-print "	<title>foltia:EPGÍ½Ìó:$epgid</title>
+print "	<title>foltia:EPGäºˆç´„:$epgid</title>
 </head>\n";
 
 
 $now = date("YmdHi");   
 
-//¥¿¥¤¥È¥ë¼èÆÀ
+//ã‚¿ã‚¤ãƒˆãƒ«å–å¾—
 	$query = "
 	SELECT epgid,startdatetime,enddatetime,lengthmin, ontvchannel,epgtitle,epgdesc,epgcategory , 
 	stationname , stationrecch ,stationid 
 	FROM foltia_epg , foltia_station 
 	WHERE epgid = ? AND foltia_station.ontvcode = foltia_epg.ontvchannel
 	";//4812
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($epgid));
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($epgid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
-		die_exit("ÅĞÏ¿ÈÖÁÈ¤¬¤¢¤ê¤Ş¤»¤ó<BR>");
+		die_exit("ç™»éŒ²ç•ªçµ„ãŒã‚ã‚Šã¾ã›ã‚“<BR>");
 		}
 
 		//$title = htmlspecialchars($rowdata[0]);
@@ -72,9 +72,9 @@ if (! $rowdata) {
 	printhtmlpageheader();
 ?>
 
-  <p align="left"><font color="#494949" size="6">ÈÖÁÈÍ½Ìó</font></p>
+  <p align="left"><font color="#494949" size="6">ç•ªçµ„äºˆç´„</font></p>
   <hr size="4">
-EPG¤«¤é²¼µ­ÈÖÁÈ¤òÏ¿²èÍ½Ìó¤·¤Ş¤¹¡£ <br>
+EPGã‹ã‚‰ä¸‹è¨˜ç•ªçµ„ã‚’éŒ²ç”»äºˆç´„ã—ã¾ã™ã€‚ <br>
 
 
 <?php	
@@ -92,47 +92,47 @@ $progdesc =  z2h($progdesc);
 $progcat = htmlspecialchars(z2h($rowdata[7]));
 
 if ($progcat == "information"){
-$progcat =  '¾ğÊó';
+$progcat =  'æƒ…å ±';
 }elseif ($progcat == "anime"){
-$progcat =  '¥¢¥Ë¥á¡¦ÆÃ»£';
+$progcat =  'ã‚¢ãƒ‹ãƒ¡ãƒ»ç‰¹æ’®';
 }elseif ($progcat == "news"){
-$progcat =  '¥Ë¥å¡¼¥¹¡¦ÊóÆ»';
+$progcat =  'ãƒ‹ãƒ¥ãƒ¼ã‚¹ãƒ»å ±é“';
 }elseif ($progcat == "drama"){
-$progcat =  '¥É¥é¥Ş';
+$progcat =  'ãƒ‰ãƒ©ãƒ';
 }elseif ($progcat == "variety"){
-$progcat =  '¥Ğ¥é¥¨¥Æ¥£';
+$progcat =  'ãƒãƒ©ã‚¨ãƒ†ã‚£';
 }elseif ($progcat == "documentary"){
-$progcat =  '¥É¥­¥å¥á¥ó¥¿¥ê¡¼¡¦¶µÍÜ';
+$progcat =  'ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ã‚¿ãƒªãƒ¼ãƒ»æ•™é¤Š';
 }elseif ($progcat == "education"){
-$progcat =  '¶µ°é';
+$progcat =  'æ•™è‚²';
 }elseif ($progcat == "music"){
-$progcat =  '²»³Ú';
+$progcat =  'éŸ³æ¥½';
 }elseif ($progcat == "cinema"){
-$progcat =  '±Ç²è';
+$progcat =  'æ˜ ç”»';
 }elseif ($progcat == "hobby"){
-$progcat =  '¼ñÌ£¡¦¼ÂÍÑ';
+$progcat =  'è¶£å‘³ãƒ»å®Ÿç”¨';
 }elseif ($progcat == "kids"){
-$progcat =  '¥­¥Ã¥º';
+$progcat =  'ã‚­ãƒƒã‚º';
 }elseif ($progcat == "sports"){
-$progcat =  '¥¹¥İ¡¼¥Ä';
+$progcat =  'ã‚¹ãƒãƒ¼ãƒ„';
 }elseif ($progcat == "etc"){
-$progcat =  '¤½¤ÎÂ¾';
+$progcat =  'ãã®ä»–';
 }elseif ($progcat == "stage"){
-$progcat =  '±é·à';
+$progcat =  'æ¼”åŠ‡';
 }
 
 $epgid = $epgid ;
 $stationid = htmlspecialchars($rowdata[10]);
 
 if ($now > $endfoltime){
-	print "¤³¤ÎÈÖÁÈ¤Ï¤¹¤Ç¤Ë½ªÎ»¤·¤Æ¤¤¤ë¤¿¤á¡¢Ï¿²è¤µ¤ì¤Ş¤»¤ó¡£<br>";
+	print "ã“ã®ç•ªçµ„ã¯ã™ã§ã«çµ‚äº†ã—ã¦ã„ã‚‹ãŸã‚ã€éŒ²ç”»ã•ã‚Œã¾ã›ã‚“ã€‚<br>";
 }elseif($now > $startfoltime){
-	print "¤³¤ÎÈÖÁÈ¤Ï¤¹¤Ç¤ËÊü±Ç³«»Ï¤·¤Æ¤¤¤ë¤¿¤á¡¢Ï¿²è¤µ¤ì¤Ş¤»¤ó¡£<br>";
+	print "ã“ã®ç•ªçµ„ã¯ã™ã§ã«æ”¾æ˜ é–‹å§‹ã—ã¦ã„ã‚‹ãŸã‚ã€éŒ²ç”»ã•ã‚Œã¾ã›ã‚“ã€‚<br>";
 }elseif($now > ($startfoltime - 10) ){
-	print "¤³¤ÎÈÖÁÈ¤ÏÊü±ÇÄ¾Á°¤Ê¤¿¤á¡¢Ï¿²è¤µ¤ì¤Ê¤¤²ÄÇ½À­¤¬¤¢¤ê¤Ş¤¹¡£<br>";
+	print "ã“ã®ç•ªçµ„ã¯æ”¾æ˜ ç›´å‰ãªãŸã‚ã€éŒ²ç”»ã•ã‚Œãªã„å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚<br>";
 }
 
-//½ÅÊ£³ÎÇ§
+//é‡è¤‡ç¢ºèª
 $query = "
 SELECT
  foltia_program.title, foltia_program.tid, stationname,
@@ -166,37 +166,37 @@ AND foltia_station.stationid = ?
 
 print "<form name=\"recordingsetting\" method=\"POST\" action=\"reserveepgcomp.php\">\n";
 
-//$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($startfoltime,$endfoltime,$stationid,$startfoltime,$endfoltime,$stationid));
+//$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($startfoltime,$endfoltime,$stationid,$startfoltime,$endfoltime,$stationid));
 $chkoverwrap = $rs->fetch();
 if (! $chkoverwrap) {
-		//½ÅÊ£¤Ê¤·
-		print "<input type=\"submit\" value=\"Í½Ìó\" ><br>\n";
+		//é‡è¤‡ãªã—
+		print "<input type=\"submit\" value=\"äºˆç´„\" ><br>\n";
 		}else{
 		$prereservedtitle = htmlspecialchars($chkoverwrap[0]);
 		$tid =  htmlspecialchars($chkoverwrap[1]);
 		$pid =  htmlspecialchars($chkoverwrap[2]);
-		print "<input type=\"submit\" value=\"¤½¤ì¤Ç¤âÍ½Ìó\" ><br><strong>¤³¤ÎÈÖÁÈ¤Ï´û¤ËÍ½ÌóºÑ¤ß¤Ç¤¹¡£</strong>¡¡\n";
+		print "<input type=\"submit\" value=\"ãã‚Œã§ã‚‚äºˆç´„\" ><br><strong>ã“ã®ç•ªçµ„ã¯æ—¢ã«äºˆç´„æ¸ˆã¿ã§ã™ã€‚</strong>ã€€\n";
 			if ($tid > 1){
-			print "Í½ÌóÈÖÁÈÌ¾:<a href=\"http://cal.syoboi.jp/tid/$tid/time/#$pid\" target=\"_blank\">$prereservedtitle</a><br>\n";
+			print "äºˆç´„ç•ªçµ„å:<a href=\"http://cal.syoboi.jp/tid/$tid/time/#$pid\" target=\"_blank\">$prereservedtitle</a><br>\n";
 			}else{
-			print "Í½ÌóÊıË¡:EPGÏ¿²è<br>\n";
+			print "äºˆç´„æ–¹æ³•:EPGéŒ²ç”»<br>\n";
 			}
 		}
 		
 
 
 print "<table width=\"100%\" border=\"0\">
-    <tr><td>ÊüÁ÷¶É</td><td>$stationjname</td></tr>
-    <tr><td>ÊüÁ÷³«»Ï</td><td>$startprinttime</td></tr>
-    <tr><td>ÊüÁ÷½ªÎ»</td><td>$endprinttime</td></tr>
-    <tr><td>¼Ü(Ê¬)</td><td>$lengthmin</td></tr>
-    <tr><td>ÊüÁ÷¥Á¥ã¥ó¥Í¥ë</td><td>$recch</td></tr>
-    <tr><td>ÈÖÁÈÌ¾</td><td>$progname</td></tr>
-    <tr><td>ÆâÍÆ</td><td>$progdesc</td></tr>
-    <tr><td>¥¸¥ã¥ó¥ë</td><td>$progcat</td></tr>
-    <tr><td>ÈÖÁÈID</td><td>$epgid</td></tr>
-    <tr><td>¶É¥³¡¼¥É</td><td>$stationid</td></tr>
+    <tr><td>æ”¾é€å±€</td><td>$stationjname</td></tr>
+    <tr><td>æ”¾é€é–‹å§‹</td><td>$startprinttime</td></tr>
+    <tr><td>æ”¾é€çµ‚äº†</td><td>$endprinttime</td></tr>
+    <tr><td>å°º(åˆ†)</td><td>$lengthmin</td></tr>
+    <tr><td>æ”¾é€ãƒãƒ£ãƒ³ãƒãƒ«</td><td>$recch</td></tr>
+    <tr><td>ç•ªçµ„å</td><td>$progname</td></tr>
+    <tr><td>å†…å®¹</td><td>$progdesc</td></tr>
+    <tr><td>ã‚¸ãƒ£ãƒ³ãƒ«</td><td>$progcat</td></tr>
+    <tr><td>ç•ªçµ„ID</td><td>$epgid</td></tr>
+    <tr><td>å±€ã‚³ãƒ¼ãƒ‰</td><td>$stationid</td></tr>
 	
 </table>
 

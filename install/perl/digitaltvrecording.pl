@@ -4,19 +4,19 @@
 # http://www.dcc-jpl.com/soft/foltia/
 #
 #digitaltvrecording.pl
-# PT1,PT2,friio¤ò¤Ï¤¸¤á¤È¤¹¤ë¥Ç¥¸¥¿¥ëÏ¿²è¥×¥í¥°¥é¥à¤ò¸Æ¤Ó¤À¤¹Ï¿²è¥â¥¸¥å¡¼¥ë¡£
+# PT1,PT2,friioã‚’ã¯ã˜ã‚ã¨ã™ã‚‹ãƒ‡ã‚¸ã‚¿ãƒ«éŒ²ç”»ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’å‘¼ã³ã ã™éŒ²ç”»ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã€‚
 #
 #usage digitaltvrecording.pl bandtype ch length(sec) [stationid] [sleeptype] [filename] [TID] [NO] [unittype]
-#°ú¿ô
-#bandtype : 0:ÃÏ¥Ç¥¸ 1:BS¥Ç¥¸¥¿¥ë 2:CS¥Ç¥¸¥¿¥ë
-#ch :Ï¿²è¥Á¥ã¥ó¥Í¥ë (ÃÏ¥Ç¥¸¤Ï¤½¤Î¤Ş¤ŞÅÏ¤¹¡¢BS/CS¥Ç¥¸¥¿¥ë¤Ï´ğËÜÅª¤Ë¥Á¥ã¥ó¥Í¥ë BS1/BS2¤Ê¤ÉÆ±¤¸¿ô»ş¤Ë)
-#length(sec) :Ï¿²èÉÃ¿ô [É¬¿Ü¹àÌÜ]
+#å¼•æ•°
+#bandtype : 0:åœ°ãƒ‡ã‚¸ 1:BSãƒ‡ã‚¸ã‚¿ãƒ« 2:CSãƒ‡ã‚¸ã‚¿ãƒ«
+#ch :éŒ²ç”»ãƒãƒ£ãƒ³ãƒãƒ« (åœ°ãƒ‡ã‚¸ã¯ãã®ã¾ã¾æ¸¡ã™ã€BS/CSãƒ‡ã‚¸ã‚¿ãƒ«ã¯åŸºæœ¬çš„ã«ãƒãƒ£ãƒ³ãƒãƒ« BS1/BS2ãªã©åŒã˜æ•°æ™‚ã«)
+#length(sec) :éŒ²ç”»ç§’æ•° [å¿…é ˆé …ç›®]
 #[stationid] :foltia stationid
-#[sleeptype] :0¤«N N¤Ê¤é¥¹¥ê¡¼¥×¤Ê¤·¤ÇÏ¿²è
-#[filename] :½ĞÎÏ¥Õ¥¡¥¤¥ëÌ¾
-#[TID] :¤·¤ç¤Ü¤«¤ë¥¿¥¤¥È¥ëID
-#[NO] :¤½¤ÎÈÖÁÈ¤ÎÊüÁ÷ÏÃ¿ô
-#[unittype] :friio¤«friioBS¤«¥æ¥Ë¥Ç¥ó¥Á¥å¡¼¥Ê¤«HDUS¤«¤Ê¤É(Ì¤»ÈÍÑ)
+#[sleeptype] :0ã‹N Nãªã‚‰ã‚¹ãƒªãƒ¼ãƒ—ãªã—ã§éŒ²ç”»
+#[filename] :å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«å
+#[TID] :ã—ã‚‡ã¼ã‹ã‚‹ã‚¿ã‚¤ãƒˆãƒ«ID
+#[NO] :ãã®ç•ªçµ„ã®æ”¾é€è©±æ•°
+#[unittype] :friioã‹friioBSã‹ãƒ¦ãƒ‹ãƒ‡ãƒ³ãƒãƒ¥ãƒ¼ãƒŠã‹HDUSã‹ãªã©(æœªä½¿ç”¨)
 #
 # DCC-JPL Japan/foltia project
 #
@@ -39,9 +39,9 @@ require 'foltialib.pl';
  &writelog("digitaltvrecording: DEBUG $ARGV[0] $ARGV[1] $ARGV[2] $ARGV[3] $ARGV[4] $ARGV[5] $ARGV[6] $ARGV[7] $ARGV[8]");
 
 
-#½àÈ÷
+#æº–å‚™
 &prepare;
-#¤â¤·Ï¿²è¤¬Áö¤Ã¤Æ¤¿¤é¡¢»ß¤á¤ë
+#ã‚‚ã—éŒ²ç”»ãŒèµ°ã£ã¦ãŸã‚‰ã€æ­¢ã‚ã‚‹
 #$reclengthsec = &chkrecprocess();
 #&setbitrate;
 #&chkextinput;
@@ -52,12 +52,12 @@ require 'foltialib.pl';
 &writelog("digitaldigitaltvrecording:RECEND:$bandtype $recch $lengthsec $stationid $sleeptype $filename $tid $countno $unittype
 ");
 
-# -- ¤³¤ì°Ê²¼¥µ¥Ö¥ë¡¼¥Á¥ó ----------------------------
+# -- ã“ã‚Œä»¥ä¸‹ã‚µãƒ–ãƒ«ãƒ¼ãƒãƒ³ ----------------------------
 
 
 sub prepare{
 
-#°ú¿ô¥¨¥é¡¼½èÍı
+#å¼•æ•°ã‚¨ãƒ©ãƒ¼å‡¦ç†
 $bandtype = $ARGV[0] ;
 $recch = $ARGV[1] ;
 $lengthsec = $ARGV[2] ;
@@ -73,8 +73,8 @@ if (($bandtype eq "" )|| ($recch eq "")|| ($lengthsec eq "")){
 	exit;
 }
 
-my $intval = $recch % 10; # 0¡Á9 sec
-my $startupsleep = $startupsleeptime - $intval; #  18¡Á27 sec
+my $intval = $recch % 10; # 0ã€œ9 sec
+my $startupsleep = $startupsleeptime - $intval; #  18ã€œ27 sec
 $reclengthsec = $lengthsec + (60 - $startupsleep) + 1; #
 
 if ( $sleeptype ne "N"){
@@ -84,13 +84,13 @@ if ( $sleeptype ne "N"){
 }else{
 	&writelog("digitaltvrecording: DEBUG RAPID START");
 }
-## recfriio ¤³¤Î¤Ø¤ó¤É¤¦¤Ê¤Ã¤Æ¤ë¤Î?
+## recfriio ã“ã®ã¸ã‚“ã©ã†ãªã£ã¦ã‚‹ã®?
 #if ($recunits > 1){
-#my $deviceno = $recunits - 1;#3Ëçº¹¤·¤Î¤È¤­/dev/video2¤«¤é»È¤¦
+#my $deviceno = $recunits - 1;#3æšå·®ã—ã®ã¨ã/dev/video2ã‹ã‚‰ä½¿ã†
 #	$recdevice = "/dev/video$deviceno";
 #	$recch = $ARGV[0] ;
 #}else{
-##1Ëçº¹¤·
+##1æšå·®ã—
 #	$recdevice = "/dev/video0";
 #	$recch = $ARGV[0] ;
 #}
@@ -102,7 +102,7 @@ if ($countno eq "0"){
 }else{
 	$outputfile = $outputpath.$tid."-".$countno."-";
 }
-#2ÈÖÌÜ°Ê¹ß¤Î¥¯¥ê¥Ã¥×¤Ç¥Õ¥¡¥¤¥ëÌ¾»ØÄê¤¬¤¢¤Ã¤¿¤é
+#2ç•ªç›®ä»¥é™ã®ã‚¯ãƒªãƒƒãƒ—ã§ãƒ•ã‚¡ã‚¤ãƒ«åæŒ‡å®šãŒã‚ã£ãŸã‚‰
 	if ($filename  ne ""){
 
 		$outputfile = $filename ;
@@ -123,7 +123,7 @@ if ($countno eq "0"){
 $sleepcounter = 0;
 $cmd="";
 
-#Æó½ÅÏ¿¤ê¤Ê¤É´û¤ËÆ±Ì¾¥Õ¥¡¥¤¥ë¤¬¤¢¤Ã¤¿¤éÃæÃÇ
+#äºŒé‡éŒ²ã‚Šãªã©æ—¢ã«åŒåãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã£ãŸã‚‰ä¸­æ–­
 if ( -e "$outputfile" ){
 	if ( -s "$outputfile" ){
 	&writelog("digitaltvrecording :ABORT :recfile $outputfile exist.");
@@ -138,19 +138,19 @@ if ( -e "$outputfile" ){
 #
 sub calldigitalrecorder{
 #
-#Çòfriio¤È¹õfriio¡¢PT1ÂĞ±ş
-#2008/10/23 recfriio4»ÅÍÍ¤ËÊÑ¹¹ 
+#ç™½friioã¨é»’friioã€PT1å¯¾å¿œ
+#2008/10/23 recfriio4ä»•æ§˜ã«å¤‰æ›´ 
 #
 my $oserr = 0;
 my $originalrecch = $recch;
 my $pt1recch =  $recch;
 my $errorflag = 0;
 if ($bandtype == 0){
-# ÃÏ¥Ç¥¸ friio
+# åœ°ãƒ‡ã‚¸ friio
 
 }elsif($bandtype == 1){
 # BS/CS friio
-		#recfriiobsÍÑ¥Á¥ã¥ó¥Í¥ë¥ê¥Ş¥Ã¥×
+		#recfriiobsç”¨ãƒãƒ£ãƒ³ãƒãƒ«ãƒªãƒãƒƒãƒ—
 		if ($recch == 101) {
 			$bssplitflag = $recch;
 			$recch = "b10";#22 : NHK BS1/BS2 
@@ -182,143 +182,143 @@ if ($bandtype == 0){
 		}else{
 			$recch = "b7";#19 : TwellV 
 		}
-#PT1¤Ï¤½¤Î¤Ş¤ŞÄÌ¤ë
+#PT1ã¯ãã®ã¾ã¾é€šã‚‹
 
 }elsif($bandtype == 2){
-# recpt1¤Ç¤Î¤ßÆ°ºî³ÎÇ§
+# recpt1ã§ã®ã¿å‹•ä½œç¢ºèª
 		if($recch == 335){
-		$pt1recch = "CS8";#335ch¡§¥­¥Ã¥º¥¹¥Æ¡¼¥·¥ç¥ó HD
+		$pt1recch = "CS8";#335chï¼šã‚­ãƒƒã‚ºã‚¹ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ HD
 	}elsif($recch == 237){
-		$pt1recch = "CS2";#237ch¡§¥¹¥¿¡¼¡¦¥Á¥ã¥ó¥Í¥ë ¥×¥é¥¹
+		$pt1recch = "CS2";#237chï¼šã‚¹ã‚¿ãƒ¼ãƒ»ãƒãƒ£ãƒ³ãƒãƒ« ãƒ—ãƒ©ã‚¹
 	}elsif($recch == 239){
-		$pt1recch = "CS2";#239ch¡§ÆüËÜ±Ç²èÀìÌç¥Á¥ã¥ó¥Í¥ëHD
+		$pt1recch = "CS2";#239chï¼šæ—¥æœ¬æ˜ ç”»å°‚é–€ãƒãƒ£ãƒ³ãƒãƒ«HD
 	}elsif($recch == 306){
-		$pt1recch = "CS2";#306ch¡§¥Õ¥¸¥Æ¥ì¥ÓCSHD
+		$pt1recch = "CS2";#306chï¼šãƒ•ã‚¸ãƒ†ãƒ¬ãƒ“CSHD
 	}elsif($recch == 100){
-		$pt1recch = "CS4";#100ch¡§e2¥×¥í¥â
+		$pt1recch = "CS4";#100chï¼še2ãƒ—ãƒ­ãƒ¢
 	}elsif($recch == 256){
-		$pt1recch = "CS4";#256ch¡§J sports ESPN
+		$pt1recch = "CS4";#256chï¼šJ sports ESPN
 	}elsif($recch == 312){
-		$pt1recch = "CS4";#312ch¡§FOX
+		$pt1recch = "CS4";#312chï¼šFOX
 	}elsif($recch == 322){
-		$pt1recch = "CS4";#322ch¡§¥¹¥Ú¡¼¥¹¥·¥ã¥ï¡¼TV
+		$pt1recch = "CS4";#322chï¼šã‚¹ãƒšãƒ¼ã‚¹ã‚·ãƒ£ãƒ¯ãƒ¼TV
 	}elsif($recch == 331){
-		$pt1recch = "CS4";#331ch¡§¥«¡¼¥È¥¥¡¼¥ó¥Í¥Ã¥È¥ï¡¼¥¯
+		$pt1recch = "CS4";#331chï¼šã‚«ãƒ¼ãƒˆã‚¥ãƒ¼ãƒ³ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯
 	}elsif($recch == 194){
-		$pt1recch = "CS4";#194ch¡§¥¤¥ó¥¿¡¼¥í¡¼¥«¥ëTV
+		$pt1recch = "CS4";#194chï¼šã‚¤ãƒ³ã‚¿ãƒ¼ãƒ­ãƒ¼ã‚«ãƒ«TV
 	}elsif($recch == 334){
-		$pt1recch = "CS4";#334ch¡§¥È¥¥¡¼¥ó¡¦¥Ç¥£¥º¥Ë¡¼
+		$pt1recch = "CS4";#334chï¼šãƒˆã‚¥ãƒ¼ãƒ³ãƒ»ãƒ‡ã‚£ã‚ºãƒ‹ãƒ¼
 	}elsif($recch == 221){
-		$pt1recch = "CS6";#221ch¡§Åì±Ç¥Á¥ã¥ó¥Í¥ë 
+		$pt1recch = "CS6";#221chï¼šæ±æ˜ ãƒãƒ£ãƒ³ãƒãƒ« 
 	}elsif($recch == 222){
-		$pt1recch = "CS6";#222ch¡§±ÒÀ±·à¾ì
+		$pt1recch = "CS6";#222chï¼šè¡›æ˜ŸåŠ‡å ´
 	}elsif($recch == 223){
-		$pt1recch = "CS6";#223ch¡§¥Á¥ã¥ó¥Í¥ëNECO
+		$pt1recch = "CS6";#223chï¼šãƒãƒ£ãƒ³ãƒãƒ«NECO
 	}elsif($recch == 224){
-		$pt1recch = "CS6";#224ch¡§ÍÎ²è¡ú¥·¥Í¥Õ¥£¥ë¡¦¥¤¥Ş¥¸¥«
+		$pt1recch = "CS6";#224chï¼šæ´‹ç”»â˜…ã‚·ãƒãƒ•ã‚£ãƒ«ãƒ»ã‚¤ãƒã‚¸ã‚«
 	}elsif($recch == 292){
-		$pt1recch = "CS6";#292ch¡§»şÂå·àÀìÌç¥Á¥ã¥ó¥Í¥ë
+		$pt1recch = "CS6";#292chï¼šæ™‚ä»£åŠ‡å°‚é–€ãƒãƒ£ãƒ³ãƒãƒ«
 	}elsif($recch == 238){
-		$pt1recch = "CS6";#238ch¡§¥¹¥¿¡¼¡¦¥Á¥ã¥ó¥Í¥ë ¥¯¥é¥·¥Ã¥¯
+		$pt1recch = "CS6";#238chï¼šã‚¹ã‚¿ãƒ¼ãƒ»ãƒãƒ£ãƒ³ãƒãƒ« ã‚¯ãƒ©ã‚·ãƒƒã‚¯
 	}elsif($recch == 310){
-		$pt1recch = "CS6";#310ch¡§¥¹¡¼¥Ñ¡¼¡ª¥É¥é¥ŞTV
+		$pt1recch = "CS6";#310chï¼šã‚¹ãƒ¼ãƒ‘ãƒ¼ï¼ãƒ‰ãƒ©ãƒTV
 	}elsif($recch == 311){
-		$pt1recch = "CS6";#311ch¡§AXN
+		$pt1recch = "CS6";#311chï¼šAXN
 	}elsif($recch == 343){
-		$pt1recch = "CS6";#343ch¡§¥Ê¥·¥ç¥Ê¥ë¥¸¥ª¥°¥é¥Õ¥£¥Ã¥¯¥Á¥ã¥ó¥Í¥ë
+		$pt1recch = "CS6";#343chï¼šãƒŠã‚·ãƒ§ãƒŠãƒ«ã‚¸ã‚ªã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒãƒ£ãƒ³ãƒãƒ«
 	}elsif($recch == 055){
-		$pt1recch = "CS8";#055ch¡§¥·¥ç¥Ã¥× ¥Á¥ã¥ó¥Í¥ë
+		$pt1recch = "CS8";#055chï¼šã‚·ãƒ§ãƒƒãƒ— ãƒãƒ£ãƒ³ãƒãƒ«
 	}elsif($recch == 228){
-		$pt1recch = "CS10";#228ch¡§¥¶¡¦¥·¥Í¥Ş
+		$pt1recch = "CS10";#228chï¼šã‚¶ãƒ»ã‚·ãƒãƒ
 	}elsif($recch == 800){
-		$pt1recch = "CS10";#800ch¡§¥¹¥«¥Á¥ã¥óHD800
+		$pt1recch = "CS10";#800chï¼šã‚¹ã‚«ãƒãƒ£ãƒ³HD800
 	}elsif($recch == 801){
-		$pt1recch = "CS10";#801ch¡§¥¹¥«¥Á¥ã¥ó801
+		$pt1recch = "CS10";#801chï¼šã‚¹ã‚«ãƒãƒ£ãƒ³801
 	}elsif($recch == 802){
-		$pt1recch = "CS10";#802ch¡§¥¹¥«¥Á¥ã¥ó802
+		$pt1recch = "CS10";#802chï¼šã‚¹ã‚«ãƒãƒ£ãƒ³802
 	}elsif($recch == 260){
-		$pt1recch = "CS12";#260ch¡§¥¶¡¦¥´¥ë¥Õ¡¦¥Á¥ã¥ó¥Í¥ë
+		$pt1recch = "CS12";#260chï¼šã‚¶ãƒ»ã‚´ãƒ«ãƒ•ãƒ»ãƒãƒ£ãƒ³ãƒãƒ«
 	}elsif($recch == 303){
-		$pt1recch = "CS12";#303ch¡§¥Æ¥ìÄ«¥Á¥ã¥ó¥Í¥ë
+		$pt1recch = "CS12";#303chï¼šãƒ†ãƒ¬æœãƒãƒ£ãƒ³ãƒãƒ«
 	}elsif($recch == 323){
-		$pt1recch = "CS12";#323ch¡§MTV 324ch¡§Âç¿Í¤Î²»³ÚÀìÌçTV¢¡¥ß¥å¡¼¥¸¥Ã¥¯¡¦¥¨¥¢
+		$pt1recch = "CS12";#323chï¼šMTV 324chï¼šå¤§äººã®éŸ³æ¥½å°‚é–€TVâ—†ãƒŸãƒ¥ãƒ¼ã‚¸ãƒƒã‚¯ãƒ»ã‚¨ã‚¢
 	}elsif($recch == 352){
-		$pt1recch = "CS12";#352ch¡§Ä«Æü¥Ë¥å¡¼¥¹¥¿¡¼
+		$pt1recch = "CS12";#352chï¼šæœæ—¥ãƒ‹ãƒ¥ãƒ¼ã‚¹ã‚¿ãƒ¼
 	}elsif($recch == 353){
-		$pt1recch = "CS12";#353ch¡§BBC¥ï¡¼¥ë¥É¥Ë¥å¡¼¥¹
+		$pt1recch = "CS12";#353chï¼šBBCãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒ‹ãƒ¥ãƒ¼ã‚¹
 	}elsif($recch == 354){
-		$pt1recch = "CS12";#354ch¡§CNNj
+		$pt1recch = "CS12";#354chï¼šCNNj
 	}elsif($recch == 361){
-		$pt1recch = "CS12";#361ch¡§¥¸¥ã¥¹¥È¡¦¥¢¥¤ ¥¤¥ó¥Õ¥©¥á¡¼¥·¥ç¥ó
+		$pt1recch = "CS12";#361chï¼šã‚¸ãƒ£ã‚¹ãƒˆãƒ»ã‚¢ã‚¤ ã‚¤ãƒ³ãƒ•ã‚©ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 	}elsif($recch == 251){
-		$pt1recch = "CS14";#251ch¡§J sports 1
+		$pt1recch = "CS14";#251chï¼šJ sports 1
 	}elsif($recch == 252){
-		$pt1recch = "CS14";#252ch¡§J sports 2
+		$pt1recch = "CS14";#252chï¼šJ sports 2
 	}elsif($recch == 253){
-		$pt1recch = "CS14";#253ch¡§J sports Plus
+		$pt1recch = "CS14";#253chï¼šJ sports Plus
 	}elsif($recch == 254){
-		$pt1recch = "CS14";#254ch¡§GAORA
+		$pt1recch = "CS14";#254chï¼šGAORA
 	}elsif($recch == 255){
-		$pt1recch = "CS14";#255ch¡§¥¹¥«¥¤¡¦Asports¡Ü
+		$pt1recch = "CS14";#255chï¼šã‚¹ã‚«ã‚¤ãƒ»Asportsï¼‹
 	}elsif($recch == 305){
-		$pt1recch = "CS16";#305ch¡§¥Á¥ã¥ó¥Í¥ë¶ä²Ï
+		$pt1recch = "CS16";#305chï¼šãƒãƒ£ãƒ³ãƒãƒ«éŠ€æ²³
 	}elsif($recch == 333){
-		$pt1recch = "CS16";#333ch¡§¥¢¥Ë¥á¥·¥¢¥¿¡¼X(AT-X)
+		$pt1recch = "CS16";#333chï¼šã‚¢ãƒ‹ãƒ¡ã‚·ã‚¢ã‚¿ãƒ¼X(AT-X)
 	}elsif($recch == 342){
-		$pt1recch = "CS16";#342ch¡§¥Ò¥¹¥È¥ê¡¼¥Á¥ã¥ó¥Í¥ë
+		$pt1recch = "CS16";#342chï¼šãƒ’ã‚¹ãƒˆãƒªãƒ¼ãƒãƒ£ãƒ³ãƒãƒ«
 	}elsif($recch == 290){
-		$pt1recch = "CS16";#290ch¡§TAKARAZUKA SKYSTAGE
+		$pt1recch = "CS16";#290chï¼šTAKARAZUKA SKYSTAGE
 	}elsif($recch == 803){
-		$pt1recch = "CS16";#803ch¡§¥¹¥«¥Á¥ã¥ó803
+		$pt1recch = "CS16";#803chï¼šã‚¹ã‚«ãƒãƒ£ãƒ³803
 	}elsif($recch == 804){
-		$pt1recch = "CS16";#804ch¡§¥¹¥«¥Á¥ã¥ó804
+		$pt1recch = "CS16";#804chï¼šã‚¹ã‚«ãƒãƒ£ãƒ³804
 	}elsif($recch == 240){
-		$pt1recch = "CS18";#240ch¡§¥à¡¼¥Ó¡¼¥×¥é¥¹HD
+		$pt1recch = "CS18";#240chï¼šãƒ ãƒ¼ãƒ“ãƒ¼ãƒ—ãƒ©ã‚¹HD
 	}elsif($recch == 262){
-		$pt1recch = "CS18";#262ch¡§¥´¥ë¥Õ¥Í¥Ã¥È¥ï¡¼¥¯
+		$pt1recch = "CS18";#262chï¼šã‚´ãƒ«ãƒ•ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯
 	}elsif($recch == 314){
-		$pt1recch = "CS18";#314ch¡§LaLa HDHV
+		$pt1recch = "CS18";#314chï¼šLaLa HDHV
 	}elsif($recch == 258){
-		$pt1recch = "CS20";#258ch¡§¥Õ¥¸¥Æ¥ì¥Ó739
+		$pt1recch = "CS20";#258chï¼šãƒ•ã‚¸ãƒ†ãƒ¬ãƒ“739
 	}elsif($recch == 302){
-		$pt1recch = "CS20";#302ch¡§¥Õ¥¸¥Æ¥ì¥Ó721
+		$pt1recch = "CS20";#302chï¼šãƒ•ã‚¸ãƒ†ãƒ¬ãƒ“721
 	}elsif($recch == 332){
-		$pt1recch = "CS20";#332ch¡§¥¢¥Ë¥Ş¥Ã¥¯¥¹
+		$pt1recch = "CS20";#332chï¼šã‚¢ãƒ‹ãƒãƒƒã‚¯ã‚¹
 	}elsif($recch == 340){
-		$pt1recch = "CS20";#340ch¡§¥Ç¥£¥¹¥«¥Ğ¥ê¡¼¥Á¥ã¥ó¥Í¥ë
+		$pt1recch = "CS20";#340chï¼šãƒ‡ã‚£ã‚¹ã‚«ãƒãƒªãƒ¼ãƒãƒ£ãƒ³ãƒãƒ«
 	}elsif($recch == 341){
-		$pt1recch = "CS20";#341ch¡§¥¢¥Ë¥Ş¥ë¥×¥é¥Í¥Ã¥È
+		$pt1recch = "CS20";#341chï¼šã‚¢ãƒ‹ãƒãƒ«ãƒ—ãƒ©ãƒãƒƒãƒˆ
 	}elsif($recch == 160){
-		$pt1recch = "CS22";#160ch¡§C-TBS¥¦¥§¥ë¥«¥à¥Á¥ã¥ó¥Í¥ë
+		$pt1recch = "CS22";#160chï¼šC-TBSã‚¦ã‚§ãƒ«ã‚«ãƒ ãƒãƒ£ãƒ³ãƒãƒ«
 	}elsif($recch == 161){
-		$pt1recch = "CS22";#161ch¡§QVC
+		$pt1recch = "CS22";#161chï¼šQVC
 	}elsif($recch == 185){
-		$pt1recch = "CS22";#185ch¡§¥×¥é¥¤¥à365.TV
+		$pt1recch = "CS22";#185chï¼šãƒ—ãƒ©ã‚¤ãƒ 365.TV
 	}elsif($recch == 293){
-		$pt1recch = "CS22";#293ch¡§¥Õ¥¡¥ß¥ê¡¼·à¾ì
+		$pt1recch = "CS22";#293chï¼šãƒ•ã‚¡ãƒŸãƒªãƒ¼åŠ‡å ´
 	}elsif($recch == 301){
-		$pt1recch = "CS22";#301ch¡§TBS¥Á¥ã¥ó¥Í¥ë
+		$pt1recch = "CS22";#301chï¼šTBSãƒãƒ£ãƒ³ãƒãƒ«
 	}elsif($recch == 304){
-		$pt1recch = "CS22";#304ch¡§¥Ç¥£¥º¥Ë¡¼¡¦¥Á¥ã¥ó¥Í¥ë
+		$pt1recch = "CS22";#304chï¼šãƒ‡ã‚£ã‚ºãƒ‹ãƒ¼ãƒ»ãƒãƒ£ãƒ³ãƒãƒ«
 	}elsif($recch == 325){
-		$pt1recch = "CS22";#325ch¡§MUSIC ON! TV
+		$pt1recch = "CS22";#325chï¼šMUSIC ON! TV
 	#}elsif($recch == 330){
-	#	$pt1recch = "CS22";#330ch¡§¥­¥Ã¥º¥¹¥Æ¡¼¥·¥ç¥ó  #HD²½¤Ë¤è¤ê2010/4ÊÑ¹¹
+	#	$pt1recch = "CS22";#330chï¼šã‚­ãƒƒã‚ºã‚¹ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³  #HDåŒ–ã«ã‚ˆã‚Š2010/4å¤‰æ›´
 	}elsif($recch == 351){
-		$pt1recch = "CS22";#351ch¡§TBS¥Ë¥å¡¼¥¹¥Ğ¡¼¥É
+		$pt1recch = "CS22";#351chï¼šTBSãƒ‹ãƒ¥ãƒ¼ã‚¹ãƒãƒ¼ãƒ‰
 	}elsif($recch == 257){
-		$pt1recch = "CS24";#ch¡§Æü¥Æ¥ìG+
+		$pt1recch = "CS24";#chï¼šæ—¥ãƒ†ãƒ¬G+
 	}elsif($recch == 291){
-		$pt1recch = "CS24";#ch¡§fashiontv
+		$pt1recch = "CS24";#chï¼šfashiontv
 	}elsif($recch == 300){
-		$pt1recch = "CS24";#ch¡§Æü¥Æ¥ì¥×¥é¥¹
+		$pt1recch = "CS24";#chï¼šæ—¥ãƒ†ãƒ¬ãƒ—ãƒ©ã‚¹
 	}elsif($recch == 320){
-		$pt1recch = "CS24";#ch¡§°Â¤é¤®¤Î²»³Ú¤ÈÉ÷·Ê¡¿¥¨¥³¥ß¥å¡¼¥¸¥Ã¥¯TV
+		$pt1recch = "CS24";#chï¼šå®‰ã‚‰ãã®éŸ³æ¥½ã¨é¢¨æ™¯ï¼ã‚¨ã‚³ãƒŸãƒ¥ãƒ¼ã‚¸ãƒƒã‚¯TV
 	}elsif($recch == 321){
-		$pt1recch = "CS24";#ch¡§MusicJapan TV
+		$pt1recch = "CS24";#chï¼šMusicJapan TV
 	}elsif($recch == 350){
-		$pt1recch = "CS24";#ch¡§Æü¥Æ¥ìNEWS24
-	}# end if CS¥ê¥Ş¥Ã¥×
+		$pt1recch = "CS24";#chï¼šæ—¥ãƒ†ãƒ¬NEWS24
+	}# end if CSãƒªãƒãƒƒãƒ—
 
 }else{
 	&writelog("digitaltvrecording :ERROR :Unsupported and type (digital CS).");
@@ -326,12 +326,12 @@ if ($bandtype == 0){
 }
 
 # PT1
-# b25,recpt1¤¬¤¢¤ë¤«³ÎÇ§
+# b25,recpt1ãŒã‚ã‚‹ã‹ç¢ºèª
 	if  (-e "$toolpath/perl/tool/recpt1"){
-		if ($bandtype >= 1){ #BS/CS¤Ê¤é
+		if ($bandtype >= 1){ #BS/CSãªã‚‰
 		&writelog("digitaltvrecording DEBUG recpt1 --b25 --sid $originalrecch  $pt1recch $reclengthsec $outputfile   ");
 		$oserr = system("$toolpath/perl/tool/recpt1 --b25 --sid $originalrecch $pt1recch $reclengthsec $outputfile  ");
-		}else{ #ÃÏ¥Ç¥¸
+		}else{ #åœ°ãƒ‡ã‚¸
 		&writelog("digitaltvrecording DEBUG recpt1 --b25  $originalrecch $reclengthsec $outputfile  ");
 		$oserr = system("$toolpath/perl/tool/recpt1 --b25  $originalrecch $reclengthsec $outputfile  ");
 		}
@@ -340,13 +340,13 @@ if ($bandtype == 0){
 			&writelog("digitaltvrecording :ERROR :PT1 is BUSY.$oserr");
 			$errorflag = 2;
 			}
-	}else{ # ¥¨¥é¡¼ recpt1¤¬¤¢¤ê¤Ş¤»¤ó
+	}else{ # ã‚¨ãƒ©ãƒ¼ recpt1ãŒã‚ã‚Šã¾ã›ã‚“
 		&writelog("digitaltvrecording :ERROR :recpt1  not found. You must install $toolpath/tool/b25 and $toolpath/tool/recpt1.");
 	$errorflag = 1;
 	}
 # friio
 if ($errorflag >= 1 ){
-# b25,recfriio¤¬¤¢¤ë¤«³ÎÇ§
+# b25,recfriioãŒã‚ã‚‹ã‹ç¢ºèª
 	if  (-e "$toolpath/perl/tool/recfriio"){
 	
 	if (! -e "$toolpath/perl/tool/friiodetect"){
@@ -363,7 +363,7 @@ if ($errorflag >= 1 ){
 			exit 2;
 			}
 
-#BS1/BS2¤Ê¤É¤Î¥¹¥×¥ê¥Ã¥È¤ò
+#BS1/BS2ãªã©ã®ã‚¹ãƒ—ãƒªãƒƒãƒˆã‚’
 if ($bssplitflag == 101){
 	if (-e "$toolpath/perl/tool/TsSplitter.exe"){
 	# BS1		
@@ -396,9 +396,9 @@ if ($bssplitflag == 101){
 	}
 }else{
 	&writelog("digitaltvrecording DEBUG not split TS.$bssplitflag");
-}# endif #BS1/BS2¤Ê¤É¤Î¥¹¥×¥ê¥Ã¥È¤ò
+}# endif #BS1/BS2ãªã©ã®ã‚¹ãƒ—ãƒªãƒƒãƒˆã‚’
 
-	}else{ # ¥¨¥é¡¼ recfriio¤¬¤¢¤ê¤Ş¤»¤ó
+	}else{ # ã‚¨ãƒ©ãƒ¼ recfriioãŒã‚ã‚Šã¾ã›ã‚“
 		&writelog("digitaltvrecording :ERROR :recfriio  not found. You must install $toolpath/perl/tool/b25 and $toolpath/perl/tool/recfriio:$errorflag");
 	#exit 1;
 	exit $errorflag;

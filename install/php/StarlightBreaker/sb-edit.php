@@ -4,10 +4,10 @@
  http://www.dcc-jpl.com/soft/foltia/
 
 
-ÌÜÅª
-blog¥Ä¡¼¥ë¡¢¥¹¥¿¡¼¥é¥¤¥È¥Ö¥ì¥¤¥«¡¼¡¢ÊÔ½¸²èÌÌ
+ç›®çš„
+blogãƒ„ãƒ¼ãƒ«ã€ã‚¹ã‚¿ãƒ¼ãƒ©ã‚¤ãƒˆãƒ–ãƒ¬ã‚¤ã‚«ãƒ¼ã€ç·¨é›†ç”»é¢
 
-°ú¿ô
+å¼•æ•°
 pid:PID
 f:file name
 
@@ -44,7 +44,7 @@ if (($pid == "") ||($filename == "")) {
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="stylesheet" type="text/css" href="graytable.css"> 
-<title>Starlight Breaker -ÊÔ½¸</title>
+<title>Starlight Breaker -ç·¨é›†</title>
 </head>
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
 <div align="center">
@@ -53,7 +53,7 @@ if (($pid == "") ||($filename == "")) {
 printhtmlpageheader();
 
 if (($pid == "") ||($filename == "")) {
-	print "²èÁü¤¬¤¢¤ê¤Ş¤»¤ó¡£<br></body></html>";
+	print "ç”»åƒãŒã‚ã‚Šã¾ã›ã‚“ã€‚<br></body></html>";
 	exit;
 }
 
@@ -74,20 +74,20 @@ FROM foltia_subtitle , foltia_program ,foltia_station
 WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
 AND foltia_subtitle.pid = ? 
 ";
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($pid));
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($pid));
 $rows = pg_num_rows($rs);
 if ($rows == 0){
-	print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">½ñ¤­¹ş¤ßÊÔ½¸</font></p>
+	print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">æ›¸ãè¾¼ã¿ç·¨é›†</font></p>
   <hr size=\"4\">
 <p align=\"left\">
-Ï¿²èµ­Ï¿¤¬¤¢¤ê¤Ş¤»¤ó¡£<br>
+éŒ²ç”»è¨˜éŒ²ãŒã‚ã‚Šã¾ã›ã‚“ã€‚<br>
 ";
 
 }else{
 $rowdata = pg_fetch_row($rs, 0);
 
-print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">½ñ¤­¹ş¤ßÊÔ½¸ </font></p>
+print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">æ›¸ãè¾¼ã¿ç·¨é›† </font></p>
   <hr size=\"4\">
 <p align=\"left\">";
 print "<a href = \"http://cal.syoboi.jp/tid/$rowdata[0]/\" target=\"_blank\">";
@@ -103,7 +103,7 @@ print "<a href = \"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$
 print "$subtitle ";
 }
 print htmlspecialchars($rowdata[1]) . " ";
-print htmlspecialchars($rowdata[6]) . "Ê¬ ";
+print htmlspecialchars($rowdata[6]) . "åˆ† ";
 print htmlspecialchars(foldate2print($rowdata[5]));
 print "<br /><br />";
 $mp4filename = $rowdata[9];
@@ -120,13 +120,13 @@ $serveruri = getserverfqdn ();
 
 print "</div>\n";
 
-//²èÁü
+//ç”»åƒ
 
 print "<img src='http://$serveruri$httpmediamappath/$tid.localized/img/$path/$filename' width='160' height='120' alt='$tid:$countno:$filetid' align=\"left\">\n";
 
 
 if (getform(preview) == 1){
-//¥×¥ì¥Ó¥å¡¼É½¼¨
+//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼è¡¨ç¤º
 // htmlspecialchars(stripslashes( )) 
 $subject = getform(subject); 
 $maintext = $_POST["textarea"];
@@ -136,60 +136,60 @@ $rate = getform(rank4);
 
 switch ($rate) {
 	case -2:
-		$ratechara =  "¡ß ";
+		$ratechara =  "Ã— ";
 	break;
 	case -1:
-	$ratechara =  "¢¥ ";
+	$ratechara =  "â–² ";
 	break;
 	case 0:
-	$ratechara =  "¡İ ";
+	$ratechara =  "âˆ’ ";
 	break;
 	case 1:
-	$ratechara =  "¡ú ";
+	$ratechara =  "â˜… ";
 	break;
 	case 2:
-	$ratechara =  "¡ú¡ú ";
+	$ratechara =  "â˜…â˜… ";
 	break;
 	case 3:
-	$ratechara =  "¡ú¡ú¡ú ";
+	$ratechara =  "â˜…â˜…â˜… ";
 	break;
 	case 4:
-	$ratechara =  "¡ú¡ú¡ú¡ú ";
+	$ratechara =  "â˜…â˜…â˜…â˜… ";
 	break;
 	default:
-	$ratechara =  "¡İ ";
+	$ratechara =  "âˆ’ ";
 }
 $subject = $ratechara . $subject;
 
 print "". htmlspecialchars(stripslashes( $subject)) ."\n";
 print "". stripslashes( $maintext) ."<br />\n";
 print "<br />\n";
-print "ËÜÊ¸(source view):<br />". htmlspecialchars(stripslashes( $maintext)) ."<hr><br /><br /><br />\n";
+print "æœ¬æ–‡(source view):<br />". htmlspecialchars(stripslashes( $maintext)) ."<hr><br /><br /><br />\n";
 
 print "<form id=\"form2\" name=\"form2\" method=\"post\" action=\"./sb-write.php?tid=$tid&path=$path&f=$filename\"><input type=\"password\" name=\"blogpw\">[ <a href = \"./sb-write.php?tid=$tid&path=$path&f=$filename\" target=\"_blank\">Send Picture Only</a> ] [ <input type=\"hidden\" name=\"subjects\" value=\"" . urlencode(stripslashes($subject)) . "\" /><input type=\"hidden\" name=\"maintext\" value=\"" . urlencode(stripslashes($maintext)) . "\" /><input type=submit value=\" Blog Write \"> ]</form>";
 
 
-}else{//ÊÔ½¸½ñ¤­¹ş¤ß¥â¡¼¥É
-//¥¿¥¤¥È¥ë
+}else{//ç·¨é›†æ›¸ãè¾¼ã¿ãƒ¢ãƒ¼ãƒ‰
+//ã‚¿ã‚¤ãƒˆãƒ«
 if ($tid == 0){
-	$subjects = "¡Ö".$subtitle."¡×";
+	$subjects = "ã€Œ".$subtitle."ã€";
 }else{
 	if ($countno == ""){
-	$subjects = "$title ¡Ö".$subtitle."¡×";
+	$subjects = "$title ã€Œ".$subtitle."ã€";
 	}else{
-	$subjects = "$title ¡ô". $countno ." ¡Ö".$subtitle."¡×";
+	$subjects = "$title ï¼ƒ". $countno ." ã€Œ".$subtitle."ã€";
 	}
 }
 print "<form id=\"form1\" name=\"form1\" method=\"post\" action=\"./sb-edit.php?pid=$pid&f=$filename\">
 <input type=\"text\" name=\"subject\" size=\"70\"value=\"$subjects \"><br />
 			<select class='hosi' name='rank4' size='1'>
-				<option value='-2'>¡ß¸«ÀÚ¤ê
-				<option value='-1'>¢¥¸«ÀÚ¤ê¸õÊä
-				<option value='0'>¡İ¸«¤Æ¤Ê¤¤
-				<option value='1' selected=\"selected\">¡ú¤Õ¤Ä¤¦
-				<option value='2'>¡ú¡ú¤ª¤â¤·¤í¤¤
-				<option value='3'>¡ú¡ú¡úÌ¾ºî
-				<option value='4'>¡ú¡ú¡ú¡úÅÂÆ²
+				<option value='-2'>Ã—è¦‹åˆ‡ã‚Š
+				<option value='-1'>â–²è¦‹åˆ‡ã‚Šå€™è£œ
+				<option value='0'>âˆ’è¦‹ã¦ãªã„
+				<option value='1' selected=\"selected\">â˜…ãµã¤ã†
+				<option value='2'>â˜…â˜…ãŠã‚‚ã—ã‚ã„
+				<option value='3'>â˜…â˜…â˜…åä½œ
+				<option value='4'>â˜…â˜…â˜…â˜…æ®¿å ‚
 			</select> 
 <br />
 <br />
@@ -200,26 +200,26 @@ print "<form id=\"form1\" name=\"form1\" method=\"post\" action=\"./sb-edit.php?
 if ($tid > 0){
 print "
 <br />
-»²¹Í¥ê¥ó¥¯:<a href = \"http://cal.syoboi.jp/tid/$tid/\" target=\"_blank\"> $title</a> "; 
+å‚è€ƒãƒªãƒ³ã‚¯:<a href = \"http://cal.syoboi.jp/tid/$tid/\" target=\"_blank\"> $title</a> "; 
 	if ($countno != ""){ 
-	print "Âè". $countno ."ÏÃ ";
+	print "ç¬¬". $countno ."è©± ";
 	}
-print"<a href = \"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$subtitle</a> (¾ğÊó:<a href = \"http://cal.syoboi.jp/\">¤·¤ç¤Ü¤¤¥«¥ì¥ó¥À¡¼</a>)";
+print"<a href = \"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$subtitle</a> (æƒ…å ±:<a href = \"http://cal.syoboi.jp/\">ã—ã‚‡ã¼ã„ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼</a>)";
 }
 print "			</textarea><br />
-  <input type=submit value=\" ¥Ö¥ì¥Ó¥å¡¼ \">
+  <input type=submit value=\" ãƒ–ãƒ¬ãƒ“ãƒ¥ãƒ¼ \">
 </form>
 
 ";
-}//¥×¥ì¥Ó¥å¡¼É½¼¨¤«¤É¤¦¤«
+}//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼è¡¨ç¤ºã‹ã©ã†ã‹
 /*
 ToDo
-¡¦Form¥×¥ì¥Ó¥å¡¼
-¡¦¥Ñ¥Ö¥ê¥Ã¥·¥å¥Ü¥¿¥ó
-¡¦
+ãƒ»Formãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
+ãƒ»ãƒ‘ãƒ–ãƒªãƒƒã‚·ãƒ¥ãƒœã‚¿ãƒ³
+ãƒ»
 */
 
-// ¥¿¥¤¥È¥ë°ìÍ÷¡¡¤³¤³¤Ş¤Ç
+// ã‚¿ã‚¤ãƒˆãƒ«ä¸€è¦§ã€€ã“ã“ã¾ã§
 }//if rowdata == 0
 
 ?>

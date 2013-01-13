@@ -4,17 +4,17 @@
  http://www.dcc-jpl.com/soft/foltia/
 
 
-ÌÜÅª
-MediaWiz,LinkPlayer ¤ò¤Ï¤¸¤á¤È¤¹¤ë Syabas¥¢¡¼¥­¥Æ¥¯¥Á¥ã¤Î¥Í¥Ã¥È¥ï¡¼¥¯¥á¥Ç¥£¥¢¥×¥ì¡¼¥ä¤Ç¤ÎºÆÀ¸
+ç›®çš„
+MediaWiz,LinkPlayer ã‚’ã¯ã˜ã‚ã¨ã™ã‚‹ Syabasã‚¢ãƒ¼ã‚­ãƒ†ã‚¯ãƒãƒ£ã®ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ—ãƒ¬ãƒ¼ãƒ¤ã§ã®å†ç”Ÿ
 
-°ú¿ô
+å¼•æ•°
 pid:PID
 
-½ĞÎÏ
+å‡ºåŠ›
 
 <Title>|0|0|http://servername/foltia/tv/filename.m2p|
 
-»²¹ÍURL
+å‚è€ƒURL
 http://www.geocities.co.jp/SiliconValley-Cupertino/2647/tec.html
 
 */
@@ -56,8 +56,8 @@ foltia_subtitle.pspfilename
 FROM foltia_subtitle , foltia_program ,foltia_station  
 WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
  AND foltia_subtitle.pid = ? ";
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($pid));
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($pid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
 	print "";
@@ -74,7 +74,7 @@ print "\n";
 print "\n";
 
 print "$title";
-print " Âè". "$episode" . "ÏÃ ";
+print " ç¬¬". "$episode" . "è©± ";
 print "$subtitle";
 print "|0|0|";
 print "http://$serveruri$httpmediamappath/$m2pfilename";

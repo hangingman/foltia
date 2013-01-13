@@ -4,10 +4,10 @@
  http://www.dcc-jpl.com/soft/foltia/
 
 
-目的
-blogツール、スターライトブレイカー、書き込み、画像アップロード
+㍾
+blog鴻若ゃゃ若吾莨若≪若
 
-引数
+綣
 tid:TID
 path:PATH (1004-15-20061018-0145)
 f:filename (00000102.jpg)
@@ -16,8 +16,7 @@ f:filename (00000102.jpg)
 
 */
 
-//スタブレコンフィグ
-include("./sb-config.php");
+//鴻潟include("./sb-config.php");
 include("./foltialib.php");
 $con = m_connect();
 
@@ -54,7 +53,7 @@ $htmloutput = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.
 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=EUC-JP\">
 <meta http-equiv=\"Content-Style-Type\" content=\"text/css\">
 <link rel=\"stylesheet\" type=\"text/css\" href=\"graytable.css\"> 
-<title>Starlight Breaker -書き込み</title>
+<title>Starlight Breaker -吾莨若</title>
 </head>
 <body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#000000\" ALINK=\"#c6edff\" >
 <div align=\"center\">";
@@ -70,7 +69,7 @@ if (($tid == "") ||($filename == "") || ($path == "")) {
 	exit;
 }
 
-$htmloutput = " <p align=\"left\"><font color=\"#494949\" size=\"6\">書き込み・アップロード </font></p>  <hr size=\"4\">";
+$htmloutput = " <p align=\"left\"><font color=\"#494949\" size=\"6\">吾莨若祉㏍</font></p>  <hr size=\"4\">";
 $htmloutput =  mb_convert_encoding($htmloutput,"EUC-JP", "UTF-8");
 print "$htmloutput";
 
@@ -98,7 +97,7 @@ print "$oserr \n";//
 
 
 
-//書き込み
+//吾莨若
 require_once 'Services/Blogging.php';
 //$blogurl = "http://www.dcc-jpl.com/wp3/wordpress/";
 //$datafilepath = "/home/jplcom/public_html/soft/map/data";

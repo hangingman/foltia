@@ -5,17 +5,17 @@
 #
 #folprep.pl
 #
-#at¤«¤é¸Æ¤Ğ¤ì¤Æ¡¢ÌÜÅªÈÖÁÈ¤¬¤º¤ì¤Æ¤¤¤Ê¤¤¤«³ÎÇ§¤·¤Ş¤¹
-#¿·¤·¤¤Êü±Ç»ş¹ï¤¬15Ê¬°Ê¾åÀè¤Ê¤éºÆÅÙfolprep¤Î¥­¥å¡¼¤òÆş¤ì¤Ş¤¹
-#Êü±Ç»ş¹ï¤¬15Ê¬°ÊÆâ¤Ê¤éÊü±Ç»ş¹ï¤ËÏ¿²è¥­¥å¡¼¤òÆş¤ì¤Ş¤¹
+#atã‹ã‚‰å‘¼ã°ã‚Œã¦ã€ç›®çš„ç•ªçµ„ãŒãšã‚Œã¦ã„ãªã„ã‹ç¢ºèªã—ã¾ã™
+#æ–°ã—ã„æ”¾æ˜ æ™‚åˆ»ãŒ15åˆ†ä»¥ä¸Šå…ˆãªã‚‰å†åº¦folprepã®ã‚­ãƒ¥ãƒ¼ã‚’å…¥ã‚Œã¾ã™
+#æ”¾æ˜ æ™‚åˆ»ãŒ15åˆ†ä»¥å†…ãªã‚‰æ”¾æ˜ æ™‚åˆ»ã«éŒ²ç”»ã‚­ãƒ¥ãƒ¼ã‚’å…¥ã‚Œã¾ã™
 #
-#°ú¿ô:PID
+#å¼•æ•°:PID
 #
 # DCC-JPL Japan/foltia project
 #
 #
 use DBI;
-use DBD::Pg;
+
 use Schedule::At;
 use Time::Local;
 
@@ -29,30 +29,30 @@ push( @INC, "$path");
 require "foltialib.pl";
 
 
-#PIDÃµ¤·
+#PIDæ¢ã—
 my $pid = $ARGV[0];
 
-#°ú¤­¿ô¤¬¥¢¥ë¤«?
+#å¼•ãæ•°ãŒã‚¢ãƒ«ã‹?
 if ($pid eq "" ){
-	#°ú¤­¿ô¤Ê¤·½Ğ¼Â¹Ô¤µ¤ì¤¿¤é¡¢½ªÎ»
+	#å¼•ãæ•°ãªã—å‡ºå®Ÿè¡Œã•ã‚ŒãŸã‚‰ã€çµ‚äº†
 	print "usage;folprep.pl <PID>\n";
 	exit;
 }
 
 my $stationid = "";
-if ($pid <= 0){#EPGÏ¿²è/¥­¡¼¥ï¡¼¥ÉÏ¿²è
-	#EPG¹¹¿· & DB¹¹¿·
+if ($pid <= 0){#EPGéŒ²ç”»/ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰éŒ²ç”»
+	#EPGæ›´æ–° & DBæ›´æ–°
 	$dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 	$stationid = &pid2sid($pid);
 	&writelog("folprep DEBUG epgimport.pl $stationid");
 	system("$toolpath/perl/epgimport.pl $stationid");
-}else{#¤·¤ç¤Ü¤«¤ëÏ¿²è
-	#XML¥²¥Ã¥È & DB¹¹¿·
+}else{#ã—ã‚‡ã¼ã‹ã‚‹éŒ²ç”»
+	#XMLã‚²ãƒƒãƒˆ & DBæ›´æ–°
 	&writelog("folprep DEBUG getxml2db.pl");
 	system("$toolpath/perl/getxml2db.pl");
 }
 
-#¥­¥å¡¼ºÆÅêÆş
+#ã‚­ãƒ¥ãƒ¼å†æŠ•å…¥
 &writelog("folprep  $toolpath/perl/addpidatq.pl $pid");
 system("$toolpath/perl/addpidatq.pl $pid");
 

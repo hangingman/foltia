@@ -5,32 +5,17 @@
 # http://www.dcc-jpl.com/soft/foltia/
 #
 #
-# е┴еуеєе═еые╣енеуеє
-# ╜щ┤№едеєе╣е╚б╝еы╗■д╦╝ї┐о▓─╟╜╢╔дЄе╣енеуеєд╖д▐д╣
+# уГБуГгуГ│уГНуГлуВ╣уВнуГгуГ│
+# хИЭцЬЯуВдуГ│уВ╣уГИуГ╝уГлцЩВуБлхПЧф┐бхПпшГ╜х▒АуВТуВ╣уВнуГгуГ│уБЧуБ╛уБЩ
 #
 # DCC-JPL Japan/foltia project
 #
 
-#use DBI;
-#use DBD::Pg;
-#use DBD::SQLite;
-#use Schedule::At;
-#use Time::Local;
-#use Jcode;
-
-#$path = $0;
-#$path =~ s/channelscan.pl$//i;
-#if ($path ne "./"){
-#push( @INC, "$path");
-#}
-
-#require "foltialib.pl";
-
-my $recpt1path = "/home/foltia/perl/tool/recpt1"; #д█длд╬енеуе╫е┴еуе╟е╨еде╣║юд├д╞ды┐═д╧е│е│дЄ╩╤╣╣
-my $epgdumppath = "/home/foltia/perl/tool"; #epgdumpд╬двдые╟егеьепе╚еъ
-my $recfolderpath = "/home/foltia/php/tv";#tsдЄ╜╨╬╧д╣дые╟егеьепе╚еъ
+my $recpt1path = "/home/foltia/perl/tool/recpt1"; #уБ╗уБЛуБоуВнуГгуГЧуГБуГгуГЗуГРуВдуВ╣ф╜ЬуБгуБжуВЛф║║уБпуВ│уВ│уВТхдЙцЫ┤
+my $epgdumppath = "/home/foltia/perl/tool"; #epgdumpуБоуБВуВЛуГЗуВгуГмуВпуГИуГк
+my $recfolderpath = "/home/foltia/php/tv";#tsуВТхЗ║хКЫуБЩуВЛуГЗуВгуГмуВпуГИуГк
 my $xmloutpath = "/tmp";
-my $channel = 13 ; #├╧е╟е╕е┴еуеєе═еыд╧13-62
+my $channel = 13 ; #хЬ░уГЗуВ╕уГБуГгуГ│уГНуГлуБп13-62
 my $oserr = "";
 my $line = "";
 
@@ -41,7 +26,7 @@ print "EPGDUMP:$epgdumppath/epgdump\n";
 print "TS OUT:$recfolderpath/\n";
 print "XML OUT:$xmloutpath/\n";
 
-#е─б╝еыдмдвдыдл│╬╟з
+#уГДуГ╝уГлуБМуБВуВЛуБЛчв║шкН
 unless (-e "$recpt1path"){
 	print "Please install $recpt1path.\n";
 	exit 1;
@@ -60,7 +45,7 @@ unless (-e "$xmloutpath"){
 }
 
 
-#├╧е╟е╕е╣енеуеєеыб╝е╫
+#хЬ░уГЗуВ╕уВ╣уВнуГгуГ│уГлуГ╝уГЧ
 for ($channel = 13; $channel <= 62 ; $channel++){
 	print "\nChannel: $channel\n";
 	$oserr = `$recpt1path $channel 4 $recfolderpath/__$channel.m2t`;
@@ -84,7 +69,7 @@ for ($channel = 13; $channel <= 62 ; $channel++){
 }#end for
 
 
-#BSе╟е╕е┐еы
+#BSуГЗуВ╕уВ┐уГл
 $channel = 211;
 	print "\nBS Digital Scan\n";
 	$oserr = `$recpt1path $channel 4 $recfolderpath/__$channel.m2t`;
@@ -117,19 +102,19 @@ $channel = 211;
 #    <display-name lang="ja_JP">NHK BSh</display-name>
 #  </channel>
 #  <channel id="3004.ontvjapan.com">
-#    <display-name lang="ja_JP">BS╞№е╞еь</display-name>
+#    <display-name lang="ja_JP">BSцЧеуГЖуГм</display-name>
 #  </channel>
 #  <channel id="3005.ontvjapan.com">
-#    <display-name lang="ja_JP">BS─л╞№</display-name>
+#    <display-name lang="ja_JP">BSцЬЭцЧе</display-name>
 #  </channel>
 #  <channel id="3006.ontvjapan.com">
 #    <display-name lang="ja_JP">BS-TBS</display-name>
 #  </channel>
 #  <channel id="3007.ontvjapan.com">
-#    <display-name lang="ja_JP">BSе╕еуе╤еє</display-name>
+#    <display-name lang="ja_JP">BSуВ╕уГгуГСуГ│</display-name>
 #  </channel>
 #  <channel id="3008.ontvjapan.com">
-#    <display-name lang="ja_JP">BSе╒е╕</display-name>
+#    <display-name lang="ja_JP">BSуГХуВ╕</display-name>
 #  </channel>
 #  <channel id="3009.ontvjapan.com">
 #    <display-name lang="ja_JP">WOWOW</display-name>
@@ -141,7 +126,7 @@ $channel = 211;
 #    <display-name lang="ja_JP">WOWOW3</display-name>
 #  </channel>
 #  <channel id="3012.ontvjapan.com">
-#    <display-name lang="ja_JP">е╣е┐б╝бже┴еуеєе═еы</display-name>
+#    <display-name lang="ja_JP">уВ╣уВ┐уГ╝уГ╗уГБуГгуГ│уГНуГл</display-name>
 #  </channel>
 #  <channel id="3013.ontvjapan.com">
 #    <display-name lang="ja_JP">BS11</display-name>
@@ -151,7 +136,7 @@ $channel = 211;
 #  </channel>
 #
 
-#CSе╟е╕е┐еы
+#CSуГЗуВ╕уВ┐уГл
 $channel = "CS8";
 	print "\nCS Digital Scan\n";
 	$oserr = `$recpt1path $channel 4 $recfolderpath/__$channel.m2t`;
@@ -174,211 +159,211 @@ $channel = "CS8";
 	}#end if 
 
 #  <channel id="1002.ontvjapan.com">
-#    <display-name lang="ja_JP">е╣е┐б╝гугше╫еще╣</display-name>
+#    <display-name lang="ja_JP">уВ╣уВ┐уГ╝я╜Гя╜ИуГЧуГйуВ╣</display-name>
 #  </channel>
 #  <channel id="1086.ontvjapan.com">
-#    <display-name lang="ja_JP">╞№╦▄▒╟▓ш└ь╠чгугшг╚г─</display-name>
+#    <display-name lang="ja_JP">цЧецЬмцШачФ╗х░ВщЦАя╜Гя╜Ия╝ия╝д</display-name>
 #  </channel>
 #  <channel id="306ch.epgdata.ontvjapan">
-#    <display-name lang="ja_JP">е╒е╕е╞еье╙г├г╙г╚г─</display-name>
+#    <display-name lang="ja_JP">уГХуВ╕уГЖуГмуГУя╝гя╝│я╝ия╝д</display-name>
 #  </channel>
 #  <channel id="1059.ontvjapan.com">
-#    <display-name lang="ja_JP">е╖ече├е╫е┴еуеєе═еы</display-name>
+#    <display-name lang="ja_JP">уВ╖уГзуГГуГЧуГБуГгуГ│уГНуГл</display-name>
 #  </channel>
 #  <channel id="1217.ontvjapan.com">
-#    <display-name lang="ja_JP">е╢бже╖е═е▐</display-name>
+#    <display-name lang="ja_JP">уВ╢уГ╗уВ╖уГНуГЮ</display-name>
 #  </channel>
 #  <channel id="800ch.epgdata.ontvjapan">
-#    <display-name lang="ja_JP">е╣еле┴еуеєг╚г─г╕г░г░</display-name>
+#    <display-name lang="ja_JP">уВ╣уВлуГБуГгуГ│я╝ия╝дя╝Шя╝Ря╝Р</display-name>
 #  </channel>
 #  <channel id="801ch.epgdata.ontvjapan">
-#    <display-name lang="ja_JP">е╣еле┴еуеєг╕г░г▒</display-name>
+#    <display-name lang="ja_JP">уВ╣уВлуГБуГгуГ│я╝Шя╝Ря╝С</display-name>
 #  </channel>
 #  <channel id="802ch.epgdata.ontvjapan">
-#    <display-name lang="ja_JP">е╣еле┴еуеєг╕г░г▓</display-name>
+#    <display-name lang="ja_JP">уВ╣уВлуГБуГгуГ│я╝Шя╝Ря╝Т</display-name>
 #  </channel>
 #  <channel id="100ch.epgdata.ontvjapan">
-#    <display-name lang="ja_JP">гхг▓е╫еэет</display-name>
+#    <display-name lang="ja_JP">я╜Ея╝ТуГЧуГнуГв</display-name>
 #  </channel>
 #  <channel id="194ch.epgdata.ontvjapan">
-#    <display-name lang="ja_JP">едеєе┐б╝еэб╝елеыг╘г╓</display-name>
+#    <display-name lang="ja_JP">уВдуГ│уВ┐уГ╝уГнуГ╝уВлуГля╝┤я╝╢</display-name>
 #  </channel>
 #  <channel id="1025.ontvjapan.com">
-#    <display-name lang="ja_JP">г╩е╣е▌б╝е─ббг┼г╙г╨г╬</display-name>
+#    <display-name lang="ja_JP">я╝куВ╣уГЭуГ╝уГДуААя╝ея╝│я╝░я╝о</display-name>
 #  </channel>
 #  <channel id="1016.ontvjapan.com">
-#    <display-name lang="ja_JP">г╞г╧г╪</display-name>
+#    <display-name lang="ja_JP">я╝жя╝пя╝╕</display-name>
 #  </channel>
 #  <channel id="1018.ontvjapan.com">
-#    <display-name lang="ja_JP">е╣е┌б╝е╣е╖еуеяб╝г╘г╓</display-name>
+#    <display-name lang="ja_JP">уВ╣уГЪуГ╝уВ╣уВ╖уГгуГпуГ╝я╝┤я╝╢</display-name>
 #  </channel>
 #  <channel id="1046.ontvjapan.com">
-#    <display-name lang="ja_JP">елб╝е╚ееб╝еєббе═е├е╚</display-name>
+#    <display-name lang="ja_JP">уВлуГ╝уГИуВеуГ╝уГ│уААуГНуГГуГИ</display-name>
 #  </channel>
 #  <channel id="1213.ontvjapan.com">
-#    <display-name lang="ja_JP">е╚ееб╝еєбже╟еге║е╦б╝</display-name>
+#    <display-name lang="ja_JP">уГИуВеуГ╝уГ│уГ╗уГЗуВгуВ║уГЛуГ╝</display-name>
 #  </channel>
 #  <channel id="1010.ontvjapan.com">
-#    <display-name lang="ja_JP">┼ь▒╟е┴еуеєе═еы</display-name>
+#    <display-name lang="ja_JP">цЭ▒цШауГБуГгуГ│уГНуГл</display-name>
 #  </channel>
 #  <channel id="1005.ontvjapan.com">
-#    <display-name lang="ja_JP">▒╥└▒╖р╛ь</display-name>
+#    <display-name lang="ja_JP">шбЫцШЯхКЗха┤</display-name>
 #  </channel>
 #  <channel id="1008.ontvjapan.com">
-#    <display-name lang="ja_JP">е┴еуеєе═еыг╬г┼г├г╧</display-name>
+#    <display-name lang="ja_JP">уГБуГгуГ│уГНуГля╝оя╝ея╝гя╝п</display-name>
 #  </channel>
 #  <channel id="1009.ontvjapan.com">
-#    <display-name lang="ja_JP">═╬▓шб·е╖е═е╒егеы</display-name>
+#    <display-name lang="ja_JP">ц┤ЛчФ╗тШЕуВ╖уГНуГХуВгуГл</display-name>
 #  </channel>
 #  <channel id="1003.ontvjapan.com">
-#    <display-name lang="ja_JP">е╣е┐б╝бжепеще╖е├еп</display-name>
+#    <display-name lang="ja_JP">уВ╣уВ┐уГ╝уГ╗уВпуГйуВ╖уГГуВп</display-name>
 #  </channel>
 #  <channel id="1133.ontvjapan.com">
-#    <display-name lang="ja_JP">╗■┬х╖р└ь╠че┴еуеєе═еы</display-name>
+#    <display-name lang="ja_JP">цЩВф╗гхКЗх░ВщЦАуГБуГгуГ│уГНуГл</display-name>
 #  </channel>
 #  <channel id="1006.ontvjapan.com">
-#    <display-name lang="ja_JP">е╣б╝е╤б╝е╔еще▐</display-name>
+#    <display-name lang="ja_JP">уВ╣уГ╝уГСуГ╝уГЙуГйуГЮ</display-name>
 #  </channel>
 #  <channel id="1014.ontvjapan.com">
-#    <display-name lang="ja_JP">г┴г╪г╬</display-name>
+#    <display-name lang="ja_JP">я╝бя╝╕я╝о</display-name>
 #  </channel>
 #  <channel id="1204.ontvjapan.com">
-#    <display-name lang="ja_JP">е╩е╖ече╕еке┴еуеєе═еы</display-name>
+#    <display-name lang="ja_JP">уГКуВ╖уГзуВ╕уВкуГБуГгуГ│уГНуГл</display-name>
 #  </channel>
 #  <channel id="110ch.epgdata.ontvjapan">
-#    <display-name lang="ja_JP">еяеєе╞еєе▌б╝е┐еы</display-name>
+#    <display-name lang="ja_JP">уГпуГ│уГЖуГ│уГЭуГ╝уВ┐уГл</display-name>
 #  </channel>
 #  <channel id="1028.ontvjapan.com">
-#    <display-name lang="ja_JP">е┤еые╒е┴еуеєе═еы</display-name>
+#    <display-name lang="ja_JP">уВ┤уГлуГХуГБуГгуГ│уГНуГл</display-name>
 #  </channel>
 #  <channel id="1092.ontvjapan.com">
-#    <display-name lang="ja_JP">е╞еь─ле┴еуеєе═еы</display-name>
+#    <display-name lang="ja_JP">уГЖуГмцЬЭуГБуГгуГ│уГНуГл</display-name>
 #  </channel>
 #  <channel id="1019.ontvjapan.com">
-#    <display-name lang="ja_JP">г═г╘г╓</display-name>
+#    <display-name lang="ja_JP">я╝ня╝┤я╝╢</display-name>
 #  </channel>
 #  <channel id="1024.ontvjapan.com">
-#    <display-name lang="ja_JP">е▀ехб╝е╕е├епбжеиев</display-name>
+#    <display-name lang="ja_JP">уГЯуГеуГ╝уВ╕уГГуВпуГ╗уВиуВв</display-name>
 #  </channel>
 #  <channel id="1067.ontvjapan.com">
-#    <display-name lang="ja_JP">─л╞№е╦ехб╝е╣е┐б╝</display-name>
+#    <display-name lang="ja_JP">цЬЭцЧеуГЛуГеуГ╝уВ╣уВ┐уГ╝</display-name>
 #  </channel>
 #  <channel id="1070.ontvjapan.com">
-#    <display-name lang="ja_JP">г┬г┬г├еяб╝еые╔</display-name>
+#    <display-name lang="ja_JP">я╝вя╝вя╝гуГпуГ╝уГлуГЙ</display-name>
 #  </channel>
 #  <channel id="1069.ontvjapan.com">
-#    <display-name lang="ja_JP">г├г╬г╬гъ</display-name>
+#    <display-name lang="ja_JP">я╝гя╝оя╝оя╜К</display-name>
 #  </channel>
 #  <channel id="361ch.epgdata.ontvjapan">
-#    <display-name lang="ja_JP">е╕еуе╣е╚бжевед</display-name>
+#    <display-name lang="ja_JP">уВ╕уГгуВ╣уГИуГ╗уВвуВд</display-name>
 #  </channel>
 #  <channel id="1041.ontvjapan.com">
-#    <display-name lang="ja_JP">г╩е╣е▌б╝е─ббг▒</display-name>
+#    <display-name lang="ja_JP">я╝куВ╣уГЭуГ╝уГДуААя╝С</display-name>
 #  </channel>
 #  <channel id="1042.ontvjapan.com">
-#    <display-name lang="ja_JP">г╩е╣е▌б╝е─ббг▓</display-name>
+#    <display-name lang="ja_JP">я╝куВ╣уГЭуГ╝уГДуААя╝Т</display-name>
 #  </channel>
 #  <channel id="1043.ontvjapan.com">
-#    <display-name lang="ja_JP">г╩е╣е▌б╝е─г╨гьгїгєг╚</display-name>
+#    <display-name lang="ja_JP">я╝куВ╣уГЭуГ╝уГДя╝░я╜Мя╜Хя╜Уя╝и</display-name>
 #  </channel>
 #  <channel id="1026.ontvjapan.com">
-#    <display-name lang="ja_JP">г╟г┴г╧г╥г┴</display-name>
+#    <display-name lang="ja_JP">я╝зя╝бя╝пя╝▓я╝б</display-name>
 #  </channel>
 #  <channel id="1040.ontvjapan.com">
-#    <display-name lang="ja_JP">гєгыг∙бжг┴е╣е▌б╝е─б▄</display-name>
+#    <display-name lang="ja_JP">я╜Уя╜Ля╜ЩуГ╗я╝буВ╣уГЭуГ╝уГДя╝Л</display-name>
 #  </channel>
 #  <channel id="101ch.epgdata.ontvjapan">
-#    <display-name lang="ja_JP">╩ї─═е╫еэете┴еуеєе═еы</display-name>
+#    <display-name lang="ja_JP">хоЭхбЪуГЧуГнуГвуГБуГгуГ│уГНуГл</display-name>
 #  </channel>
 #  <channel id="1207.ontvjapan.com">
-#    <display-name lang="ja_JP">г╙г╦г┘бжг╙г╘г┴г╟г┼</display-name>
+#    <display-name lang="ja_JP">я╝│я╝ля╝╣уГ╗я╝│я╝┤я╝бя╝зя╝е</display-name>
 #  </channel>
 #  <channel id="305ch.epgdata.ontvjapan">
-#    <display-name lang="ja_JP">е┴еуеєе═еы╢ф▓╧</display-name>
+#    <display-name lang="ja_JP">уГБуГгуГ│уГНуГлщКАц▓│</display-name>
 #  </channel>
 #  <channel id="1201.ontvjapan.com">
-#    <display-name lang="ja_JP">г┴г╘-г╪</display-name>
+#    <display-name lang="ja_JP">я╝бя╝┤-я╝╕</display-name>
 #  </channel>
 #  <channel id="1050.ontvjapan.com">
-#    <display-name lang="ja_JP">е╥е╣е╚еъб╝е┴еуеєе═еы</display-name>
+#    <display-name lang="ja_JP">уГТуВ╣уГИуГкуГ╝уГБуГгуГ│уГНуГл</display-name>
 #  </channel>
 #  <channel id="803ch.epgdata.ontvjapan">
-#    <display-name lang="ja_JP">е╣еле┴еуеєг╕г░г│</display-name>
+#    <display-name lang="ja_JP">уВ╣уВлуГБуГгуГ│я╝Шя╝Ря╝У</display-name>
 #  </channel>
 #  <channel id="804ch.epgdata.ontvjapan">
-#    <display-name lang="ja_JP">е╣еле┴еуеєг╕г░г┤</display-name>
+#    <display-name lang="ja_JP">уВ╣уВлуГБуГгуГ│я╝Шя╝Ря╝Ф</display-name>
 #  </channel>
 #  <channel id="1007.ontvjapan.com">
-#    <display-name lang="ja_JP">ерб╝е╙б╝е╫еще╣г╚г─</display-name>
+#    <display-name lang="ja_JP">уГауГ╝уГУуГ╝уГЧуГйуВ╣я╝ия╝д</display-name>
 #  </channel>
 #  <channel id="1027.ontvjapan.com">
-#    <display-name lang="ja_JP">е┤еые╒е═е├е╚еяб╝еп</display-name>
+#    <display-name lang="ja_JP">уВ┤уГлуГХуГНуГГуГИуГпуГ╝уВп</display-name>
 #  </channel>
 #  <channel id="1074.ontvjapan.com">
-#    <display-name lang="ja_JP">г╠гсг╠гсббг╚г─</display-name>
+#    <display-name lang="ja_JP">я╝мя╜Бя╝мя╜БуААя╝ия╝д</display-name>
 #  </channel>
 #  <channel id="1073.ontvjapan.com">
-#    <display-name lang="ja_JP">е╒е╕е╞еье╙г╖г│г╣</display-name>
+#    <display-name lang="ja_JP">уГХуВ╕уГЖуГмуГУя╝Чя╝Уя╝Щ</display-name>
 #  </channel>
 #  <channel id="1072.ontvjapan.com">
-#    <display-name lang="ja_JP">е╒е╕е╞еье╙г╖г▓г▒</display-name>
+#    <display-name lang="ja_JP">уГХуВ╕уГЖуГмуГУя╝Чя╝Тя╝С</display-name>
 #  </channel>
 #  <channel id="1047.ontvjapan.com">
-#    <display-name lang="ja_JP">еве╦е▐е├епе╣</display-name>
+#    <display-name lang="ja_JP">уВвуГЛуГЮуГГуВпуВ╣</display-name>
 #  </channel>
 #  <channel id="1062.ontvjapan.com">
-#    <display-name lang="ja_JP">е╟еге╣еле╨еъб╝</display-name>
+#    <display-name lang="ja_JP">уГЗуВгуВ╣уВлуГРуГкуГ╝</display-name>
 #  </channel>
 #  <channel id="1193.ontvjapan.com">
-#    <display-name lang="ja_JP">еве╦е▐еые╫еще═е├е╚</display-name>
+#    <display-name lang="ja_JP">уВвуГЛуГЮуГлуГЧуГйуГНуГГуГИ</display-name>
 #  </channel>
 #  <channel id="160ch.epgdata.ontvjapan">
-#    <display-name lang="ja_JP">г├-г╘г┬г╙ежеиеыелер</display-name>
+#    <display-name lang="ja_JP">я╝г-я╝┤я╝вя╝│уВжуВиуГлуВлуГа</display-name>
 #  </channel>
 #  <channel id="1120.ontvjapan.com">
-#    <display-name lang="ja_JP">г╤г╓г├</display-name>
+#    <display-name lang="ja_JP">я╝▒я╝╢я╝г</display-name>
 #  </channel>
 #  <channel id="185ch.epgdata.ontvjapan">
-#    <display-name lang="ja_JP">е╫ещедерг│г╢г╡бег╘г╓</display-name>
+#    <display-name lang="ja_JP">уГЧуГйуВдуГая╝Уя╝Ця╝Хя╝Оя╝┤я╝╢</display-name>
 #  </channel>
 #  <channel id="1015.ontvjapan.com">
-#    <display-name lang="ja_JP">е╒ебе▀еъб╝╖р╛ь</display-name>
+#    <display-name lang="ja_JP">уГХуВбуГЯуГкуГ╝хКЗха┤</display-name>
 #  </channel>
 #  <channel id="3201.ontvjapan.com">
-#    <display-name lang="ja_JP">г╘г┬г╙е┴еуеєе═еы</display-name>
+#    <display-name lang="ja_JP">я╝┤я╝вя╝│уГБуГгуГ│уГНуГл</display-name>
 #  </channel>
 #  <channel id="1090.ontvjapan.com">
-#    <display-name lang="ja_JP">е╟еге║е╦б╝е┴еуеєе═еы</display-name>
+#    <display-name lang="ja_JP">уГЗуВгуВ║уГЛуГ╝уГБуГгуГ│уГНуГл</display-name>
 #  </channel>
 #  <channel id="1022.ontvjapan.com">
 #    <display-name lang="ja_JP">MUSIC ON! TV</display-name>
 #  </channel>
 #  <channel id="1045.ontvjapan.com">
-#    <display-name lang="ja_JP">ене├е║е╣е╞б╝е╖ечеє</display-name>
+#    <display-name lang="ja_JP">уВнуГГуВ║уВ╣уГЖуГ╝уВ╖уГзуГ│</display-name>
 #  </channel>
 #  <channel id="1076.ontvjapan.com">
-#    <display-name lang="ja_JP">г╘г┬г╙е╦ехб╝е╣е╨б╝е╔</display-name>
+#    <display-name lang="ja_JP">я╝┤я╝вя╝│уГЛуГеуГ╝уВ╣уГРуГ╝уГЙ</display-name>
 #  </channel>
 #  <channel id="147ch.epgdata.ontvjapan">
-#    <display-name lang="ja_JP">г├г╙╞№╦▄╚╓┴╚емеде╔</display-name>
+#    <display-name lang="ja_JP">я╝гя╝│цЧецЬмчХкч╡ДуВмуВдуГЙ</display-name>
 #  </channel>
 #  <channel id="1068.ontvjapan.com">
-#    <display-name lang="ja_JP">╞№е╞еьг╟б▄</display-name>
+#    <display-name lang="ja_JP">цЧеуГЖуГмя╝зя╝Л</display-name>
 #  </channel>
 #  <channel id="5004.ontvjapan.com">
 #    <display-name lang="ja_JP">fashion TV</display-name>
 #  </channel>
 #  <channel id="300ch.epgdata.ontvjapan">
-#    <display-name lang="ja_JP">╞№е╞еье╫еще╣</display-name>
+#    <display-name lang="ja_JP">цЧеуГЖуГмуГЧуГйуВ╣</display-name>
 #  </channel>
 #  <channel id="1023.ontvjapan.com">
-#    <display-name lang="ja_JP">еие│е▀ехб╝е╕е├епг╘г╓</display-name>
+#    <display-name lang="ja_JP">уВиуВ│уГЯуГеуГ╝уВ╕уГГуВпя╝┤я╝╢</display-name>
 #  </channel>
 #  <channel id="1208.ontvjapan.com">
 #    <display-name lang="ja_JP">Music Japan TV</display-name>
 #  </channel>
 #  <channel id="2002.ontvjapan.com">
-#    <display-name lang="ja_JP">╞№е╞еьг╬г┼г╫г╙г▓г┤</display-name>
+#    <display-name lang="ja_JP">цЧеуГЖуГмя╝оя╝ея╝╖я╝│я╝Тя╝Ф</display-name>
 #  </channel>
 
 

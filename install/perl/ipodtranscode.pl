@@ -4,14 +4,14 @@
 # Anime recording system foltia
 # http://www.dcc-jpl.com/soft/foltia/
 #
-# iPod MPEG4/H.264•»•È•≥•Û
-# ffmpeg§Ú∏∆§”Ω–§∑§∆ —¥π
+# iPod MPEG4/H.264„Éà„É©„Ç≥„É≥
+# ffmpeg„ÇíÂëº„Å≥Âá∫„Åó„Å¶Â§âÊèõ
 #
 # DCC-JPL Japan/foltia project
 #
 
 use DBI;
-use DBD::Pg;
+
 use DBD::SQLite;
 use Jcode;
 
@@ -23,7 +23,7 @@ push( @INC, "$path");
 require "foltialib.pl";
 
 
-# ∆ÛΩ≈µØ∆∞§Œ≥Œ«ß!
+# ‰∫åÈáçËµ∑Âãï„ÅÆÁ¢∫Ë™ç!
 $processes =  &processfind("ipodtranscode.pl");
 #$processes = $processes +  &processfind("ffmpeg");
 
@@ -34,12 +34,12 @@ exit;
 #&writelog("ipodtranscode.pl  Normal launch.");
 }
 
-#DBΩÈ¥¸≤Ω
+#DBÂàùÊúüÂåñ
 $dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
-# •ø•§•»•ÎºË∆¿
-#•»•È•≥•Û•’•È•∞§¨§ø§√§∆§§§∆•π•∆°º•ø•π50∞ æÂ150Ã§À˛§Œ•’•°•§•Î§Ú∏≈§§ΩÁ§À§“§»§ƒ√µ§π
-# øÙøÙ§®§Î
+# „Çø„Ç§„Éà„É´ÂèñÂæó
+#„Éà„É©„Ç≥„É≥„Éï„É©„Ç∞„Åå„Åü„Å£„Å¶„ÅÑ„Å¶„Çπ„ÉÜ„Éº„Çø„Çπ50‰ª•‰∏ä150Êú™Ê∫Ä„ÅÆ„Éï„Ç°„Ç§„É´„ÇíÂè§„ÅÑÈ†Ü„Å´„Å≤„Å®„Å§Êé¢„Åô
+# Êï∞Êï∞„Åà„Çã
 #$DBQuery =  "SELECT count(*) FROM foltia_subtitle, foltia_program, foltia_m2pfiles 
 #WHERE filestatus >= $FILESTATUSRECEND AND filestatus < $FILESTATUSTRANSCODECOMPLETE  AND foltia_program.tid = foltia_subtitle.TID AND foltia_program.PSP = 1  AND foltia_m2pfiles.m2pfilename = foltia_subtitle.m2pfilename  ";
 #$sth = $dbh->prepare($DBQuery);
@@ -63,21 +63,21 @@ while ($counttranscodefiles >= 1){
 &writelog("ipodtranscode DEBUG $dbparam[0],$dbparam[1],$dbparam[2],$dbparam[3],$dbparam[4],$dbparam[5]");
 $pid = $dbparam[0];
 $tid = $dbparam[1];
-$inputmpeg2 = $recfolderpath."/".$dbparam[2]; # path…’§≠
-$mpeg2filename = $dbparam[2]; # path§ §∑
+$inputmpeg2 = $recfolderpath."/".$dbparam[2]; # path‰ªò„Åç
+$mpeg2filename = $dbparam[2]; # path„Å™„Åó
 $filestatus = $dbparam[3];
-$aspect = $dbparam[4];# 16,1 (ƒ∂≥€±Ô),4,3
+$aspect = $dbparam[4];# 16,1 (Ë∂ÖÈ°çÁ∏Å),4,3
 $countno = $dbparam[5];
 $mp4filenamestring = &mp4filenamestringbuild($pid);
 
-if (-e $inputmpeg2){#MPEG2•’•°•§•Î§¨¬∏∫ﬂ§∑§∆§§§Ï§–
+if (-e $inputmpeg2){#MPEG2„Éï„Ç°„Ç§„É´„ÅåÂ≠òÂú®„Åó„Å¶„ÅÑ„Çå„Å∞
 
 &writelog("ipodtranscode DEBUG mp4filenamestring $mp4filenamestring");
-#≈∏≥´•«•£•Ï•Ø•»•Í∫Ó¿Æ
+#Â±ïÈñã„Éá„Ç£„É¨„ÇØ„Éà„É™‰ΩúÊàê
 $pspdirname = &makemp4dir($tid);
 $mp4outdir = $pspdirname ;
-# º¬∫›§Œ•»•È•≥•Û
-# •ø•§•»•ÎºË∆¿
+# ÂÆüÈöõ„ÅÆ„Éà„É©„Ç≥„É≥
+# „Çø„Ç§„Éà„É´ÂèñÂæó
 if ($pid ne ""){
 	$sth = $dbh->prepare($stmt{'ipodtranscode.2'});
 	$sth->execute($pid);
@@ -87,8 +87,8 @@ $programtitle[2] =~ s/\"/\\"/gi;
 
 	if ($pid > 0){
 		if ($programtitle[1] ne ""){
-			$movietitle = " -title \"$programtitle[0] ¬Ë$programtitle[1]œ√ $programtitle[2]\" ";
-			$movietitleeuc = " -t \"$programtitle[0] ¬Ë$programtitle[1]œ√ $programtitle[2]\" ";
+			$movietitle = " -title \"$programtitle[0] Á¨¨$programtitle[1]Ë©± $programtitle[2]\" ";
+			$movietitleeuc = " -t \"$programtitle[0] Á¨¨$programtitle[1]Ë©± $programtitle[2]\" ";
 		}else{
 			$movietitle = " -title \"$programtitle[0] $programtitle[2]\" ";
 			$movietitleeuc = " -t \"$programtitle[0] $programtitle[2]\" ";
@@ -98,11 +98,11 @@ $programtitle[2] =~ s/\"/\\"/gi;
 		$movietitle = " -title \"$programtitle[2]\" ";
 		$movietitleeuc = " -t \"$programtitle[2]\" ";
 	}else{# 0
-	#∂ı«Ú
+	#Á©∫ÁôΩ
 	$movietitle = "";
 	$movietitleeuc = "";
 	}
-#Jcode::convert(\$movietitle,'utf8');# Title∆˛§Ï§Î§»iTunes7.0.2§¨•Ø•È•√•∑•Â§π§Î
+#Jcode::convert(\$movietitle,'utf8');# TitleÂÖ•„Çå„Çã„Å®iTunes7.0.2„Åå„ÇØ„É©„ÉÉ„Ç∑„É•„Åô„Çã
 	$movietitle = "";
 	$movietitleeuc = "";
 
@@ -112,12 +112,12 @@ if ($filestatus <= $FILESTATUSRECEND){
 }
 
 if ($filestatus <= $FILESTATUSWAITINGCAPTURE){
-#§ §À§‚§∑§ §§
+#„Å™„Å´„ÇÇ„Åó„Å™„ÅÑ
 }
 
 if ($filestatus <= $FILESTATUSCAPTURE){
 #unlink
-# Starlight breaker∏˛§±•≠•„•◊•¡•„≤Ë¡¸∫Ó¿Æ
+# Starlight breakerÂêë„Åë„Ç≠„É£„Éó„ÉÅ„É£ÁîªÂÉè‰ΩúÊàê
 if (-e "$toolpath/perl/captureimagemaker.pl"){
 	&writelog("ipodtranscode Call captureimagemaker $mpeg2filename");
 &changefilestatus($pid,$FILESTATUSCAPTURE);
@@ -127,7 +127,7 @@ if (-e "$toolpath/perl/captureimagemaker.pl"){
 }
 
 if ($filestatus <= $FILESTATUSCAPEND){
-# •µ•‡•Õ•§•Î∫Ó§Î
+# „Çµ„É†„Éç„Ç§„É´‰Ωú„Çã
 &makethumbnail();
 &changefilestatus($pid,$FILESTATUSTHMCREATE);
 }
@@ -138,7 +138,7 @@ if ($filestatus <= $FILESTATUSWAITINGTRANSCODE){
 $filenamebody = $inputmpeg2 ;
 $filenamebody =~ s/.m2t$|.ts$|.m2p$|.mpg$|.aac$//gi;
 
-#•«•∏•ø•Î§´•¢• •Ì•∞§´
+#„Éá„Ç∏„Çø„É´„Åã„Ç¢„Éä„É≠„Ç∞„Åã
 if ($inputmpeg2 =~ /m2t$|ts$|aac$/i){
 
 if ($filestatus <= $FILESTATUSTRANSCODETSSPLITTING){
@@ -147,17 +147,17 @@ if ($filestatus <= $FILESTATUSTRANSCODETSSPLITTING){
 }
 if ($filestatus <= $FILESTATUSTRANSCODEFFMPEG){
 	unlink("$filenamebody.264");
-	# H.264Ω–Œœ
+	# H.264Âá∫Âäõ
 	$trcnmpegfile = $inputmpeg2 ;
-	# •¢•π•⁄•Ø•»»Ê
-	if ($aspect == 1){#ƒ∂≥€±Ô
+	# „Ç¢„Çπ„Éö„ÇØ„ÉàÊØî
+	if ($aspect == 1){#Ë∂ÖÈ°çÁ∏Å
 	$cropopt = " -croptop 150 -cropbottom 150 -cropleft 200 -cropright 200 ";
 	}elsif($aspect == 4){#SD 
 	$cropopt = " -croptop 6 -cropbottom 6 -cropleft 8 -cropright 8 ";
 	}else{#16:9
 	$cropopt = " -croptop 6 -cropbottom 6 -cropleft 8 -cropright 8 ";
 	}
-	# •Ø•™•Í•∆•£§¥§»§À
+	# „ÇØ„Ç™„É™„ÉÜ„Ç£„Åî„Å®„Å´
 	if (($trconqty eq "")||($trconqty == 1)){
 	$ffmpegencopt = " -threads 0 -s 360x202 -deinterlace -r 24.00 -vcodec libx264 -g 300 -b 330000 -level 13 -loop 1 -sc_threshold 60 -partp4x4 1 -rc_eq 'blurCplx^(1-qComp)' -refs 3 -maxrate 700000 -async 50 -f h264 $filenamebody.264";
 	}elsif($trconqty == 2){
@@ -172,7 +172,7 @@ if ($filestatus <= $FILESTATUSTRANSCODEFFMPEG){
 	&changefilestatus($pid,$FILESTATUSTRANSCODEFFMPEG);
 #	&writelog("ipodtranscode ffmpeg $filenamebody.264");
 #	system ("ffmpeg -y -i $trcnmpegfile $cropopt $ffmpegencopt");
-#§ﬁ§∫TsSplit§π§Î ¢™•Ô•Û•ª•∞§Ú•Ω°º•π§À§∑§∆§∑§ﬁ§Ô§ §§§Ë§¶§À
+#„Åæ„ÅöTsSplit„Åô„Çã ‚Üí„ÉØ„É≥„Çª„Ç∞„Çí„ÇΩ„Éº„Çπ„Å´„Åó„Å¶„Åó„Åæ„Çè„Å™„ÅÑ„Çà„ÅÜ„Å´
 	if (! -e "$filenamebody.264"){
 		&changefilestatus($pid,$FILESTATUSTRANSCODETSSPLITTING);
 		unlink("${filenamebody}_tss.m2t");
@@ -193,9 +193,9 @@ if ($filestatus <= $FILESTATUSTRANSCODEFFMPEG){
 		&writelog("ipodtranscode ERR NOT Exist ${filenamebody}_HD.m2t");
 		$trcnmpegfile = $inputmpeg2 ;
 		}
-		#Split•’•°•§•Î§Œ≥Œ«ß
+		#Split„Éï„Ç°„Ç§„É´„ÅÆÁ¢∫Ë™ç
 		$trcnmpegfile = &validationsplitfile($inputmpeg2,$trcnmpegfile);
-		#tss.py§Àº∫«‘§∑§∆§ø§ §È∂Ø¿©≈™§ÀWINE§«TsSplit.exe
+		#tss.py„Å´Â§±Êïó„Åó„Å¶„Åü„Å™„ÇâÂº∑Âà∂ÁöÑ„Å´WINE„ÅßTsSplit.exe
 		if($trcnmpegfile eq $inputmpeg2){
 		
 		# TsSplit
@@ -203,7 +203,7 @@ if ($filestatus <= $FILESTATUSTRANSCODEFFMPEG){
 		system("wine $toolpath/perl/tool/TsSplitter.exe -EIT -ECM  -EMM -SD -1SEG -WAIT2 $inputmpeg2");
 		if (-e "${filenamebody}_HD.m2t"){
 			$trcnmpegfile = "${filenamebody}_HD.m2t";
-			#Split•’•°•§•Î§Œ≥Œ«ß
+			#Split„Éï„Ç°„Ç§„É´„ÅÆÁ¢∫Ë™ç
 			$trcnmpegfile = &validationsplitfile($inputmpeg2,$trcnmpegfile);
 #			if($trcnmpegfile ne $inputmpeg2){
 #			&changefilestatus($pid,$FILESTATUSTRANSCODEFFMPEG);
@@ -219,31 +219,31 @@ if ($filestatus <= $FILESTATUSTRANSCODEFFMPEG){
 		}#endif $trcnmpegfile eq $inputmpeg2
 		
 		
-		#∫∆ffmpeg
+		#ÂÜçffmpeg
 		&changefilestatus($pid,$FILESTATUSTRANSCODEFFMPEG);
 		&writelog("ipodtranscode ffmpeg retry $filenamebody.264");
 		system ("ffmpeg -y -i $trcnmpegfile $cropopt $ffmpegencopt");
 	}
-	#§‚§∑•®•È°º§À§ §√§ø§Ècrop§‰§·§Î
+	#„ÇÇ„Åó„Ç®„É©„Éº„Å´„Å™„Å£„Åü„Çâcrop„ÇÑ„ÇÅ„Çã
 	if (! -e "$filenamebody.264"){
-		#∫∆ffmpeg
+		#ÂÜçffmpeg
 		&changefilestatus($pid,$FILESTATUSTRANSCODEFFMPEG);
 		&writelog("ipodtranscode ffmpeg retry no crop $filenamebody.264");
 		system ("ffmpeg -y -i $trcnmpegfile $ffmpegencopt");
 	}
-	#∂Ø¿©≈™§ÀWINE§«TsSplit.exe
+	#Âº∑Âà∂ÁöÑ„Å´WINE„ÅßTsSplit.exe
 	if (! -e "$filenamebody.264"){
 	}
-	#§Ω§Ï§«§‚•®•È°º§ §Èsplit§∑§∆§ §§•’•°•§•Î§Ú•ø°º•≤•√•»§À
+	#„Åù„Çå„Åß„ÇÇ„Ç®„É©„Éº„Å™„Çâsplit„Åó„Å¶„Å™„ÅÑ„Éï„Ç°„Ç§„É´„Çí„Çø„Éº„Ç≤„ÉÉ„Éà„Å´
 	if (! -e "$filenamebody.264"){
-		#∫∆ffmpeg
+		#ÂÜçffmpeg
 		&changefilestatus($pid,$FILESTATUSTRANSCODEFFMPEG);
 		&writelog("ipodtranscode ffmpeg retry No splited originalTS file $filenamebody.264");
 		system ("ffmpeg -y -i $inputmpeg2 $ffmpegencopt");
 	}
 }
 if ($filestatus <= $FILESTATUSTRANSCODEWAVE){
-	# WAVEΩ–Œœ
+	# WAVEÂá∫Âäõ
 	unlink("${filenamebody}.wav");
 	&changefilestatus($pid,$FILESTATUSTRANSCODEWAVE);
 	&writelog("ipodtranscode mplayer $filenamebody.wav");
@@ -251,7 +251,7 @@ if ($filestatus <= $FILESTATUSTRANSCODEWAVE){
 
 }
 if ($filestatus <= $FILESTATUSTRANSCODEAAC){
-	# AAC —¥π
+	# AACÂ§âÊèõ
 	unlink("${filenamebody}.aac");
 	&changefilestatus($pid,$FILESTATUSTRANSCODEAAC);
 	if (-e "$toolpath/perl/tool/neroAacEnc"){
@@ -272,7 +272,7 @@ if ($filestatus <= $FILESTATUSTRANSCODEMP4BOX){
 
 unlink("${filenamebody}.base.mp4");
 
-#•«•∏•ø•Î•È•∏•™§ §È
+#„Éá„Ç∏„Çø„É´„É©„Ç∏„Ç™„Å™„Çâ
 if ($inputmpeg2 =~ /aac$/i){
 	if (-e "$toolpath/perl/tool/MP4Box"){
 		&writelog("ipodtranscode MP4Box $filenamebody");
@@ -285,7 +285,7 @@ if ($inputmpeg2 =~ /aac$/i){
 		&writelog("ipodtranscode WARN; Pls. install $toolpath/perl/tool/MP4Box");
 	}
 }else{
-	# MP4•”•Î•…
+	# MP4„Éì„É´„Éâ
 	if (-e "$toolpath/perl/tool/MP4Box"){
 		&changefilestatus($pid,$FILESTATUSTRANSCODEMP4BOX);
 		&writelog("ipodtranscode MP4Box $filenamebody");
@@ -309,13 +309,13 @@ if ($inputmpeg2 =~ /aac$/i){
 		&writelog("ipodtranscode WARN; Pls. install $toolpath/perl/tool/MP4Box");
 	}
 unlink("$filenamebody.aac");
-}#endif #•«•∏•ø•Î•È•∏•™§ §È
+}#endif #„Éá„Ç∏„Çø„É´„É©„Ç∏„Ç™„Å™„Çâ
 	
 #}
 
 #if ($filestatus <= $FILESTATUSTRANSCODEATOM){
 	if (-e "$toolpath/perl/tool/MP4Box"){
-		# iPod•ÿ•√•¿…’≤√
+		# iPod„Éò„ÉÉ„ÉÄ‰ªòÂä†
 #		&changefilestatus($pid,$FILESTATUSTRANSCODEATOM);
 		&writelog("ipodtranscode ATOM $filenamebody");
 		#system ("/usr/local/bin/ffmpeg -y -i $filenamebody.base.mp4 -vcodec copy -acodec copy -f ipod ${mp4outdir}MAQ${mp4filenamestring}.MP4");
@@ -339,7 +339,7 @@ unlink("$filenamebody.aac");
 }
 if ($filestatus <= $FILESTATUSTRANSCODECOMPLETE){
 	if (-e "${mp4outdir}MAQ${mp4filenamestring}.MP4"){
-	# √Ê¥÷•’•°•§•Îæ√§π
+	# ‰∏≠Èñì„Éï„Ç°„Ç§„É´Ê∂à„Åô
 	&changefilestatus($pid,$FILESTATUSTRANSCODECOMPLETE);
 	&updatemp4file();
 	}else{
@@ -347,8 +347,8 @@ if ($filestatus <= $FILESTATUSTRANSCODECOMPLETE){
 		&changefilestatus($pid,999);
 	}
 	unlink("${filenamebody}_HD.m2t");
-# Config§À§Ë§√§∆TS•’•°•§•Î§œæÔ§Àsplit§∑§øæı¬÷§À§π§Î§´§…§¶§´¡™¬Ú
-# B25º∫«‘§∑§ø§»§≠§À§≥§≥§¨¡ˆ§Î§»•’•°•§•Î§÷§√≤ı§Ï§Î§Œ§«∏°æ⁄§Ú∆˛§Ï§Î
+# Config„Å´„Çà„Å£„Å¶TS„Éï„Ç°„Ç§„É´„ÅØÂ∏∏„Å´split„Åó„ÅüÁä∂ÊÖã„Å´„Åô„Çã„Åã„Å©„ÅÜ„ÅãÈÅ∏Êäû
+# B25Â§±Êïó„Åó„Åü„Å®„Åç„Å´„Åì„Åì„ÅåËµ∞„Çã„Å®„Éï„Ç°„Ç§„É´„Å∂„Å£Â£ä„Çå„Çã„ÅÆ„ÅßÊ§úË®º„ÇíÂÖ•„Çå„Çã
 #
 #	if (-e "${filenamebody}_tss.m2t"){
 #		unlink("${filenamebody}.m2t");
@@ -365,15 +365,15 @@ if ($filestatus <= $FILESTATUSTRANSCODECOMPLETE){
 
 }
 
-}else{ #•«•∏•ø•Î§´•¢• •Ì•∞§´
+}else{ #„Éá„Ç∏„Çø„É´„Åã„Ç¢„Éä„É≠„Ç∞„Åã
 	#print "MPEG2\n";
-	# •¢•π•⁄•Ø•»»Ê
+	# „Ç¢„Çπ„Éö„ÇØ„ÉàÊØî
 	if ($aspect == 16){
 	$cropopt = " -croptop 70 -cropbottom 60 -cropleft  8 -cropright 14 -aspect 16:9 ";
 	}else{
 	$cropopt = " -croptop 8 -cropbottom 8 -cropleft  8 -cropright 14 ";
 	}
-# •Ø•™•Í•∆•£§¥§»§À
+# „ÇØ„Ç™„É™„ÉÜ„Ç£„Åî„Å®„Å´
 if (($trconqty eq "")||($trconqty == 1)){
 #$encodeoption = "-y -i $inputmpeg2 -vcodec xvid $cropopt -s 320x240 -b 300 -bt 128 -r 14.985 -bufsize 192 -maxrate 512 -minrate 0 -deinterlace -acodec aac -ab 128 -ar 24000 -ac 2 $movietitle ${mp4outdir}M4V${mp4filenamestring}.MP4";
 $mp4file = "${mp4outdir}M4V${mp4filenamestring}.MP4";
@@ -420,33 +420,33 @@ Jcode::convert(\$encodeoptionlog,'euc');
 system ("ffmpeg  $encodeoption ");
 &writelog("ipodtranscode FFEND $inputmpeg2");
 &changefilestatus($pid,$FILESTATUSTRANSCODECOMPLETE);
-#§‚§¶Õ◊§È§ §Ø§ §√§ø #2008/11/14 
+#„ÇÇ„ÅÜË¶Å„Çâ„Å™„Åè„Å™„Å£„Åü #2008/11/14 
 #&writelog("ipodtranscode mp4psp -p $mp4file $movietitleeuc");
 #system("/usr/local/bin/mp4psp -p $mp4file '$movietitleeuc' ");
 #&writelog("ipodtranscode mp4psp COMPLETE  $mp4file ");
 
 &updatemp4file();
-}#endif #•«•∏•ø•Î§´•¢• •Ì•∞§´
+}#endif #„Éá„Ç∏„Çø„É´„Åã„Ç¢„Éä„É≠„Ç∞„Åã
 
 $counttranscodefiles = &counttranscodefiles();
 ############################
-#∞Ï≤Û§«Ω™§È§ª§Î§Ë§¶§À
+#‰∏ÄÂõû„ÅßÁµÇ„Çâ„Åõ„Çã„Çà„ÅÜ„Å´
 #exit;
 
 
-}else{#•’•°•§•Î§¨§ §±§Ï§–
+}else{#„Éï„Ç°„Ç§„É´„Åå„Å™„Åë„Çå„Å∞
 &writelog("ipodtranscode NO $inputmpeg2 file.Skip.");
 }#end if
 
 }# end while
-#ªƒ§Í•’•°•§•Î§¨•º•Ì§ §È
+#ÊÆã„Çä„Éï„Ç°„Ç§„É´„Åå„Çº„É≠„Å™„Çâ
 &writelog("ipodtranscode ALL COMPLETE");
 exit;
 
 
 #-----------------------------------------------------------------------
 sub mp4filenamestringbuild(){
-#•’•°•§•ÎÃæ∑ËƒÍ
+#„Éï„Ç°„Ç§„É´ÂêçÊ±∫ÂÆö
 #1329-19-20080814-2337.m2t
 my @mpegfilename = split(/\./,$dbparam[2]) ;
 my $pspfilname = "-".$mpegfilename[0] ;
@@ -455,8 +455,8 @@ return("$pspfilname");
 
 
 sub makethumbnail(){
-#•µ•‡•Õ°º•Î
-my $outputfilename = $inputmpeg2 ;#•’•Î•—•π
+#„Çµ„É†„Éç„Éº„É´
+my $outputfilename = $inputmpeg2 ;#„Éï„É´„Éë„Çπ
 my $thmfilename = "MAQ${mp4filenamestring}.THM";
 &writelog("ipodtranscode DEBUG thmfilename $thmfilename");
 
@@ -464,11 +464,11 @@ my $thmfilename = "MAQ${mp4filenamestring}.THM";
 #
 #&writelog("ipodtranscode DEBUG mplayer -ss 00:01:20 -vo jpeg:outdir=$pspdirname -ao null -sstep 1 -frames 3  -v 3 $outputfilename");
 if($outputfilename =~ /.m2t$/){
-#•œ•§•”•∏•Á•ÛTS
+#„Éè„Ç§„Éì„Ç∏„Éß„É≥TS
 system ("mplayer -ss 00:01:20 -vo jpeg:outdir=$pspdirname -ao null -vf framestep=300step,scale=160:90,expand=160:120 -frames 1 $outputfilename");
 &writelog("ipodtranscode DEBUG mplayer -ss 00:01:20 -vo jpeg:outdir=$pspdirname -ao null -vf framestep=300step,scale=160:90,expand=160:120 -frames 1 $outputfilename");
 }else{
-#•¢• •Ì•∞
+#„Ç¢„Éä„É≠„Ç∞
 system ("mplayer -ss 00:01:20 -vo jpeg:outdir=$pspdirname -ao null -vf framestep=300step,scale=165:126,crop=160:120 -frames 1 $outputfilename");
 &writelog("ipodtranscode DEBUG mplayer -ss 00:01:20 -vo jpeg:outdir=$pspdirname -ao null -vf framestep=300step,scale=165:126,crop=160:120 -frames 1 $outputfilename");
 }
@@ -491,12 +491,12 @@ sub updatemp4file(){
 my $mp4filename = "MAQ${mp4filenamestring}.MP4";
 
 if (-e "${mp4outdir}MAQ${mp4filenamestring}.MP4"){
-# MP4•’•°•§•ÎÃæ§ÚPID•Ï•≥°º•…§ÀΩÒ§≠π˛§ﬂ
+# MP4„Éï„Ç°„Ç§„É´Âêç„ÇíPID„É¨„Ç≥„Éº„Éâ„Å´Êõ∏„ÅçËæº„Åø
 	$sth = $dbh->prepare($stmt{'ipodtranscode.updatemp4file.1'});
 	$sth->execute($mp4filename, $pid);
 	&writelog("ipodtranscode UPDATEsubtitleDB $stmt{'ipodtranscode.updatemp4file.1'}");
 
-# MP4•’•°•§•ÎÃæ§Úfoltia_mp4files¡ﬁ∆˛
+# MP4„Éï„Ç°„Ç§„É´Âêç„Çífoltia_mp4filesÊåøÂÖ•
 	$sth = $dbh->prepare($stmt{'ipodtranscode.updatemp4file.2'});
 	$sth->execute($tid, $mp4filename);
 	&writelog("ipodtranscode UPDATEmp4DB $stmt{'ipodtranscode.updatemp4file.2'}");
@@ -524,7 +524,7 @@ sub validationsplitfile{
 my $inputmpeg2 = $_[0];
 my $trcnmpegfile = $_[1];
 
-		#Split∑Î≤Ã≥Œ«ß
+		#SplitÁµêÊûúÁ¢∫Ë™ç
 		my $filesizeoriginal = -s $inputmpeg2 ;
 		my $filesizesplit = -s $trcnmpegfile;
 		my $validation = 0;

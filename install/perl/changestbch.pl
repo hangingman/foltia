@@ -5,26 +5,26 @@
 #
 #changestbch.pl
 #
-# ¥ê¥â¥³¥ó¥æ¥Ë¥Ã¥È¤òÁàºî¤·¤Æ³°Éô¥Á¥å¡¼¥Ê¤Î¿®¹æ¤òÀÚ¤êÂØ¤¨¤ë¡£
-#ÂĞ±ş¥æ¥Ë¥Ã¥È
+# ãƒªãƒ¢ã‚³ãƒ³ãƒ¦ãƒ‹ãƒƒãƒˆã‚’æ“ä½œã—ã¦å¤–éƒ¨ãƒãƒ¥ãƒ¼ãƒŠã®ä¿¡å·ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ã€‚
+#å¯¾å¿œãƒ¦ãƒ‹ãƒƒãƒˆ
 # Tira-2.1: Remote Control Receiver/Transmitter
 #http://www.home-electro.com/tira2.php
 #
 #usage :changestbch.pl  [PID]
-#°ú¿ô
-#[PID]ÈÖÁÈ¥×¥í¥°¥é¥àID
+#å¼•æ•°
+#[PID]ç•ªçµ„ãƒ—ãƒ­ã‚°ãƒ©ãƒ ID
 #
-# ¥Á¥ã¥ó¥Í¥ëÀÚ¤êÂØ¤¨¤ÎÎ®¤ì
-# changestbch.pl :¶É¤«¤éÁ÷½Ğ¿®¹æ¤òÄ´¤Ù¤Æ transfer.pl ¤Ë¥Á¥ã¥ó¥Í¥ëÊÑ¹¹°ú¤­¿ô¤òÅÏ¤¹¡£
-# ¢­
-# transfer.pl »ØÄê¥Õ¥¡¥¤¥ë¤òÁ÷½Ğ <http://www.geocities.jp/coffee_style/Tira-2-0.html>
+# ãƒãƒ£ãƒ³ãƒãƒ«åˆ‡ã‚Šæ›¿ãˆã®æµã‚Œ
+# changestbch.pl :å±€ã‹ã‚‰é€å‡ºä¿¡å·ã‚’èª¿ã¹ã¦ transfer.pl ã«ãƒãƒ£ãƒ³ãƒãƒ«å¤‰æ›´å¼•ãæ•°ã‚’æ¸¡ã™ã€‚
+# â†“
+# transfer.pl æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’é€å‡º <http://www.geocities.jp/coffee_style/Tira-2-0.html>
 #
 #
 # DCC-JPL Japan/foltia project
 #
 
 use DBI;
-use DBD::Pg;
+
 use DBD::SQLite;
 
 $path = $0;
@@ -38,22 +38,22 @@ require 'foltialib.pl';
 #	&writelog("changestbch DEBUG START");
 
 
-#°ú¤­¿ô¤¬¥¢¥ë¤«?
+#å¼•ãæ•°ãŒã‚¢ãƒ«ã‹?
 $pid = $ARGV[0] ;
 if ($pid eq "" ){
-	#°ú¤­¿ô¤Ê¤·½Ğ¼Â¹Ô¤µ¤ì¤¿¤é¡¢½ªÎ»
+	#å¼•ãæ•°ãªã—å‡ºå®Ÿè¡Œã•ã‚ŒãŸã‚‰ã€çµ‚äº†
 	print "usage :changestbch.pl  [PID]\n";
 	&writelog("changestbch ERR PID null");
 	exit;
 }
 
-# $haveirdaunit = 1;¥ê¥â¥³¥ó¤Ä¤Ê¤¤¤Ç¤ë¤«¤É¤¦¤«
+# $haveirdaunit = 1;ãƒªãƒ¢ã‚³ãƒ³ã¤ãªã„ã§ã‚‹ã‹ã©ã†ã‹
 if ($haveirdaunit == 1){
-#¥Ç¥Ğ¥¤¥¹¸«¤¨¤ë¤«¤É¤¦¤«
+#ãƒ‡ãƒã‚¤ã‚¹è¦‹ãˆã‚‹ã‹ã©ã†ã‹
 if (-e "/dev/ttyUSB0"){
 
-# pid¤«¤é¶É(Á÷½Ğ¥³¥Ş¥ó¥É)Ä´¤Ù¤ë
-#DB½é´ü²½
+# pidã‹ã‚‰å±€(é€å‡ºã‚³ãƒãƒ³ãƒ‰)èª¿ã¹ã‚‹
+#DBåˆæœŸåŒ–
 	$dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
 	$sth = $dbh->prepare($stmt{'changestbch.1'});
@@ -85,11 +85,11 @@ for ($i=0 ; $i < $length ; $i++ ){
 
 
 #BS-hi b x103 || b 3
-#¥­¥Ã¥º¥¹¥Æ¡¼¥·¥ç¥ó c x264 || c 2 
+#ã‚­ãƒƒã‚ºã‚¹ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ c x264 || c 2 
 
-#¥³¥Ş¥ó¥É¤«¤é¼Â¹Ô¤¹¤ë¥³¥Ş¥ó¥ÉÁÈ¤ßÎ©¤Æ
+#ã‚³ãƒãƒ³ãƒ‰ã‹ã‚‰å®Ÿè¡Œã™ã‚‹ã‚³ãƒãƒ³ãƒ‰çµ„ã¿ç«‹ã¦
 }else{
-#¥Ç¥Ğ¥¤¥¹¸«¤¨¤Ê¤¤
+#ãƒ‡ãƒã‚¤ã‚¹è¦‹ãˆãªã„
 		&writelog("changestbch ERR Tira2 Not found.");
 }#end if (-e "/dev/ttyUSB0")
 

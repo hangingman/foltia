@@ -5,13 +5,13 @@
 
 delreserve.php
 
-ÌÜÅª
-¼«Æ°Ï¿²è¤ÎÍ½Ìó²ò½ü¤ò¹Ô¤¤¤Ş¤¹
+ç›®çš„
+è‡ªå‹•éŒ²ç”»ã®äºˆç´„è§£é™¤ã‚’è¡Œã„ã¾ã™
 
-°ú¿ô
-tid:¥¿¥¤¥È¥ëID
-sid:ÊüÁ÷¶ÉID
-delflag:³ÎÇ§¥Õ¥é¥°
+å¼•æ•°
+tid:ã‚¿ã‚¤ãƒˆãƒ«ID
+sid:æ”¾é€å±€ID
+delflag:ç¢ºèªãƒ•ãƒ©ã‚°
 
  DCC-JPL Japan/foltia project
 
@@ -45,11 +45,11 @@ login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
 
     $tid = getgetnumform("tid");
 		if ($tid == "") {
-		die_exit("ÈÖÁÈ¤¬¤¢¤ê¤Ş¤»¤ó<BR>");
+		die_exit("ç•ªçµ„ãŒã‚ã‚Šã¾ã›ã‚“<BR>");
 		}
     $sid = getgetnumform("sid");
 		if ($sid == "") {
-		die_exit("¶É¤¬¤¢¤ê¤Ş¤»¤ó<BR>");
+		die_exit("å±€ãŒã‚ã‚Šã¾ã›ã‚“<BR>");
 		}
 
 $now = date("YmdHi");   
@@ -59,7 +59,7 @@ $now = date("YmdHi");
 <?php 
 	printhtmlpageheader();
 
-//¥¿¥¤¥È¥ë¼èÆÀ
+//ã‚¿ã‚¤ãƒˆãƒ«å–å¾—
 $query = "
 SELECT 
 foltia_program.tid,
@@ -70,12 +70,12 @@ foltia_tvrecord.stationid
 FROM  foltia_tvrecord , foltia_program , foltia_station 
 WHERE foltia_tvrecord.tid = foltia_program.tid  AND foltia_tvrecord.stationid = foltia_station .stationid  AND foltia_tvrecord.tid = ? AND foltia_tvrecord.stationid = ?  ";
 
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($tid,$sid));
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($tid,$sid));
 $rowdata = $rs->fetch();
 
 if (! $rowdata ) {
-		die_exit("ÅĞÏ¿ÈÖÁÈ¤¬¤¢¤ê¤Ş¤»¤ó<BR>");
+		die_exit("ç™»éŒ²ç•ªçµ„ãŒã‚ã‚Šã¾ã›ã‚“<BR>");
 		}
 		$tid = htmlspecialchars($rowdata[0]);
 		$stationname = htmlspecialchars($rowdata[1]);
@@ -87,34 +87,34 @@ $delflag = getgetnumform(delflag);
 
 ?>
 
-  <p align="left"><font color="#494949" size="6">Í½Ìó²ò½ü</font></p>
+  <p align="left"><font color="#494949" size="6">äºˆç´„è§£é™¤</font></p>
   <hr size="4">
 <?php
 if ($delflag == "1") {
-	print "¡Ö".$title."¡×¤Î¼«Æ°Ï¿²èÍ½Ìó¤ò²ò½ü¤·¤Ş¤·¤¿¡£ <br>\n";
+	print "ã€Œ".$title."ã€ã®è‡ªå‹•éŒ²ç”»äºˆç´„ã‚’è§£é™¤ã—ã¾ã—ãŸã€‚ <br>\n";
 
-//ºï½ü½èÍı
+//å‰Šé™¤å‡¦ç†
 if (($demomode) || ($protectmode) ){
-//demomode¤äprotectmode¤Ê¤é¤Ê¤Ë¤â¤·¤Ê¤¤
+//demomodeã‚„protectmodeãªã‚‰ãªã«ã‚‚ã—ãªã„
 }else{
 
-//¥­¥å¡¼ºï½ü¥×¥í¥°¥é¥à¤ò¥­¥Ã¥¯
+//ã‚­ãƒ¥ãƒ¼å‰Šé™¤ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’ã‚­ãƒƒã‚¯
 $oserr = system("$toolpath/perl/addatq.pl $tid $sid DELETE");
-//DBºï½ü
+//DBå‰Šé™¤
 $query = "
 DELETE  
 FROM  foltia_tvrecord  
 WHERE foltia_tvrecord.tid = ? AND foltia_tvrecord.stationid = ?  ";
 $rs->closeCursor();
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($tid,$sid));
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($tid,$sid));
 }
 
 }else{
-	print "¡Ö".$title."¡×¤Î¼«Æ°Ï¿²èÍ½Ìó¤ò²ò½ü¤·¤Ş¤¹¡£ <br>\n";
+	print "ã€Œ".$title."ã€ã®è‡ªå‹•éŒ²ç”»äºˆç´„ã‚’è§£é™¤ã—ã¾ã™ã€‚ <br>\n";
 
 print "<form name=\"deletereserve\" method=\"GET\" action=\"delreserve.php\">
-<input type=\"submit\" value=\"Í½Ìó²ò½ü\" >\n";
+<input type=\"submit\" value=\"äºˆç´„è§£é™¤\" >\n";
 
 }
 
@@ -122,9 +122,9 @@ print "<form name=\"deletereserve\" method=\"GET\" action=\"delreserve.php\">
 <br>
 <table width="100%" border="0">
   <tr>
-    <td>¥¿¥¤¥È¥ë</td>
-    <td>ÊüÁ÷¶É</td>
-    <td>¥Ó¥Ã¥È¥ì¡¼¥È</td>
+    <td>ã‚¿ã‚¤ãƒˆãƒ«</td>
+    <td>æ”¾é€å±€</td>
+    <td>ãƒ“ãƒƒãƒˆãƒ¬ãƒ¼ãƒˆ</td>
   </tr>
   <tr>
     <td><?php print"$title"; ?></td>
@@ -150,7 +150,7 @@ print "
 
 <p>&nbsp; </p>
 <p><br>
-º£¸å¤ÎÊü±ÇÍ½Äê </p>
+ä»Šå¾Œã®æ”¾æ˜ äºˆå®š </p>
 
 <?php
 	$query = "
@@ -166,33 +166,33 @@ WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = fo
  AND foltia_subtitle.startdatetime >= ?  AND foltia_program.tid = ?  
 ORDER BY foltia_subtitle.startdatetime  ASC
 ";
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($now,$tid));
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($now,$tid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
-		echo("Êü±ÇÍ½Äê¤Ï¤¢¤ê¤Ş¤»¤ó<BR>");
+		echo("æ”¾æ˜ äºˆå®šã¯ã‚ã‚Šã¾ã›ã‚“<BR>");
 }else{
 	$maxcols = $rs->columnCount();
 ?>
   <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%" BGCOLOR="#bcf1be">
 	<thead>
 		<tr>
-			<th align="left">Êü±Ç¶É</th>
-			<th align="left">ÏÃ¿ô</th>
-			<th align="left">¥µ¥Ö¥¿¥¤¥È¥ë</th>
-			<th align="left">³«»Ï»ş¹ï</th>
-			<th align="left">Áí¼Ü</th>
-			<th align="left">»ş¹ï¤º¤ì</th>
+			<th align="left">æ”¾æ˜ å±€</th>
+			<th align="left">è©±æ•°</th>
+			<th align="left">ã‚µãƒ–ã‚¿ã‚¤ãƒˆãƒ«</th>
+			<th align="left">é–‹å§‹æ™‚åˆ»</th>
+			<th align="left">ç·å°º</th>
+			<th align="left">æ™‚åˆ»ãšã‚Œ</th>
 
 		</tr>
 	</thead>
 
 	<tbody>
 		<?php
-			/* ¥Æ¡¼¥Ö¥ë¤Î¥Ç¡¼¥¿¤ò½ĞÎÏ */
+			/* ãƒ†ãƒ¼ãƒ–ãƒ«ã®ãƒ‡ãƒ¼ã‚¿ã‚’å‡ºåŠ› */
 	     do {
 				echo("<tr>\n");
-				for ($col = 0; $col < $maxcols; $col++) { /* Îó¤ËÂĞ±ş */
+				for ($col = 0; $col < $maxcols; $col++) { /* åˆ—ã«å¯¾å¿œ */
 					echo("<td>".htmlspecialchars($rowdata[$col])."<br></td>\n");
 				}
 				echo("</tr>\n");

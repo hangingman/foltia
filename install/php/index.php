@@ -5,14 +5,14 @@
 
 index.php
 
-ÌÜÅª
-Á´ÈÖÁÈÊü±ÇÍ½Äê¤òÉ½¼¨¤·¤Ş¤¹¡£
-Ï¿²èÍ½Ìó¤µ¤ì¤Æ¤¤¤ëÈÖÁÈ¤ÏÊÌ¿§¤Ç¤ï¤«¤ê¤ä¤¹¤¯É½¸½¤µ¤ì¤Æ¤¤¤Ş¤¹¡£
+ç›®çš„
+å…¨ç•ªçµ„æ”¾æ˜ äºˆå®šã‚’è¡¨ç¤ºã—ã¾ã™ã€‚
+éŒ²ç”»äºˆç´„ã•ã‚Œã¦ã„ã‚‹ç•ªçµ„ã¯åˆ¥è‰²ã§ã‚ã‹ã‚Šã‚„ã™ãè¡¨ç¾ã•ã‚Œã¦ã„ã¾ã™ã€‚
 
 
-¥ª¥×¥·¥ç¥ó
-mode:"new"¤ò»ØÄê¤¹¤ë¤È¡¢¿·ÈÖÁÈ(Âè1ÏÃ)¤Î¤ß¤ÎÉ½¼¨¤È¤Ê¤ë¡£
-now:YmdHi·Á¼°¤ÇÆüÉÕ¤ò»ØÄê¤¹¤ë¤È¤½¤ÎÆü¤«¤é¤ÎÈÖÁÈÉ½¤¬É½¼¨¤µ¤ì¤ë¡£
+ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+mode:"new"ã‚’æŒ‡å®šã™ã‚‹ã¨ã€æ–°ç•ªçµ„(ç¬¬1è©±)ã®ã¿ã®è¡¨ç¤ºã¨ãªã‚‹ã€‚
+now:YmdHiå½¢å¼ã§æ—¥ä»˜ã‚’æŒ‡å®šã™ã‚‹ã¨ãã®æ—¥ã‹ã‚‰ã®ç•ªçµ„è¡¨ãŒè¡¨ç¤ºã•ã‚Œã‚‹ã€‚
 
  DCC-JPL Japan/foltia project
 
@@ -44,9 +44,9 @@ print "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/T
 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=EUC-JP\">
 <meta http-equiv=\"Content-Style-Type\" content=\"text/css\">
 <link rel=\"stylesheet\" type=\"text/css\" href=\"graytable.css\"> ";
-//¥Ç¥£¥¹¥¯¶õ¤­ÍÆÎÌ¤Ë¤è¤Ã¤ÆÇØ·Ê¿§É½¼¨ÊÑ¹¹
+//ãƒ‡ã‚£ã‚¹ã‚¯ç©ºãå®¹é‡ã«ã‚ˆã£ã¦èƒŒæ™¯è‰²è¡¨ç¤ºå¤‰æ›´
 warndiskfreearea();
-print "<title>foltia:Êü±ÇÍ½Äê</title>
+print "<title>foltia:æ”¾æ˜ äºˆå®š</title>
 </head>";
 
 
@@ -54,15 +54,15 @@ print "<title>foltia:Êü±ÇÍ½Äê</title>
 
 
 //////////////////////////
-//¥Ú¡¼¥¸¤ÎÉ½¼¨¥ì¥³¡¼¥É¿ô
+//ãƒšãƒ¼ã‚¸ã®è¡¨ç¤ºãƒ¬ã‚³ãƒ¼ãƒ‰æ•°
 $lim = 300;		
-//¥¯¥¨¥ê¼èÆÀ
+//ã‚¯ã‚¨ãƒªå–å¾—
 $p = getgetnumform(p);
-//¥Ú¡¼¥¸¼èÆÀ¤Î·×»»
+//ãƒšãƒ¼ã‚¸å–å¾—ã®è¨ˆç®—
 list($st,$p,$p2) = number_page($p,$lim);
 ////////////////////////////
 
-//Æ±°ìÈÖÁÈÂ¾¶É¸¡º÷
+//åŒä¸€ç•ªçµ„ä»–å±€æ¤œç´¢
 $query = "
 SELECT
 foltia_program .tid,
@@ -80,8 +80,8 @@ AND foltia_subtitle.enddatetime >= ?
 ORDER BY \"startdatetime\" ASC 
 LIMIT 1000
 	";
-//	$reservedrssametid = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-$reservedrssametid = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($now));
+//	$reservedrssametid = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+$reservedrssametid = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($now));
 $rowdata = $reservedrssametid->fetch();
 if ($rowdata) {
 	do {
@@ -94,7 +94,7 @@ if ($rowdata) {
 	}//end if
 $reservedrssametid->closeCursor();
 
-//Ï¿²èÈÖÁÈ¸¡º÷
+//éŒ²ç”»ç•ªçµ„æ¤œç´¢
 $query = "
 SELECT
  foltia_program.tid, stationname, foltia_program.title,
@@ -119,7 +119,7 @@ WHERE foltia_tvrecord.stationid = 0 AND
 LIMIT 1000
 	";
 
-//$reservedrs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+//$reservedrs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 $query = "
 SELECT
  foltia_program.tid, stationname, foltia_program.title,
@@ -142,7 +142,7 @@ LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.st
 WHERE foltia_tvrecord.stationid = 0 AND
  foltia_subtitle.enddatetime >= ? ORDER BY x ASC
 	";
-$reservedrs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($now,$now));
+$reservedrs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($now,$now));
 
 $rowdata = $reservedrs->fetch();
 if ($rowdata) {
@@ -156,7 +156,7 @@ if ($rowdata) {
 $mode = getgetform(mode);
 
 if ($mode == "new"){
-//¿·ÈÖÁÈÉ½¼¨¥â¡¼¥É
+//æ–°ç•ªçµ„è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰
 	$query = "
 	SELECT 
  foltia_program.tid, stationname, foltia_program.title,
@@ -198,7 +198,7 @@ LIMIT 1000
 	";
 
 /////////////////////////////////////////////////////////////
-//¥ì¥³¡¼¥ÉÁí¿ô¼èÆÀ
+//ãƒ¬ã‚³ãƒ¼ãƒ‰ç·æ•°å–å¾—
 $query = "
 	SELECT
 COUNT(*) AS cnt 
@@ -208,18 +208,18 @@ WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = fo
 LIMIT 1000 
 	";
 
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($now));
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($now));
 $rowdata = $rs->fetch();
 
 $dtcnt = htmlspecialchars($rowdata[0]);
 //	echo $dtcnt;
 
 if (! $rowdata) {
-	die_exit("ÈÖÁÈ¥Ç¡¼¥¿¤¬¤¢¤ê¤Ş¤»¤ó<BR>");
+	die_exit("ç•ªçµ„ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Šã¾ã›ã‚“<BR>");
 }//endif
 ////////////////////////////////////////////////////////////
 
-//¥ì¥³¡¼¥ÉÉ½¼¨
+//ãƒ¬ã‚³ãƒ¼ãƒ‰è¡¨ç¤º
 $query = "
 	SELECT 
  foltia_program.tid, stationname, foltia_program.title,
@@ -238,8 +238,8 @@ LIMIT $lim OFFSET $st
 
 }//end if
 
-//$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($now));
+//$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($now));
 $rowdata = $rs->fetch();
 //
 //
@@ -250,7 +250,7 @@ print "<body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#0000
 <div align=\"center\">\n";
 printhtmlpageheader();
 print "<hr size=\"4\">\n";
-		die_exit("ÈÖÁÈ¥Ç¡¼¥¿¤¬¤¢¤ê¤Ş¤»¤ó<BR>");
+		die_exit("ç•ªçµ„ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Šã¾ã›ã‚“<BR>");
 
 }//endif
 
@@ -264,17 +264,17 @@ printhtmlpageheader();
   <p align="left"><font color="#494949" size="6">
 <?php
 if ($mode == "new"){
-	print "¿·ÈÖÁÈÊü±ÇÍ½Äê";
+	print "æ–°ç•ªçµ„æ”¾æ˜ äºˆå®š";
 }else{
-	print "Êü±ÇÍ½Äê";
+	print "æ”¾æ˜ äºˆå®š";
 }
 ?>
 </font></p>
   <hr size="4">
-<p align="left">Êü±ÇÈÖÁÈ¥ê¥¹¥È¤òÉ½¼¨¤·¤Ş¤¹¡£</p>
+<p align="left">æ”¾æ˜ ç•ªçµ„ãƒªã‚¹ãƒˆã‚’è¡¨ç¤ºã—ã¾ã™ã€‚</p>
 
 <?php
-		/* ¥Õ¥£¡¼¥ë¥É¿ô */
+		/* ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æ•° */
     $maxcols = $rs->columnCount();
 
 //Autopager
@@ -285,26 +285,26 @@ echo "<div id=contents class=autopagerize_page_element />";
 	<thead>
 		<tr>
 			<th align="left">TID</th>
-			<th align="left">Êü±Ç¶É</th>
-			<th align="left">¥¿¥¤¥È¥ë</th>
-			<th align="left">ÏÃ¿ô</th>
-			<th align="left">¥µ¥Ö¥¿¥¤¥È¥ë</th>
-			<th align="left">³«»Ï»ş¹ï(¥º¥ì)</th>
-			<th align="left">Áí¼Ü</th>
+			<th align="left">æ”¾æ˜ å±€</th>
+			<th align="left">ã‚¿ã‚¤ãƒˆãƒ«</th>
+			<th align="left">è©±æ•°</th>
+			<th align="left">ã‚µãƒ–ã‚¿ã‚¤ãƒˆãƒ«</th>
+			<th align="left">é–‹å§‹æ™‚åˆ»(ã‚ºãƒ¬)</th>
+			<th align="left">ç·å°º</th>
 		</tr>
 	</thead>
 
 	<tbody>
 		<?php
-			/* ¥Æ¡¼¥Ö¥ë¤Î¥Ç¡¼¥¿¤ò½ĞÎÏ */
+			/* ãƒ†ãƒ¼ãƒ–ãƒ«ã®ãƒ‡ãƒ¼ã‚¿ã‚’å‡ºåŠ› */
      do {
-//Â¾¶É¤ÇÆ±°ìÈÖÁÈÏ¿²èºÑ¤ß¤Ê¤é¿§ÊÑ¤¨
+//ä»–å±€ã§åŒä¸€ç•ªçµ„éŒ²ç”»æ¸ˆã¿ãªã‚‰è‰²å¤‰ãˆ
 if (in_array($rowdata[7], $reservedpidsametid)) {
 $rclass = "reservedtitle";
 }else{
 $rclass = "";
 }
-//Ï¿²èÍ½ÌóºÑ¤ß¤Ê¤é¿§ÊÑ¤¨
+//éŒ²ç”»äºˆç´„æ¸ˆã¿ãªã‚‰è‰²å¤‰ãˆ
 if (in_array($rowdata[7], $reservedpid)) {
 $rclass = "reserved";
 }
@@ -323,9 +323,9 @@ $subtitle =  htmlspecialchars($rowdata[4]);
 					print "<a href=\"reserveprogram.php?tid=$tid\">$tid</a>";
 					}
 					print "</td>\n";
-				     // Êü±Ç¶É
+				     // æ”¾æ˜ å±€
 				     echo("<td>".htmlspecialchars($rowdata[1])."<br></td>\n");
-				     // ¥¿¥¤¥È¥ë
+				     // ã‚¿ã‚¤ãƒˆãƒ«
 					print "<td>";
 					if ($tid == 0 ){
 					print "$title";
@@ -333,17 +333,17 @@ $subtitle =  htmlspecialchars($rowdata[4]);
 					print "<a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a>";
 					}
 					print "</td>\n";
-					 // ÏÃ¿ô
+					 // è©±æ•°
 					echo("<td>".htmlspecialchars($rowdata[3])."<br></td>\n");
-					// ¥µ¥Ö¥¿¥¤
+					// ã‚µãƒ–ã‚¿ã‚¤
 					if ($pid > 0 ){
 					print "<td><a href=\"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$subtitle<br></td>\n";
 					}else{
 					print "<td>$subtitle<br></td>\n";
 					}
-					// ³«»Ï»ş¹ï(¥º¥ì)
+					// é–‹å§‹æ™‚åˆ»(ã‚ºãƒ¬)
 					echo("<td>".htmlspecialchars(foldate2print($rowdata[5]))."<br>(".htmlspecialchars($rowdata[8]).")</td>\n");
-					// Áí¼Ü
+					// ç·å°º
 					echo("<td>".htmlspecialchars($rowdata[6])."<br></td>\n");
 
 				echo("</tr>\n");
@@ -355,7 +355,7 @@ $subtitle =  htmlspecialchars($rowdata[4]);
 
 <?php
 /////////////////////////////////////////////////
-//Autopageing½èÍı¤È¥Ú¡¼¥¸¤Î¥ê¥ó¥¯¤òÉ½¼¨
+//Autopageingå‡¦ç†ã¨ãƒšãƒ¼ã‚¸ã®ãƒªãƒ³ã‚¯ã‚’è¡¨ç¤º
 page_display("",$p,$p2,$lim,$dtcnt,$mode);
 /////////////////////////////////////////////////
 ?>

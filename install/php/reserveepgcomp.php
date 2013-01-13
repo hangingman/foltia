@@ -5,15 +5,15 @@
 
 reserveepgcomp.php
 
-ÌÜÅª
-EPGÈÖÁÈ¤ÎÍ½ÌóÅĞÏ¿¤ò¤·¤Ş¤¹¡£
+ç›®çš„
+EPGç•ªçµ„ã®äºˆç´„ç™»éŒ²ã‚’ã—ã¾ã™ã€‚
 
-°ú¿ô
-stationid:Ï¿²è¶ÉID
-subtitle:ÈÖÁÈÌ¾
-startdatetime:Ï¿²è³«»Ï»ş¹ï (ex.200510070145)
-enddatetime:Ï¿²è½ªÎ»»ş¹ï (ex.200510070215)
-lengthmin:Ï¿²è»ş´Ö(Ã±°Ì:Ê¬)
+å¼•æ•°
+stationid:éŒ²ç”»å±€ID
+subtitle:ç•ªçµ„å
+startdatetime:éŒ²ç”»é–‹å§‹æ™‚åˆ» (ex.200510070145)
+enddatetime:éŒ²ç”»çµ‚äº†æ™‚åˆ» (ex.200510070215)
+lengthmin:éŒ²ç”»æ™‚é–“(å˜ä½:åˆ†)
 
  DCC-JPL Japan/foltia project
 
@@ -47,7 +47,7 @@ login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
 
 	printhtmlpageheader();
 ?>
-  <p align="left"><font color="#494949" size="6">ÈÖÁÈÍ½Ìó</font></p>
+  <p align="left"><font color="#494949" size="6">ç•ªçµ„äºˆç´„</font></p>
   <hr size="4">
 <?php
 
@@ -59,23 +59,23 @@ $lengthmin = getnumform(lengthmin); */
 $epgid = getnumform(epgid);
 
 		if ($epgid == "" ) {
-		print "	<title>foltia:EPGÍ½Ìó:Error</title></head>\n";
-		die_exit("ÅĞÏ¿ÈÖÁÈ¤¬¤¢¤ê¤Ş¤»¤ó<BR>");
+		print "	<title>foltia:EPGäºˆç´„:Error</title></head>\n";
+		die_exit("ç™»éŒ²ç•ªçµ„ãŒã‚ã‚Šã¾ã›ã‚“<BR>");
 		}
-print "	<title>foltia:EPGÍ½Ìó:´°Î»</title>
+print "	<title>foltia:EPGäºˆç´„:å®Œäº†</title>
 </head>\n";
 $now = date("YmdHi");   
-//¥¿¥¤¥È¥ë¼èÆÀ
+//ã‚¿ã‚¤ãƒˆãƒ«å–å¾—
 	$query = "
 	SELECT epgid,startdatetime,enddatetime,lengthmin, ontvchannel,epgtitle,epgdesc,epgcategory , 
 	stationname , stationrecch ,stationid 
 	FROM foltia_epg , foltia_station 
 	WHERE epgid = ? AND foltia_station.ontvcode = foltia_epg.ontvchannel
 	";
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($epgid));
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($epgid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
-		die_exit("ÅĞÏ¿ÈÖÁÈ¤¬¤¢¤ê¤Ş¤»¤ó¡£¤â¤¦°ìÅÙEPG¤ËÌá¤êÁàºî¤·¤Æ²¼¤µ¤¤¡£<BR>");
+		die_exit("ç™»éŒ²ç•ªçµ„ãŒã‚ã‚Šã¾ã›ã‚“ã€‚ã‚‚ã†ä¸€åº¦EPGã«æˆ»ã‚Šæ“ä½œã—ã¦ä¸‹ã•ã„ã€‚<BR>");
 }else{
 $stationid = $rowdata[10];
 $subtitle = $rowdata[5] . $rowdata[6];
@@ -86,15 +86,15 @@ $lengthmin = $rowdata[3];
 
 
 
-// - DBÅĞÏ¿ºî¶È
+// - DBç™»éŒ²ä½œæ¥­
 
-//»ş¹ï¸¡ºº
+//æ™‚åˆ»æ¤œæŸ»
 if (($startdatetime > $now ) && ($enddatetime > $now ) && ($enddatetime  > $startdatetime ) ){
 
-//min pid¤òÃµ¤¹
+//min pidã‚’æ¢ã™
 $query = "SELECT min(pid) FROM  foltia_subtitle ";
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 	$rowdata = $rs->fetch();
 	if (! $rowdata) {
 	$insertpid = -1 ;
@@ -106,10 +106,10 @@ $query = "SELECT min(pid) FROM  foltia_subtitle ";
 		$insertpid-- ;
 		}
 	}
-// next ÏÃ¿ô¤òÃµ¤¹
+// next è©±æ•°ã‚’æ¢ã™
 $query = "SELECT max(countno) FROM  foltia_subtitle WHERE tid = 0";
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 	$rowdata = $rs->fetch();
 	if (! $rowdata) {
 	$nextcno = 1 ;
@@ -120,7 +120,7 @@ $query = "SELECT max(countno) FROM  foltia_subtitle WHERE tid = 0";
 
 //INSERT
 if ($demomode){
-	print "²¼µ­Í½Ìó¤ò´°Î»¤¤¤¿¤·¤Ş¤·¤¿¡£<br>";
+	print "ä¸‹è¨˜äºˆç´„ã‚’å®Œäº†ã„ãŸã—ã¾ã—ãŸã€‚<br>";
 }else{
 $userclass = getuserclass($con);
 if ( $userclass <= 2){
@@ -145,35 +145,35 @@ $memberid = getmymemberid($con);
 insert into foltia_subtitle  (pid ,tid ,stationid , countno ,subtitle ,
 startdatetime ,enddatetime ,startoffset , lengthmin , epgaddedby ) 
 values ( ?,'0',?,?,?,?,?,'0',?,?)";
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($insertpid,$stationid,$nextcno,$subtitle,$startdatetime,$enddatetime,$lengthmin,$memberid));
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($insertpid,$stationid,$nextcno,$subtitle,$startdatetime,$enddatetime,$lengthmin,$memberid));
 
 	//addatq.pl
-	//¥­¥å¡¼Æş¤ì¥×¥í¥°¥é¥à¤ò¥­¥Ã¥¯
-	//°ú¿ô¡¡TID ¥Á¥ã¥ó¥Í¥ëID
+	//ã‚­ãƒ¥ãƒ¼å…¥ã‚Œãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’ã‚­ãƒƒã‚¯
+	//å¼•æ•°ã€€TID ãƒãƒ£ãƒ³ãƒãƒ«ID
 	//echo("$toolpath/perl/addatq.pl $tid $station");
 
 	$oserr = system("$toolpath/perl/addatq.pl 0 0");
-	print "²¼µ­Í½Ìó¤ò´°Î»¤¤¤¿¤·¤Ş¤·¤¿¡£<br>";
+	print "ä¸‹è¨˜äºˆç´„ã‚’å®Œäº†ã„ãŸã—ã¾ã—ãŸã€‚<br>";
 }else{
-	print "EPGÍ½Ìó¤ò¹Ô¤¦¸¢¸Â¤¬¤¢¤ê¤Ş¤»¤ó¡£";
+	print "EPGäºˆç´„ã‚’è¡Œã†æ¨©é™ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
 }// end if $userclass <= 2
 }//end if demomode
 
 
 
 }else{
-print "»ş¹ï¤¬ÉÔÀµ¤Ê¤¿¤á¤ËÍ½Ìó¤Ç¤­¤Ş¤»¤ó¤Ç¤·¤¿¡£ <br>";
+print "æ™‚åˆ»ãŒä¸æ­£ãªãŸã‚ã«äºˆç´„ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚ <br>";
 
 }
 
 
 print "<table width=\"100%\" border=\"0\">\n";
-print "<tr><td>ÊüÁ÷³«»Ï</td><td>".htmlspecialchars($startdatetime)."</td></tr>";
-print "<tr><td>ÊüÁ÷½ªÎ»</td><td>".htmlspecialchars($enddatetime)."</td></tr>\n";
-print "<tr><td>¶É¥³¡¼¥É</td><td>".htmlspecialchars($stationid)."</td></tr>\n";
-print "<tr><td>¼Ü(Ê¬)</td><td>".htmlspecialchars($lengthmin)."</td></tr>\n";
-print "<tr><td>ÈÖÁÈÌ¾</td><td>".htmlspecialchars($subtitle)."</td></tr>\n";
+print "<tr><td>æ”¾é€é–‹å§‹</td><td>".htmlspecialchars($startdatetime)."</td></tr>";
+print "<tr><td>æ”¾é€çµ‚äº†</td><td>".htmlspecialchars($enddatetime)."</td></tr>\n";
+print "<tr><td>å±€ã‚³ãƒ¼ãƒ‰</td><td>".htmlspecialchars($stationid)."</td></tr>\n";
+print "<tr><td>å°º(åˆ†)</td><td>".htmlspecialchars($lengthmin)."</td></tr>\n";
+print "<tr><td>ç•ªçµ„å</td><td>".htmlspecialchars($subtitle)."</td></tr>\n";
 print "</tbody>\n</table>";
 
 ?>

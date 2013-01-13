@@ -11,7 +11,7 @@ require "foltia_conf1.pl";
 
 #  foltia lib
 use DBI;
-use DBD::Pg;
+
 use DBD::SQLite;
 use POSIX qw(strftime);
 
@@ -69,7 +69,7 @@ return  $foltiadate;
 
 sub foldate2epoch{
 my $foltiadate = $_[0] ;
-#EPG¤òEPOC¤Ë
+#EPGã‚’EPOCã«
 # 2004 11 14 21 30
 my $eyear = substr($foltiadate , 0, 4);
 my $emon = substr($foltiadate, 4, 2);
@@ -108,8 +108,8 @@ return  $foltiadate;
 }
 
 sub calclength{
-#foltia³«»Ï»ş¹ï¡¢folti½ªÎ»»ş¹ï
-#Ìá¤êÃÍ:Ê¬¿ô
+#foltiaé–‹å§‹æ™‚åˆ»ã€foltiçµ‚äº†æ™‚åˆ»
+#æˆ»ã‚Šå€¤:åˆ†æ•°
 my $sttime  = $_[0] ;
 my $edtime = $_[1] ;
 my $length = -1;
@@ -127,8 +127,8 @@ return $length ;
 }
 
 sub calcoffsetdate{
-#°ú¤­¿ô:foltia»ş¹ï¡¢¥ª¥Õ¥»¥Ã¥È(+/-)Ê¬
-#Ìá¤êÃÍ]foltia»ş¹ï
+#å¼•ãæ•°:foltiaæ™‚åˆ»ã€ã‚ªãƒ•ã‚»ãƒƒãƒˆ(+/-)åˆ†
+#æˆ»ã‚Šå€¤]foltiaæ™‚åˆ»
 my $foltime  = $_[0] ;
 my $offsetmin = $_[1] ;
 
@@ -139,8 +139,8 @@ return $foltime ;
 }
 
 sub getstationid{
-#°ú¤­¿ô:¶ÉÊ¸»úÎó(NHKÁí¹ç)
-#Ìá¤êÃÍ:1
+#å¼•ãæ•°:å±€æ–‡å­—åˆ—(NHKç·åˆ)
+#æˆ»ã‚Šå€¤:1
 my $stationname =  $_[0] ;
 my $stationid ;
 
@@ -151,23 +151,23 @@ my $sth;
  @stationcount= $sth->fetchrow_array;
 
 if ($stationcount[0] == 1){
-#¥Á¥ã¥ó¥Í¥ëID¼èÆÀ
+#ãƒãƒ£ãƒ³ãƒãƒ«IDå–å¾—
 	$sth = $dbh->prepare($stmt{'foltialib.getstationid.2'});
 	$sth->execute($item{'ChName'});
  @stationinfo= $sth->fetchrow_array;
-#¶ÉID
+#å±€ID
 $stationid  = $stationinfo[0];
 #print "StationID:$stationid \n";
 
 }elsif($stationcount[0] == 0){
-#¿·µ¬ÅĞÏ¿
+#æ–°è¦ç™»éŒ²
 	$sth = $dbh->prepare($stmt{'foltialib.getstationid.3'});
 	$sth->execute();
  @stationinfo= $sth->fetchrow_array;
 my $stationid = $stationinfo[0] ;
 $stationid  ++;
 ##$DBQuery =  "insert into  foltia_station values ('$stationid'  ,'$item{ChName}','0','','','','','','')";
-#¿·µ¬¶ÉÄÉ²Ã»ş¤ÏÈó¼õ¿®¶É¤ò¥Ç¥Õ¥©¥ë¥È¤Ë
+#æ–°è¦å±€è¿½åŠ æ™‚ã¯éå—ä¿¡å±€ã‚’ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã«
 	$sth = $dbh->prepare($stmt{'foltialib.getstationid.4'});
 	$sth->execute($stationid, $item{'ChName'}, -10);
 #print "Add station;$DBQuery\n";
@@ -198,7 +198,7 @@ my $yday = "";
 my $isdst = "";
 	($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime($processstarttimeepoch) ;
 	$year+=1900;
-	$mon++;#ÈÏ°Ï¤ò0-11¤«¤é1-12¤Ø
+	$mon++;#ç¯„å›²ã‚’0-11ã‹ã‚‰1-12ã¸
 my $atdateparam = "";
 	$atdateparam = sprintf ("%04d%02d%02d%02d%02d",$year,$mon,$mday,$hour,$min);	
 
@@ -272,8 +272,8 @@ return ($configline);
 
 
 sub getpidbympegfilename {
-#°ú¤­¿ô:m2pfilename
-#Ìá¤êÃÍ:PID
+#å¼•ãæ•°:m2pfilename
+#æˆ»ã‚Šå€¤:PID
 my $m2pfilename =  $_[0] ;
 if ($m2pfilename eq ""){
 	return  0 ;
@@ -294,8 +294,8 @@ if ($pid eq ""){
 }#end sub getpidbympegfilename
 
 sub changefilestatus {
-#°ú¤­¿ô:PID,updatestatus
-#Ìá¤êÃÍ:¥¨¥é¡¼¥³¡¼¥É
+#å¼•ãæ•°:PID,updatestatus
+#æˆ»ã‚Šå€¤:ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
 my $pid =  $_[0] ;
 my $updatestatus = $_[1];
 if (($pid eq "" ) || ($updatestatus eq "")){
@@ -315,27 +315,27 @@ return 1;
 
 
 sub getfilestatus {
-#°ú¤­¿ô:PID
-#Ìá¤êÃÍ:¥¹¥Æ¡¼¥¿¥¹
+#å¼•ãæ•°:PID
+#æˆ»ã‚Šå€¤:ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
 
-#10:Í½ÌóÃæ(5Ê¬°Ê¾åÀè)
-#20:Í½ÌóÃæ(5Ê¬°ÊÆâ)
-#30:Ï¿²èÃæ
-#40:TSSplitÃæ
-#50:MPEG2Ï¿²è½ªÎ»
-#55 ÀÅ»ß²è¥­¥ã¥×¥Á¥ãÂÔ
-#60:ÀÅ»ß²è¥­¥ã¥×Ãæ
-#70:ÀÅ»ß²è¥­¥ã¥×½ªÎ»
-#72:¥µ¥à¥Í¥¤¥ëºîÀ®ºÑ¤ß(.THM)
-#80:¥È¥é¥³¥óÂÔ
-#90:¥È¥é¥³¥óÃæ:TSsplit
-#100:¥È¥é¥³¥óÃæ:H264
-#110:¥È¥é¥³¥óÃæ:WAVE
-#120:¥È¥é¥³¥óÃæ:AAC
-#130:¥È¥é¥³¥óÃæ:MP4Box
-#140:¥È¥é¥³¥óÃæ:ATOM
-#150:¥È¥é¥³¥ó´°Î»
-#200:Á´´°Î»
+#10:äºˆç´„ä¸­(5åˆ†ä»¥ä¸Šå…ˆ)
+#20:äºˆç´„ä¸­(5åˆ†ä»¥å†…)
+#30:éŒ²ç”»ä¸­
+#40:TSSplitä¸­
+#50:MPEG2éŒ²ç”»çµ‚äº†
+#55 é™æ­¢ç”»ã‚­ãƒ£ãƒ—ãƒãƒ£å¾…
+#60:é™æ­¢ç”»ã‚­ãƒ£ãƒ—ä¸­
+#70:é™æ­¢ç”»ã‚­ãƒ£ãƒ—çµ‚äº†
+#72:ã‚µãƒ ãƒã‚¤ãƒ«ä½œæˆæ¸ˆã¿(.THM)
+#80:ãƒˆãƒ©ã‚³ãƒ³å¾…
+#90:ãƒˆãƒ©ã‚³ãƒ³ä¸­:TSsplit
+#100:ãƒˆãƒ©ã‚³ãƒ³ä¸­:H264
+#110:ãƒˆãƒ©ã‚³ãƒ³ä¸­:WAVE
+#120:ãƒˆãƒ©ã‚³ãƒ³ä¸­:AAC
+#130:ãƒˆãƒ©ã‚³ãƒ³ä¸­:MP4Box
+#140:ãƒˆãƒ©ã‚³ãƒ³ä¸­:ATOM
+#150:ãƒˆãƒ©ã‚³ãƒ³å®Œäº†
+#200:å…¨å®Œäº†
 my $pid =  $_[0] ;
 if ($pid eq "" ){
 	return  0 ;
@@ -359,20 +359,20 @@ if ($status eq ""){
 
 
 sub makemp4dir{
-#TID¤¬100°Ê¾å¤Î3·å¤Î¾ì¹ç¤Ï¤½¤Î¤Ş¤Ş
+#TIDãŒ100ä»¥ä¸Šã®3æ¡ã®å ´åˆã¯ãã®ã¾ã¾
 my $pspfilnamehd = $_[0];
 my $tid = $_[0];
 my $pspdirname = "$tid.localized/";
 $pspdirname = $recfolderpath."/".$pspdirname;
 
-#¤Ê¤±¤ì¤Ğºî¤ë
+#ãªã‘ã‚Œã°ä½œã‚‹
 unless (-e $pspdirname ){
 	system("$toolpath/perl/mklocalizeddir.pl $tid");
 	#&writelog("recwrap mkdir $pspdirname");
 }
 $pspdirname = "$tid.localized/mp4/";
 $pspdirname = $recfolderpath."/".$pspdirname;
-#¤Ê¤±¤ì¤Ğºî¤ë
+#ãªã‘ã‚Œã°ä½œã‚‹
 unless (-e $pspdirname ){
 	mkdir $pspdirname ,0777;
 	#&writelog("recwrap mkdir $pspdirname");
@@ -381,7 +381,7 @@ return ("$pspdirname");
 }#endsub makemp4dir
 
 sub pid2sid{
-#ÈÖÁÈID¤«¤éStation ID¤ò¼èÆÀ
+#ç•ªçµ„IDã‹ã‚‰Station IDã‚’å–å¾—
 my $pid = $_[0];
 my $sth;
     $sth = $dbh->prepare($stmt{'foltialib.pid2sid.1'});
@@ -399,7 +399,7 @@ if ($sid eq ""){
 
 
 sub mp4filename2tid{
-#MPEG4¥Õ¥¡¥¤¥ëÌ¾¤«¤éTID¤òÆÀ¤ë
+#MPEG4ãƒ•ã‚¡ã‚¤ãƒ«åã‹ã‚‰TIDã‚’å¾—ã‚‹
 my $mp4filename =  $_[0];
 
 my $sth;

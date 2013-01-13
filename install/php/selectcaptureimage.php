@@ -4,10 +4,10 @@
  http://www.dcc-jpl.com/soft/foltia/
 
 
-ÌÜÅª
-blog¥Ä¡¼¥ë¡¢¥¹¥¿¡¼¥é¥¤¥È¥Ö¥ì¥¤¥«¡¼ÍÑ¥­¥ã¥×ÁªÂò²èÌÌ¥µ¥ó¥×¥ë
+ç›®çš„
+blogãƒ„ãƒ¼ãƒ«ã€ã‚¹ã‚¿ãƒ¼ãƒ©ã‚¤ãƒˆãƒ–ãƒ¬ã‚¤ã‚«ãƒ¼ç”¨ã‚­ãƒ£ãƒ—é¸æŠç”»é¢ã‚µãƒ³ãƒ—ãƒ«
 
-°ú¿ô
+å¼•æ•°
 pid:PID
 
 mplayer -ss 00:00:10 -vo jpeg:outdir=/home/foltia/php/tv/691.localized/img/6/ -vf crop=702:468:6:6,scale=160:120,pp=lb  -ao null -sstep 14  -v 3 /home/foltia/php/tv/691-6-20060216-0130.m2p
@@ -44,7 +44,7 @@ if ($pid == "") {
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="stylesheet" type="text/css" href="graytable.css"> 
-<title>Starlight Breaker -¥­¥ã¥×¥Á¥ã²èÁüÁªÂò</title>
+<title>Starlight Breaker -ã‚­ãƒ£ãƒ—ãƒãƒ£ç”»åƒé¸æŠ</title>
 <script src="http://images.apple.com/main/js/ac_quicktime.js" language="JavaScript" type="text/javascript"></script>
 </head>
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
@@ -54,7 +54,7 @@ if ($pid == "") {
 printhtmlpageheader();
 
 if ($pid == "") {
-	print "²èÁü¤¬¤¢¤ê¤Ş¤»¤ó¡£<br></body></html>";
+	print "ç”»åƒãŒã‚ã‚Šã¾ã›ã‚“ã€‚<br></body></html>";
 	exit;
 }
 
@@ -74,7 +74,7 @@ FROM foltia_subtitle , foltia_program ,foltia_station
 WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
 AND foltia_subtitle.pid = ?  
 ";
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($pid));
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($pid));
 $rowdata = $rs->fetch();
 
 if (! $rowdata) {
@@ -95,19 +95,19 @@ WHERE foltia_program.tid = foltia_subtitle.tid
 AND foltia_subtitle.pid = ?  
 ";
 
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($pid));
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($pid));
 $rowdata = $rs->fetch();
 	if (! $rowdata) {
-		print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">¥­¥ã¥×¥Á¥ã²èÁü</font></p>
+		print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">ã‚­ãƒ£ãƒ—ãƒãƒ£ç”»åƒ</font></p>
 	  <hr size=\"4\">
 	<p align=\"left\">
-	Ï¿²èµ­Ï¿¤¬¤¢¤ê¤Ş¤»¤ó¡£<br></body></html>";
+	éŒ²ç”»è¨˜éŒ²ãŒã‚ã‚Šã¾ã›ã‚“ã€‚<br></body></html>";
 	exit ;
 	}
 $rowdata[1] = "";
 }//end if (! $rowdata) 
 
-print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">¥­¥ã¥×¥Á¥ã²èÁü</font></p>
+print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">ã‚­ãƒ£ãƒ—ãƒãƒ£ç”»åƒ</font></p>
   <hr size=\"4\">
 <p align=\"left\">";
 print "<a href = \"http://cal.syoboi.jp/tid/$rowdata[0]/\" target=\"_blank\">";
@@ -121,13 +121,13 @@ print htmlspecialchars($rowdata[4]) . "</a> ";
 print htmlspecialchars($rowdata[4]) . " ";
 }
 print htmlspecialchars($rowdata[1]) . " ";
-print htmlspecialchars($rowdata[6]) . "Ê¬ ";
+print htmlspecialchars($rowdata[6]) . "åˆ† ";
 print htmlspecialchars(foldate2print($rowdata[5]));
 
 $mp4filename = $rowdata[9];
 $serverfqdn = getserverfqdn();
 
-print "¡¡¡¡ºÆÀ¸:<A HREF=\"$httpmediamappath/$tid.localized/mp4/$mp4filename\" target=\"_blank\">$mp4filename</A> / <script language=\"JavaScript\" type=\"text/javascript\">QT_WriteOBJECT_XHTML('http://g.hatena.ne.jp/images/podcasting.gif','16','16','','controller','FALSE','href','http://$serverfqdn/$httpmediamappath/$tid.localized/mp4/$mp4filename','target','QuickTimePlayer','type','video/mp4');</script> / <a href=\"./mp4player.php?p=$pid\" target=\"_blank\">Player</a><br>";
+print "ã€€ã€€å†ç”Ÿ:<A HREF=\"$httpmediamappath/$tid.localized/mp4/$mp4filename\" target=\"_blank\">$mp4filename</A> / <script language=\"JavaScript\" type=\"text/javascript\">QT_WriteOBJECT_XHTML('http://g.hatena.ne.jp/images/podcasting.gif','16','16','','controller','FALSE','href','http://$serverfqdn/$httpmediamappath/$tid.localized/mp4/$mp4filename','target','QuickTimePlayer','type','video/mp4');</script> / <a href=\"./mp4player.php?p=$pid\" target=\"_blank\">Player</a><br>";
 
 $m2pfilename = $rowdata[8];
 
@@ -148,7 +148,7 @@ print "<a href=\"./sb-edit.php?pid=$pid&f=$filetid\"><img src='http://$serveruri
 print "<img src='http://$serveruri$httpmediamappath/$tid.localized/img/$path/$filetid'  alt='$tid:$countno:$filetid'>\n";
 }
 }//foreach
-// ¥¿¥¤¥È¥ë°ìÍ÷¡¡¤³¤³¤Ş¤Ç
+// ã‚¿ã‚¤ãƒˆãƒ«ä¸€è¦§ã€€ã“ã“ã¾ã§
 
 
 ?>

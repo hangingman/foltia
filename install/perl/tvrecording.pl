@@ -4,18 +4,18 @@
 # http://www.dcc-jpl.com/soft/foltia/
 #
 #tvrecording.pl
-# record-v4l2.pl¤ò¸Æ¤Ó¤À¤¹Ï¿²è¥â¥¸¥å¡¼¥ë¡£
+# record-v4l2.plã‚’å‘¼ã³ã ã™éŒ²ç”»ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã€‚
 #
 #usage tvrecording.pl ch length(sec) [clip No(000-)] [filename] [bitrate(5)] [TID] [NO] [/dev/video0]
-#°ú¿ô
-#ch :Ï¿²è¥Á¥ã¥ó¥Í¥ë¡¡0¤À¤ÈSÆşÎÏ¡¢-1¤À¤È¥³¥ó¥İ¥¸¥Ã¥ÈÆşÎÏ [É¬¿Ü¹àÌÜ]
-#length(sec) :Ï¿²èÉÃ¿ô [É¬¿Ü¹àÌÜ]
-#[sleeptype] :0¤«N N¤Ê¤é¥¹¥ê¡¼¥×¤Ê¤·¤ÇÏ¿²è
-#[filename] :½ĞÎÏ¥Õ¥¡¥¤¥ëÌ¾
-#[bitrate(5)] :¥Ó¥Ã¥È¥ì¡¼¥È¡¡MbpsÃ±°Ì¤Ç»ØÄê
-#[TID] :¤·¤ç¤Ü¤«¤ë¥¿¥¤¥È¥ëID
-#[NO] :¤½¤ÎÈÖÁÈ¤ÎÊüÁ÷ÏÃ¿ô
-#[/dev/video0]:¥­¥ã¥×¥Á¥ã¥Ç¥Ğ¥¤¥¹
+#å¼•æ•°
+#ch :éŒ²ç”»ãƒãƒ£ãƒ³ãƒãƒ«ã€€0ã ã¨Så…¥åŠ›ã€-1ã ã¨ã‚³ãƒ³ãƒã‚¸ãƒƒãƒˆå…¥åŠ› [å¿…é ˆé …ç›®]
+#length(sec) :éŒ²ç”»ç§’æ•° [å¿…é ˆé …ç›®]
+#[sleeptype] :0ã‹N Nãªã‚‰ã‚¹ãƒªãƒ¼ãƒ—ãªã—ã§éŒ²ç”»
+#[filename] :å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«å
+#[bitrate(5)] :ãƒ“ãƒƒãƒˆãƒ¬ãƒ¼ãƒˆã€€Mbpså˜ä½ã§æŒ‡å®š
+#[TID] :ã—ã‚‡ã¼ã‹ã‚‹ã‚¿ã‚¤ãƒˆãƒ«ID
+#[NO] :ãã®ç•ªçµ„ã®æ”¾é€è©±æ•°
+#[/dev/video0]:ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹
 #
 #
 # DCC-JPL Japan/foltia project
@@ -34,10 +34,10 @@ push( @INC, "$path");
 
 
 ##
-#¥­¥ã¥×¥Á¥ã¥«¡¼¥ÉËç¿ô¸¡½Ğ
+#ã‚­ãƒ£ãƒ—ãƒãƒ£ã‚«ãƒ¼ãƒ‰æšæ•°æ¤œå‡º
 #cat /proc/interrupts  | grep ivtv |wc -l
 # 11:    1054118          XT-PIC  uhci_hcd, eth0, ivtv0, ivtv1, ivtv2
-#¼ºÇÔ
+#å¤±æ•—
 
 #tvConfig.pl -------------------------------
 $extendrecendsec = 10;							#recording end second. 
@@ -64,10 +64,10 @@ sub getRecPath{ #capture directory define
 	$recfolderpath = '/home/foltia/php/tv';		
 }#end sub getRecPath
 #
-# -- ¤³¤³¤«¤é¥á¥¤¥ó ----------------------------
-#½àÈ÷
+# -- ã“ã“ã‹ã‚‰ãƒ¡ã‚¤ãƒ³ ----------------------------
+#æº–å‚™
 &prepare;
-#¤â¤·Ï¿²è¤¬Áö¤Ã¤Æ¤¿¤é¡¢»ß¤á¤ë
+#ã‚‚ã—éŒ²ç”»ãŒèµ°ã£ã¦ãŸã‚‰ã€æ­¢ã‚ã‚‹
 $reclengthsec = &chkrecprocess();
 &setbitrate;
 &chkextinput;
@@ -78,7 +78,7 @@ $reclengthsec = $reclengthsec + $extendrecendsec ;
 
 &writelog("tvrecording:$recch:$reclengthsec:$outputfile:$recdevice:$capturedeviceinputnum:$ivtvrecch:$stdbitrate:$peakbitrate");
 
-# -- ¤³¤ì°Ê²¼¥µ¥Ö¥ë¡¼¥Á¥ó ----------------------------
+# -- ã“ã‚Œä»¥ä¸‹ã‚µãƒ–ãƒ«ãƒ¼ãƒãƒ³ ----------------------------
 sub chkextinput{
 
 if ($recch == 0){
@@ -106,7 +106,7 @@ if ($recch == 0){
 	$capturedeviceinputName = "Tuner 1";
 	$ivtvrecch = $recch;
 }
-# 1-12ch¤Ïntsc-bcast-jp
+# 1-12chã¯ntsc-bcast-jp
 if($recch > 12){
 	if ($uhfbandtype == 1){
 	$frequencyTable = "ntsc-cable-jp";
@@ -123,7 +123,7 @@ if($recch > 12){
 
 
 sub chkrecprocessOLD{
-#¤â¤·Ï¿²è¤¬Áö¤Ã¤Æ¤¿¤é¡¢»ß¤á¤ë
+#ã‚‚ã—éŒ²ç”»ãŒèµ°ã£ã¦ãŸã‚‰ã€æ­¢ã‚ã‚‹
 my $mencoderkillcmd = "";
 
 $mencoderkillcmd =`/usr/sbin/lsof -Fp $recdevice`;
@@ -181,14 +181,14 @@ if ($mencoderkillcmd != ""){
 }#if
 }#for
 
-$i = 0; #½é´ü²½
+$i = 0; #åˆæœŸåŒ–
 $n = @unusedevices;
-#¥Ç¥Ğ¥¤¥¹»ØÄê¤¬¤¢¤ë¤«?
-if ($recdevice  ne ""){ #»ØÄê¤¬¤¢¤Ã¤¿¤é
-#¤½¤³¤¬»È¤ï¤ì¤Æ¤¤¤ë¤«¥Á¥§¥Ã¥¯
+#ãƒ‡ãƒã‚¤ã‚¹æŒ‡å®šãŒã‚ã‚‹ã‹?
+if ($recdevice  ne ""){ #æŒ‡å®šãŒã‚ã£ãŸã‚‰
+#ãã“ãŒä½¿ã‚ã‚Œã¦ã„ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
 $mencoderkillcmd =`/usr/sbin/lsof -Fp $recdevice`;
 $mencoderkillcmd =~ s/p//;
-	if ($mencoderkillcmd != ""){ #»È¤ï¤ì¤Æ¤¿¤éÌµ¾ò·ï¤ËÍî¤È¤¹
+	if ($mencoderkillcmd != ""){ #ä½¿ã‚ã‚Œã¦ãŸã‚‰ç„¡æ¡ä»¶ã«è½ã¨ã™
 	$mencoderkillcmd  = "kill ".$mencoderkillcmd;
 	system ($mencoderkillcmd);
 	chomp($mencoderkillcmd);
@@ -196,41 +196,41 @@ $mencoderkillcmd =~ s/p//;
 		sleep(1);
 	}
 }else{
-#ÃÏ¾åÇÈor »ØÄê¤Ê¤·¤Ê¤é
-	if (($n == 0) and ($recch > 0)) {#¶õ¤­¥Ç¥Ğ¥¤¥¹¤¬¤Ê¤¯¤Æ¡¢ÃÏ¾åÇÈ¤Ê¤é	
-	$mencoderkillcmd =`/usr/sbin/lsof -Fp /dev/video$i`;#¢ª$i
+#åœ°ä¸Šæ³¢or æŒ‡å®šãªã—ãªã‚‰
+	if (($n == 0) and ($recch > 0)) {#ç©ºããƒ‡ãƒã‚¤ã‚¹ãŒãªãã¦ã€åœ°ä¸Šæ³¢ãªã‚‰	
+	$mencoderkillcmd =`/usr/sbin/lsof -Fp /dev/video$i`;#â†’$i
 	$mencoderkillcmd =~ s/p//;
-		if ($mencoderkillcmd != ""){ #»È¤ï¤ì¤Æ¤¿¤éºÇ¹â°Ì/dev/video$j ¤òÌµ¾ò·ï¤ËÍî¤È¤¹ ¢ªºÇÄã°Ì$i
+		if ($mencoderkillcmd != ""){ #ä½¿ã‚ã‚Œã¦ãŸã‚‰æœ€é«˜ä½/dev/video$j ã‚’ç„¡æ¡ä»¶ã«è½ã¨ã™ â†’æœ€ä½ä½$i
 		$mencoderkillcmd  = "kill ".$mencoderkillcmd;
 		system ($mencoderkillcmd);
 		chomp($mencoderkillcmd);
 		&writelog ("tvrecording Killed current recording process. /dev/video$i:$mencoderkillcmd");
 			sleep(1);
 		}
-	$recdevice = "/dev/video$i"; #¢ªºÇÄã°Ì$i
+	$recdevice = "/dev/video$i"; #â†’æœ€ä½ä½$i
 		&writelog ("tvrecording select device:$recdevice");
 
-}elsif ($recch <= 0) { # ³°ÉôÆşÎÏ¤Ê¤é
-	#³°ÉôÆşÎÏ¤À¤±¤É¥Ç¥Ğ¥¤¥¹»ØÄê¤µ¤ì¤Æ¤¤¤Ê¤¤¤È¤­¤â
-	#Íî¤È¤¹
+}elsif ($recch <= 0) { # å¤–éƒ¨å…¥åŠ›ãªã‚‰
+	#å¤–éƒ¨å…¥åŠ›ã ã‘ã©ãƒ‡ãƒã‚¤ã‚¹æŒ‡å®šã•ã‚Œã¦ã„ãªã„ã¨ãã‚‚
+	#è½ã¨ã™
 	$mencoderkillcmd =`/usr/sbin/lsof -Fp /dev/video$j`;#
 	$mencoderkillcmd =~ s/p//;
-		if ($mencoderkillcmd != ""){ #»È¤ï¤ì¤Æ¤¿¤éºÇ¹â°Ì/dev/video$j ¤òÌµ¾ò·ï¤ËÍî¤È¤¹
+		if ($mencoderkillcmd != ""){ #ä½¿ã‚ã‚Œã¦ãŸã‚‰æœ€é«˜ä½/dev/video$j ã‚’ç„¡æ¡ä»¶ã«è½ã¨ã™
 		$mencoderkillcmd  = "kill ".$mencoderkillcmd;
 		system ($mencoderkillcmd);
 		chomp($mencoderkillcmd);
 		&writelog ("tvrecording Killed current recording process. /dev/video$j:$mencoderkillcmd");
 			sleep(1);
 		}
-	$recdevice = "/dev/video$j"; #¡¡³°ÉôÆşÎÏ¤ÏºÇ¹â°Ì¥Ç¥Ğ¥¤¥¹
+	$recdevice = "/dev/video$j"; #ã€€å¤–éƒ¨å…¥åŠ›ã¯æœ€é«˜ä½ãƒ‡ãƒã‚¤ã‚¹
 	}else{
-	#¶õ¤­¤ò»È¤¦
+	#ç©ºãã‚’ä½¿ã†
 	$recdevice = shift(@unusedevices );
-	}#endif ¶õ¤­¥Ç¥Ğ¥¤¥¹¤Ê¤±¤ì¤Ğ
+	}#endif ç©ºããƒ‡ãƒã‚¤ã‚¹ãªã‘ã‚Œã°
 
-}#end if »ØÄê¤¢¤ë¤«
+}#end if æŒ‡å®šã‚ã‚‹ã‹
 
-#¤³¤³¤Ë¤ÏÍî¤Á¤Æ¤³¤Ê¤¤¤Ï¤º¤Ê¤Î¤Ë?
+#ã“ã“ã«ã¯è½ã¡ã¦ã“ãªã„ã¯ãšãªã®ã«?
 if ($recdevice eq ""){
 	$recdevice = "/dev/video0";
 	&writelog ( "Rec Device un defined. / $recch ");
@@ -243,14 +243,14 @@ return $reclengthsec;
 
 sub prepare{
 
-#°ú¿ô¥¨¥é¡¼½èÍı
+#å¼•æ•°ã‚¨ãƒ©ãƒ¼å‡¦ç†
 $recch = $ARGV[0] ;
 $reclengthsec = $ARGV[1];
 if (($recch eq "" )|| ($reclengthsec eq "")){
 	print "usage tvrecording.pl ch length(sec) [clip No(000-)] [filename] [bitrate(5)] [TID] [NO] [/dev/video0]\n";
 	exit;
 }
-#1Ê¬Á°¤Ë¥×¥í¥»¥¹µ¯Æ°¤¹¤ë¤«¤é»ØÄê»ş´Ö¥¹¥ê¡¼¥×
+#1åˆ†å‰ã«ãƒ—ãƒ­ã‚»ã‚¹èµ·å‹•ã™ã‚‹ã‹ã‚‰æŒ‡å®šæ™‚é–“ã‚¹ãƒªãƒ¼ãƒ—
 #srand(time ^ ($$ + ($$ << 15)));
 #my $useconds  = int(rand(12000000));
 #my $intval = int ($useconds  / 1000000);
@@ -259,12 +259,12 @@ if (($recch eq "" )|| ($reclengthsec eq "")){
 #&writelog("tvrecording:  DEBUG SLEEP $startupsleeptime:$useconds:$intval:$startupsleeptimemicro");
 #	usleep ( $startupsleeptimemicro );
 
-# $recch ¤Ç¥¦¥§¥¤¥ÈÄ´À°Æş¤ì¤Ş¤·¤ç¤¦
+# $recch ã§ã‚¦ã‚§ã‚¤ãƒˆèª¿æ•´å…¥ã‚Œã¾ã—ã‚‡ã†
 #52
-#my $intval = $recch % 50; # 0¡Á49
-#my $startupsleep = $startupsleeptime - $intval; #  3¡Á52 (VHF 40-51)
+#my $intval = $recch % 50; # 0ã€œ49
+#my $startupsleep = $startupsleeptime - $intval; #  3ã€œ52 (VHF 40-51)
 #37
-my $intval = $recch % 35; # 0¡Á34
+my $intval = $recch % 35; # 0ã€œ34
 my $startupsleep = $startupsleeptime - $intval; #  3-37 (VHF 25-36,tvk 30)
 $reclengthsec = $reclengthsec + (60 - $startupsleep) + 1; #
 
@@ -276,11 +276,11 @@ if ( $ARGV[2] ne "N"){
 
 }
 if ($recunits > 1){
-my $deviceno = $recunits - 1;#3Ëçº¹¤·¤Î¤È¤­/dev/video2¤«¤é»È¤¦
+my $deviceno = $recunits - 1;#3æšå·®ã—ã®ã¨ã/dev/video2ã‹ã‚‰ä½¿ã†
 	$recdevice = "/dev/video$deviceno";
 	$recch = $ARGV[0] ;
 }else{
-#1Ëçº¹¤·
+#1æšå·®ã—
 	$recdevice = "/dev/video0";
 	$recch = $ARGV[0] ;
 }
@@ -295,7 +295,7 @@ if ($ARGV[6] eq "0"){
 }else{
 	$outputfile = $outputpath.$ARGV[5]."-".$ARGV[6]."-";
 }
-#2ÈÖÌÜ°Ê¹ß¤Î¥¯¥ê¥Ã¥×¤Ç¥Õ¥¡¥¤¥ëÌ¾»ØÄê¤¬¤¢¤Ã¤¿¤é
+#2ç•ªç›®ä»¥é™ã®ã‚¯ãƒªãƒƒãƒ—ã§ãƒ•ã‚¡ã‚¤ãƒ«åæŒ‡å®šãŒã‚ã£ãŸã‚‰
 	if ($ARGV[3]  ne ""){
 #		if ($ARGV[3] =~ /[0-9]{8}-[0-9]{4}/){
 #		$outputfile .= "$ARGV[3]";
@@ -322,7 +322,7 @@ if ($ARGV[6] eq "0"){
 $sleepcounter = 0;
 $cmd="";
 
-#Æó½ÅÏ¿¤ê¤Ê¤É´û¤ËÆ±Ì¾¥Õ¥¡¥¤¥ë¤¬¤¢¤Ã¤¿¤éÃæÃÇ
+#äºŒé‡éŒ²ã‚Šãªã©æ—¢ã«åŒåãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã£ãŸã‚‰ä¸­æ–­
 if ( -e "$outputfile" ){
 	if ( -s "$outputfile" ){
 	&writelog("tvrecording :ABORT :recfile $outputfile exist.");

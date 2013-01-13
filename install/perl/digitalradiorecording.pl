@@ -4,13 +4,13 @@
 # http://www.dcc-jpl.com/soft/foltia/
 #
 #digitalradiorecording.pl
-# IP¥µ¥¤¥Ş¥ë¥é¥¸¥ª¡Öradiko¡×¤òÏ¿²»¤¹¤ë¡£
+# IPã‚µã‚¤ãƒãƒ«ãƒ©ã‚¸ã‚ªã€Œradikoã€ã‚’éŒ²éŸ³ã™ã‚‹ã€‚
 #
 #usage digitalradiorecording.pl stationname length(sec) filename
-#°ú¿ô
-#stationname : radiko¤Î»È¤¦¶Ê¼±ÊÌ»Ò Îã:Ê¸²½ÊüÁ÷ QRR  [É¬¿Ü¹àÌÜ]
-#length(sec) :Ï¿²èÉÃ¿ô [É¬¿Ü¹àÌÜ]
-#filename :½ĞÎÏ¥Õ¥¡¥¤¥ëÌ¾ [É¬¿Ü¹àÌÜ]
+#å¼•æ•°
+#stationname : radikoã®ä½¿ã†æ›²è­˜åˆ¥å­ ä¾‹:æ–‡åŒ–æ”¾é€ QRR  [å¿…é ˆé …ç›®]
+#length(sec) :éŒ²ç”»ç§’æ•° [å¿…é ˆé …ç›®]
+#filename :å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«å [å¿…é ˆé …ç›®]
 #
 # DCC-JPL Japan/foltia project
 #
@@ -33,7 +33,7 @@ require 'foltialib.pl';
 # &writelog("digitalradiorecording.pl: DEBUG $ARGV[0] $ARGV[1] ");
 
 
-#½àÈ÷
+#æº–å‚™
 &prepare;
 
 
@@ -41,12 +41,12 @@ require 'foltialib.pl';
 
 # &writelog("digitaldigitalradiorecording:RECEND:$bandtype $recch $lengthsec $stationid $sleeptype $filename $tid $countno $unittype");
 
-# -- ¤³¤ì°Ê²¼¥µ¥Ö¥ë¡¼¥Á¥ó ----------------------------
+# -- ã“ã‚Œä»¥ä¸‹ã‚µãƒ–ãƒ«ãƒ¼ãƒãƒ³ ----------------------------
 
 
 sub prepare{
 
-#°ú¿ô¥¨¥é¡¼½èÍı
+#å¼•æ•°ã‚¨ãƒ©ãƒ¼å‡¦ç†
 $stationname = $ARGV[0] ;
 $lengthsec = $ARGV[1] ;
 $filename = $ARGV[2] ;
@@ -57,9 +57,9 @@ if (($stationname eq "" ) || ($lengthsec eq "") || ($filename eq "")){
 	exit;
 }
 
-#my $intval = $recch % 10; # 0¡Á9 sec
+#my $intval = $recch % 10; # 0ã€œ9 sec
 my $intval = 0;
-my $startupsleep = $startupsleeptime - $intval; #  18¡Á27 sec
+my $startupsleep = $startupsleeptime - $intval; #  18ã€œ27 sec
 $reclengthsec = $lengthsec + (60 - $startupsleep) + 10; #
 
 if ( $sleeptype ne "N"){
@@ -77,7 +77,7 @@ if ($countno eq "0"){
 }else{
 	$outputfile = $outputpath.$tid."-".$countno."-";
 }
-#2ÈÖÌÜ°Ê¹ß¤Î¥¯¥ê¥Ã¥×¤Ç¥Õ¥¡¥¤¥ëÌ¾»ØÄê¤¬¤¢¤Ã¤¿¤é
+#2ç•ªç›®ä»¥é™ã®ã‚¯ãƒªãƒƒãƒ—ã§ãƒ•ã‚¡ã‚¤ãƒ«åæŒ‡å®šãŒã‚ã£ãŸã‚‰
 	if ($filename  ne ""){
 
 		$outputfile = $filename ;
@@ -98,7 +98,7 @@ if ($countno eq "0"){
 $sleepcounter = 0;
 $cmd="";
 
-#Æó½ÅÏ¿¤ê¤Ê¤É´û¤ËÆ±Ì¾¥Õ¥¡¥¤¥ë¤¬¤¢¤Ã¤¿¤éÃæÃÇ
+#äºŒé‡éŒ²ã‚Šãªã©æ—¢ã«åŒåãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã£ãŸã‚‰ä¸­æ–­
 if ( -e "$outputfile" ){
 	if ( -s "$outputfile" ){
 	&writelog("digitalradiorecording :ABORT :recfile $outputfile exist.");
@@ -113,7 +113,7 @@ if ( -e "$outputfile" ){
 sub calldigitalrecorder{
 
 #if  (-e "$toolpath/perl/tool/ffmpeg"){
-#2010/4/7 radiko¤ËÂĞºö¤µ¤ì¤¿¤Î¤ÇffmpegÄ¾ÀÜ¼õ¿®¤Ç¤­¤Ê¤¯¤Ê¤Ã¤¿
+#2010/4/7 radikoã«å¯¾ç­–ã•ã‚ŒãŸã®ã§ffmpegç›´æ¥å—ä¿¡ã§ããªããªã£ãŸ
 #./ffmpeg -i rtmp://radiko.smartstream.ne.jp:1935/QRR/_defInst_/simul-stream -t 180 -acodec copy ~/php/tv/qrr.aac
 #&writelog("digitalradiorecording :DEBUG :$toolpath/perl/tool/ffmpeg -y -i rtmp://radiko.smartstream.ne.jp:1935/$stationname/_defInst_/simul-stream -t $reclengthsec -acodec copy $outputfile.");
 #system("$toolpath/perl/tool/ffmpeg -y -i rtmp://radiko.smartstream.ne.jp:1935/$stationname/_defInst_/simul-stream -t $reclengthsec -acodec copy $outputfile");

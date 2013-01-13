@@ -5,8 +5,8 @@
 # http://www.dcc-jpl.com/soft/foltia/
 #
 #
-# ¥­¥ã¥×¥Á¥ã²èÁüºîÀ®¥â¥¸¥å¡¼¥ë
-# recwrap.pl¤«¤é¸Æ¤Ó½Ğ¤µ¤ì¤ë¡£
+# ã‚­ãƒ£ãƒ—ãƒãƒ£ç”»åƒä½œæˆãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
+# recwrap.plã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ã€‚
 #
 # DCC-JPL Japan/foltia project
 #
@@ -22,17 +22,17 @@ require "foltialib.pl";
 #$tid = $ARGV[0] ;
 $filename = $ARGV[0] ;
 
-# filename¤ÎÂÅÅöÀ­¤ò¥Á¥§¥Ã¥¯
+# filenameã®å¦¥å½“æ€§ã‚’ãƒã‚§ãƒƒã‚¯
 @filenametmp = split(/\./,$filename);
 @filename = split(/-/,$filenametmp[0]);
 $tid = $filename[0];
 
-# tid¤¬¿ô»ú¤Î¤ß¤«¥Á¥§¥Ã¥¯
+# tidãŒæ•°å­—ã®ã¿ã‹ãƒã‚§ãƒƒã‚¯
 $tid =~ s/[^0-9]//ig;
 #print "$tid\n";
 
 if ($tid eq "" ){
-	#°ú¤­¿ô¤Ê¤·½Ğ¼Â¹Ô¤µ¤ì¤¿¤é¡¢½ªÎ»
+	#å¼•ãæ•°ãªã—å‡ºå®Ÿè¡Œã•ã‚ŒãŸã‚‰ã€çµ‚äº†
 	print "usage captureimagemaker.pl  MPEG2filename\n";
 	exit;
 }
@@ -68,7 +68,7 @@ if ($time eq "" ){
 }
 #	print "TIME:$time\n";
 
-#¡¡Ï¿²è¥Õ¥¡¥¤¥ë¤¬¥¢¥ë¤«¥Á¥§¥Ã¥¯
+#ã€€éŒ²ç”»ãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚¢ãƒ«ã‹ãƒã‚§ãƒƒã‚¯
 if (-e "$recfolderpath/$filename"){
 #	print "EXIST $recfolderpath/$filename\n";
 }else{
@@ -78,25 +78,25 @@ if (-e "$recfolderpath/$filename"){
 	exit;
 }
 
-# Å¸³«Àè¥Ç¥£¥ì¥¯¥È¥ê¤¬¤¢¤ë¤«³ÎÇ§
+# å±•é–‹å…ˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒã‚ã‚‹ã‹ç¢ºèª
 
 $capimgdirname = "$tid.localized/";
 $capimgdirname = $recfolderpath."/".$capimgdirname;
-#¤Ê¤±¤ì¤Ğºî¤ë
+#ãªã‘ã‚Œã°ä½œã‚‹
 unless (-e $capimgdirname ){
 	system("$toolpath/perl/mklocalizeddir.pl $tid");
 	&writelog("captureimagemaker mkdir $capimgdirname");
 }
 $capimgdirname = "$tid.localized/img";
 $capimgdirname = $recfolderpath."/".$capimgdirname;
-#¤Ê¤±¤ì¤Ğºî¤ë
+#ãªã‘ã‚Œã°ä½œã‚‹
 unless (-e $capimgdirname ){
 	mkdir $capimgdirname ,0777;
 	&writelog("captureimagemaker mkdir $capimgdirname");
 }
 
 
-# ¥­¥ã¥×¥Á¥ãÆş¤ì¤ë¥Ç¥£¥ì¥¯¥È¥êºîÀ® 
+# ã‚­ãƒ£ãƒ—ãƒãƒ£å…¥ã‚Œã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä½œæˆ 
 # $captureimgdir = "$tid"."-"."$countno"."-"."$date"."-"."$time";
 $captureimgdir = $filename;
 $captureimgdir =~ s/\.m2p$|\.m2t$//; 
@@ -107,21 +107,21 @@ unless (-e "$capimgdirname/$captureimgdir"){
 
 }
 
-# ÊÑ´¹
+# å¤‰æ›
 #system ("mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf crop=702:468:6:6,scale=160:120,pp=lb -ao null -sstep 14 -v 3 $recfolderpath/$filename");
 
 #system ("mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf crop=702:468:6:6,scale=160:120 -ao null -sstep 14 -v 3 $recfolderpath/$filename");
 
 
-#¡¡ETV¤È¤«¹õÀşÆş¤ë¤«¤éº¸±¦¡¢¤â¤¦¤¹¤³¤·¤Å¤ÄÀÚ¤í¤¦¡£
+#ã€€ETVã¨ã‹é»’ç·šå…¥ã‚‹ã‹ã‚‰å·¦å³ã€ã‚‚ã†ã™ã“ã—ã¥ã¤åˆ‡ã‚ã†ã€‚
 #system ("mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf crop=690:460:12:10,scale=160:120 -ao null -sstep 14 -v 3 $recfolderpath/$filename");
 
-#¡¡10ÉÃ¤´¤È¤Ë
+#ã€€10ç§’ã”ã¨ã«
 if ($filename =~ /m2t$/){
 	&writelog("captureimagemaker DEBUG mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf scale=192:108 -ao null -sstep 9  $recfolderpath/$filename");
 	system ("mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf scale=192:108 -ao null -sstep 9  $recfolderpath/$filename");
-	if(-e "$capimgdirname/$captureimgdir/00000001.jpg" ){ #$capimgdirname/$captureimgdir/¤¬¤¢¤Ã¤¿¤é¤Ê¤Ë¤â¤·¤Ê¤¤	
-	}else{ #¶õ¤Ã¤İ¤Ê¤éºÆ»î¹Ô
+	if(-e "$capimgdirname/$captureimgdir/00000001.jpg" ){ #$capimgdirname/$captureimgdir/ãŒã‚ã£ãŸã‚‰ãªã«ã‚‚ã—ãªã„	
+	}else{ #ç©ºã£ã½ãªã‚‰å†è©¦è¡Œ
 			&writelog("captureimagemaker DEBUG RETRY mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf framestep=300step,scale=192:108 -ao null $recfolderpath/$filename");
 		system ("mplayer -ss 00:00:10 -vo jpeg:outdir=$capimgdirname/$captureimgdir/ -vf framestep=300step,scale=192:108 -ao null $recfolderpath/$filename");
 	}

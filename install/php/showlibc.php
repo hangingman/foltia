@@ -5,11 +5,11 @@
 
 showlibc.php
 
-ÌÜÅª
-Ï¿²è¥é¥¤¥Ö¥é¥êÈÖÁÈ¤ò¸ÄÊÌÉ½¼¨¤·¤Ş¤¹¡£
+ç›®çš„
+éŒ²ç”»ãƒ©ã‚¤ãƒ–ãƒ©ãƒªç•ªçµ„ã‚’å€‹åˆ¥è¡¨ç¤ºã—ã¾ã™ã€‚
 
-°ú¿ô
-tid:¥¿¥¤¥È¥ëID
+å¼•æ•°
+tid:ã‚¿ã‚¤ãƒˆãƒ«ID
 
  DCC-JPL Japan/foltia project
 
@@ -60,7 +60,7 @@ if ($tid == "") {
 	print "<title>foltia:Lib</title>
 </head><body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#000000\" ALINK=\"#c6edff\" > \n";
 		printhtmlpageheader();
-		die_exit("ºÆÀ¸²ÄÇ½ÈÖÁÈ¤¬¤¢¤ê¤Ş¤»¤ó<BR>");
+		die_exit("å†ç”Ÿå¯èƒ½ç•ªçµ„ãŒã‚ã‚Šã¾ã›ã‚“<BR>");
 	}
 
 ?>
@@ -68,11 +68,11 @@ if ($tid == "") {
 
 <?php
 //////////////////////////////////////////////////////////
-//£±¥Ú¡¼¥¸¤ÎÉ½¼¨¥ì¥³¡¼¥É¿ô
+//ï¼‘ãƒšãƒ¼ã‚¸ã®è¡¨ç¤ºãƒ¬ã‚³ãƒ¼ãƒ‰æ•°
 $lim = 53;
-//¥¯¥¨¥ê¼èÆÀ
+//ã‚¯ã‚¨ãƒªå–å¾—
 $p = getgetnumform(p);
-//¥Ú¡¼¥¸¼èÆÀ¤Î·×»»
+//ãƒšãƒ¼ã‚¸å–å¾—ã®è¨ˆç®—
 list($st,$p,$p2) = number_page($p,$lim);
 ///////////////////////////////////////////////////////////
 
@@ -83,8 +83,8 @@ SELECT foltia_program.title
 FROM  foltia_program   
 WHERE foltia_program.tid = ? 
 ";
-//$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($tid));
+//$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($tid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
 $syobocaldb = `curl "http://cal.syoboi.jp/db?Command=TitleLookup&TID=$tid" | head -2 `;
@@ -97,7 +97,7 @@ $syobocaldb = mb_convert_encoding($syobocaldb, "EUC-JP", "UTF-8");
 $title = $rowdata[0];
 $title =  htmlspecialchars($title) ;
 }
-//¥Ø¥Ã¥ÀÂ³¤­
+//ãƒ˜ãƒƒãƒ€ç¶šã
 print "<title>foltia:Lib $tid:$title</title></head>";
 $serveruri = getserveruri();
 
@@ -115,29 +115,29 @@ print "<body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#0000
 <div align=\"center\">
 ";
 	printhtmlpageheader();
-print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">Ï¿²è¥é¥¤¥Ö¥é¥êÈÖÁÈ¸ÄÊÌÉ½¼¨</font></p>
+print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">éŒ²ç”»ãƒ©ã‚¤ãƒ–ãƒ©ãƒªç•ªçµ„å€‹åˆ¥è¡¨ç¤º</font></p>
   <hr size=\"4\">
-<p align=\"left\">ºÆÀ¸²ÄÇ½¥à¡¼¥Ó¡¼¤òÉ½¼¨¤·¤Ş¤¹¡£<br>";
+<p align=\"left\">å†ç”Ÿå¯èƒ½ãƒ ãƒ¼ãƒ“ãƒ¼ã‚’è¡¨ç¤ºã—ã¾ã™ã€‚<br>";
 if ($tid == 0){
-print "$title ¡Ú<A HREF = \"./folcast.php?tid=$tid\">¤³¤ÎÈÖÁÈ¤ÎFolcast</A> ¡Î<a href=\"itpc://$serveruri/folcast.php?tid=$tid\">iTunes¤ËÅĞÏ¿</a>¡Ï¡Û <br>\n";
+print "$title ã€<A HREF = \"./folcast.php?tid=$tid\">ã“ã®ç•ªçµ„ã®Folcast</A> ï¼»<a href=\"itpc://$serveruri/folcast.php?tid=$tid\">iTunesã«ç™»éŒ²</a>ï¼½ã€‘ <br>\n";
 }else{
 print "<a href=\"http://cal.syoboi.jp/tid/" .
 				     htmlspecialchars($tid)  . "\" target=\"_blank\">$title</a> 
-¡Ú<A HREF = \"./folcast.php?tid=$tid\">¤³¤ÎÈÖÁÈ¤ÎFolcast</A> 
-¡Î<a href=\"itpc://$serveruri/folcast.php?tid=$tid\">iTunes¤ËÅĞÏ¿</a>¡Ï¡Û <br>\n";
+ã€<A HREF = \"./folcast.php?tid=$tid\">ã“ã®ç•ªçµ„ã®Folcast</A> 
+ï¼»<a href=\"itpc://$serveruri/folcast.php?tid=$tid\">iTunesã«ç™»éŒ²</a>ï¼½ã€‘ <br>\n";
 }
 }// endif if(ereg("iPhone",$useragent))
 
-//³ÎÇ§
+//ç¢ºèª
 if (file_exists ("$recfolderpath/$tid.localized")){
-//	print "¥Ç¥£¥ì¥¯¥È¥ê¤ÏÂ¸ºß¤·¤Ş¤¹\n";
+//	print "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¯å­˜åœ¨ã—ã¾ã™\n";
 }else{
-//	print "¥Ç¥£¥ì¥¯¥È¥ê¤Ï¤¢¤ê¤Ş¤»¤ó\n";
-		print "ºÆÀ¸²ÄÇ½ÈÖÁÈ¤¬¤¢¤ê¤Ş¤»¤ó<BR>\n</body></html>";
+//	print "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¯ã‚ã‚Šã¾ã›ã‚“\n";
+		print "å†ç”Ÿå¯èƒ½ç•ªçµ„ãŒã‚ã‚Šã¾ã›ã‚“<BR>\n</body></html>";
 	exit;
 }					 
 
-//¿·»ÅÍÍ/* 2006/10/26 */
+//æ–°ä»•æ§˜/* 2006/10/26 */
 if (file_exists("./selectcaptureimage.php") ) {
 	$sbpluginexist = 1;
 }
@@ -149,13 +149,13 @@ echo "<div id=contents class=autopagerize_page_element />";
 ?>
 
 <form name="deletemovie" method="POST" action="./deletemovie.php">
-<p align="left"><input type="submit" value="¹àÌÜºï½ü" ></p>
+<p align="left"><input type="submit" value="é …ç›®å‰Šé™¤" ></p>
 
 
 <?php
 
 /////////////////////////////////////////////////////////
-//¥ì¥³¡¼¥ÉÁí¿ô¼èÆÀ
+//ãƒ¬ã‚³ãƒ¼ãƒ‰ç·æ•°å–å¾—
     $query = "
 SELECT
 COUNT(*) AS cnt
@@ -167,17 +167,17 @@ ON foltia_mp4files.tid = foltia_program.tid
 WHERE foltia_mp4files.tid = ?  
 ";
 
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($tid));
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($tid));
 $rowdata = $rs->fetch();
 $dtcnt = htmlspecialchars($rowdata[0]);
 //echo $dtcnt;
 //
 if (! $rowdata) {
-        die_exit("ÈÖÁÈ¥Ç¡¼¥¿¤¬¤¢¤ê¤Ş¤»¤ó¡£<BR>");
+        die_exit("ç•ªçµ„ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Šã¾ã›ã‚“ã€‚<BR>");
 }//endif
 
 //////////////////////////////////////////////////////////
-//¥ì¥³¡¼¥ÉÉ½¼¨
+//ãƒ¬ã‚³ãƒ¼ãƒ‰è¡¨ç¤º
 $query = "
 SELECT 
 foltia_program.tid,
@@ -199,8 +199,8 @@ LIMIT $lim OFFSET $st
 ";
 
 $rs = "";
-//$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($tid));
+//$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($tid));
 $rowdata = $rs->fetch();
 if ($rowdata) {
 if(ereg("iPhone",$useragent)){
@@ -216,12 +216,12 @@ print "
 $title = $rowdata[1];
 
 if ($rowdata[2]== "" ){
-	$count = "[ÏÃ¿ô]";
+	$count = "[è©±æ•°]";
 }else{
 	$count = $rowdata[2];
 }
 if ($rowdata[3]== "" ){
-	$subtitle = "[¥µ¥Ö¥¿¥¤¥È¥ë]";
+	$subtitle = "[ã‚µãƒ–ã‚¿ã‚¤ãƒˆãƒ«]";
 }else{
 	$subtitle = $rowdata[3];
 }
@@ -240,13 +240,13 @@ if (ereg(".MP4", $fName)){
 	$thumbnail = ereg_replace(".MP4", ".THM", $thumbnail);
 }
 if ($onairdate == ""){
-$onairdate = "[ÊüÁ÷Æü]";
+$onairdate = "[æ”¾é€æ—¥]";
 }else{
 $day = substr($onairdate,0,4)."/".substr($onairdate,4,2)."/".substr($onairdate,6,2);
 $time = substr($onairdate,8,2).":".substr($onairdate,10,2);
 $onairdate = "$day $time";
 }
-//Starlight Breaker¸ş¤±³ÈÄ¥
+//Starlight Breakerå‘ã‘æ‹¡å¼µ
 //$debug_pg_num_rows = $rs ->rowCount();
 $caplink = "";
 
@@ -255,9 +255,9 @@ $caplink = "";
  $capimgpath = htmlspecialchars(preg_replace("/.m2./", "", $rowdata[5]));
  	
 	if (($capimgpath != "") && (file_exists("$recfolderpath/$tid.localized/img/$capimgpath") )){
-	$caplink = " / <a href = \"./selectcaptureimage.php?pid=$rowdata[6]\">¥­¥ã¥×</a>";
+	$caplink = " / <a href = \"./selectcaptureimage.php?pid=$rowdata[6]\">ã‚­ãƒ£ãƒ—</a>";
 	}else{
-	$caplink = " / ¥­¥ã¥×¤Ê¤·";
+	$caplink = " / ã‚­ãƒ£ãƒ—ãªã—";
 	}
 }else{
 $caplink = "";
@@ -292,7 +292,7 @@ print "  </tr>
     <td>$onairdate</td>
   </tr>
   <tr>
-    <td><INPUT TYPE='checkbox' NAME='delete[]' VALUE='$fName'>ºï½ü /
+    <td><INPUT TYPE='checkbox' NAME='delete[]' VALUE='$fName'>å‰Šé™¤ /
 	<a href =\"$httpmediamappath/$tid.localized/mp4/$fName\" target=\"_blank\">$fName</A> / 
 	<a href=\"./mp4player.php?p=$pid\" target=\"_blank\">Player</a> / 
         <script language=\"JavaScript\" type=\"text/javascript\">QT_WriteOBJECT_XHTML('http://g.hatena.ne.jp/images/podcasting.gif','16','16','','controller','FALSE','href','http://$serverfqdn/$httpmediamappath/$tid.localized/mp4/$fName','target','QuickTimePlayer','type','video/mp4');</script> $caplink</td>
@@ -304,20 +304,20 @@ print "  </tr>
 
 	} while ($rowdata = $rs->fetch());
 }else{
-print "Ï¿²è¥Õ¥¡¥¤¥ë¤¬¤¢¤ê¤Ş¤»¤ó<br>\n";
+print "éŒ²ç”»ãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã‚Šã¾ã›ã‚“<br>\n";
 }//if
 
 if(ereg("iPhone",$useragent)){
-	print "<li><a href=\"http://$serveruri/showlib.php\" target=\"_self\">°ìÍ÷¤ØÌá¤ë</a></li>\n";
+	print "<li><a href=\"http://$serveruri/showlib.php\" target=\"_self\">ä¸€è¦§ã¸æˆ»ã‚‹</a></li>\n";
 	print "</ul>\n";
 }else{
 	print "</tbody></table>\n";
 }
 
 //////////////////////////////////////////////
-//¥¯¥¨¥êÂåÆş
+//ã‚¯ã‚¨ãƒªä»£å…¥
 $query_st =  $tid;
-//Autopager½èÍı¤È¥Ú¡¼¥¸¤Î¥ê¥ó¥¯É½¼¨
+//Autopagerå‡¦ç†ã¨ãƒšãƒ¼ã‚¸ã®ãƒªãƒ³ã‚¯è¡¨ç¤º
 page_display($query_st,$p,$p2,$lim,$dtcnt,"");
 //////////////////////////////////////////////
 ?>

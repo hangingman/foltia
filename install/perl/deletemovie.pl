@@ -6,15 +6,15 @@
 #
 #deletemovie.pl
 #
-#¥Õ¥¡¥¤¥ëÌ¾¤ò¼õ¤±¼è¤ê¡¢ºï½ü½èÍı¤ò¤¹¤ë
-#¤È¤ê¤¢¤¨¤º¤Ï./mita/¤Ø°ÜÆ°
+#ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å—ã‘å–ã‚Šã€å‰Šé™¤å‡¦ç†ã‚’ã™ã‚‹
+#ã¨ã‚Šã‚ãˆãšã¯./mita/ã¸ç§»å‹•
 #
 #
 # DCC-JPL Japan/foltia project
 #
 #
 use DBI;
-use DBD::Pg;
+
 use DBD::SQLite;
 
 $path = $0;
@@ -25,15 +25,15 @@ push( @INC, "$path");
 
 require "foltialib.pl";
 
-#°ú¤­¿ô¤¬¥¢¥ë¤«?
+#å¼•ãæ•°ãŒã‚¢ãƒ«ã‹?
 $fname = $ARGV[0] ;
 if ($fname eq "" ){
-	#°ú¤­¿ô¤Ê¤·½Ğ¼Â¹Ô¤µ¤ì¤¿¤é¡¢½ªÎ»
+	#å¼•ãæ•°ãªã—å‡ºå®Ÿè¡Œã•ã‚ŒãŸã‚‰ã€çµ‚äº†
 	print "usage;deletemovie.pl <FILENAME>\n";
 	exit;
 }
 
-#¥Õ¥¡¥¤¥ëÌ¾ÀµÅöÀ­¥Á¥§¥Ã¥¯
+#ãƒ•ã‚¡ã‚¤ãƒ«åæ­£å½“æ€§ãƒã‚§ãƒƒã‚¯
 if ($fname =~ /.m2p$|.m2t$|.MP4$|.aac$/){
 
 }else{
@@ -42,10 +42,10 @@ if ($fname =~ /.m2p$|.m2t$|.MP4$|.aac$/){
 	exit (1);
 }
 
-#DB½é´ü²½
+#DBåˆæœŸåŒ–
 $dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
-#¥Õ¥¡¥¤¥ëÂ¸ºß¥Á¥§¥Ã¥¯
+#ãƒ•ã‚¡ã‚¤ãƒ«å­˜åœ¨ãƒã‚§ãƒƒã‚¯
 my $tid = &mp4filename2tid($fname);
 my $mp4dirname = &makemp4dir($tid);
 if (-e "$recfolderpath/$fname"){
@@ -58,11 +58,11 @@ if (-e "$recfolderpath/$fname"){
 	exit (1);
 }
 
-#´ûÆÉºï½ü½èÍı 
-if ($rapidfiledelete  > 0){ #./mita/¤Ø°ÜÆ°
+#æ—¢èª­å‰Šé™¤å‡¦ç† 
+if ($rapidfiledelete  > 0){ #./mita/ã¸ç§»å‹•
 	system ("mv $filemovepath/$fname $recfolderpath/mita/");
 	&writelog("deletemovie mv filemovepath/$fname $recfolderpath/mita/.");
-}else{ #Â¨»şºï½ü
+}else{ #å³æ™‚å‰Šé™¤
 	system ("rm $filemovepath/$fname ");
 	&writelog("deletemovie rm $filemovepath/$fname ");
 

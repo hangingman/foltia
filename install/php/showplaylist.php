@@ -5,15 +5,15 @@
 
 showplaylist.php
 
-ÌÜÅª
-Ï¿²è¤·¤¿mpeg2¤ÎÈÖÁÈ°ìÍ÷¤òÉ½¼¨¤·¤Ş¤¹¡£
+ç›®çš„
+éŒ²ç”»ã—ãŸmpeg2ã®ç•ªçµ„ä¸€è¦§ã‚’è¡¨ç¤ºã—ã¾ã™ã€‚
 
 
-¥ª¥×¥·¥ç¥ó
+ã‚ªãƒ—ã‚·ãƒ§ãƒ³
 list:
-¡¡¾ÊÎ¬»ş¡¢Ï¿²è½ç¤Ë¥½¡¼¥È¤µ¤ì¤ë¡£
-¡¡title¤Î¤È¤­¤Ë¡¢ÈÖÁÈ½ç¥½¡¼¥È¤µ¤ì¤ë¡£
-¡¡raw¤Î¤È¤­¤Ë¡¢DB¤Ëµ­Ï¿¤µ¤ì¤Æ¤¤¤ëÈÖÁÈÏ¿²è¾ğÊó¤Ç¤Ï¤Ê¤¯¥Ç¥£¥ì¥¯¥È¥ê¤Ë¤¢¤ëm2p/m2t¥Õ¥¡¥¤¥ë¤òÁ´¤ÆÉ½¼¨¤¹¤ë¡£
+ã€€çœç•¥æ™‚ã€éŒ²ç”»é †ã«ã‚½ãƒ¼ãƒˆã•ã‚Œã‚‹ã€‚
+ã€€titleã®ã¨ãã«ã€ç•ªçµ„é †ã‚½ãƒ¼ãƒˆã•ã‚Œã‚‹ã€‚
+ã€€rawã®ã¨ãã«ã€DBã«è¨˜éŒ²ã•ã‚Œã¦ã„ã‚‹ç•ªçµ„éŒ²ç”»æƒ…å ±ã§ã¯ãªããƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«ã‚ã‚‹m2p/m2tãƒ•ã‚¡ã‚¤ãƒ«ã‚’å…¨ã¦è¡¨ç¤ºã™ã‚‹ã€‚
 
  DCC-JPL Japan/foltia project
 
@@ -43,10 +43,10 @@ if ($useenvironmentpolicy == 1){
 <link rel="stylesheet" type="text/css" href="graytable.css"> 
 <?php
 
-// Syabas È½Äê
+// Syabas åˆ¤å®š
 $useragent = $_SERVER['HTTP_USER_AGENT'];
 
-//¥Ç¥£¥¹¥¯¶õ¤­ÍÆÎÌ¤Ë¤è¤Ã¤ÆÇØ·Ê¿§É½¼¨ÊÑ¹¹
+//ãƒ‡ã‚£ã‚¹ã‚¯ç©ºãå®¹é‡ã«ã‚ˆã£ã¦èƒŒæ™¯è‰²è¡¨ç¤ºå¤‰æ›´
 warndiskfreearea();
 
 print "<title>foltia:recorded file list</title>
@@ -54,11 +54,11 @@ print "<title>foltia:recorded file list</title>
 
 
 /////////////////////////////////////////////////??????
-//£±¥Ú¡¼¥¸¤ÎÉ½¼¨¥ì¥³¡¼¥É¿ô
+//ï¼‘ãƒšãƒ¼ã‚¸ã®è¡¨ç¤ºãƒ¬ã‚³ãƒ¼ãƒ‰æ•°
 $lim = 300;
-//¥¯¥¨¥ê¼èÆÀ
+//ã‚¯ã‚¨ãƒªå–å¾—
 $p = getgetnumform(p);
-//¥Ú¡¼¥¸¼èÆÀ¤Î·×»»
+//ãƒšãƒ¼ã‚¸å–å¾—ã®è¨ˆç®—
 list($st,$p,$p2) = number_page($p,$lim);
 //////////////////////////////////////////////////????
 
@@ -71,9 +71,9 @@ $now = date("YmdHi");
 	printhtmlpageheader();
 ?>
 
-  <p align="left"><font color="#494949" size="6">Ï¿²è°ìÍ÷É½¼¨</font></p>
+  <p align="left"><font color="#494949" size="6">éŒ²ç”»ä¸€è¦§è¡¨ç¤º</font></p>
   <hr size="4">
-<p align="left">ºÆÀ¸²ÄÇ½ÈÖÁÈ¥ê¥¹¥È¤òÉ½¼¨¤·¤Ş¤¹¡£<br>
+<p align="left">å†ç”Ÿå¯èƒ½ç•ªçµ„ãƒªã‚¹ãƒˆã‚’è¡¨ç¤ºã—ã¾ã™ã€‚<br>
 
 <?php
 if ($demomode){
@@ -84,7 +84,7 @@ if ($demomode){
 
 
 //////////////////////////////////////////
-//¥¯¥¨¥ê¼èÆÀ
+//ã‚¯ã‚¨ãƒªå–å¾—
 $list = getgetform('list');
 //Autopager
 echo "<div id=contents class=autopagerize_page_element />";
@@ -93,20 +93,20 @@ echo "<div id=contents class=autopagerize_page_element />";
 
 ?>
 <form name="deletemovie" method="POST" action="./deletemovie.php"> 
-<p align="left"><input type="submit" value="¹àÌÜºï½ü" ></p>
+<p align="left"><input type="submit" value="é …ç›®å‰Šé™¤" ></p>
 
   <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
 	<thead> 
 		<tr> 
-			<th align="left">ºï½ü</th>
-			<th align="left"><A HREF="./showplaylist.php">¥Õ¥¡¥¤¥ëÌ¾</A></th>
-			<th align="left"><A HREF="./showplaylist.php?list=title">¥¿¥¤¥È¥ë</A></th>
-			<th align="left">ÏÃ¿ô</th>
-			<th align="left">¥µ¥Ö¥¿¥¤</th>
+			<th align="left">å‰Šé™¤</th>
+			<th align="left"><A HREF="./showplaylist.php">ãƒ•ã‚¡ã‚¤ãƒ«å</A></th>
+			<th align="left"><A HREF="./showplaylist.php?list=title">ã‚¿ã‚¤ãƒˆãƒ«</A></th>
+			<th align="left">è©±æ•°</th>
+			<th align="left">ã‚µãƒ–ã‚¿ã‚¤</th>
 
 <?php
 if (file_exists("./selectcaptureimage.php") ) {
-print "			<th align=\"left\">¥­¥ã¥×</th>\n";
+print "			<th align=\"left\">ã‚­ãƒ£ãƒ—</th>\n";
 }
 ?>
 		</tr>
@@ -120,7 +120,7 @@ print "			<th align=\"left\">¥­¥ã¥×</th>\n";
 
 //$list = getgetform('list');
 
-//µì»ÅÍÍ
+//æ—§ä»•æ§˜
 if($list == "raw"){
 exec ("ls -t  $recfolderpath/*.???", $m2pfiles);
 
@@ -144,8 +144,8 @@ FROM foltia_subtitle , foltia_program
 WHERE foltia_program.tid = foltia_subtitle.tid  
  AND foltia_subtitle.tid = ? 
 ";
-//$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($filesplit[0]));
+//$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($filesplit[0]));
 				$rall = $rs->fetchAll();
 				$rowdata = $rall[0];
 //print" $fName./$rowdata[1]//$rowdata[2]<BR>\n";
@@ -163,15 +163,15 @@ WHERE foltia_program.tid = foltia_subtitle.tid
  AND foltia_subtitle.tid = ? 
  AND foltia_subtitle.countno = ? 
 ";
-//$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($filesplit[0],$filesplit[1]));
+//$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($filesplit[0],$filesplit[1]));
 				$rall = $rs->fetchAll();
 				$rowdata = $rall[0];
 //print" $fName./$rowdata[1]/$rowdata[2]/$rowdata[3]<BR>\n";
 $title = $rowdata[1];
 $count = $rowdata[2];
 $subtitle = $rowdata[3];
-}//if ÏÃ¿ô¤¢¤ë¤«¤É¤¦¤«
+}//if è©±æ•°ã‚ã‚‹ã‹ã©ã†ã‹
 
 $tid = htmlspecialchars($rowdata[0]);
 $title = htmlspecialchars($title);
@@ -202,7 +202,7 @@ print "</tr>\n
 print "	</tbody>\n</table>\n</FORM>\n</body>\n</html>\n";
 exit;
 
-}elseif ($list== "title"){//¿·»ÅÍÍ
+}elseif ($list== "title"){//æ–°ä»•æ§˜
 $query = "
 SELECT 
 foltia_program.tid,
@@ -235,21 +235,21 @@ LIMIT $lim OFFSET $st
 ";
 }
 
-//$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+//$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 $rowdata = $rs->fetch();
 
 /////////////////////////////////////////
-//¥Æ¡¼¥Ö¥ë¤ÎÁí¿ô¼èÆÀ
+//ãƒ†ãƒ¼ãƒ–ãƒ«ã®ç·æ•°å–å¾—
        $query2 = "
 SELECT COUNT(*) AS cnt FROM foltia_subtitle , foltia_program , foltia_m2pfiles
 WHERE foltia_program.tid = foltia_subtitle.tid
  AND foltia_subtitle.m2pfilename = foltia_m2pfiles.m2pfilename
         ";
-$rs2 = sql_query($con, $query2, "DB\?\¨\e?E?oCO???T????");
+$rs2 = sql_query($con, $query2, "DB\?\ã‚£\e?E?oCO???T????");
 $rowdata2 = $rs2->fetch();
           if (! $rowdata2) {
-                die_exit("ÈÖÁÈ¥Ç¡¼¥¿¤¬¤¢¤ê¤Ş¤»¤ó<BR>");
+                die_exit("ç•ªçµ„ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Šã¾ã›ã‚“<BR>");
           }
 //1O?o?eAA
 $dtcnt =  $rowdata2[0];
@@ -289,7 +289,7 @@ print"<td>$title</td>
 
 	if (file_exists("./selectcaptureimage.php") ) {
 	$capimgpath = preg_replace("/.m2.+/", "", $fName);
-	print "			<td align=\"left\"><a href=\"./selectcaptureimage.php?pid=$pid\">¥­¥ã¥×</a></td>\n";
+	print "			<td align=\"left\"><a href=\"./selectcaptureimage.php?pid=$pid\">ã‚­ãƒ£ãƒ—</a></td>\n";
 	}
 
 print "</tr>\n
@@ -303,7 +303,7 @@ print "</tr>\n
 
 print "
 <tr>
-<td COLSPAN=\"5\">¥Õ¥¡¥¤¥ë¤¬¤¢¤ê¤Ş¤»¤ó</td>
+<td COLSPAN=\"5\">ãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã‚Šã¾ã›ã‚“</td>
 </tr>
 ";
 
@@ -315,15 +315,15 @@ print "</tbody>
 </FORM>\n";
 
 //////////////////////////////////////////////////////////////////////
-//¥¯¥¨¥êÂåÆş
+//ã‚¯ã‚¨ãƒªä»£å…¥
 $query_st = $list;
-//Autopageing½èÍı¤È¥Ú¡¼¥¸¤Î¥ê¥ó¥¯¤òÉ½¼¨
+//Autopageingå‡¦ç†ã¨ãƒšãƒ¼ã‚¸ã®ãƒªãƒ³ã‚¯ã‚’è¡¨ç¤º
 list($p2,$page) = page_display($query_st,$p,$p2,$lim,$dtcnt,"");
 //////////////////////////////////////////////////////////////////////
-print "</div>";	//Auto pager½ª¤ï¤ê
+print "</div>";	//Auto pagerçµ‚ã‚ã‚Š
 
 
-//ÈÖÁÈ¥½¡¼¥È¤Î»ş¡¢Ì¤ÆÉÈÖÁÈ¤Î¥¿¥¤¥È¥ë¤À¤±É½¼¨
+//ç•ªçµ„ã‚½ãƒ¼ãƒˆã®æ™‚ã€æœªèª­ç•ªçµ„ã®ã‚¿ã‚¤ãƒˆãƒ«ã ã‘è¡¨ç¤º
 //if ($list== "title" && $p2 > $page){
 if ($list== "title"){
 
@@ -337,17 +337,17 @@ WHERE foltia_program.tid = foltia_subtitle.tid
 ORDER BY foltia_program.tid DESC 
 ";
 
-//$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+//$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 	$rowdata = $rs->fetch();
 	if ($rowdata) {
 print "<hr>
-<p align=\"left\">Ì¤ÆÉ¥¿¥¤¥È¥ë¤òÉ½¼¨¤·¤Ş¤¹¡£<br>
+<p align=\"left\">æœªèª­ã‚¿ã‚¤ãƒˆãƒ«ã‚’è¡¨ç¤ºã—ã¾ã™ã€‚<br>
   <table BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"2\" WIDTH=\"100%\">
 	<thead>
 		<tr>
 			<th align=\"left\">TID</th>
-			<th align=\"left\">¥¿¥¤¥È¥ë</th>
+			<th align=\"left\">ã‚¿ã‚¤ãƒˆãƒ«</th>
 		</tr>
 	</thead>
 	<tbody>

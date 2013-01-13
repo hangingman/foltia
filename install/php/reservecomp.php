@@ -5,13 +5,13 @@
 
 reserveprogram.php
 
-ÌÜÅª
-ÈÖÁÈ¤ÎÍ½ÌóÅĞÏ¿¤ò¤·¤Ş¤¹¡£
+ç›®çš„
+ç•ªçµ„ã®äºˆç´„ç™»éŒ²ã‚’ã—ã¾ã™ã€‚
 
-°ú¿ô
-tid:¥¿¥¤¥È¥ëID
-station:Ï¿²è¶É
-bitrate:Ï¿²è¥Ó¥Ã¥È¥ì¡¼¥È(Ã±°Ì:Mbps)
+å¼•æ•°
+tid:ã‚¿ã‚¤ãƒˆãƒ«ID
+station:éŒ²ç”»å±€
+bitrate:éŒ²ç”»ãƒ“ãƒƒãƒˆãƒ¬ãƒ¼ãƒˆ(å˜ä½:Mbps)
 
  DCC-JPL Japan/foltia project
 
@@ -46,7 +46,7 @@ login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
 
 $tid = getgetnumform(tid);
 		if ($tid == "") {
-		die_exit("ÈÖÁÈ¤¬»ØÄê¤µ¤ì¤Æ¤¤¤Ş¤»¤ó<BR>");
+		die_exit("ç•ªçµ„ãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“<BR>");
 		}
 
 $station = getgetnumform(station);
@@ -65,13 +65,13 @@ $bitrate = getgetnumform(bitrate);
 
 $now = date("YmdHi");   
 
-//¥¿¥¤¥È¥ë¼èÆÀ
+//ã‚¿ã‚¤ãƒˆãƒ«å–å¾—
 	$query = "select title from foltia_program where tid = ? ";
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($tid));
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($tid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
-		$title = "(Ì¤ÅĞÏ¿)";
+		$title = "(æœªç™»éŒ²)";
 		}else{
 		$title = htmlspecialchars($rowdata[0]);
 		}
@@ -82,17 +82,17 @@ if (! $rowdata) {
 <?php 
 	printhtmlpageheader();
 ?>
-  <p align="left"><font color="#494949" size="6">Í½Ìó´°Î»</font></p>
+  <p align="left"><font color="#494949" size="6">äºˆç´„å®Œäº†</font></p>
   <hr size="4">
 
-¡Ö<?php print "$title"; ?>¡×¤òÈÖÁÈÍ½Ìó¥â¡¼¥É¤ÇÍ½Ìó¤·¤Ş¤·¤¿¡£ <br>
+ã€Œ<?php print "$title"; ?>ã€ã‚’ç•ªçµ„äºˆç´„ãƒ¢ãƒ¼ãƒ‰ã§äºˆç´„ã—ã¾ã—ãŸã€‚ <br>
  <br>
-Í½Ìó¥¹¥±¥¸¥å¡¼¥ë <BR>
+äºˆç´„ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ« <BR>
 
 <?php
 
 if ($station != 0){
-//¶É¸ÂÄê
+//å±€é™å®š
 	$query = "
 SELECT 
 foltia_subtitle.pid ,  
@@ -110,7 +110,7 @@ ORDER BY foltia_subtitle.startdatetime  ASC
 ";
 
 }else{
-//Á´¶É
+//å…¨å±€
 	$query = "
 SELECT 
 foltia_subtitle.pid ,  
@@ -127,10 +127,10 @@ ORDER BY foltia_subtitle.startdatetime  ASC
 ";
 
 }
-	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 $rowdata = $rs->fetch();
 if (! $rowdata) {
-		echo("Êü±ÇÍ½Äê¤Ï¤¤¤Ş¤Î¤È¤³¤í¤¢¤ê¤Ş¤»¤ó<BR>");
+		echo("æ”¾æ˜ äºˆå®šã¯ã„ã¾ã®ã¨ã“ã‚ã‚ã‚Šã¾ã›ã‚“<BR>");
 		}
 		else{
 	$maxcols = $rs->columnCount();
@@ -139,22 +139,22 @@ if (! $rowdata) {
 	<thead>
 		<tr>
 			<th align="left">PID</th>
-			<th align="left">Êü±Ç¶É</th>
-			<th align="left">ÏÃ¿ô</th>
-			<th align="left">¥µ¥Ö¥¿¥¤¥È¥ë</th>
-			<th align="left">³«»Ï»ş¹ï</th>
-			<th align="left">Áí¼Ü</th>
-			<th align="left">»ş¹ï¤º¤ì</th>
+			<th align="left">æ”¾æ˜ å±€</th>
+			<th align="left">è©±æ•°</th>
+			<th align="left">ã‚µãƒ–ã‚¿ã‚¤ãƒˆãƒ«</th>
+			<th align="left">é–‹å§‹æ™‚åˆ»</th>
+			<th align="left">ç·å°º</th>
+			<th align="left">æ™‚åˆ»ãšã‚Œ</th>
 
 		</tr>
 	</thead>
 
 	<tbody>
 		<?php
-			/* ¥Æ¡¼¥Ö¥ë¤Î¥Ç¡¼¥¿¤ò½ĞÎÏ */
+			/* ãƒ†ãƒ¼ãƒ–ãƒ«ã®ãƒ‡ãƒ¼ã‚¿ã‚’å‡ºåŠ› */
        do {
 				echo("<tr>\n");
-				for ($col = 0; $col < $maxcols; $col++) { /* Îó¤ËÂĞ±ş */
+				for ($col = 0; $col < $maxcols; $col++) { /* åˆ—ã«å¯¾å¿œ */
 					echo("<td>".htmlspecialchars($rowdata[$col])."<br></td>\n");
 				}
 				echo("</tr>\n");
@@ -168,16 +168,16 @@ if (! $rowdata) {
 <?php
 if ($demomode){
 }else{
-//foltia_tvrecord¡¡½ñ¤­¹ş¤ß
-//´ûÂ¸¤¬Í½Ìó¤¢¤Ã¤Æ¡¢¿·Ãå¤¬Á´¶ÉÍ½Ìó¤À¤Ã¤¿¤é
+//foltia_tvrecordã€€æ›¸ãè¾¼ã¿
+//æ—¢å­˜ãŒäºˆç´„ã‚ã£ã¦ã€æ–°ç€ãŒå…¨å±€äºˆç´„ã ã£ãŸã‚‰
 if ($station ==0){
-	//´ûÂ¸¶É¤ò¾Ã¤¹
+	//æ—¢å­˜å±€ã‚’æ¶ˆã™
 		$query = "DELETE 
 FROM foltia_tvrecord  
 WHERE tid = ? 
 ";
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($tid));
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($tid));
 }//endif
 
 	$query = "
@@ -186,22 +186,22 @@ count(*)
 FROM foltia_tvrecord  
 WHERE tid = ?  AND stationid = ? 
 ";
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($tid,$station));
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($tid,$station));
 	$maxrows = $rs->fetchColumn(0);
-		if ($maxrows == 0) { //¿·µ¬ÄÉ²Ã
+		if ($maxrows == 0) { //æ–°è¦è¿½åŠ 
 				$query = "INSERT INTO  foltia_tvrecord  values (?,?,?,?)";
-//				$rs = m_query($con, $query, "DB½ñ¤­¹ş¤ß¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-				$rs = sql_query($con, $query, "DB½ñ¤­¹ş¤ß¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($tid,$station,$bitrate,$usedigital));
-		}else{//½¤Àµ¡¡(¥Ó¥Ã¥È¥ì¡¼¥È)
+//				$rs = m_query($con, $query, "DBæ›¸ãè¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸ");
+				$rs = sql_query($con, $query, "DBæ›¸ãè¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸ",array($tid,$station,$bitrate,$usedigital));
+		}else{//ä¿®æ­£ã€€(ãƒ“ãƒƒãƒˆãƒ¬ãƒ¼ãƒˆ)
 			$query = "UPDATE  foltia_tvrecord  SET 
   bitrate = ? , digital = ? WHERE tid = ? AND stationid = ? ";
-//			$rs = m_query($con, $query, "DB½ñ¤­¹ş¤ß¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-			$rs = sql_query($con, $query, "DB½ñ¤­¹ş¤ß¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array( $bitrate, $usedigital , $tid , $station ));
+//			$rs = m_query($con, $query, "DBæ›¸ãè¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸ");
+			$rs = sql_query($con, $query, "DBæ›¸ãè¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸ",array( $bitrate, $usedigital , $tid , $station ));
 		}
 	
-//¥­¥å¡¼Æş¤ì¥×¥í¥°¥é¥à¤ò¥­¥Ã¥¯
-//°ú¿ô¡¡TID ¥Á¥ã¥ó¥Í¥ëID
+//ã‚­ãƒ¥ãƒ¼å…¥ã‚Œãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’ã‚­ãƒƒã‚¯
+//å¼•æ•°ã€€TID ãƒãƒ£ãƒ³ãƒãƒ«ID
 //echo("$toolpath/perl/addatq.pl $tid $station");
 $oserr = system("$toolpath/perl/addatq.pl $tid $station");
 }//end if demomode

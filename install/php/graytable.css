@@ -31,7 +31,7 @@ tr.reservedtitle{background-color: #DDDDFF;}
 tr.overwraped{background-color: #FF0000;}
 tr.exoverwraped{background-color: #FF00FF;}
 
-/* Á´ÂÎ¶¦ÄÌ */
+/* å…¨ä½“å…±é€š */
 
 ul.topmenu {list-style-type:none;}
 ul.topmenu li {display:inline;}
@@ -39,39 +39,39 @@ ul.topmenu li:after { content: " | "; }
 
 hr {border:1px solid;margin:5px 0px;}
 
-/* foltia:Êü±ÇÍ½Äê */
+/* foltia:æ”¾æ˜ äºˆå®š */
 
-/* ¿·ÈÖÁÈ */
+/* æ–°ç•ªçµ„ */
 
-/* Í½Ìó°ìÍ÷ */
+/* äºˆç´„ä¸€è¦§ */
 
-/* ÈÖÁÈ°ìÍ÷ */
+/* ç•ªçµ„ä¸€è¦§ */
 
-/* Ï¿²èºÑ°ìÍ÷(Ï¿²è½ç¡¦¥¿¥¤¥È¥ë½ç) */
+/* éŒ²ç”»æ¸ˆä¸€è¦§(éŒ²ç”»é †ãƒ»ã‚¿ã‚¤ãƒˆãƒ«é †) */
 
-/* Ï¿²è¥é¥¤¥Ö¥é¥ê */
+/* éŒ²ç”»ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
 
-/* ¾ÜºÙ */
+/* è©³ç´° */
 
-/* ÈÖÁÈÉ½ */
+/* ç•ªçµ„è¡¨ */
 
 ul {list-style-type:none;}
 li {width:90px;background:#ffa;padding:2px;border:1px solid white;line-height:1.1em;}
 
-td#anime {background:#FFC0CB;} /* ¥¢¥Ë¥á¡¦ÆÃ»£ */
-td#kids {background:#FFFFDC;} /* ¥­¥Ã¥º */
-td#sports {background:#D7D7FF;} /* ¥¹¥İ¡¼¥Ä */
-td#etc {background:#F3F3F3;} /* ¤½¤ÎÂ¾ */
-td#news {background:#E3C0FF;} /* ¥Ë¥å¡¼¥¹¡¦ÊóÆ» */
-td#cinema {background:#FAA5FF;} /* ±Ç²è */
-td#education{background-color:#C9C9C9;} /* ¶µ°é */
-td#documentary{background-color:#E8FFE8;} /* ¥É¥­¥å¥á¥ó¥¿¥ê¡¼¡¦¶µÍÜ */
-td#music{background-color: #FFEAD5;} /* ²»³Ú */
-td#variety{background-color: #E0F0CA;} /* ¥Ğ¥é¥¨¥Æ¥£ */
-td#hobby{background-color: #FDF7BB;} /* ¼ñÌ£¡¦¼ÂÍÑ */
-td#information {background:#B6FFFA;} /* ¾ğÊó */
-td#stage{background-color: #FFC0E3;} /* ±é·à */
-td#drama {background:#FFD0FF;} /* ¥É¥é¥Ş */
+td#anime {background:#FFC0CB;} /* ã‚¢ãƒ‹ãƒ¡ãƒ»ç‰¹æ’® */
+td#kids {background:#FFFFDC;} /* ã‚­ãƒƒã‚º */
+td#sports {background:#D7D7FF;} /* ã‚¹ãƒãƒ¼ãƒ„ */
+td#etc {background:#F3F3F3;} /* ãã®ä»– */
+td#news {background:#E3C0FF;} /* ãƒ‹ãƒ¥ãƒ¼ã‚¹ãƒ»å ±é“ */
+td#cinema {background:#FAA5FF;} /* æ˜ ç”» */
+td#education{background-color:#C9C9C9;} /* æ•™è‚² */
+td#documentary{background-color:#E8FFE8;} /* ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ã‚¿ãƒªãƒ¼ãƒ»æ•™é¤Š */
+td#music{background-color: #FFEAD5;} /* éŸ³æ¥½ */
+td#variety{background-color: #E0F0CA;} /* ãƒãƒ©ã‚¨ãƒ†ã‚£ */
+td#hobby{background-color: #FDF7BB;} /* è¶£å‘³ãƒ»å®Ÿç”¨ */
+td#information {background:#B6FFFA;} /* æƒ…å ± */
+td#stage{background-color: #FFC0E3;} /* æ¼”åŠ‡ */
+td#drama {background:#FFD0FF;} /* ãƒ‰ãƒ©ãƒ */
 
 #information:hover, #hobby:hover, #education:hover, #music:hover, #stage:hover, #cinema:hover, #variety:hover, #news:hover, #drama:hover, #documentary:hover, #sports:hover, #kids:hover, #anime:hover, #etc:hover
  {

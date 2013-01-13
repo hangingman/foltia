@@ -5,13 +5,13 @@
 
 mp4player.php
 
-ÌÜÅª
-HTML5 Video Player¤ò»È¤Ã¤ÆMP4¤ÎºÆÀ¸¤ò¤·¤Ş¤¹
+ç›®çš„
+HTML5 Video Playerã‚’ä½¿ã£ã¦MP4ã®å†ç”Ÿã‚’ã—ã¾ã™
 
 based HTML5 Video Player | VideoJS http://videojs.com/ 
 
-°ú¿ô
-f:ºÆÀ¸¥Õ¥¡¥¤¥ëÌ¾
+å¼•æ•°
+f:å†ç”Ÿãƒ•ã‚¡ã‚¤ãƒ«å
 
  DCC-JPL Japan/foltia project
 
@@ -38,7 +38,7 @@ $query = "
 SELECT title,countno,subtitle,foltia_subtitle.tid,PSPfilename  
 FROM foltia_subtitle,foltia_program 
 WHERE pid = ? AND foltia_subtitle.tid = foltia_program.tid";
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($pid));
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($pid));
 $rowdata = $rs->fetch();
 
 //$title = htmlspecialchars(mb_convert_encoding($rowdata[0],"UTF-8", "EUC-JP"));
@@ -46,14 +46,14 @@ $title = htmlspecialchars($rowdata[0]);
 	if ($rowdata[1] == ""){
 	$countno = "";
 	}else{
-	$countno = "Âè".htmlspecialchars($rowdata[1])."ÏÃ";
+	$countno = "ç¬¬".htmlspecialchars($rowdata[1])."è©±";
 	}
 //$subtitle = htmlspecialchars(mb_convert_encoding($rowdata[2],"UTF-8", "EUC-JP"));
 $subtitle = htmlspecialchars($rowdata[2]);
 $tid =  htmlspecialchars($rowdata[3]);
 $filename = htmlspecialchars($rowdata[4]);
 
-}else{//°ú¿ô¤Ê¤·¥¨¥é¡¼½èÍı
+}else{//å¼•æ•°ãªã—ã‚¨ãƒ©ãƒ¼å‡¦ç†
 
 header("Status: 404 Not Found",TRUE,404);
 print "<!DOCTYPE html>
@@ -64,7 +64,7 @@ print "<!DOCTYPE html>
 	exit ;
 }
 
-if ($filename == "") {//¥Õ¥¡¥¤¥ë¤Ê¤·¤Ê¤·¥¨¥é¡¼½èÍı
+if ($filename == "") {//ãƒ•ã‚¡ã‚¤ãƒ«ãªã—ãªã—ã‚¨ãƒ©ãƒ¼å‡¦ç†
 header("Status: 404 Not Found",TRUE,404);
 print "<!DOCTYPE html>
 <html>

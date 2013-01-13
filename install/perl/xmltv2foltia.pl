@@ -5,8 +5,8 @@
 #
 # xmltv2foltia.pl 
 #
-# XMLTV���ܸ��Ƿ�����XML�������ꡢEPG�ǡ����١������������ޤ���
-# ���ʥ��������XMLTV�����Ѥ��Ƥ��ޤ����������ߤ�epgimport.pl����Ѥ��ޤ���
+# XMLTV日本語版形式のXMLを受け取り、EPGデータベースに挿入します。
+# アナログ時代はXMLTVを利用していましたが、現在はepgimport.plを使用します。
 #
 # usage
 # cat /tmp/__27-epg.xml | /home/foltia/perl/xmltv2foltia.pl
@@ -17,19 +17,19 @@
 
 #use LWP::Simple;
 #use Encode qw(from_to);
-#use encoding 'euc-jp', STDIN=>'utf8', STDOUT=>'euc-jp' ; # ɸ������:utf8 
+#use encoding 'euc-jp', STDIN=>'utf8', STDOUT=>'euc-jp' ; # 標準入力:utf8 
 # http://www.lr.pi.titech.ac.jp/~abekawa/perl/perl_unicode.html
 use Jcode;
 #use Data::Dumper; 
 use Time::Local;
 use DBI;
-use DBD::Pg;
+
 use DBD::SQLite;
 
 $path = $0;
 $path =~ s/xmltv2foltia.pl$//i;
 if ($path ne "./"){
-push( @INC, "$path");
+    push( @INC, "$path");
 }
 require "foltialib.pl";
 
@@ -44,16 +44,16 @@ $dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
 while(<>){
 #print $_;
-s/\xef\xbd\x9e/\xe3\x80\x9c/g; #wavedash
-s/\xef\xbc\x8d/\xe2\x88\x92/g; #hyphenminus
-s/&#([0-9A-Fa-f]{2,6});/(chr($1))/eg; #'ͷ����5D&#039;s'�Ȥ��ο��ͻ����б���
+    s/\xef\xbd\x9e/\xe3\x80\x9c/g; #wavedash
+    s/\xef\xbc\x8d/\xe2\x88\x92/g; #hyphenminus
+    s/&#([0-9A-Fa-f]{2,6});/(chr($1))/eg; #'遊戯王5D&#039;s'とかの数値参照対応を
 
-Jcode::convert(\$_,'euc','utf8');
+#Jcode::convert(\$_,'euc','utf8');
 #    from_to($_, "utf8","euc-jp");
-if(/<channel/){
+    if(/<channel/){
 
 #  <channel id="0031.ontvjapan.com">
-#    <display-name lang="ja_JP">�Σȣ�����</display-name>
+#    <display-name lang="ja_JP">ＮＨＫ総合</display-name>
 #    <display-name lang="en">NHK</display-name>
 #  </channel>
 
@@ -68,21 +68,21 @@ if(/<channel/){
 	eval("$_");
 #print Dumper($_) ;
 
-}elsif(/<display-name lang=\"ja_JP/){
+    }elsif(/<display-name lang=\"ja_JP/){
 	s/^[\s]*//gio;
 	chomp();
 	$channel{ja}  = &removetag($_);
 	#print Dumper($_) ;
 	#print "$result  \n";
-}elsif(/<display-name lang=\"en/){
+    }elsif(/<display-name lang=\"en/){
 	s/^[\s]*//gio;
 	chomp();
 	$channel{en}  = &removetag($_);
 	#print Dumper($_) ;
 	#print "$result  \n";
 
-}elsif(/<\/channel>/){
-# foltia �ɥꥹ�Ȥ˺ܤäƤʤ������ɤ��ɲä��ʤ�
+    }elsif(/<\/channel>/){
+# foltia 局リストに載ってない放送局は追加しない
 
 #	print "$channel{id}
 #$channel{ja}
@@ -93,13 +93,13 @@ if(/<channel/){
 	$channel{ja} = "";
 	$channel{en} = "";
 
-}elsif (/<programme /){
+    }elsif (/<programme /){
 
 # <programme start="20051112210000 +0900" stop="20051112225100 +0900" channel="0007.ontvjapan.com">
-#    <title lang="ja_JP">���˥磻�ɷ��</title>
-#    <sub-title lang="ja_JP">�ֵ�̿�Ρ����Ĥ�����۵޽�ư���Ƿ�ʪ�ҳ��θ���ˤʤ��ɻ���?�ռ������δ��ԤȾ�ǯ�����������</sub-title>
-#    <desc lang="ja_JP">������ͺ���ܡ����ܹ����ġ�����ҡ�����εƸ����ƣ���졡����դߤ����дݸ���Ϻ�����ߵ��ᡡ�����Τޤ����</desc>
-#    <category lang="ja_JP">�ɥ��</category>
+#    <title lang="ja_JP">土曜ワイド劇場</title>
+#    <sub-title lang="ja_JP">「救命士・牧田さおり緊急出動！毒劇物災害の現場になぜ刺殺体?意識不明の患者と少年に謎の接点」</sub-title>
+#    <desc lang="ja_JP">寺田敏雄脚本　岡本弘監督　浅野温子　宇崎竜童　遠藤憲一　細川ふみえ　石丸謙二郎　根岸季衣　　そのまんま東</desc>
+#    <category lang="ja_JP">ドラマ</category>
 #    <category lang="en">series</category>
 #  </programme>
 
@@ -109,11 +109,11 @@ if(/<channel/){
 	s/\"[\s]/\";\n/gio;
 	s/[\w]*=/\$item{$&}=/gio;
 	s/\=}=/}=/gio;
-	chomp();
-	eval("$_");
-	#print Dumper($_) ;
-	#print "$item{start}/$item{stop}/$item{channel}\n";
-	
+chomp();
+eval("$_");
+#print Dumper($_) ;
+#print "$item{start}/$item{stop}/$item{channel}\n";
+
 
 }elsif(/<sub-title /){
 	s/^[\s]*//gio;
@@ -127,12 +127,12 @@ if(/<channel/){
 	chomp();
 	$item{title}  = &removetag($_);
 	$titlebackup = $item{title};
-	$item{title} =~ s/��.*?��//g;#�ڲ�ۤȤ�
-	$item{title} =~ s/\[.*?\]//g;#[��]�Ȥ� 
-#	$item{title} =~ s/��.??��//g;#�ڲ�ۤȤ�
-#	$item{title} =~ s/\[.??\]//g;#[��]�Ȥ� 
+	$item{title} =~ s/【.*?】//g;#【解】とか
+	$item{title} =~ s/\[.*?\]//g;#[二]とか 
+#	$item{title} =~ s/【.??】//g;#【解】とか
+#	$item{title} =~ s/\[.??\]//g;#[二]とか 
 	if ($item{title} eq ""){
-		# WOWOW��<title lang="ja_JP">��̵��</title>����ʥߥ����Ȥ����ꡢ�����ȥ����ˤʤäƤ��ޤ����Ȥ�����
+		# WOWOWで<title lang="ja_JP">【無】</title>こんなミニ番組があり、タイトル空白になってしまうことがある
 		$item{title} = $titlebackup;
 	}
 	#print Dumper($_) ;
@@ -150,33 +150,33 @@ if(/<channel/){
 	chomp();
 	$item{category} = &removetag($_);
 	
-	if ($item{category} =~ /����/){
+	if ($item{category} =~ /情報/){
 	$item{category} = "information";
-	}elsif ($item{category} =~ /��̣������/){
+	}elsif ($item{category} =~ /趣味・実用/){
 	$item{category} = "hobby";
-	}elsif ($item{category} =~ /����/){
+	}elsif ($item{category} =~ /教育/){
 	$item{category} = "education";
-	}elsif ($item{category} =~ /����/){
+	}elsif ($item{category} =~ /音楽/){
 	$item{category} = "music";
-	}elsif ($item{category} =~ /���/){
+	}elsif ($item{category} =~ /演劇/){
 	$item{category} = "stage";
-	}elsif ($item{category} =~ /�ǲ�/){
+	}elsif ($item{category} =~ /映画/){
 	$item{category} = "cinema";
-	}elsif ($item{category} =~ /�Х饨�ƥ�/){
+	}elsif ($item{category} =~ /バラエティ/){
 	$item{category} = "variety";
-	}elsif ($item{category} =~ /�˥塼������ƻ/){
+	}elsif ($item{category} =~ /ニュース・報道/){
 	$item{category} = "news";
-	}elsif ($item{category} =~ /�ɥ��/){
+	}elsif ($item{category} =~ /ドラマ/){
 	$item{category} = "drama";
-	}elsif ($item{category} =~ /�ɥ����󥿥꡼������/){
+	}elsif ($item{category} =~ /ドキュメンタリー・教養/){
 	$item{category} = "documentary";
-	}elsif ($item{category} =~ /���ݡ���/){
+	}elsif ($item{category} =~ /スポーツ/){
 	$item{category} = "sports";
-	}elsif ($item{category} =~ /���å�/){
+	}elsif ($item{category} =~ /キッズ/){
 	$item{category} = "kids";
-	}elsif ($item{category} =~ /���˥ᡦ�û�/){
+	}elsif ($item{category} =~ /アニメ・特撮/){
 	$item{category} = "anime";
-	}elsif ($item{category} =~ /����¾/){
+	}elsif ($item{category} =~ /その他/){
 	$item{category} = "etc";
 	}else{
 	$item{category} = "etc";
@@ -187,9 +187,9 @@ if(/<channel/){
 
 
 }elsif(/<\/programme>/){
-#��Ͽ�����ϥ�����
+#登録処理はココで
 #&writelog("xmltv2foltia DEBUG call chkerase $item{'start'},$item{'channel'}");
-#�����	#&chkerase($item{'start'}, $item{'channel'});
+#旧仕様	#&chkerase($item{'start'}, $item{'channel'});
 	&replaceepg($item{'start'}, $item{'channel'},$item{'stop'});
 	if ($item{'subtitle'} ne "" ){
 	    $registdesc = $item{'subtitle'}." ".$item{'desc'};
@@ -223,14 +223,14 @@ if(/<channel/){
 ################
 
 sub replaceepg{
-#�ä�EPG��ID��������ɲä��ޤ�
-my $foltiastarttime = $_[0]; # 14��
+#消すEPGのIDを配列に追加します
+my $foltiastarttime = $_[0]; # 14桁
 my $ontvepgchannel =  $_[1];
-my $foltiaendtime = $_[2]; # 14��
+my $foltiaendtime = $_[2]; # 14桁
 my @data = ();
 
-$foltiastarttime = substr($foltiastarttime,0,12); # 12�塡200508072254
-$foltiaendtime   = substr($foltiaendtime,0,12); # 12�塡200508072355
+$foltiastarttime = substr($foltiastarttime,0,12); # 12桁　200508072254
+$foltiaendtime   = substr($foltiaendtime,0,12); # 12桁　200508072355
 
 $sth = $dbh->prepare($stmt{'xmltv2foltia.replaceepg.1'});
 my $now = &epoch2foldate(time());
@@ -240,7 +240,7 @@ while (@data = $sth->fetchrow_array()) {
 	#&writelog("xmltv2foltia DEBUG push(\@deleteepgid,$data[0]);");
 }#end while 
 
-#��񤭤�ä�
+#上書きを消す
 $sth = $dbh->prepare($stmt{'xmltv2foltia.replaceepg.2'});
 $sth->execute($foltiastarttime , $foltiaendtime , $ontvepgchannel);
 while (@data = $sth->fetchrow_array()) {
@@ -259,17 +259,17 @@ my $desc = $_[4];
 my $category = $_[5];
 
 #Encode::JP::H2Z::z2h(\$string);
-$title = jcode($title)->tr('��-�ڣ�-����-�����������ʡˡ��ܡ��ݡ����������䡩���Ρ��ϡ������Сáѡ�','A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|} ');
-$desc = jcode($desc)->tr('��-�ڣ�-����-�����������ʡˡ��ܡ��ݡ����������䡩���Ρ��ϡ������Сáѡ�','A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|} ');
-#$title = jcode($title)->tr('��-�ڣ�-����-�����������ʡˡ��ܡ��ݡ����������䡩���Ρ��ϡ������Сá�','A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|}');
-#$desc = jcode($desc)->tr('��-�ڣ�-����-�����������ʡˡ��ܡ��ݡ����������䡩���Ρ��ϡ������Сá�','A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|}');
+$title = jcode($title)->tr('Ａ-Ｚａ-ｚ０-９！＃＄％＆（）＊＋，−．／：；＜＝＞？＠［＼］＾＿｀｛｜｝　','A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|} ');
+$desc = jcode($desc)->tr('Ａ-Ｚａ-ｚ０-９！＃＄％＆（）＊＋，−．／：；＜＝＞？＠［＼］＾＿｀｛｜｝　','A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|} ');
+#$title = jcode($title)->tr('Ａ-Ｚａ-ｚ０-９！＃＄％＆（）＊＋，−．／：；＜＝＞？＠［＼］＾＿｀｛｜｝','A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|}');
+#$desc = jcode($desc)->tr('Ａ-Ｚａ-ｚ０-９！＃＄％＆（）＊＋，−．／：；＜＝＞？＠［＼］＾＿｀｛｜｝','A-Za-z0-9!#$%&()*+,-./:;<=>?@[\]^_`{|}');
 
 #&writelog("xmltv2foltia DEBUG $foltiastarttime:$foltiaendtime");
 $foltiastarttime = substr($foltiastarttime,0,12);
 $foltiaendtime = substr($foltiaendtime,0,12);
 
-#if($foltiaendtime > $todaytime){#���Ȥ˾�äƤ��������̵��ﹹ��
-# epgid��AUTOINCREMENT���ѹ����� #2010/8/10 
+#if($foltiaendtime > $todaytime){#電波に乗ってきた情報は無条件更新
+# epgidはAUTOINCREMENTに変更した #2010/8/10 
 #	$sth = $dbh->prepare($stmt{'xmltv2foltia.registdb.1'});
 #		$sth->execute();
 #	 @currentepgid = $sth->fetchrow_array;
@@ -296,7 +296,7 @@ push (@category,$category);
 # &writelog("xmltv2foltia DEBUG $DBQuery");
 #}else{
 #&writelog("xmltv2foltia DEBUG SKIP $foltiastarttime:$foltiaendtime");
-#}#̤�褸��ʤ�����������ʤ�
+#}#未来じゃなければ挿入しない
 
 }#end sub registdb
 
@@ -306,13 +306,13 @@ $dbh->{AutoCommit} = 0;
 my $loopcount = @foltiastarttime;
 my $i = 0;
 
-#���
+#削除
 foreach $delid (@deleteepgid){
 	$sth = $dbh->prepare($stmt{'xmltv2foltia.commitdb.1'});
 	$sth->execute( $delid ) || warn "$delid\n";
 	#&writelog("xmltv2foltia DEBUG $stmt{'xmltv2foltia.commitdb.1'}/$delid");
 }
-#�ɲ�
+#追加
 for ($i=0;$i<$loopcount;$i++){
 	$sth = $dbh->prepare($stmt{'xmltv2foltia.commitdb.2'});
 	$sth->execute( $foltiastarttime[$i],$foltiaendtime[$i], $lengthmin[$i], $channel[$i], $title[$i], $desc[$i], $category[$i]) || warn "error: $foltiastarttime, $foltiaendtime, $lengthmin, $channel, $title, $desc, $category\n";
@@ -325,7 +325,7 @@ $dbh->{AutoCommit} = 1;
 sub removetag(){
 my $str = $_[0];
 
-# HTML����������ɽ�� $tag_regex
+# HTMLタグの正規表現 $tag_regex
 my $tag_regex_ = q{[^"'<>]*(?:"[^"]*"[^"'<>]*|'[^']*'[^"'<>]*)*(?:>|(?=<)|$(?!\n))}; #'}}}}
 my $comment_tag_regex =
     '<!(?:--[^-]*-(?:[^-]+-)*?-(?:[^>-]*(?:-[^>-]+)*?)??)*(?:>|$(?!\n)|--.*$)';

@@ -5,14 +5,14 @@
 #
 #schedulecheck.pl
 #
-#DB¤ÎÍ½Ìó¤«¤éÄê´üÅª¤ËÍ½Ìó¥­¥å¡¼¤òºî¤ê½Ğ¤·¤Ş¤¹
+#DBã®äºˆç´„ã‹ã‚‰å®šæœŸçš„ã«äºˆç´„ã‚­ãƒ¥ãƒ¼ã‚’ä½œã‚Šå‡ºã—ã¾ã™
 #
 # DCC-JPL Japan/foltia project
 #
 #
 
 use DBI;
-use DBD::Pg;
+
 use DBD::SQLite;
 use Schedule::At;
 use Time::Local;
@@ -25,13 +25,13 @@ push( @INC, "$path");
 
 require "foltialib.pl";
 
-#XML¥²¥Ã¥È&¹¹¿·
+#XMLã‚²ãƒƒãƒˆ&æ›´æ–°
 system("$toolpath/perl/getxml2db.pl");
 
-#Í½ÌóÈÖÁÈÃµ¤·
+#äºˆç´„ç•ªçµ„æ¢ã—
 $now = &epoch2foldate(time());
 $now = &epoch2foldate($now);
-$checkrangetime = $now   + 15*60;#15Ê¬¸å¤Ş¤Ç
+$checkrangetime = $now   + 15*60;#15åˆ†å¾Œã¾ã§
 $checkrangetime =  &epoch2foldate($checkrangetime);
 
 $dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
@@ -46,12 +46,12 @@ exit;
     $sth = $dbh->prepare($stmt{'schedulecheck.2'});
 	$sth->execute();
 while (($tid,$stationid  ) = $sth->fetchrow_array()) {
-#¥­¥å¡¼ºÆÅêÆş
+#ã‚­ãƒ¥ãƒ¼å†æŠ•å…¥
 system ("$toolpath/perl/addatq.pl $tid $stationid  ");
 &writelog("schedulecheck  $toolpath/perl/addatq.pl $tid $stationid ");
 
 }#while
 
-#EPG¹¹¿·
+#EPGæ›´æ–°
 system("$toolpath/perl/epgimport.pl");
 }

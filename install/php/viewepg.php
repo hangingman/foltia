@@ -5,12 +5,12 @@
 
 viewepg.php
 
-ÌÜÅª
-ÈÖÁÈÏ¿²èÍ½Ìó¥Ú¡¼¥¸¤òÉ½¼¨¤·¤Ş¤¹¡£
+ç›®çš„
+ç•ªçµ„éŒ²ç”»äºˆç´„ãƒšãƒ¼ã‚¸ã‚’è¡¨ç¤ºã—ã¾ã™ã€‚
 
-¥ª¥×¥·¥ç¥ó
-start:É½¼¨¥¿¥¤¥à¥¹¥¿¥ó¥×(Ex.200512281558)
-¡¡¾ÊÎ¬»ş¡¢¸½ºß»ş¹ï¡£
+ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+start:è¡¨ç¤ºã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—(Ex.200512281558)
+ã€€çœç•¥æ™‚ã€ç¾åœ¨æ™‚åˆ»ã€‚
 
  DCC-JPL Japan/foltia project
 
@@ -18,7 +18,7 @@ start:É½¼¨¥¿¥¤¥à¥¹¥¿¥ó¥×(Ex.200512281558)
 
 include("./foltialib.php");
 $con = m_connect();
-$epgviewstyle = 1;// 0¤À¤È½ªÎ»»ş¹ï¤âÉ½¼¨
+$epgviewstyle = 1;// 0ã ã¨çµ‚äº†æ™‚åˆ»ã‚‚è¡¨ç¤º
 if ($useenvironmentpolicy == 1){
 	if (!isset($_SERVER['PHP_AUTH_USER'])) {
 	    header("WWW-Authenticate: Basic realm=\"foltia\"");
@@ -36,7 +36,7 @@ if ($useenvironmentpolicy == 1){
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="stylesheet" type="text/css" href="graytable.css"> 
-<title>foltia:EPGÈÖÁÈÉ½</title>
+<title>foltia:EPGç•ªçµ„è¡¨</title>
 </head>
 <?php
 $start = getgetnumform("start");
@@ -54,14 +54,14 @@ if ($start == ""){
 <?php 
 printhtmlpageheader();
 ?>
-<p align="left"><font color="#494949" size="6">EPGÈÖÁÈÉ½</font></p>
-<p align="left"><a href="./m.php">ÈÖÁÈ¼êÆ°Í½Ìó</a ></p>
+<p align="left"><font color="#494949" size="6">EPGç•ªçµ„è¡¨</font></p>
+<p align="left"><a href="./m.php">ç•ªçµ„æ‰‹å‹•äºˆç´„</a ></p>
 <hr size="4">
-<p align="left">EPGÈÖÁÈÉ½¤òÉ½¼¨¤·¤Ş¤¹¡£
+<p align="left">EPGç•ªçµ„è¡¨ã‚’è¡¨ç¤ºã—ã¾ã™ã€‚
 <?php 
 
 ///////////////////////////////////////////////////////////////////////////
-//¸½ºß¤ÎÆüÉÕ¾ğÊó¼èÆÀ
+//ç¾åœ¨ã®æ—¥ä»˜æƒ…å ±å–å¾—
 $begin =  date("YmdHi");
 $beginyear =   substr($begin,0,4);
 $beginmonth =   substr($begin,4,2);
@@ -84,10 +84,10 @@ $yesterday = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday -1
 $dayyesterday = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday -1 , $startyear));
 
 /////////////////////////////////////////////////////////// 
-//»ş¹ï¤ÎÎÙ¤Î¡ÚÍâÆü¡Û¤ÎÊÑ¿ô
+//æ™‚åˆ»ã®éš£ã®ã€ç¿Œæ—¥ã€‘ã®å¤‰æ•°
 $tomorrow  = date ("YmdHi",mktime($starthour , 0 , 0, $startmonth , $startday +1 , $startyear));   
 /////////////////////////////////////////////////////////// 
-//EPGÈÖÁÈÉ½¤ò¼èÆÀ¤·¤Ş¤¹¤Î¤È¤Ê¤ê¤ÎÆüÉÕ¤Î¡ÚÍËÆü¡Û¤ÎÊÑ¿ô
+//EPGç•ªçµ„è¡¨ã‚’å–å¾—ã—ã¾ã™ã®ã¨ãªã‚Šã®æ—¥ä»˜ã®ã€æ›œæ—¥ã€‘ã®å¤‰æ•°
 $daytomorrow  = date ("m/d(D)",mktime($starthour , 0 , 0, $startmonth , $startday +1 , $startyear));
 ///////////////////////////////////////////////////////////
 
@@ -101,7 +101,7 @@ $today2359 = date ("YmdHi",mktime(23 , 59 , 0, $startmonth , $startday , $starty
 
 
 ///////////////////////////////////////////////////////////////////
-//£±½µ´ÖÊ¬¤Î¥Ú¡¼¥¸¤Î¥ê¥ó¥¯¤ÎÊÑ¿ô
+//ï¼‘é€±é–“åˆ†ã®ãƒšãƒ¼ã‚¸ã®ãƒªãƒ³ã‚¯ã®å¤‰æ•°
 $day0after = date ("YmdHi",mktime($beginhour , 0 , 0, $beginmonth , $beginday  , $beginyear));
 $day0 = date ("m/d(D)",mktime($beginhour , 0 , 0, $beginmonth , $beginday  , $beginyear));
 $day1after = date ("YmdHi",mktime($beginhour , 0 , 0, $beginmonth , $beginday +1 , $beginyear));
@@ -121,13 +121,13 @@ $day7 = date ("m/d(D)",mktime($beginhour , 0 , 0, $beginmonth , $beginday +7 , $
 ///////////////////////////////////////////////////////////////////
 
 
-//É½¼¨¶ÉÁªÄê
+//è¡¨ç¤ºå±€é¸å®š
 // $page = 1 ~ 
 $maxdisplay = 8;
 
 $query = "SELECT count(*) FROM foltia_station WHERE \"ontvcode\" LIKE '%ontvjapan%'";
-//$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+//$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 $maxrows = $rs->fetchColumn(0);
 if ($maxrows > $maxdisplay){
 	$pages = ceil($maxrows / $maxdisplay) ;
@@ -150,19 +150,19 @@ if (($page == "")|| ($page <= 0) ){
 
 
 /////////////////////////////////////////////////////////////////
-//É½¼¨ÉôÊ¬
+//è¡¨ç¤ºéƒ¨åˆ†
 $navigationbar =  "
 
-[<A HREF=\"./viewepg.php\">¸½ºß</A>] | 
-<A HREF=\"./viewepg.php?p=$page&start=$yesterday\">$dayyesterday [Á°Æü]</A> | 
-ÅöÆü(
-<A HREF=\"./viewepg.php?p=$page&start=$today0400\">4:00</A>¡¡
-<A HREF=\"./viewepg.php?p=$page&start=$today0800\">8:00</A>¡¡
-<A HREF=\"./viewepg.php?p=$page&start=$today1200\">12:00</A>¡¡
-<A HREF=\"./viewepg.php?p=$page&start=$today1600\">16:00</A>¡¡
-<A HREF=\"./viewepg.php?p=$page&start=$today2000\">20:00</A>¡¡
+[<A HREF=\"./viewepg.php\">ç¾åœ¨</A>] | 
+<A HREF=\"./viewepg.php?p=$page&start=$yesterday\">$dayyesterday [å‰æ—¥]</A> | 
+å½“æ—¥(
+<A HREF=\"./viewepg.php?p=$page&start=$today0400\">4:00</A>ã€€
+<A HREF=\"./viewepg.php?p=$page&start=$today0800\">8:00</A>ã€€
+<A HREF=\"./viewepg.php?p=$page&start=$today1200\">12:00</A>ã€€
+<A HREF=\"./viewepg.php?p=$page&start=$today1600\">16:00</A>ã€€
+<A HREF=\"./viewepg.php?p=$page&start=$today2000\">20:00</A>ã€€
 <A HREF=\"./viewepg.php?p=$page&start=$today2359\">24:00</A>) | 
-<A HREF=\"./viewepg.php?p=$page&start=$tomorrow\">$daytomorrow [ÍâÆü]</A>
+<A HREF=\"./viewepg.php?p=$page&start=$tomorrow\">$daytomorrow [ç¿Œæ—¥]</A>
 <br>
  | 
 <A HREF=\"./viewepg.php?p=$page&start=$day0after\">$day0</A> | 
@@ -177,26 +177,26 @@ print "$navigationbar";
 ///////////////////////////////////////////////////////////////////
 
 if ($maxrows > $maxdisplay){
-//Ê£¿ô¥Ú¡¼¥¸
+//è¤‡æ•°ãƒšãƒ¼ã‚¸
 //$pages = ceil($maxrows / $maxdisplay) ;
 if ($page > 1){
 	$beforepage = $page - 1;
-	print "<a href = \"./viewepg.php?p=$beforepage&start=$start\">¢«</A>";
+	print "<a href = \"./viewepg.php?p=$beforepage&start=$start\">â†</A>";
 }
 
-print " $page / $pages (ÊüÁ÷¶É) ";
+print " $page / $pages (æ”¾é€å±€) ";
 for ($i=1;$i<=$pages;$i++){
-	print "<a href = \"./viewepg.php?p=$i&start=$start\">$i</a>¡¦";
+	print "<a href = \"./viewepg.php?p=$i&start=$start\">$i</a>ãƒ»";
 }
 
 
 if ($page < $pages){
 	$nextpage = $page + 1;
-	print "<a href = \"./viewepg.php?p=$nextpage&start=$start\">¢ª</a>";
+	print "<a href = \"./viewepg.php?p=$nextpage&start=$start\">â†’</a>";
 }
 }
-//¥³¥³¤«¤é¿·¥³¡¼¥É
-//¡¦¶É¥ê¥¹¥È
+//ã‚³ã‚³ã‹ã‚‰æ–°ã‚³ãƒ¼ãƒ‰
+//ãƒ»å±€ãƒªã‚¹ãƒˆ
 $query = "SELECT stationid, stationname, stationrecch, ontvcode 
 FROM foltia_station 
 WHERE \"ontvcode\" LIKE '%ontvjapan%'  
@@ -204,14 +204,14 @@ ORDER BY stationid ASC , stationrecch
 LIMIT ? OFFSET ?
 ";
 
-//$slistrs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-$slistrs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($maxdisplay,$offset));
+//$slistrs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+$slistrs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($maxdisplay,$offset));
 while ($rowdata = $slistrs->fetch()) {
 	$stationhash[] = $rowdata[3];
 	$snames[] = $rowdata[1]; // headder
 }
 
-//¡¦»ş´Ö¤ÈÁ´½çÈÖ¤Î¥Ï¥Ã¥·¥åºî¤ë
+//ãƒ»æ™‚é–“ã¨å…¨é †ç•ªã®ãƒãƒƒã‚·ãƒ¥ä½œã‚‹
 $epgstart = $start ;
 $epgend = calcendtime($start , (8*60));
 
@@ -228,14 +228,14 @@ AND startdatetime  >= ?
 AND startdatetime  < ? 
 ORDER BY foltia_epg.startdatetime  ASC	";
 
-//$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($maxdisplay,$offset,$start,$epgend));
+//$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($maxdisplay,$offset,$start,$epgend));
 
 //print "$query<br>\n";
 
 $rowdata = $rs->fetch();
 if (! $rowdata) {
-//ÈÖÁÈ¥Ç¡¼¥¿¤¬¤Ê¤¤
+//ç•ªçµ„ãƒ‡ãƒ¼ã‚¿ãŒãªã„
 $colmnums = 2;
 }else{
 	$colmnums = 0;
@@ -247,7 +247,7 @@ $colmnums = 2;
 }
 //print "colmnums $colmnums <br>\n";
 
-//¡¦¶É¤´¤È¤Ë½Ä¤ËÇÛÎóÆş¤ì¤Æ¤¤¤¯
+//ãƒ»å±€ã”ã¨ã«ç¸¦ã«é…åˆ—å…¥ã‚Œã¦ã„ã
 foreach ($stationhash as $stationname) {
 $epgstart = $start ;
 $epgend = calcendtime($start , (8*60));
@@ -260,12 +260,12 @@ startdatetime  < ?
 ORDER BY foltia_epg.startdatetime  ASC
 	";
 
-//	$statiodh = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$statiodh = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($stationname,$epgstart,$epgend));
+//	$statiodh = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$statiodh = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($stationname,$epgstart,$epgend));
 	$stationrowdata = $statiodh->fetch();
 	if (! $stationrowdata) {
-		//print("ÈÖÁÈ¥Ç¡¼¥¿¤¬¤¢¤ê¤Ş¤»¤ó<BR>");
-		$item[0]["$stationname"] =  ">ÈÖÁÈ¥Ç¡¼¥¿¤¬¤¢¤ê¤Ş¤»¤ó";
+		//print("ç•ªçµ„ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Šã¾ã›ã‚“<BR>");
+		$item[0]["$stationname"] =  ">ç•ªçµ„ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Šã¾ã›ã‚“";
 }else{
 		do {
 $printstarttime = substr($stationrowdata[0],8,2) . ":" .  substr($stationrowdata[0],10,2);
@@ -291,7 +291,7 @@ if (isset($timetablehash["$stationrowdata[0]"])){
 //print "$stationname $stationrowdata[0] [$number] $printstarttime $title $desc<br>\n";
 }else{
 	$number = 0;
-//print "$stationname $stationrowdata[0] ¸½ºßÈÖÁÈ $printstarttime $title $desc<br>\n";
+//print "$stationname $stationrowdata[0] ç¾åœ¨ç•ªçµ„ $printstarttime $title $desc<br>\n";
 }
 if ($epgcategory == ""){
 $item["$number"]["$stationname"] =  " onClick=\"location = './reserveepg.php?epgid=$epgid'\"><span id=\"epgstarttime\">$printstarttime</span> <A HREF=\"./reserveepg.php?epgid=$epgid\"><span id=\"epgtitle\">$title</span></A> <span id=\"epgdesc\">$desc</span>";
@@ -302,15 +302,15 @@ $item["$number"]["$stationname"] =  " id=\"$epgcategory\" onClick=\"location = '
 		} while ($stationrowdata = $statiodh->fetch());
 }//if
 
-//¡¦¶É¤´¤È¤Ë´Ö³Ö·èÄê
-//$item[$i][NHK] ¤Ï¥Ì¥ë¤«¤É¤¦¤«È½Äê
-$dataplace = 0 ; //½é´ü²½
+//ãƒ»å±€ã”ã¨ã«é–“éš”æ±ºå®š
+//$item[$i][NHK] ã¯ãƒŒãƒ«ã‹ã©ã†ã‹åˆ¤å®š
+$dataplace = 0 ; //åˆæœŸåŒ–
 $rowspan = 0;
 
 for ($i=1; $i <= $colmnums ; $i++){
-	if ($i === ($colmnums )){//ºÇ½ª¹Ô
+	if ($i === ($colmnums )){//æœ€çµ‚è¡Œ
 		$rowspan = $i - $dataplace ;
-		//¤½¤·¤Æ¼«Ê¬¼«¿È¤Ë¥¿¥°¤ò
+		//ãã—ã¦è‡ªåˆ†è‡ªèº«ã«ã‚¿ã‚°ã‚’
 			//if ((!isset($item[$i][$stationname])) && ($item[$i][$stationname] == "")){
 			if (!isset($item[$i][$stationname])){
 			$item[$i][$stationname]  = null ;
@@ -328,12 +328,12 @@ for ($i=1; $i <= $colmnums ; $i++){
 
 //	}elseif ((!isset($item[$i][$stationname]))&&($item[$i][$stationname] == "")){
 	}elseif (!isset($item[$i][$stationname])){
-	//¥Ì¥ë¤Ê¤é
+	//ãƒŒãƒ«ãªã‚‰
 		//$item[$i][$stationname]  =  $item[$i][$stationname] ;
 		$item[$i][$stationname]  =  null ;
 //		$item[$i][$stationname]  =  "<td><br></td>" ;
 	}else{
-	//¤Ê¤ó¤«Æş¤Ã¤Æ¤ë¤Ê¤é
+	//ãªã‚“ã‹å…¥ã£ã¦ã‚‹ãªã‚‰
 		$rowspan = $i - $dataplace;
 		$itemDataplaceStationname = null;
 		if (isset($item[$dataplace][$stationname])){
@@ -349,16 +349,16 @@ for ($i=1; $i <= $colmnums ; $i++){
 		
 	}
 }//for
-}// end of for://¡¦¶É¤´¤È¤Ë½Ä¤ËÇÛÎóÆş¤ì¤Æ¤¤¤¯
+}// end of for://ãƒ»å±€ã”ã¨ã«ç¸¦ã«é…åˆ—å…¥ã‚Œã¦ã„ã
 
-//¡¦¥Æ¡¼¥Ö¥ë¥ì¥ó¥À¥ê¥ó¥°
+//ãƒ»ãƒ†ãƒ¼ãƒ–ãƒ«ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°
 print "<table>\n<tr>";
 
-//¥Ø¥Ã¥À
+//ãƒ˜ãƒƒãƒ€
 foreach ($snames as $s) {
 	print "<th>".htmlspecialchars($s)."</th>" ;
 }
-//ËÜÂÎ
+//æœ¬ä½“
 for ($l = 0 ;$l <  $colmnums; $l++){
 	print "<tr>";
 	foreach ($stationhash as $stationname) {
@@ -371,23 +371,23 @@ print "</table>\n";
 print "<p align=\"left\"> $navigationbar </p>";
 ?>
 <hr>
-ËŞÎã
+å‡¡ä¾‹
 <table>
 <tr>
-<td id="information">¾ğÊó</td>
-<td id="anime">¥¢¥Ë¥á¡¦ÆÃ»£</td>
-<td id="news">¥Ë¥å¡¼¥¹¡¦ÊóÆ»</td>
-<td id="drama">¥É¥é¥Ş</td>
-<td id="variety">¥Ğ¥é¥¨¥Æ¥£</td>
-<td id="documentary">¥É¥­¥å¥á¥ó¥¿¥ê¡¼¡¦¶µÍÜ</td>
-<td id="education">¶µ°é</td>
-<td id="music">²»³Ú</td>
-<td id="cinema">±Ç²è</td>
-<td id="hobby">¼ñÌ£¡¦¼ÂÍÑ</td>
-<td id="kids">¥­¥Ã¥º</td>
-<td id="sports">¥¹¥İ¡¼¥Ä</td>
-<td id="etc">¤½¤ÎÂ¾</td>
-<td id="stage">±é·à</td>
+<td id="information">æƒ…å ±</td>
+<td id="anime">ã‚¢ãƒ‹ãƒ¡ãƒ»ç‰¹æ’®</td>
+<td id="news">ãƒ‹ãƒ¥ãƒ¼ã‚¹ãƒ»å ±é“</td>
+<td id="drama">ãƒ‰ãƒ©ãƒ</td>
+<td id="variety">ãƒãƒ©ã‚¨ãƒ†ã‚£</td>
+<td id="documentary">ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ã‚¿ãƒªãƒ¼ãƒ»æ•™é¤Š</td>
+<td id="education">æ•™è‚²</td>
+<td id="music">éŸ³æ¥½</td>
+<td id="cinema">æ˜ ç”»</td>
+<td id="hobby">è¶£å‘³ãƒ»å®Ÿç”¨</td>
+<td id="kids">ã‚­ãƒƒã‚º</td>
+<td id="sports">ã‚¹ãƒãƒ¼ãƒ„</td>
+<td id="etc">ãã®ä»–</td>
+<td id="stage">æ¼”åŠ‡</td>
 
 </tr>
 </table>

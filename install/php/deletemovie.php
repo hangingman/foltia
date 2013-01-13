@@ -5,11 +5,11 @@
 
 deletemovie.php
 
-ÌÜÅª
-»ØÄê¤µ¤ì¤¿ÈÖÁÈ¤òºï½ü½èÍı¤·¤Ş¤¹¡£
+ç›®çš„
+æŒ‡å®šã•ã‚ŒãŸç•ªçµ„ã‚’å‰Šé™¤å‡¦ç†ã—ã¾ã™ã€‚
 
-°ú¿ô
-showplaylist.php¤«¤éºï½üÂĞ¾İmpeg2¥ê¥¹¥È¡£
+å¼•æ•°
+showplaylist.phpã‹ã‚‰å‰Šé™¤å¯¾è±¡mpeg2ãƒªã‚¹ãƒˆã€‚
 
  DCC-JPL Japan/foltia project
 
@@ -36,7 +36,7 @@ login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="stylesheet" type="text/css" href="graytable.css"> 
-<title>foltia:¥Õ¥¡¥¤¥ëºï½ü</title>
+<title>foltia:ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤</title>
 </head>
 
 <?php
@@ -51,32 +51,32 @@ $delete = $_POST['delete'];
 <?php 
 printhtmlpageheader();
 ?>
-  <p align="left"><font color="#494949" size="6">Ï¿²èÈÖÁÈºï½ü</font></p>
+  <p align="left"><font color="#494949" size="6">éŒ²ç”»ç•ªçµ„å‰Šé™¤</font></p>
   <hr size="4">
 <?php
 if ($delete == ""){
-	print "<p align=\"left\">ºï½üÈÖÁÈ¤Ï¤¢¤ê¤Ş¤»¤ó¡£</p>\n";
+	print "<p align=\"left\">å‰Šé™¤ç•ªçµ„ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚</p>\n";
 }else{
 
 
 $userclass = getuserclass($con);
 if ( $userclass <= 1){
 
-print "<p align=\"left\">¼¡¤ÎÈÖÁÈ¤òºï½ü¤·¤Ş¤·¤¿¡£</p>
+print "<p align=\"left\">æ¬¡ã®ç•ªçµ„ã‚’å‰Šé™¤ã—ã¾ã—ãŸã€‚</p>
   <table BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"2\" WIDTH=\"100%\">
 	<thead>
 		<tr>
-			<th align=\"left\">¥Õ¥¡¥¤¥ëÌ¾</th>
-			<th align=\"left\">¥¿¥¤¥È¥ë</th>
-			<th align=\"left\">ÏÃ¿ô</th>
-			<th align=\"left\">¥µ¥Ö¥¿¥¤</th>
+			<th align=\"left\">ãƒ•ã‚¡ã‚¤ãƒ«å</th>
+			<th align=\"left\">ã‚¿ã‚¤ãƒˆãƒ«</th>
+			<th align=\"left\">è©±æ•°</th>
+			<th align=\"left\">ã‚µãƒ–ã‚¿ã‚¤</th>
 		</tr>
 	</thead>
 	<tbody>";
 
 foreach ($delete as $fName) {
 
-if( preg_match('/.MP4$/',$fName)){   //³ÈÄ¥»Ò¤¬MP4¤Ê¤éÏ¿²è¥é¥¤¥Ö¥é¥êÈÖÁÈ¸ÄÊÌÉ½¼¨¤Ç¤Îºï½ü (showlibc.php)
+if( preg_match('/.MP4$/',$fName)){   //æ‹¡å¼µå­ãŒMP4ãªã‚‰éŒ²ç”»ãƒ©ã‚¤ãƒ–ãƒ©ãƒªç•ªçµ„å€‹åˆ¥è¡¨ç¤ºã§ã®å‰Šé™¤ (showlibc.php)
 $query = "
 SELECT
 foltia_subtitle.pspfilename,
@@ -87,7 +87,7 @@ FROM foltia_subtitle,foltia_program
 WHERE  foltia_subtitle.tid = foltia_program.tid AND  foltia_subtitle.pspfilename = ? 
 LIMIT 1";
 
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($fName));
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($fName));
 $rall = $rs->fetch();
 $rowdata = $rall[0];
 
@@ -112,7 +112,7 @@ print "</td>
 </tr>\n
 ";
 
-//DB¤«¤éºï½ü
+//DBã‹ã‚‰å‰Šé™¤
 if ($demomode){
 }else{
 
@@ -120,14 +120,14 @@ $query = "
 DELETE  FROM  foltia_mp4files
 WHERE mp4filename = ?
 ";
-//$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($fName));
+//$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($fName));
 
-//ºï½ü½èÍı
+//å‰Šé™¤å‡¦ç†
 $oserr = system("$toolpath/perl/deletemovie.pl $fName");
 }//end if demomode
 
-}else{       //³ÈÄ¥»Ò¤¬MP4°Ê³°¤Ê¤é Ï¿²è°ìÍ÷¡ÊÏ¿²è½ç¡¦ÈÖÁÈ½ç¡Ë¤Îºï½ü(showplaylist.php)
+}else{       //æ‹¡å¼µå­ãŒMP4ä»¥å¤–ãªã‚‰ éŒ²ç”»ä¸€è¦§ï¼ˆéŒ²ç”»é †ãƒ»ç•ªçµ„é †ï¼‰ã®å‰Šé™¤(showplaylist.php)
 
 $query = "
 SELECT foltia_program.tid,foltia_program.title,foltia_subtitle.countno,foltia_subtitle.subtitle 
@@ -136,9 +136,9 @@ WHERE foltia_program.tid = foltia_subtitle.tid
 AND foltia_subtitle.m2pfilename =  ? 
 ";
 
-//$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-//$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($filesplit[0] ,$filesplit[1]));
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($fName));
+//$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+//$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($filesplit[0] ,$filesplit[1]));
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($fName));
 				$rall = $rs->fetchAll();
 				$rowdata = $rall[0];
 $title = $rowdata[1];
@@ -167,7 +167,7 @@ print "</td>
 </tr>\n
 ";
 
-//DB¤«¤éºï½ü
+//DBã‹ã‚‰å‰Šé™¤
 if ($demomode){
 }else{
 
@@ -175,21 +175,21 @@ $query = "
 DELETE  FROM  foltia_m2pfiles  
 WHERE m2pfilename = ? 
 ";
-//$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($fName));
+//$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($fName));
 
-//ºï½ü½èÍı
+//å‰Šé™¤å‡¦ç†
 $oserr = system("$toolpath/perl/deletemovie.pl $fName");
 }//end if demomode
 
-}//end if .MP4³ÈÄ¥»ÒÊ¬´ô
+}//end if .MP4æ‹¡å¼µå­åˆ†å²
 
 }//foreach
 
 print "	</tbody></table>\n";
 
-}else{//¸¢¸Â¤Ê¤·
-	print "<p align=\"left\">¥Õ¥¡¥¤¥ëºï½ü¸¢¸Â¤¬¤¢¤ê¤Ş¤»¤ó¡£</p>";
+}else{//æ¨©é™ãªã—
+	print "<p align=\"left\">ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤æ¨©é™ãŒã‚ã‚Šã¾ã›ã‚“ã€‚</p>";
 }
 }//if $delete == ""
 ?>

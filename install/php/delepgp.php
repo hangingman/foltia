@@ -5,12 +5,12 @@
 
 delepgp.php
 
-ÌÜÅª
-EPGÏ¿²èÍ½Ìó¤ÎÍ½Ìó²ò½ü¤ò¹Ô¤¤¤Ş¤¹
+ç›®çš„
+EPGéŒ²ç”»äºˆç´„ã®äºˆç´„è§£é™¤ã‚’è¡Œã„ã¾ã™
 
-°ú¿ô
-pid:¥×¥í¥°¥é¥àID
-delflag:³ÎÇ§¥Õ¥é¥°
+å¼•æ•°
+pid:ãƒ—ãƒ­ã‚°ãƒ©ãƒ ID
+delflag:ç¢ºèªãƒ•ãƒ©ã‚°
 
  DCC-JPL Japan/foltia project
 
@@ -48,13 +48,13 @@ login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
 
 $pid = getgetnumform(pid);
 		if ($pid == "") {
-		die_exit("ÈÖÁÈ¤¬¤¢¤ê¤Ş¤»¤ó<BR>");
+		die_exit("ç•ªçµ„ãŒã‚ã‚Šã¾ã›ã‚“<BR>");
 		}
 
 $now = date("YmdHi");   
 
 
-//¥¿¥¤¥È¥ë¼èÆÀ
+//ã‚¿ã‚¤ãƒˆãƒ«å–å¾—
 $query = "
 SELECT 
 foltia_subtitle.pid  , 
@@ -72,13 +72,13 @@ foltia_station.stationid = foltia_subtitle.stationid AND
 foltia_subtitle.pid = ? 
  ";
 
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($pid));
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($pid));
 	$rowdata = $rs->fetch();
 	$rs->closeCursor();
 
 		if (!is_array($rowdata) || empty($rowdata)) {
-			die_exit("ÅĞÏ¿ÈÖÁÈ¤¬¤¢¤ê¤Ş¤»¤ó<BR>");
+			die_exit("ç™»éŒ²ç•ªçµ„ãŒã‚ã‚Šã¾ã›ã‚“<BR>");
 		}
 
 		$pid = htmlspecialchars($rowdata[0]);
@@ -95,56 +95,56 @@ foltia_subtitle.pid = ?
 $delflag = getgetnumform(delflag);
 ?>
 
-  <p align="left"><font color="#494949" size="6">EPGÍ½Ìó²ò½ü</font></p>
+  <p align="left"><font color="#494949" size="6">EPGäºˆç´„è§£é™¤</font></p>
   <hr size="4">
 <?php
 if ($delflag == "1") {
-	//»ş¹ï³ÎÇ§
+	//æ™‚åˆ»ç¢ºèª
 	if ($now < $starttime ){
-		print "EPGÍ½Ìó¡Ö".$subtitle."¡×¤ÎÏ¿²èÍ½Ìó¤ò²ò½ü¤·¤Ş¤·¤¿¡£ <br>\n";
+		print "EPGäºˆç´„ã€Œ".$subtitle."ã€ã®éŒ²ç”»äºˆç´„ã‚’è§£é™¤ã—ã¾ã—ãŸã€‚ <br>\n";
 		
-		//ºï½ü½èÍı
+		//å‰Šé™¤å‡¦ç†
 		if (($demomode) || ($protectmode) ){
-		//demomode¤äprotectmode¤Ê¤é¤Ê¤Ë¤â¤·¤Ê¤¤
+		//demomodeã‚„protectmodeãªã‚‰ãªã«ã‚‚ã—ãªã„
 		}else{
-		//¥­¥å¡¼¹¹¿·
+		//ã‚­ãƒ¥ãƒ¼æ›´æ–°
 //		$oserr = system("$toolpath/perl/addatq.pl 0 $stationid ");
 		$oserr = system("$toolpath/perl/addpidatq.pl $pid ");
-		//DBºï½ü
+		//DBå‰Šé™¤
 		$query = "
 		DELETE  
 		FROM  foltia_subtitle  
 		WHERE foltia_subtitle.pid = ? AND  foltia_subtitle.tid = 0 ";
-//			$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-			$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($pid));
+//			$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+			$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($pid));
 		}
 	}else{
-		print "<strong>²áµîÈÖÁÈ¤ÏÍ½Ìóºï½ü½ĞÍè¤Ş¤»¤ó¡£</strong>";
+		print "<strong>éå»ç•ªçµ„ã¯äºˆç´„å‰Šé™¤å‡ºæ¥ã¾ã›ã‚“ã€‚</strong>";
 	}//end if
 
-}else{//delflag¤¬1¤¸¤ã¤Ê¤±¤ì¤Ğ
+}else{//delflagãŒ1ã˜ã‚ƒãªã‘ã‚Œã°
 
-	//»ş¹ï³ÎÇ§
+	//æ™‚åˆ»ç¢ºèª
 	if ($now < $starttime ){
-	print "EPGÍ½Ìó¡Ö".$subtitle."¡×¤ÎÏ¿²èÍ½Ìó¤ò²ò½ü¤·¤Ş¤¹¡£ <br>\n";
+	print "EPGäºˆç´„ã€Œ".$subtitle."ã€ã®éŒ²ç”»äºˆç´„ã‚’è§£é™¤ã—ã¾ã™ã€‚ <br>\n";
 
 	print "<form name=\"deletereserve\" method=\"GET\" action=\"delepgp.php\">
-	<input type=\"submit\" value=\"Í½Ìó²ò½ü\" >\n";
+	<input type=\"submit\" value=\"äºˆç´„è§£é™¤\" >\n";
 	}else{
-	print "<strong>²áµîÈÖÁÈ¤ÏÍ½Ìóºï½ü½ĞÍè¤Ş¤»¤ó¡£</strong>";
+	print "<strong>éå»ç•ªçµ„ã¯äºˆç´„å‰Šé™¤å‡ºæ¥ã¾ã›ã‚“ã€‚</strong>";
 	}//end if
 }
 
 print "<br>
 	<table width=\"100%\" border=\"0\">
-    <tr><td>ÊüÁ÷¶É</td><td>$stationjname</td></tr>
-    <tr><td>ÊüÁ÷³«»Ï</td><td>$startprinttime</td></tr>
-    <tr><td>ÊüÁ÷½ªÎ»</td><td>$endprinttime</td></tr>
-    <tr><td>¼Ü(Ê¬)</td><td>$lengthmin</td></tr>
-    <tr><td>ÊüÁ÷¥Á¥ã¥ó¥Í¥ë</td><td>$recch</td></tr>
-    <tr><td>ÈÖÁÈÌ¾</td><td>$subtitle</td></tr>
-    <tr><td>ÈÖÁÈID</td><td>$pid</td></tr>
-    <tr><td>¶É¥³¡¼¥É</td><td>$stationid</td></tr>
+    <tr><td>æ”¾é€å±€</td><td>$stationjname</td></tr>
+    <tr><td>æ”¾é€é–‹å§‹</td><td>$startprinttime</td></tr>
+    <tr><td>æ”¾é€çµ‚äº†</td><td>$endprinttime</td></tr>
+    <tr><td>å°º(åˆ†)</td><td>$lengthmin</td></tr>
+    <tr><td>æ”¾é€ãƒãƒ£ãƒ³ãƒãƒ«</td><td>$recch</td></tr>
+    <tr><td>ç•ªçµ„å</td><td>$subtitle</td></tr>
+    <tr><td>ç•ªçµ„ID</td><td>$pid</td></tr>
+    <tr><td>å±€ã‚³ãƒ¼ãƒ‰</td><td>$stationid</td></tr>
 	
 </table>
 ";

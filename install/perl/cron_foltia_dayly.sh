@@ -3,25 +3,25 @@
 # Anime recording system foltia
 # http://www.dcc-jpl.com/soft/foltia/
 #
-# Äê´ü¼Â¹Ô¥¸¥ç¥Öµ­½Ò¥Õ¥¡¥¤¥ë¡£
-#cron¤Ç1Æü1²óÄøÅÙ¼Â¹Ô¤¹¤ë¤È¤è¤¤¤Ç¤·¤ç¤¦¡£
+# å®šæœŸå®Ÿè¡Œã‚¸ãƒ§ãƒ–è¨˜è¿°ãƒ•ã‚¡ã‚¤ãƒ«ã€‚
+#cronã§1æ—¥1å›ç¨‹åº¦å®Ÿè¡Œã™ã‚‹ã¨ã‚ˆã„ã§ã—ã‚‡ã†ã€‚
 #
 # DCC-JPL Japan/foltia project
 #
 
-#¥Ç¥¸¥¿¥ëÊüÁ÷¤«¤é°ì½µ´ÖÊ¬¤ÎEPG¤ò¼èÆÀ
+#ãƒ‡ã‚¸ã‚¿ãƒ«æ”¾é€ã‹ã‚‰ä¸€é€±é–“åˆ†ã®EPGã‚’å–å¾—
 /home/foltia/perl/epgimport.pl long
 
-# XMLTV¤ò¤Ä¤«¤Ã¤ÆEPGÈÖÁÈÉ½¥¤¥ó¥İ¡¼¥È(¥¢¥Ê¥í¥°ÀìÍÑµì»ÅÍÍ)
+# XMLTVã‚’ã¤ã‹ã£ã¦EPGç•ªçµ„è¡¨ã‚¤ãƒ³ãƒãƒ¼ãƒˆ(ã‚¢ãƒŠãƒ­ã‚°å°‚ç”¨æ—§ä»•æ§˜)
 #
 #/usr/bin/perl  /usr/bin/tv_grab_jp | /home/foltia/perl/xmltv2foltia.pl
-# 2¤Ä¤Î¶ÉÀßÄê»È¤¦¤è¤¦¤Ê¾ì¹ç
+# 2ã¤ã®å±€è¨­å®šä½¿ã†ã‚ˆã†ãªå ´åˆ
 #/usr/bin/perl  /usr/bin/tv_grab_jp --config-file ~/.xmltv/tv_grab_jp.conf.jcom  | /home/foltia/perl/xmltv2foltia.pl
 #/usr/bin/perl  /usr/bin/tv_grab_jp --config-file ~/.xmltv/tv_grab_jp.conf.tvk  | /home/foltia/perl/xmltv2foltia.pl
 
-#Ï¿²è¥Õ¥¡¥¤¥ë¤È¥Æ¡¼¥Ö¥ë¤ÎÀ°¹çÀ­¤ò¹¹¿·
+#éŒ²ç”»ãƒ•ã‚¡ã‚¤ãƒ«ã¨ãƒ†ãƒ¼ãƒ–ãƒ«ã®æ•´åˆæ€§ã‚’æ›´æ–°
 /home/foltia/perl/updatem2pfiletable.pl
 
-#2½µ´ÖÀè¤Î¥¹¥±¥¸¥å¡¼¥ë¤ò¼èÆÀ
+#2é€±é–“å…ˆã®ã‚¹ã‚±ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’å–å¾—
 /home/foltia/perl/getxml2db.pl long
 

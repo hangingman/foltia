@@ -5,16 +5,16 @@
 
 m.php
 
-ÌÜÅª
-ÈÖÁÈÉ½¤òÍÑ¤¤¤Ê¤¤´°Á´¼êÆ°Ï¿²èÍ½Ìó¤ò¼Â¸½¤·¤Ş¤¹¡£
-¥±¡¼¥¿¥¤¤Ê¤É¤ÇÍ½Ìó¤¹¤ë¾ì¹ç¤â¤³¤³¤ò³«¤¯¤È¤è¤µ¤½¤¦¤Ç¤¹¡£
+ç›®çš„
+ç•ªçµ„è¡¨ã‚’ç”¨ã„ãªã„å®Œå…¨æ‰‹å‹•éŒ²ç”»äºˆç´„ã‚’å®Ÿç¾ã—ã¾ã™ã€‚
+ã‚±ãƒ¼ã‚¿ã‚¤ãªã©ã§äºˆç´„ã™ã‚‹å ´åˆã‚‚ã“ã“ã‚’é–‹ãã¨ã‚ˆã•ãã†ã§ã™ã€‚
 
-°ú¿ô
-startdate:Ï¿²è³«»ÏÆü (ex.20051207)
-starttime:Ï¿²è³«»Ï»ş¹ï (ex.2304)
-lengthmin:Ï¿²è¼ÜÊ¬
-recstid:Ï¿²è¶ÉID
-pname:ÈÖÁÈÌ¾
+å¼•æ•°
+startdate:éŒ²ç”»é–‹å§‹æ—¥ (ex.20051207)
+starttime:éŒ²ç”»é–‹å§‹æ™‚åˆ» (ex.2304)
+lengthmin:éŒ²ç”»å°ºåˆ†
+recstid:éŒ²ç”»å±€ID
+pname:ç•ªçµ„å
 
  DCC-JPL Japan/foltia project
 
@@ -37,7 +37,7 @@ $now = date("YmdHi");
 $today = date("Ymd");
 $nowdate = date("Hi",(mktime(date("G"),date("i")+8,date("s"),date("m"),date("d"),date("Y"))));
 $errflag = 0;
-$pname = "¼êÆ°Ï¿²è";
+$pname = "æ‰‹å‹•éŒ²ç”»";
 
 function printtitle(){
 print "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">
@@ -47,7 +47,7 @@ print "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/T
 <meta http-equiv=\"Content-Style-Type\" content=\"text/css\">
 <link rel=\"stylesheet\" type=\"text/css\" href=\"graytable.css\"> ";
 
-print "<title>foltia:ÈÖÁÈ¼êÆ°Í½Ìó</title>
+print "<title>foltia:ç•ªçµ„æ‰‹å‹•äºˆç´„</title>
 </head>";
 }//end function printtitle()
 
@@ -60,16 +60,16 @@ printhtmlpageheader();
 ?>
 </div>
 <p align="left"><font color="#494949" size="6">
-ÈÖÁÈ¼êÆ°Í½Ìó
+ç•ªçµ„æ‰‹å‹•äºˆç´„
 </font></p>
 <hr size="4">
 <?php
-//ÃÍ¼èÆÀ
+//å€¤å–å¾—
 $startdate = getgetnumform(startdate);
 $starttime = getgetnumform(starttime);
 
 if (($startdate == "") || ($starttime == "")){
-	print "<p align=\"left\">Á´¹àÌÜ¼êÆ°»ØÄê¤ÇÍ½Ìó¤·¤Ş¤¹¡£</p>\n";
+	print "<p align=\"left\">å…¨é …ç›®æ‰‹å‹•æŒ‡å®šã§äºˆç´„ã—ã¾ã™ã€‚</p>\n";
 }else{
 
 $lengthmin = getgetnumform(lengthmin);
@@ -77,60 +77,60 @@ $recstid = getgetnumform(recstid);
 $pname = getgetform(pname);
 //$usedigital = getgetnumform(usedigital);
 
-//³ÎÇ§
+//ç¢ºèª
 $startdatetime = "$startdate"."$starttime";
 if (foldatevalidation($startdatetime)){
 //print "valid";
 }else{
 	$errflag = 1;
-	$errmsg = "ÆüÉÕ¤¬ÉÔÀµ¤Ç¤¹¡£";
+	$errmsg = "æ—¥ä»˜ãŒä¸æ­£ã§ã™ã€‚";
 }
 if ($lengthmin < 361){
 //valid
 }else{
 	$errflag = 2;
-	$errmsg = "Ï¿²è»ş´Ö¤Ï360Ê¬¤Ç¶èÀÚ¤Ã¤Æ¤¯¤À¤µ¤¤¡£";
+	$errmsg = "éŒ²ç”»æ™‚é–“ã¯360åˆ†ã§åŒºåˆ‡ã£ã¦ãã ã•ã„ã€‚";
 }
-//¶É³ÎÇ§
+//å±€ç¢ºèª
 if ($recstid != ""){
 $query = "
 SELECT stationname  
 FROM foltia_station 
 WHERE stationid = ? ";
-//	$stationvalid = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$stationvalid = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($recstid));
+//	$stationvalid = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$stationvalid = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($recstid));
 		$recstationname = $stationvalid->fetch();
 		$stationvalid->closeCursor();
 
 		if (!is_array($recstationname) || empty($recstationname)) {
 		$errflag = 3;
-		$errmsg = "ÊüÁ÷¶ÉÀßÄê¤¬°Û¾ï¤Ç¤¹¡£";
+		$errmsg = "æ”¾é€å±€è¨­å®šãŒç•°å¸¸ã§ã™ã€‚";
 	}
 }else{
 	$errflag = 2;
-	$errmsg = "Ï¿²è¤¹¤ë¶É¤òÀßÄê¤·¤Æ¤¯¤À¤µ¤¤¡£";
+	$errmsg = "éŒ²ç”»ã™ã‚‹å±€ã‚’è¨­å®šã—ã¦ãã ã•ã„ã€‚";
 }
-//¥Ç¥¸¥¿¥ëÍ¥Àè
+//ãƒ‡ã‚¸ã‚¿ãƒ«å„ªå…ˆ
 /*if ($usedigital == 1){
 }else{
 	$usedigital = 0;
 }
 */
-//Àµ¤·¤±¤ì¤Ğ
+//æ­£ã—ã‘ã‚Œã°
 if ($errflag == 0){
-//½ÅÊ£¤¬¤¢¤ë¤«?
-//Ì¤¥Á¥§¥Ã¥¯
+//é‡è¤‡ãŒã‚ã‚‹ã‹?
+//æœªãƒã‚§ãƒƒã‚¯
 
-//¥Ç¥â¥â¡¼¥É¤¸¤ã¤Ê¤«¤Ã¤¿¤é½ñ¤­¹ş¤ß
+//ãƒ‡ãƒ¢ãƒ¢ãƒ¼ãƒ‰ã˜ã‚ƒãªã‹ã£ãŸã‚‰æ›¸ãè¾¼ã¿
 $enddatetime = calcendtime($startdatetime,$lengthmin);
 
-//»ş¹ï¸¡ºº
+//æ™‚åˆ»æ¤œæŸ»
 if (($startdatetime > $now ) && ($enddatetime > $now ) && ($enddatetime  > $startdatetime ) ){
 
-//min pid¤òÃµ¤¹
+//min pidã‚’æ¢ã™
 $query = "SELECT min(pid) FROM  foltia_subtitle ";
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 	$rowdata = $rs->fetch();
 	$rs->closeCursor();
 	if (! $rowdata) {
@@ -143,10 +143,10 @@ $query = "SELECT min(pid) FROM  foltia_subtitle ";
 			$insertpid-- ;
 		}
 	}
-// next ÏÃ¿ô¤òÃµ¤¹
+// next è©±æ•°ã‚’æ¢ã™
 $query = "SELECT max(countno) FROM  foltia_subtitle WHERE tid = 0";
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 			$rowdata = $rs->fetch();
 			$rs->closeCursor();
 			if (! $rowdata) {
@@ -168,59 +168,59 @@ if ($demomode){
 startdatetime ,enddatetime ,startoffset , lengthmin , epgaddedby )  
 	values ( ?,'0',?,?,?,?,?,'0',?,?)";
 	
-//		$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-//print "¡ÚDEBUG¡Û$insertpid,$recstid,$nextcno,$pname,$startdatetime,$enddatetime ,$lengthmin,$memberid <br>\n";
-		$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($insertpid,$recstid,$nextcno,$pname,$startdatetime,$enddatetime ,$lengthmin,$memberid));
+//		$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+//print "ã€DEBUGã€‘$insertpid,$recstid,$nextcno,$pname,$startdatetime,$enddatetime ,$lengthmin,$memberid <br>\n";
+		$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($insertpid,$recstid,$nextcno,$pname,$startdatetime,$enddatetime ,$lengthmin,$memberid));
 	
 	//addatq.pl
-	//¥­¥å¡¼Æş¤ì¥×¥í¥°¥é¥à¤ò¥­¥Ã¥¯
-	//°ú¿ô¡¡TID ¥Á¥ã¥ó¥Í¥ëID
+	//ã‚­ãƒ¥ãƒ¼å…¥ã‚Œãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’ã‚­ãƒƒã‚¯
+	//å¼•æ•°ã€€TID ãƒãƒ£ãƒ³ãƒãƒ«ID
 	//echo("$toolpath/perl/addatq.pl $tid $station");
 	//exec("$toolpath/perl/addatq.pl 0 0");
 	$oserr = system("$toolpath/perl/addatq.pl 0 0");
 	}else{
-		print "EPGÍ½Ìó¤ò¹Ô¤¦¸¢¸Â¤¬¤¢¤ê¤Ş¤»¤ó¡£";
+		print "EPGäºˆç´„ã‚’è¡Œã†æ¨©é™ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
 	}// end if $userclass <= 2
 }//end if demomode
 
-print "²¼µ­Í½Ìó¤ò´°Î»¤¤¤¿¤·¤Ş¤·¤¿¡£<br>";
-//·ë²ÌÉ½¼¨
-print "Ï¿²è³«»Ï:";
+print "ä¸‹è¨˜äºˆç´„ã‚’å®Œäº†ã„ãŸã—ã¾ã—ãŸã€‚<br>";
+//çµæœè¡¨ç¤º
+print "éŒ²ç”»é–‹å§‹:";
 echo foldate2print($startdatetime);
 print "<br />
-Ï¿²è½ªÎ»:";
+éŒ²ç”»çµ‚äº†:";
 echo foldate2print($enddatetime);
 print "<br />
-Ï¿²è¼Ü: $lengthmin Ê¬<br />
-Ï¿²è¶É:$recstationname[0]<br />
-ÈÖÁÈÌ¾:$pname<br />
+éŒ²ç”»å°º: $lengthmin åˆ†<br />
+éŒ²ç”»å±€:$recstationname[0]<br />
+ç•ªçµ„å:$pname<br />
 ";
 exit();
 }else{
-print "»ş¹ï¤¬ÉÔÀµ¤Ê¤¿¤á¤ËÍ½Ìó¤Ç¤­¤Ş¤»¤ó¤Ç¤·¤¿¡£ <br>";
+print "æ™‚åˆ»ãŒä¸æ­£ãªãŸã‚ã«äºˆç´„ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚ <br>";
 
 }
 
 
 }else{
-	print "ÆşÎÏ¹àÌÜ¤¬Àµ¤·¤¯¤Ê¤µ¤½¤¦¤Ç¤¹¡£$errmsg<br />\n";
+	print "å…¥åŠ›é …ç›®ãŒæ­£ã—ããªã•ãã†ã§ã™ã€‚$errmsg<br />\n";
 }
 
-}//¡¡½é²óÉ½¼¨¤«¥Ç¡¼¥¿½èÍı¤«
+}//ã€€åˆå›è¡¨ç¤ºã‹ãƒ‡ãƒ¼ã‚¿å‡¦ç†ã‹
 ?>
 <form id="record" name="record" method="get" action="./m.php" autocomplete="off">
-  <p>ÊüÁ÷Æü:
+  <p>æ”¾é€æ—¥:
     <input name="startdate" type="text" id="startdate" size="9" value="<?php print "$startdate"; ?>" />
-  Ç¯·îÆü Ex.<?php print "$today";?></p>
-  <p>Ï¿²è³«»Ï»ş¹ï:
+  å¹´æœˆæ—¥ Ex.<?php print "$today";?></p>
+  <p>éŒ²ç”»é–‹å§‹æ™‚åˆ»:
     <input name="starttime" type="text" id="starttime" size="5" value="<?php print "$starttime"; ?>" />
-  »şÊ¬ Ex.<?php print "$nowdate"; ?>  </p>
+  æ™‚åˆ† Ex.<?php print "$nowdate"; ?>  </p>
   <p>
-    Ï¿²è¼Ü:
+    éŒ²ç”»å°º:
       <input name="lengthmin" type="text" id="lengthmin" size="4" value="<?php print "$lengthmin"; ?>"/> 
-    Ê¬ (ºÇÄ¹360Ê¬) </p>
+    åˆ† (æœ€é•·360åˆ†) </p>
 
-  <p>Ï¿²è¶É:
+  <p>éŒ²ç”»å±€:
 <?php
 $query = "
 SELECT stationid as x, stationname, stationrecch, digitalch 
@@ -236,40 +236,40 @@ FROM  foltia_station
 WHERE stationrecch = -2 
 ORDER BY x ASC";
 
-$stations = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+$stations = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 $rowdata = $stations->fetch();
 
 if ($rowdata) {
 			   do {
 			if ($recstid == $rowdata[0]){
-			print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" checked />  $rowdata[1] ($rowdata[2]ch / $rowdata[3]ch)¡¡\n";
+			print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" checked />  $rowdata[1] ($rowdata[2]ch / $rowdata[3]ch)ã€€\n";
 			}elseif( $rowdata[2] == -2){
-			print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" checked />  $rowdata[1] (<!-- $rowdata[2]ch / $rowdata[3]ch -->RADIKO)¡¡\n";
+			print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" checked />  $rowdata[1] (<!-- $rowdata[2]ch / $rowdata[3]ch -->RADIKO)ã€€\n";
 			}else{
-				print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" />  $rowdata[1] ($rowdata[2]ch / $rowdata[3]ch)¡¡\n";
+				print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" />  $rowdata[1] ($rowdata[2]ch / $rowdata[3]ch)ã€€\n";
 			}
 			   } while ($rowdata = $stations->fetch());
 }else{
-print "ÊüÁ÷¶É¥Ç¡¼¥¿¥Ù¡¼¥¹¤¬Àµ¤·¤¯¥»¥Ã¥È¥¢¥Ã¥×¤µ¤ì¤Æ¤¤¤Ş¤»¤ó¡£Ï¿²è²ÄÇ½¶É¤¬¤¢¤ê¤Ş¤»¤ó";
+print "æ”¾é€å±€ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãŒæ­£ã—ãã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚éŒ²ç”»å¯èƒ½å±€ãŒã‚ã‚Šã¾ã›ã‚“";
 }
 $stations->closeCursor();
-//³°ÉôÆşÎÏ¥Á¥ã¥ó¥Í¥ë
+//å¤–éƒ¨å…¥åŠ›ãƒãƒ£ãƒ³ãƒãƒ«
 $query = "
 SELECT stationid as x ,stationname,stationrecch 
 FROM foltia_station 
 WHERE stationrecch > -2 AND stationrecch < 1 
 ORDER BY x ASC";
 
-//	$stations = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$stations = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+//	$stations = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$stations = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 $rowdata = $stations->fetch();	
 if ($rowdata) {
 	do {
 		if ($rowdata[0] != 0){
 			if ($recstid == $rowdata[0]){
-			print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" checked />  $rowdata[1]¡¡\n";
+			print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" checked />  $rowdata[1]ã€€\n";
 			}else{
-				print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" />  $rowdata[1]¡¡\n";
+				print " <input name=\"recstid\" type=\"radio\" value=\"$rowdata[0]\" />  $rowdata[1]ã€€\n";
 			}
 
 		}
@@ -277,34 +277,34 @@ if ($rowdata) {
 }
 $stations->closeCursor();
 /*
-print "<p>¥Ç¥¸¥¿¥ëÏ¿²è¤òÍ¥Àè:";
+print "<p>ãƒ‡ã‚¸ã‚¿ãƒ«éŒ²ç”»ã‚’å„ªå…ˆ:";
 
 if ($usedigital == 1){
-print "<input name="useditial" type="radio" value="1" selected />  ¤¹¤ë¡¡
-<input name="useditial" type="radio" value="0" />  ¤·¤Ê¤¤¡¡
+print "<input name="useditial" type="radio" value="1" selected />  ã™ã‚‹ã€€
+<input name="useditial" type="radio" value="0" />  ã—ãªã„ã€€
 ";
 }else{
-print "<input name="useditial" type="radio" value="1" />  ¤¹¤ë¡¡
-<input name="useditial" type="radio" value="0" selected />  ¤·¤Ê¤¤¡¡
+print "<input name="useditial" type="radio" value="1" />  ã™ã‚‹ã€€
+<input name="useditial" type="radio" value="0" selected />  ã—ãªã„ã€€
 ";
 }
 */
 ?>
-  <p>ÈÖÁÈÌ¾:
+  <p>ç•ªçµ„å:
     <input name="pname" type="text" id="pname" value="<?php print "$pname"; ?>" />
   </p>
 <!-- <p  style='background-color: #DDDDFF'>
-·«¤êÊÖ¤·»ØÄê-Ëè½µ°Ê²¼¤ÎÍËÆü¤ËÏ¿²è:
-<input name="weeklyloop" type="radio" value="128" />  ÆüÍË¡¡
-<input name="weeklyloop" type="radio" value="64" />  ·îÍË¡¡
-<input name="weeklyloop" type="radio" value="32" />  ²ĞÍË¡¡
-<input name="weeklyloop" type="radio" value="16" />  ¿åÍË¡¡
-<input name="weeklyloop" type="radio" value="8" />  ÌÚÍË¡¡
-<input name="weeklyloop" type="radio" value="4" />  ¶âÍË¡¡
-<input name="weeklyloop" type="radio" value="2" />  ÅÚÍË¡¡
+ç¹°ã‚Šè¿”ã—æŒ‡å®š-æ¯é€±ä»¥ä¸‹ã®æ›œæ—¥ã«éŒ²ç”»:
+<input name="weeklyloop" type="radio" value="128" />  æ—¥æ›œã€€
+<input name="weeklyloop" type="radio" value="64" />  æœˆæ›œã€€
+<input name="weeklyloop" type="radio" value="32" />  ç«æ›œã€€
+<input name="weeklyloop" type="radio" value="16" />  æ°´æ›œã€€
+<input name="weeklyloop" type="radio" value="8" />  æœ¨æ›œã€€
+<input name="weeklyloop" type="radio" value="4" />  é‡‘æ›œã€€
+<input name="weeklyloop" type="radio" value="2" />  åœŸæ›œã€€
  </p>
  -->
-<input type="submit" value="Í½Ìó">¡¡
+<input type="submit" value="äºˆç´„">ã€€
 </form>
 
 </body>

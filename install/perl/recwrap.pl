@@ -5,15 +5,15 @@
 # http://www.dcc-jpl.com/soft/foltia/
 #
 #
-#¥ì¥³¡¼¥Ç¥£¥ó¥°¥é¥Ã¥Ñ
-#at¤«¤é¸Æ¤Ó½Ğ¤µ¤ì¡¢tvrecording¤ò¸Æ¤Ó½Ğ¤·Ï¿²è
-#¤½¤Î¤¢¤ÈMPEG4¥È¥é¥³¥ó¤ò¸Æ¤Ó½Ğ¤¹
+#ãƒ¬ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ãƒ©ãƒƒãƒ‘
+#atã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã€tvrecordingã‚’å‘¼ã³å‡ºã—éŒ²ç”»
+#ãã®ã‚ã¨MPEG4ãƒˆãƒ©ã‚³ãƒ³ã‚’å‘¼ã³å‡ºã™
 #
 # DCC-JPL Japan/foltia project
 #
 
 use DBI;
-use DBD::Pg;
+
 use DBD::SQLite;
 use Schedule::At;
 use Time::Local;
@@ -26,10 +26,10 @@ push( @INC, "$path");
 }
 
 require "foltialib.pl";
-#°ú¤­¿ô¤¬¥¢¥ë¤«?
+#å¼•ãæ•°ãŒã‚¢ãƒ«ã‹?
 $recch = $ARGV[0] ;
 if ($recch eq "" ){
-	#°ú¤­¿ô¤Ê¤·¤Ç¼Â¹Ô¤µ¤ì¤¿¤é¡¢½ªÎ»
+	#å¼•ãæ•°ãªã—ã§å®Ÿè¡Œã•ã‚ŒãŸã‚‰ã€çµ‚äº†
 	print "usage recwrap.pl  ch length(sec) [bitrate(5)] [TID] [NO] [PID]\n";
 	exit;
 }
@@ -45,17 +45,17 @@ $usedigital = $ARGV[7] ;
 $digitalstationband = $ARGV[8] ;
 $digitalch= $ARGV[9] ;
 
-#DB½é´ü²½
+#DBåˆæœŸåŒ–
 $dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
 
 if ($usedigital == 1){
-	$extension = ".m2t";#TS¤Î³ÈÄ¥»Ò
+	$extension = ".m2t";#TSã®æ‹¡å¼µå­
 }else{
-	$extension = ".m2p";#MPEG2¤Î³ÈÄ¥»Ò
+	$extension = ".m2p";#MPEG2ã®æ‹¡å¼µå­
 }
-if ($recch == -2 ){ #¥é¥¸¥ª¶É
-	$extension = ".aac";#MPEG2¤Î³ÈÄ¥»Ò
+if ($recch == -2 ){ #ãƒ©ã‚¸ã‚ªå±€
+	$extension = ".aac";#MPEG2ã®æ‹¡å¼µå­
 }
 
 $outputfile = strftime("%Y%m%d-%H%M", localtime(time + 60));
@@ -79,21 +79,21 @@ if ($tid == 0){
 	}
 }
 
-if ($recch == -2 ){ #¥é¥¸¥ª¶É
-# stationID¤«¤éradiko¼±ÊÌ»Ò¤ò¼èÆÀ
+if ($recch == -2 ){ #ãƒ©ã‚¸ã‚ªå±€
+# stationIDã‹ã‚‰radikoè­˜åˆ¥å­ã‚’å–å¾—
 $sth = $dbh->prepare($stmt{'recwrap.8'});
 $sth->execute($stationid);
  @stationline= $sth->fetchrow_array;
 $radikostationname = $stationline[3];
 my $starttime = time();
 my $endepochtime = time() + $reclength;
-#Ï¿²»
+#éŒ²éŸ³
 $oserr = system("$toolpath/perl/digitalradiorecording.pl $radikostationname $reclength $outputfilename");
 $oserr = $oserr / 256;
 &writelog("recwrap DEBUG radiko rec finished. $oserr");
-#¥µ¡¼¥Ğ¥Ó¥¸¡¼¤ÇÂ¨»à¤·¤Æ¤Ê¤¤¤«¸¡½Ğ
+#ã‚µãƒ¼ãƒãƒ“ã‚¸ãƒ¼ã§å³æ­»ã—ã¦ãªã„ã‹æ¤œå‡º
 $now = time();
-if ($now < $endepochtime){ #½ªÎ»Í½Äê¤è¤êÁ°¤ËÏ¿²»¥×¥í¥»¥¹¤¬Ìá¤Ã¤Æ¤­¤¿¤Ê¤é
+if ($now < $endepochtime){ #çµ‚äº†äºˆå®šã‚ˆã‚Šå‰ã«éŒ²éŸ³ãƒ—ãƒ­ã‚»ã‚¹ãŒæˆ»ã£ã¦ããŸãªã‚‰
 &writelog("recwrap radiko rec failed,will be retry. NOW:$now PlanedEnd:$endepochtime");
 
 my $retrycounter = 0;
@@ -116,8 +116,8 @@ my $recfilepath;
 		unlink("$recfilepath");
 		&writelog("recwrap DEBUG delete $recfilepath");
 	}
-	#Ï¿²»
-	$oserr = system("$toolpath/perl/digitalradiorecording.pl $radikostationname $reclength $outputfilename N");#µ¯Æ°wait¤Ê¤·¤Ç
+	#éŒ²éŸ³
+	$oserr = system("$toolpath/perl/digitalradiorecording.pl $radikostationname $reclength $outputfilename N");#èµ·å‹•waitãªã—ã§
 	$oserr = $oserr / 256;
 	&writelog("recwrap DEBUG radiko rec retry finished. $oserr");
 
@@ -130,24 +130,24 @@ my $recfilepath;
 } # if 
 
 
-# aac¥Õ¥¡¥¤¥ëÌ¾¤òfoltia_subtitlePID¥ì¥³¡¼¥É¤Ë½ñ¤­¹ş¤ß
+# aacãƒ•ã‚¡ã‚¤ãƒ«åã‚’foltia_subtitlePIDãƒ¬ã‚³ãƒ¼ãƒ‰ã«æ›¸ãè¾¼ã¿
 $sth = $dbh->prepare($stmt{'recwrap.1'});
 $sth->execute($outputfilename, $pid);
 &writelog("recwrap DEBUG UPDATEDB $stmt{'recwrap.1'}");
 &changefilestatus($pid,$FILESTATUSTRANSCODEMP4BOX);
 
-# aac¥Õ¥¡¥¤¥ëÌ¾¤òfoltia_m2pfilesPID¥ì¥³¡¼¥É¤Ë½ñ¤­¹ş¤ß
+# aacãƒ•ã‚¡ã‚¤ãƒ«åã‚’foltia_m2pfilesPIDãƒ¬ã‚³ãƒ¼ãƒ‰ã«æ›¸ãè¾¼ã¿
 $sth = $dbh->prepare($stmt{'recwrap.2'});
 $sth->execute($outputfilename);
 &writelog("recwrap DEBUG UPDATEDB $stmt{'recwrap.2'}");
 
 
-}else{#Èó¥é¥¸¥ª¶É¤Ê¤é
+}else{#éãƒ©ã‚¸ã‚ªå±€ãªã‚‰
 
 if ($usedigital == 1){
-#¥Ç¥¸¥¿¥ë¤Ê¤é
+#ãƒ‡ã‚¸ã‚¿ãƒ«ãªã‚‰
 &writelog("recwrap RECSTART DIGITAL $digitalstationband $digitalch $reclength $stationid 0 $outputfilename $tid $countno friio");
-#Ï¿²è
+#éŒ²ç”»
     $starttime = time();
 $oserr = system("$toolpath/perl/digitaltvrecording.pl $digitalstationband $digitalch $reclength $stationid 0 $outputfilename $tid $countno friio");
 $oserr = $oserr / 256;
@@ -157,7 +157,7 @@ if ($oserr == 1){
 	exit;
 }elsif ($oserr == 2){
 	&writelog("recwrap ERR 2:Device busy;retry.");
-	&continuousrecordingcheck;#¤â¤¦¤¹¤°½ª¤ï¤ëÈÖÁÈ¤òkill
+	&continuousrecordingcheck;#ã‚‚ã†ã™ãçµ‚ã‚ã‚‹ç•ªçµ„ã‚’kill
 	sleep(2);
 	$oserr = system("$toolpath/perl/digitaltvrecording.pl $digitalstationband $digitalch $reclength $stationid N $outputfilename $tid $countno friio");
 	$oserr = $oserr / 256;
@@ -174,26 +174,26 @@ exit ;
 }
 }else{ # NOT $usedigital == 1
 	if ($recunits > 0 ){
-	#¥ê¥â¥³¥óÁàºî
-	# $haveirdaunit = 1;¥ê¥â¥³¥ó¤Ä¤Ê¤¤¤Ç¤ë¤«¤É¤¦¤«³ÎÇ§
+	#ãƒªãƒ¢ã‚³ãƒ³æ“ä½œ
+	# $haveirdaunit = 1;ãƒªãƒ¢ã‚³ãƒ³ã¤ãªã„ã§ã‚‹ã‹ã©ã†ã‹ç¢ºèª
 	if ($haveirdaunit == 1){
-	# Ï¿²è¥Á¥ã¥ó¥Í¥ë¤¬0¤Ê¤é
+	# éŒ²ç”»ãƒãƒ£ãƒ³ãƒãƒ«ãŒ0ãªã‚‰
 		if ($recch == 0){
-	# &¤Ä¤±¤ÆÈóÆ±´ü¤Çchangestbch.pl¸Æ¤Ó½Ğ¤·
+	# &ã¤ã‘ã¦éåŒæœŸã§changestbch.plå‘¼ã³å‡ºã—
 		&writelog("recwrap Call Change STB CH :$pid");
 		system ("$toolpath/perl/changestbch.pl $pid &");
 		}#end if
 	}#end if
 	
 	if($recch == -10){
-	#Èó¼õ¿®¶É¤Ê¤é
+	#éå—ä¿¡å±€ãªã‚‰
 		&writelog("recwrap Not recordable channel;exit:PID $pid");
 		exit;
 		}#end if
-	# ¥¢¥Ê¥í¥°Ï¿²è
+	# ã‚¢ãƒŠãƒ­ã‚°éŒ²ç”»
 	&writelog("recwrap RECSTART $recch $reclength 0 $outputfilename $bitrate $tid $countno $pid $usedigital $digitalstationband $digitalch");
 	
-	#Ï¿²è
+	#éŒ²ç”»
 	#system("$toolpath/perl/tvrecording.pl $recch $reclength 0 $outputfile $bitrate $tid $countno");
 		$starttime = time();
 	
@@ -203,9 +203,9 @@ exit ;
 		&writelog("recwrap ABORT recfile exist. [$outputfilename] $recch $reclength 0 0 $bitrate $tid $countno $pid");
 		exit;
 	}
-#¥Ç¥Ğ¥¤¥¹¥Ó¥¸¡¼¤ÇÂ¨»à¤·¤Æ¤Ê¤¤¤«¸¡½Ğ
+#ãƒ‡ãƒã‚¤ã‚¹ãƒ“ã‚¸ãƒ¼ã§å³æ­»ã—ã¦ãªã„ã‹æ¤œå‡º
 $now = time();
-	if ($now < $starttime + 100){ #Ï¿²è¥×¥í¥»¥¹µ¯Æ°¤·¤Æ¤«¤é100ÉÃ°ÊÆâ¤ËÌá¤Ã¤Æ¤­¤Æ¤¿¤é
+	if ($now < $starttime + 100){ #éŒ²ç”»ãƒ—ãƒ­ã‚»ã‚¹èµ·å‹•ã—ã¦ã‹ã‚‰100ç§’ä»¥å†…ã«æˆ»ã£ã¦ãã¦ãŸã‚‰
     $retrycounter = 0;
 		while($now < $starttime + 100){
 			if($retrycounter >= 5){
@@ -213,7 +213,7 @@ $now = time();
 				last;
 			}
 		&writelog("recwrap retry recording $now $starttime");
-		#¥¢¥Ê¥í¥°Ï¿²è
+		#ã‚¢ãƒŠãƒ­ã‚°éŒ²ç”»
 	$starttime = time();
 if($outputfilename =~ /.m2t$/){
 	$outputfilename =~ s/.m2t$/.m2p/;
@@ -232,44 +232,44 @@ $oserr = $oserr / 256;
 	&writelog("recwrap RECEND [$outputfilename] $recch $reclength 0 0 $bitrate $tid $countno $pid");
 
 	}#end if $recunits > 0
-}#endif #¥Ç¥¸¥¿¥ëÍ¥Àè¥Õ¥é¥°
+}#endif #ãƒ‡ã‚¸ã‚¿ãƒ«å„ªå…ˆãƒ•ãƒ©ã‚°
 
 
-# m2p¥Õ¥¡¥¤¥ëÌ¾¤òPID¥ì¥³¡¼¥É¤Ë½ñ¤­¹ş¤ß
+# m2pãƒ•ã‚¡ã‚¤ãƒ«åã‚’PIDãƒ¬ã‚³ãƒ¼ãƒ‰ã«æ›¸ãè¾¼ã¿
 $sth = $dbh->prepare($stmt{'recwrap.1'});
 $sth->execute($outputfilename, $pid);
 &writelog("recwrap DEBUG UPDATEDB $stmt{'recwrap.1'}");
 &changefilestatus($pid,$FILESTATUSRECEND);
 
-# m2p¥Õ¥¡¥¤¥ëÌ¾¤òPID¥ì¥³¡¼¥É¤Ë½ñ¤­¹ş¤ß
+# m2pãƒ•ã‚¡ã‚¤ãƒ«åã‚’PIDãƒ¬ã‚³ãƒ¼ãƒ‰ã«æ›¸ãè¾¼ã¿
 $sth = $dbh->prepare($stmt{'recwrap.2'});
 $sth->execute($outputfilename);
 &writelog("recwrap DEBUG UPDATEDB $stmt{'recwrap.2'}");
 
-# Starlight breaker¸ş¤±¥­¥ã¥×¥Á¥ã²èÁüºîÀ®
+# Starlight breakerå‘ã‘ã‚­ãƒ£ãƒ—ãƒãƒ£ç”»åƒä½œæˆ
 if (-e "$toolpath/perl/captureimagemaker.pl"){
 	&writelog("recwrap Call captureimagemaker $outputfilename");
 &changefilestatus($pid,$FILESTATUSCAPTURE);
 	system ("$toolpath/perl/captureimagemaker.pl $outputfilename");
 &changefilestatus($pid,$FILESTATUSCAPEND);
 }
-}#Èó¥é¥¸¥ª¶É
+}#éãƒ©ã‚¸ã‚ªå±€
 
 # MPEG4 ------------------------------------------------------
-#MPEG4¥È¥é¥³¥óÉ¬Í×¤«¤É¤¦¤«
+#MPEG4ãƒˆãƒ©ã‚³ãƒ³å¿…è¦ã‹ã©ã†ã‹
 $sth = $dbh->prepare($stmt{'recwrap.3'});
 $sth->execute($tid);
  @psptrcn= $sth->fetchrow_array;
-if ($psptrcn[0]  == 1 ){#¥È¥é¥³¥óÈÖÁÈ
+if ($psptrcn[0]  == 1 ){#ãƒˆãƒ©ã‚³ãƒ³ç•ªçµ„
 	&writelog("recwrap Launch ipodtranscode.pl");
 	exec ("$toolpath/perl/ipodtranscode.pl");
 	exit;
-}#PSP¥È¥é¥³¥ó¤¢¤ê
+}#PSPãƒˆãƒ©ã‚³ãƒ³ã‚ã‚Š
 
 sub continuousrecordingcheck(){
     my $now = time() + 60 * 2;
 &writelog("recwrap DEBUG continuousrecordingcheck() now $now");
-my @processes =`ps ax | grep -e recpt1 -e recfriio`; #foltiaBBS ¤â¤¦¤¹¤°½ªÎ»¤¹¤ëÈÖÁÈ¤Î¥×¥í¥»¥¹¤òkill Åê¹ÆÆü 2010Ç¯08·î05Æü03»ş19Ê¬33ÉÃ Åê¹Æ¼Ô Nis 
+my @processes =`ps ax | grep -e recpt1 -e recfriio`; #foltiaBBS ã‚‚ã†ã™ãçµ‚äº†ã™ã‚‹ç•ªçµ„ã®ãƒ—ãƒ­ã‚»ã‚¹ã‚’kill æŠ•ç¨¿æ—¥ 2010å¹´08æœˆ05æ—¥03æ™‚19åˆ†33ç§’ æŠ•ç¨¿è€… Nis 
 
 my $psline = "";
 my @processline = "";
@@ -313,7 +313,7 @@ foreach $pid (@pid){
 		$starttime = $filenameparts[3];
 		@filenameparts = split(/\./,$starttime);
 		$startdatetime = $startdate.$filenameparts[0];
-		#DB¤«¤éÏ¿²èÃæÈÖÁÈ¤Î¥Ç¡¼¥¿Ãµ¤¹
+		#DBã‹ã‚‰éŒ²ç”»ä¸­ç•ªçµ„ã®ãƒ‡ãƒ¼ã‚¿æ¢ã™
 		    &writelog("recwrap DEBUG continuousrecordingcheck() $stmt{'recwrap.7'}");
 		    $sth = $dbh->prepare($stmt{'recwrap.7'});
 	&writelog("recwrap DEBUG continuousrecordingcheck() prepare");
@@ -321,11 +321,11 @@ foreach $pid (@pid){
 	&writelog("recwrap DEBUG continuousrecordingcheck() execute");
 	@recfile = $sth->fetchrow_array;
 	&writelog("recwrap DEBUG continuousrecordingcheck() @recfile  $recfile[0] $recfile[1] $recfile[2] $recfile[3] $recfile[4] $recfile[5] $recfile[6] $recfile[7] $recfile[8] $recfile[9] ");
-	#½ªÎ»»ş¹ï
+	#çµ‚äº†æ™‚åˆ»
 	$endtime = $recfile[4];
 	$endtimeepoch = &foldate2epoch($endtime);
 	&writelog("recwrap DEBUG continuousrecordingcheck() $recfile[0] $recfile[1] $recfile[2] $recfile[3] $recfile[4] $recfile[5] endtimeepoch $endtimeepoch");
-	if ($endtimeepoch < $now){#¤Ş¤â¤Ê¤¯½ª¤ï¤ëÈÖÁÈ¤Ê¤é
+	if ($endtimeepoch < $now){#ã¾ã‚‚ãªãçµ‚ã‚ã‚‹ç•ªçµ„ãªã‚‰
 		#kill
 		system("kill $pid");
 		&writelog("recwrap recording process killed $pid/$endtimeepoch/$now");

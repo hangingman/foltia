@@ -3,18 +3,18 @@
 include("./foltia_config2.php");
 
 /*
-¤³¤Á¤é¤Î¥â¥¸¥å¡¼¥ë¤Ï
-Apache + PHP + PostgreSQL ¼Â¸³¼¼
+ã“ã¡ã‚‰ã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã¯
+Apache + PHP + PostgreSQL å®Ÿé¨“å®¤
 http://www.hizlab.net/app/
-¤Î¥µ¥ó¥×¥ë¤ò»È¤ï¤»¤Æ¤¤¤¿¤À¤¤¤Æ¤ª¤ê¤Ş¤¹¡£
-¤¢¤ê¤¬¤È¤¦¤´¤¶¤¤¤Ş¤¹¡£
+ã®ã‚µãƒ³ãƒ—ãƒ«ã‚’ä½¿ã‚ã›ã¦ã„ãŸã ã„ã¦ãŠã‚Šã¾ã™ã€‚
+ã‚ã‚ŠãŒã¨ã†ã”ã–ã„ã¾ã™ã€‚
 */
 
-	/* ¥¨¥é¡¼É½¼¨¤ÎÍŞÀ© */
+	/* ã‚¨ãƒ©ãƒ¼è¡¨ç¤ºã®æŠ‘åˆ¶ */
 	//error_reporting(0);
 
 	
-	//GETÍÑ¥Õ¥©¡¼¥à¥Ç¥³¡¼¥É
+	//GETç”¨ãƒ•ã‚©ãƒ¼ãƒ ãƒ‡ã‚³ãƒ¼ãƒ‰
 	  function getgetform($key) {
     if ($_GET["{$key}"] != "") {
 		$value = $_GET["{$key}"];
@@ -23,7 +23,7 @@ http://www.hizlab.net/app/
 	return ($value);
     }
   }
-	//GETÍÑ¿ô»ú¥Õ¥©¡¼¥à¥Ç¥³¡¼¥É
+	//GETç”¨æ•°å­—ãƒ•ã‚©ãƒ¼ãƒ ãƒ‡ã‚³ãƒ¼ãƒ‰
 	  function getgetnumform($key) {
 //    if ($_GET["{$key}"] != "") {
     if (isset($_GET["{$key}"] )) {
@@ -34,7 +34,7 @@ http://www.hizlab.net/app/
     }
   }
 	
-	//¥Õ¥©¡¼¥à¥Ç¥³¡¼¥É
+	//ãƒ•ã‚©ãƒ¼ãƒ ãƒ‡ã‚³ãƒ¼ãƒ‰
 	  function getform($key) {
     if ($_POST["{$key}"] != "") {
 		$value = $_POST["{$key}"];
@@ -43,7 +43,7 @@ http://www.hizlab.net/app/
 	return ($value);
     }
   }
-	//¿ô»úÀìÍÑ¥Õ¥©¡¼¥à¥Ç¥³¡¼¥É
+	//æ•°å­—å°‚ç”¨ãƒ•ã‚©ãƒ¼ãƒ ãƒ‡ã‚³ãƒ¼ãƒ‰
 	  function getnumform($key) {
     if ($_POST["{$key}"] != "") {
 		$value = $_POST["{$key}"];
@@ -55,7 +55,7 @@ http://www.hizlab.net/app/
     }
   }
 
-	/* Á´³Ñ¥«¥¿¥«¥Ê²½¤·¤Æ¥¹¥Ú¡¼¥¹¤òºï½ü¤·¤Æ¥¤¥ó¥Ç¥Ã¥¯¥¹ÍÑ¤Ë¤¹¤ë */
+	/* å…¨è§’ã‚«ã‚¿ã‚«ãƒŠåŒ–ã—ã¦ã‚¹ãƒšãƒ¼ã‚¹ã‚’å‰Šé™¤ã—ã¦ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ç”¨ã«ã™ã‚‹ */
 	function name2read($name) {
 	$name = mb_convert_kana($name, "KVC", "EUC-JP");
 	$name = mb_convert_kana($name, "s", "EUC-JP");
@@ -64,7 +64,7 @@ http://www.hizlab.net/app/
 		return $name;
 	}
 
-	/* ¿ô»ú¤òÈ¾³Ñ²½¤·¤Æ¿ô»ú²½¤·¤Æ¥¤¥ó¥Ç¥Ã¥¯¥¹ÍÑ¤Ë¤¹¤ë */
+	/* æ•°å­—ã‚’åŠè§’åŒ–ã—ã¦æ•°å­—åŒ–ã—ã¦ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ç”¨ã«ã™ã‚‹ */
 	function pnum2dnum($num) {
 	$num = mb_convert_kana($num, "a", "EUC-JP");
 	$num = ereg_replace("[^0-9]", "", $num);
@@ -72,28 +72,28 @@ http://www.hizlab.net/app/
 		return $num;
 	}
 	
-	/* ½ªÎ»´Ø¿ô¤ÎÄêµÁ */
+	/* çµ‚äº†é–¢æ•°ã®å®šç¾© */
 	function die_exit($message) {
 		?>
 		<p class="error"><?php print "$message"; ?></p>
-		<div class="index"><a href="./">¥È¥Ã¥×</a></div>
+		<div class="index"><a href="./">ãƒˆãƒƒãƒ—</a></div>
 	</body>
 </html><?php
 		exit;
 	}
 	
-	/* ÆşÎÏ¤·¤¿ÃÍ¤Î¥µ¥¤¥º¤ò¥Á¥§¥Ã¥¯ */
+	/* å…¥åŠ›ã—ãŸå€¤ã®ã‚µã‚¤ã‚ºã‚’ãƒã‚§ãƒƒã‚¯ */
 	function check_length($str, $maxlen, $must, $name) {
 		$len = strlen($str);
 		if ($must && $len == 0) {
-			die_exit("$name ¤¬ÆşÎÏ¤µ¤ì¤Æ¤Ş¤»¤ó¡£É¬¿Ü¹àÌÜ¤Ç¤¹¡£");
+			die_exit("$name ãŒå…¥åŠ›ã•ã‚Œã¦ã¾ã›ã‚“ã€‚å¿…é ˆé …ç›®ã§ã™ã€‚");
 		}
 		if ($len > $maxlen) {
-			die_exit("$name ¤Ï $len Ê¸»ú°Ê²¼¤ÇÆşÎÏ¤·¤Æ²¼¤µ¤¤¡£Á´³ÑÊ¸»ú¤Ï¡¢°ìÊ¸»ú¤ÇÆóÊ¸»úÊ¬¤È·×»»¤µ¤ì¤Ş¤¹¡£");
+			die_exit("$name ã¯ $len æ–‡å­—ä»¥ä¸‹ã§å…¥åŠ›ã—ã¦ä¸‹ã•ã„ã€‚å…¨è§’æ–‡å­—ã¯ã€ä¸€æ–‡å­—ã§äºŒæ–‡å­—åˆ†ã¨è¨ˆç®—ã•ã‚Œã¾ã™ã€‚");
 		}
 	}
 
-	/* SQL Ê¸»úÎó¤Î¥¨¥¹¥±¡¼¥× */
+	/* SQL æ–‡å­—åˆ—ã®ã‚¨ã‚¹ã‚±ãƒ¼ãƒ— */
 	function escape_string($sql, $quote = FALSE) {
 		if ($quote && strlen($sql) == 0) {
 			return "null";
@@ -113,41 +113,41 @@ http://www.hizlab.net/app/
 		}
 	} 
 	
-	/* SQL ¿ôÃÍ¤Î¥¨¥¹¥±¡¼¥× */
+	/* SQL æ•°å€¤ã®ã‚¨ã‚¹ã‚±ãƒ¼ãƒ— */
 	function escape_numeric($sql) {
 		if (strlen($sql) == 0) {
 			return "null";
 		}
 		if (!is_numeric($sql)) {
-			die_exit("$sql ¤Ï¿ôÃÍ¤Ç¤Ï¤¢¤ê¤Ş¤»¤ó¡£");
+			die_exit("$sql ã¯æ•°å€¤ã§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚");
 		}
 		return $sql;
 	}
 	
-	/* DB¤ËÀÜÂ³ */
+	/* DBã«æ¥ç¶š */
 	function m_connect() { 
 	try {
 		$dbh = new PDO(DSN);
 		$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		return($dbh);
 	} catch (PDOException $e) {
-		die_exit($e->getMessage() . ": ¥Ç¡¼¥¿¥Ù¡¼¥¹¤ËÀÜÂ³½ĞÍè¤Ş¤»¤ó¤Ç¤·¤¿¡£");
+		die_exit($e->getMessage() . ": ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã«æ¥ç¶šå‡ºæ¥ã¾ã›ã‚“ã§ã—ãŸã€‚");
 		}
-		/* ¥Ç¡¼¥¿¥Ù¡¼¥¹¤È¡¢PHP ¤ÎÆâÉôÊ¸»ú¥³¡¼¥É¤¬°ã¤¦¾ì¹ç */
+		/* ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã¨ã€PHP ã®å†…éƒ¨æ–‡å­—ã‚³ãƒ¼ãƒ‰ãŒé•ã†å ´åˆ */
 	}
 
-	/* ¥Ç¡¼¥¿¥Ù¡¼¥¹¤È¤ÎÀÜÂ³¤òÀÚ¤êÎ¥¤¹ */
+	/* ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã¨ã®æ¥ç¶šã‚’åˆ‡ã‚Šé›¢ã™ */
 function m_close($dbh) {
 	return null;
 	}
 
-//µì´Ø¿ô¡¡sql_query¤ËÃÖ¤­´¹¤¨
+//æ—§é–¢æ•°ã€€sql_queryã«ç½®ãæ›ãˆ
 function m_query($dbh, $query, $errmessage) {
 	try {
 		$rtn = $dbh->query($query);
 		return($rtn);
 	} catch (PDOException $e) {
-			/* ¥¨¥é¡¼¥á¥Ã¥»¡¼¥¸¤Ë SQL Ê¸¤ò½Ğ¤¹¤Î¤Ï¥»¥­¥å¥ê¥Æ¥£¾åÎÉ¤¯¤Ê¤¤¡ª¡ª */
+			/* ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã« SQL æ–‡ã‚’å‡ºã™ã®ã¯ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ä¸Šè‰¯ããªã„ï¼ï¼ */
 			$msg = $errmessage . "<br>\n" .
 		    $e->getMessage() . "<br>\n" .
 		    var_export($e->errorInfo, true) . "<br>\n" .
@@ -158,14 +158,14 @@ function m_query($dbh, $query, $errmessage) {
 			die_exit($msg);
 		}
 	}
-/* SQL Ê¸¤ò¼Â¹Ô */
+/* SQL æ–‡ã‚’å®Ÿè¡Œ */
 function sql_query($dbh, $query, $errmessage,$paramarray=null) {
 	try {
 		$rtn = $dbh->prepare("$query");
 		$rtn->execute($paramarray);
 		return($rtn);
 	} catch (PDOException $e) {
-			/* ¥¨¥é¡¼¥á¥Ã¥»¡¼¥¸¤Ë SQL Ê¸¤ò½Ğ¤¹¤Î¤Ï¥»¥­¥å¥ê¥Æ¥£¾åÎÉ¤¯¤Ê¤¤¡ª¡ª */
+			/* ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã« SQL æ–‡ã‚’å‡ºã™ã®ã¯ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ä¸Šè‰¯ããªã„ï¼ï¼ */
 			$msg = $errmessage . "<br>\n" .
 		    $e->getMessage() . "<br>\n" .
 		    var_export($e->errorInfo, true) . "<br>\n" .
@@ -177,27 +177,27 @@ function sql_query($dbh, $query, $errmessage,$paramarray=null) {
 		}
 	}
 
-	/* select ¤·¤¿·ë²Ì¤ò¥Æ¡¼¥Ö¥ë¤ÇÉ½¼¨ */
+	/* select ã—ãŸçµæœã‚’ãƒ†ãƒ¼ãƒ–ãƒ«ã§è¡¨ç¤º */
 	function m_showtable($rs) {
-		/* ¸¡º÷·ï¿ô */
+		/* æ¤œç´¢ä»¶æ•° */
 	$maxrows = 0;
 		
 	$rowdata = $rs->fetch();
 	if (! $rowdata) {
-			echo("<p class=\"msg\">¥Ç¡¼¥¿¤¬Â¸ºß¤·¤Ş¤»¤ó</p>\n");
+			echo("<p class=\"msg\">ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã—ã¾ã›ã‚“</p>\n");
 			return 0;
 		}
 		
-		/* ¥Õ¥£¡¼¥ë¥É¿ô */
+		/* ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æ•° */
 	$maxcols = $rs->columnCount();
 		?>
-<table class="list" summary="¥Ç¡¼¥¿¸¡º÷·ë²Ì¤òÉ½¼¨" border="1">
+<table class="list" summary="ãƒ‡ãƒ¼ã‚¿æ¤œç´¢çµæœã‚’è¡¨ç¤º" border="1">
 	<thead>
 		<tr>
 			<?php
-				/* ¥Æ¡¼¥Ö¥ë¤Î¥Ø¥Ã¥À¡¼¤ò½ĞÎÏ */
+				/* ãƒ†ãƒ¼ãƒ–ãƒ«ã®ãƒ˜ãƒƒãƒ€ãƒ¼ã‚’å‡ºåŠ› */
 				for ($col = 1; $col < $maxcols; $col++) {
-					/* pg_field_name() ¤Ï¥Õ¥£¡¼¥ë¥ÉÌ¾¤òÊÖ¤¹ */
+					/* pg_field_name() ã¯ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åã‚’è¿”ã™ */
 		     $meta = $rs->getColumnMeta($col);
 		     $f_name = htmlspecialchars($meta["name"]);
 					echo("<th abbr=\"$f_name\">$f_name</th>\n");
@@ -207,16 +207,16 @@ function sql_query($dbh, $query, $errmessage,$paramarray=null) {
 	</thead>
 	<tbody>
 		<?php
-			/* ¥Æ¡¼¥Ö¥ë¤Î¥Ç¡¼¥¿¤ò½ĞÎÏ */
+			/* ãƒ†ãƒ¼ãƒ–ãƒ«ã®ãƒ‡ãƒ¼ã‚¿ã‚’å‡ºåŠ› */
 	      do {
 		      $maxrows++;
 
 				echo("<tr>\n");
-				/* £±ÎóÌÜ¤Ë¥ê¥ó¥¯¤òÄ¥¤ë */
+				/* ï¼‘åˆ—ç›®ã«ãƒªãƒ³ã‚¯ã‚’å¼µã‚‹ */
 				echo("<td><a href=\"edit.php?q_code=" .
 				     urlencode($rowdata[0]) . "\">" .
 				     htmlspecialchars($rowdata[1]) . "</a></td>\n");
-				for ($col = 2; $col < $maxcols; $col++) { /* Îó¤ËÂĞ±ş */
+				for ($col = 2; $col < $maxcols; $col++) { /* åˆ—ã«å¯¾å¿œ */
 					echo("<td>".htmlspecialchars($rowdata[$col])."<br></td>\n");
 				}
 				echo("</tr>\n");
@@ -231,7 +231,7 @@ function sql_query($dbh, $query, $errmessage,$paramarray=null) {
 
 function m_viewdata($dbh, $code) {
 
-/*¤³¤ì»È¤Ã¤Æ¤Ê¤¤¤è¤Í?*/
+/*ã“ã‚Œä½¿ã£ã¦ãªã„ã‚ˆã­?*/
 	}
 	
 
@@ -242,9 +242,9 @@ global $useenvironmentpolicy;
 $serveruri = getserveruri();
 $username = $_SERVER['PHP_AUTH_USER'];
 
-print "<p align='left'><font color='#494949'><A HREF = 'http://www.dcc-jpl.com/soft/foltia/' target=\"_blank\">foltia</A>¡¡| <A HREF = './index.php'>Êü±ÇÍ½Äê</A> | <A HREF = './index.php?mode=new'>¿·ÈÖÁÈ</A> | <A HREF = './listreserve.php'>Í½Ìó°ìÍ÷</A> | <A HREF = './titlelist.php'>ÈÖÁÈ°ìÍ÷</A> | <A HREF = './viewepg.php'>ÈÖÁÈÉ½</A> | Ï¿²è°ìÍ÷(<A HREF = './showplaylist.php'>Ï¿²è½ç</A>¡¦<A HREF = './showplaylist.php?list=title'>ÈÖÁÈ½ç</A>¡¦<A HREF = './showplaylist.php?list=raw'>Á´</A>) | <A HREF = './showlib.php'>Ï¿²è¥é¥¤¥Ö¥é¥ê</A> |  <A HREF = './folcast.php'>Folcast</A>[<a href=\"itpc://$serveruri/folcast.php\">iTunes¤ËÅĞÏ¿</a>] | ";
+print "<p align='left'><font color='#494949'><A HREF = 'http://www.dcc-jpl.com/soft/foltia/' target=\"_blank\">foltia</A>ã€€| <A HREF = './index.php'>æ”¾æ˜ äºˆå®š</A> | <A HREF = './index.php?mode=new'>æ–°ç•ªçµ„</A> | <A HREF = './listreserve.php'>äºˆç´„ä¸€è¦§</A> | <A HREF = './titlelist.php'>ç•ªçµ„ä¸€è¦§</A> | <A HREF = './viewepg.php'>ç•ªçµ„è¡¨</A> | éŒ²ç”»ä¸€è¦§(<A HREF = './showplaylist.php'>éŒ²ç”»é †</A>ãƒ»<A HREF = './showplaylist.php?list=title'>ç•ªçµ„é †</A>ãƒ»<A HREF = './showplaylist.php?list=raw'>å…¨</A>) | <A HREF = './showlib.php'>éŒ²ç”»ãƒ©ã‚¤ãƒ–ãƒ©ãƒª</A> |  <A HREF = './folcast.php'>Folcast</A>[<a href=\"itpc://$serveruri/folcast.php\">iTunesã«ç™»éŒ²</a>] | ";
 if ($useenvironmentpolicy == 1){
-	print "¡Ú $username ¡Û";
+	print "ã€ $username ã€‘";
 }
 
 print "</font></p>\n";
@@ -252,7 +252,7 @@ print "</font></p>\n";
 }
 
 
-function renderepgstation($con,$stationname,$start){ //Ìá¤êÃÍ¡¡¤Ê¤·¡¡EPG¤Î¶ÉÉ½¼¨
+function renderepgstation($con,$stationname,$start){ //æˆ»ã‚Šå€¤ã€€ãªã—ã€€EPGã®å±€è¡¨ç¤º
 
 $now = date("YmdHi");
 $today = date("Ymd");   
@@ -271,10 +271,10 @@ enddatetime  > $epgstart  AND
 startdatetime  < $epgend  
 ORDER BY foltia_epg.startdatetime  ASC
 	";
-	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 	$rowdata = $rs->fetch();
 	if (! $rowdata) {
-		print("ÈÖÁÈ¥Ç¡¼¥¿¤¬¤¢¤ê¤Ş¤»¤ó<BR>");			
+		print("ç•ªçµ„ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Šã¾ã›ã‚“<BR>");			
 }else{
 print "<table width=\"100%\"  border=\"0\">\n";
 //print "<ul><!-- ($maxrows) $query -->\n";
@@ -305,7 +305,7 @@ print "</table>\n";
 }//if
 }//end function
 
-function calcendtime($start,$lengthmin){//Ìá¤êÃÍ¡¡½ªÎ»»ş¹ï(Ex:200510170130) 
+function calcendtime($start,$lengthmin){//æˆ»ã‚Šå€¤ã€€çµ‚äº†æ™‚åˆ»(Ex:200510170130) 
 $startyear =   substr($start,0,4);
 $startmonth =   substr($start,4,2);
 $startday =   substr($start,6,2);
@@ -318,12 +318,12 @@ return ($endtime );
 }//end function
 
 
-function z2h($string){ //Ìá¤êÃÍ¡¡È¾³Ñ²½¤·¤¿Ê¸»ú
+function z2h($string){ //æˆ»ã‚Šå€¤ã€€åŠè§’åŒ–ã—ãŸæ–‡å­—
 	$stringh = mb_convert_kana($string, "a", "EUC-JP");
  return ($stringh );
 }
 
-function foldate2rfc822($start){//Ìá¤êÃÍ¡¡RFC822¥¹¥¿¥¤¥ë¤Î»ş¹ïÉ½µ­
+function foldate2rfc822($start){//æˆ»ã‚Šå€¤ã€€RFC822ã‚¹ã‚¿ã‚¤ãƒ«ã®æ™‚åˆ»è¡¨è¨˜
 	$startyear =   substr($start,0,4);
 	$startmonth =   substr($start,4,2);
 	$startday =   substr($start,6,2);
@@ -335,7 +335,7 @@ function foldate2rfc822($start){//Ìá¤êÃÍ¡¡RFC822¥¹¥¿¥¤¥ë¤Î»ş¹ïÉ½µ­
 	return ($rfc822);
 }//end sub
 
-function foldate2print($start){//Ìá¤êÃÍ¡¡ÆüËÜ¸ìÉ÷»ş¹ïÉ½µ­
+function foldate2print($start){//æˆ»ã‚Šå€¤ã€€æ—¥æœ¬èªé¢¨æ™‚åˆ»è¡¨è¨˜
 	$startyear =   substr($start,0,4);
 	$startmonth =   substr($start,4,2);
 	$startday =   substr($start,6,2);
@@ -346,9 +346,9 @@ function foldate2print($start){//Ìá¤êÃÍ¡¡ÆüËÜ¸ìÉ÷»ş¹ïÉ½µ­
 	return ($printabledate);
 }//end sub
 
-function getserveruri(){//Ìá¤êÃÍ¡¡¥µ¡¼¥Ğ¥¢¥É¥ì¥¹ Ex.www.dcc-jpl.com:8800/soft/foltia/
+function getserveruri(){//æˆ»ã‚Šå€¤ã€€ã‚µãƒ¼ãƒã‚¢ãƒ‰ãƒ¬ã‚¹ Ex.www.dcc-jpl.com:8800/soft/foltia/
 
-//¥ê¥ó¥¯URIÁÈ¤ßÎ©¤Æ
+//ãƒªãƒ³ã‚¯URIçµ„ã¿ç«‹ã¦
 $sv6 = $_SERVER['SCRIPT_NAME'];///dameNews/sarasorjyu/archives.php
 $sv8 = $_SERVER['SERVER_NAME'];//sync.dcc-jpl.com
 $sv9 = $_SERVER['SERVER_PORT'];
@@ -367,9 +367,9 @@ return ($serveruri );
 }//end sub
 
 
-function getserverfqdn(){//Ìá¤êÃÍ¡¡¥µ¡¼¥Ğ¥¢¥É¥ì¥¹ Ex.www.dcc-jpl.com:8800
+function getserverfqdn(){//æˆ»ã‚Šå€¤ã€€ã‚µãƒ¼ãƒã‚¢ãƒ‰ãƒ¬ã‚¹ Ex.www.dcc-jpl.com:8800
 
-//¥ê¥ó¥¯URIÁÈ¤ßÎ©¤Æ
+//ãƒªãƒ³ã‚¯URIçµ„ã¿ç«‹ã¦
 $sv6 = $_SERVER['SCRIPT_NAME'];///dameNews/sarasorjyu/archives.php
 $sv8 = $_SERVER['SERVER_NAME'];//sync.dcc-jpl.com
 $sv9 = $_SERVER['SERVER_PORT'];
@@ -388,7 +388,7 @@ return ($serveruri );
 }//end sub
 
 
-function printdiskusage(){//Ìá¤êÃÍ¡¡¤Ê¤·
+function printdiskusage(){//æˆ»ã‚Šå€¤ã€€ãªã—
 list (, $all, $use , $free, $usepercent) =  getdiskusage();
 
 print "
@@ -400,7 +400,7 @@ print "
 }//end sub
 
 
-function getdiskusage(){//Ìá¤êÃÍ¡¡ÇÛÎó¡¡[,Á´ÂÎÍÆÎÌ, »ÈÍÑÍÆÎÌ , ¶õ¤­ÍÆÎÌ, ÍøÍÑ³ä¹ç]
+function getdiskusage(){//æˆ»ã‚Šå€¤ã€€é…åˆ—ã€€[,å…¨ä½“å®¹é‡, ä½¿ç”¨å®¹é‡ , ç©ºãå®¹é‡, åˆ©ç”¨å‰²åˆ]
 
 global $recfolderpath,$recfolderpath;
 
@@ -421,7 +421,7 @@ $uptime = exec('uptime');
 
 print "<div style=\"text-align:left;\">";
 print "$uptime<br>\n";
-print "¥È¥é¥³¥ó²ÔÆ¯¿ô:$ffmpegprocesses<br>\n";
+print "ãƒˆãƒ©ã‚³ãƒ³ç¨¼åƒæ•°:$ffmpegprocesses<br>\n";
 print "</div>";
 
 }//endsub
@@ -443,10 +443,10 @@ $freebytes = $freearea[3];
 if ($freebytes == "" ){
 //
 //print "<!-- err:\$freebytes is null -->";
-}elseif($freebytes > 1024*1024*100 ){// 100GB°Ê¾å¤¢¤¤¤Æ¤ì¤Ğ
-//¤Ê¤Ë¤â¤·¤Ê¤¤
+}elseif($freebytes > 1024*1024*100 ){// 100GBä»¥ä¸Šã‚ã„ã¦ã‚Œã°
+//ãªã«ã‚‚ã—ãªã„
 print "<style type=\"text/css\"><!-- --></style>";
-}elseif($freebytes > 1024*1024*50 ){// 100GB°Ê²¼
+}elseif($freebytes > 1024*1024*50 ){// 100GBä»¥ä¸‹
 print "<style type=\"text/css\"><!--
 	body {
 	background-color: #CCCC99;
@@ -454,7 +454,7 @@ print "<style type=\"text/css\"><!--
 -->
 </style>
 ";
-}elseif($freebytes > 1024*1024*30 ){// 50GB°Ê²¼
+}elseif($freebytes > 1024*1024*30 ){// 50GBä»¥ä¸‹
 print "<style type=\"text/css\"><!--
 	body {
 	background-color:#CC6666;
@@ -462,7 +462,7 @@ print "<style type=\"text/css\"><!--
 -->
 </style>
 ";
-}elseif($freebytes > 0 ){// 30GB°Ê²¼
+}elseif($freebytes > 0 ){// 30GBä»¥ä¸‹
 print "<style type=\"text/css\"><!--
 	body {
 	background-color:#FF0000;
@@ -470,7 +470,7 @@ print "<style type=\"text/css\"><!--
 -->
 </style>
 ";
-}else{ //¶õ¤­ÍÆÎÌ 0¥Ğ¥¤¥È
+}else{ //ç©ºãå®¹é‡ 0ãƒã‚¤ãƒˆ
 print "<style type=\"text/css\"><!--
 	body {
 	background-color:#000000;
@@ -515,16 +515,16 @@ if (strlen($foldate) == 12 ){
 function login($con,$name,$passwd){
 global $environmentpolicytoken;
 
-//ÆşÎÏÆâÍÆ³ÎÇ§
+//å…¥åŠ›å†…å®¹ç¢ºèª
  if (((mb_ereg('[^0-9a-zA-Z]', $name)) ||(mb_ereg('[^0-9a-zA-Z]', $passwd) ))){
 	
-	//print "¥¨¥é¡¼½èÍı\n";
+	//print "ã‚¨ãƒ©ãƒ¼å‡¦ç†\n";
 	//print "<!-- DEBUG name/passwd format error-->";
 	redirectlogin();
 	
 }else{
-//print "Àµ¾ï½èÍı\n";
-//db¸¡º÷
+//print "æ­£å¸¸å‡¦ç†\n";
+//dbæ¤œç´¢
 escape_string($name);
 escape_string($passwd);
 
@@ -533,7 +533,7 @@ SELECT memberid ,userclass,name,passwd1
 FROM foltia_envpolicy 
 WHERE foltia_envpolicy.name  = '$name'  
 	";
-	$useraccount = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+	$useraccount = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 		$rowdata = $useraccount->fetch();
 		if (! $rowdata) {
 			header("HTTP/1.0 401 Unauthorized");
@@ -551,18 +551,18 @@ WHERE foltia_envpolicy.name  = '$name'
 		redirectlogin();
 		}
 
-// passwd¤òdb¤«¤é¼è¤ê¤À¤·
+// passwdã‚’dbã‹ã‚‰å–ã‚Šã ã—
 if ($userclass == 0){
 $dbpasswd = "$dbpasswd";
 }else{
-// db passwd¤È¥È¡¼¥¯¥ó¤òÏ¢·ë¤·
+// db passwdã¨ãƒˆãƒ¼ã‚¯ãƒ³ã‚’é€£çµã—
 $dbpasswd = "$dbpasswd"."$environmentpolicytoken";
 }
-//¤½¤ì¤¬ÆşÎÏ¤È°ìÃ×¤¹¤ì¤ĞÇ§¾Ú
+//ãã‚ŒãŒå…¥åŠ›ã¨ä¸€è‡´ã™ã‚Œã°èªè¨¼
 if ($passwd == $dbpasswd) {
-//print "Ç§¾ÚÀ®¸ù<br>$dbpasswd  $passwd\n";
+//print "èªè¨¼æˆåŠŸ<br>$dbpasswd  $passwd\n";
 }else{
-//print "Ç§¾Ú¼ºÇÔ<br>$dbpasswd  $passwd\n";
+//print "èªè¨¼å¤±æ•—<br>$dbpasswd  $passwd\n";
 		header("HTTP/1.0 401 Unauthorized");
 		//print "<!-- DEBUG passwd unmatch error>";
 		redirectlogin();
@@ -581,10 +581,10 @@ print "<html><head>\n";
 print "<title>foltia:Invalid login</title>\n";
 print "</head><body>\n";
 print "<h1>Invalid login</h1>";
-print "<p>foltia¥Ø¤Î¥¢¥¯¥»¥¹¤Ë¤Ï¥í¥°¥¤¥ó¤¬É¬Í×¤Ç¤¹¡£ºÆ¥í¥°¥¤¥ó¤Ï¥ê¥í¡¼¥É¤ä¥Ö¥é¥¦¥¶ºÆµ¯Æ°¤Ç¡¢¿·µ¬¥¢¥«¥¦¥ó¥ÈÅĞÏ¿¤Ï<a href=\"./accountregist.php\">¤³¤Á¤é¤«¤é¡£</a></p>";
+print "<p>foltiaãƒ˜ã®ã‚¢ã‚¯ã‚»ã‚¹ã«ã¯ãƒ­ã‚°ã‚¤ãƒ³ãŒå¿…è¦ã§ã™ã€‚å†ãƒ­ã‚°ã‚¤ãƒ³ã¯ãƒªãƒ­ãƒ¼ãƒ‰ã‚„ãƒ–ãƒ©ã‚¦ã‚¶å†èµ·å‹•ã§ã€æ–°è¦ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç™»éŒ²ã¯<a href=\"./accountregist.php\">ã“ã¡ã‚‰ã‹ã‚‰ã€‚</a></p>";
 if ($environmentpolicytoken == ""){
 }else{
-	print "<p>ÆÍÁ³¤³¤Î²èÌÌ¤¬É½¼¨¤µ¤ì¤¿¾ì¹ç¤Ë¤Ï¥»¥­¥å¥ê¥Æ¥£¥³¡¼¥É¤¬ÊÑ¹¹¤µ¤ì¤¿¤«¤âÃÎ¤ì¤Ş¤»¤ó¡£</p>";
+	print "<p>çªç„¶ã“ã®ç”»é¢ãŒè¡¨ç¤ºã•ã‚ŒãŸå ´åˆã«ã¯ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ã‚³ãƒ¼ãƒ‰ãŒå¤‰æ›´ã•ã‚ŒãŸã‹ã‚‚çŸ¥ã‚Œã¾ã›ã‚“ã€‚</p>";
 }
 print "</p><hr>\n";
 print "<address>foltia by DCC-JPL Japan/foltia Project.  <a href = \"http://www.dcc-jpl.com/soft/foltia/\">http://www.dcc-jpl.com/soft/foltia/</a></address>\n";
@@ -605,7 +605,7 @@ SELECT memberid ,userclass,name,passwd1
 FROM foltia_envpolicy 
 WHERE foltia_envpolicy.name  = '$username'  
 	";
-		$useraccount = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+		$useraccount = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 		$rowdata = $useraccount->fetch();
 		if (! $rowdata) {
 			return (99);
@@ -621,7 +621,7 @@ WHERE foltia_envpolicy.name  = '$username'
 		return ($userclass);
 	
 }else{
-	return (0);//´Ä¶­¥İ¥ê¥·¡¼»È¤ï¤Ê¤¤¤È¤­¤Ï¤Ä¤Í¤ËÆÃ¸¢¥â¡¼¥É
+	return (0);//ç’°å¢ƒãƒãƒªã‚·ãƒ¼ä½¿ã‚ãªã„ã¨ãã¯ã¤ã­ã«ç‰¹æ¨©ãƒ¢ãƒ¼ãƒ‰
 }//end if
 }//end function getuserclass
 
@@ -637,10 +637,10 @@ SELECT memberid ,userclass,name,passwd1
 FROM foltia_envpolicy 
 WHERE foltia_envpolicy.name  = '$username'  
 	";
-		$useraccount = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+		$useraccount = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 		$rowdata = $useraccount->fetch();
 		if (! $rowdata) {
-	return (-1);//¥¨¥é¡¼
+	return (-1);//ã‚¨ãƒ©ãƒ¼
 		}
 
 		$memberid = $rowdata[0];
@@ -653,7 +653,7 @@ WHERE foltia_envpolicy.name  = '$username'
 		return ($memberid);
 	
 }else{
-	return (0);//´Ä¶­¥İ¥ê¥·¡¼»È¤ï¤Ê¤¤¤È¤­¤Ï¤Ä¤Í¤ËÆÃ¸¢¥â¡¼¥É
+	return (0);//ç’°å¢ƒãƒãƒªã‚·ãƒ¼ä½¿ã‚ãªã„ã¨ãã¯ã¤ã­ã«ç‰¹æ¨©ãƒ¢ãƒ¼ãƒ‰
 }//end if
 }//end function getuserclass
 
@@ -668,10 +668,10 @@ SELECT memberid ,userclass,name,passwd1
 FROM foltia_envpolicy 
 WHERE foltia_envpolicy.memberid  = '$memberid'  
 	";
-		$useraccount = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+		$useraccount = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 		$rowdata = $useraccount->fetch();
 		if (! $rowdata) {
-	return ("");//¥¨¥é¡¼
+	return ("");//ã‚¨ãƒ©ãƒ¼
 		}
 	
 		$name = $rowdata[2];
@@ -692,26 +692,26 @@ WHERE foltia_envpolicy.memberid  = '$memberid'
 
 
 function number_page($p,$lim){
-//Autopager¡¦¥Ú¡¼¥¸¥ê¥ó¥¯¤Ç»ÈÍÑ¤·¤Æ¤¤¤ë´Ø¿ô
-//²¼µ­¤Ï´Ø¿ô¤ò¤·¤Æ¤¤¤ë¥Õ¥¡¥¤¥ëÌ¾
+//Autopagerãƒ»ãƒšãƒ¼ã‚¸ãƒªãƒ³ã‚¯ã§ä½¿ç”¨ã—ã¦ã„ã‚‹é–¢æ•°
+//ä¸‹è¨˜ã¯é–¢æ•°ã‚’ã—ã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«å
 //index.php  showplaylist.php  titlelist.php  showlib.php  showlibc.php
 ///////////////////////////////////////////////////////////////////////////
-// ¥Ú¡¼¥¸¿ô¤Î·×»»´Ø·¸
-// Âè£±°ú¿ô : $p       : ¸½ºß¤Î¥Ú¡¼¥¸¿ô
-// Âè£²°ú¿ô : $lim     : £±¥Ú¡¼¥¸¤¢¤¿¤ê¤ËÉ½¼¨¤¹¤ë¥ì¥³¡¼¥É¿ô
+// ãƒšãƒ¼ã‚¸æ•°ã®è¨ˆç®—é–¢ä¿‚
+// ç¬¬ï¼‘å¼•æ•° : $p       : ç¾åœ¨ã®ãƒšãƒ¼ã‚¸æ•°
+// ç¬¬ï¼’å¼•æ•° : $lim     : ï¼‘ãƒšãƒ¼ã‚¸ã‚ãŸã‚Šã«è¡¨ç¤ºã™ã‚‹ãƒ¬ã‚³ãƒ¼ãƒ‰æ•°
 ///////////////////////////////////////////////////////////////////////////
 
 	if($p == 0){
-		$p2 = 2;        //$p2¤Î½é´üÃÍÀßÄê
+		$p2 = 2;        //$p2ã®åˆæœŸå€¤è¨­å®š
 	}else{
-		$p2 = $p;       //¼¡¤Î¥Ú¡¼¥¸¿ô¤ÎÃÍ¤ò$p2¤ËÂåÆş¤¹¤ë
+		$p2 = $p;       //æ¬¡ã®ãƒšãƒ¼ã‚¸æ•°ã®å€¤ã‚’$p2ã«ä»£å…¥ã™ã‚‹
 		$p2++;
 	}
 
 	if($p < 1){
 		$p = 1;
 	}
-	//É½¼¨¤¹¤ë¥Ú¡¼¥¸¤ÎÃÍ¤ò¼èÆÀ
+	//è¡¨ç¤ºã™ã‚‹ãƒšãƒ¼ã‚¸ã®å€¤ã‚’å–å¾—
 	$st = ($p -1) * $lim;
 
 	//
@@ -720,43 +720,43 @@ function number_page($p,$lim){
 
 
 function page_display($query_st,$p,$p2,$lim,$dtcnt,$mode){
-//Autopager¡¦¥Ú¡¼¥¸¥ê¥ó¥¯¤Ç»ÈÍÑ¤·¤Æ¤¤¤ë´Ø¿ô
-//²¼µ­¤Ï´Ø¿ô¤ò»ÈÍÑ¤·¤Æ¤¤¤ë¥Õ¥¡¥¤¥ëÌ¾
-//index.php¡¡showplaylist.php¡¡titlelist.php¡¡showlib.php¡¡showlibc.php
+//Autopagerãƒ»ãƒšãƒ¼ã‚¸ãƒªãƒ³ã‚¯ã§ä½¿ç”¨ã—ã¦ã„ã‚‹é–¢æ•°
+//ä¸‹è¨˜ã¯é–¢æ•°ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«å
+//index.phpã€€showplaylist.phpã€€titlelist.phpã€€showlib.phpã€€showlibc.php
 /////////////////////////////////////////////////////////////////////////////
-// Autopager½èÍı¤È¥Ú¡¼¥¸¤Î¥ê¥ó¥¯¤ÎÉ½¼¨
-// Âè£±°ú¿ô ¡§ $query_st        : ¥¯¥¨¥ê¤ÎÃÍ
-// Âè£²°ú¿ô ¡§ $p            : ¸½ºß¤Î¥Ú¡¼¥¸¿ô¤ÎÃÍ
-// Âè£³°ú¿ô ¡§ $p2           : ¼¡¤Î¥Ú¡¼¥¸¿ô¤ÎÃÍ
-// Âè£´°ú¿ô ¡§ $lim          : 1¥Ú¡¼¥¸¤¢¤¿¤ê¤ËÉ½¼¨¤¹¤ë¥ì¥³¡¼¥É¿ô
-// Âè£µ°ú¿ô ¡§ $dtcnt        : ¥ì¥³¡¼¥É¤ÎÁí¿ô
-// Âè£¶°ú¿ô ¡§ $mode         :¡Ú¿·ÈÖÁÈ¡Ûmode=new¤Î¤È¤­¤Ë¥ê¥ó¥¯¥Ú¡¼¥¸¤òÉ½¼¨¤µ¤»¤Ê¤¤¥Õ¥é¥°(index.php¤Î¤ß¤Ç»ÈÍÑ)
+// Autopagerå‡¦ç†ã¨ãƒšãƒ¼ã‚¸ã®ãƒªãƒ³ã‚¯ã®è¡¨ç¤º
+// ç¬¬ï¼‘å¼•æ•° ï¼š $query_st        : ã‚¯ã‚¨ãƒªã®å€¤
+// ç¬¬ï¼’å¼•æ•° ï¼š $p            : ç¾åœ¨ã®ãƒšãƒ¼ã‚¸æ•°ã®å€¤
+// ç¬¬ï¼“å¼•æ•° ï¼š $p2           : æ¬¡ã®ãƒšãƒ¼ã‚¸æ•°ã®å€¤
+// ç¬¬ï¼”å¼•æ•° ï¼š $lim          : 1ãƒšãƒ¼ã‚¸ã‚ãŸã‚Šã«è¡¨ç¤ºã™ã‚‹ãƒ¬ã‚³ãƒ¼ãƒ‰æ•°
+// ç¬¬ï¼•å¼•æ•° ï¼š $dtcnt        : ãƒ¬ã‚³ãƒ¼ãƒ‰ã®ç·æ•°
+// ç¬¬ï¼–å¼•æ•° ï¼š $mode         :ã€æ–°ç•ªçµ„ã€‘mode=newã®ã¨ãã«ãƒªãƒ³ã‚¯ãƒšãƒ¼ã‚¸ã‚’è¡¨ç¤ºã•ã›ãªã„ãƒ•ãƒ©ã‚°(index.phpã®ã¿ã§ä½¿ç”¨)
 ////////////////////////////////////////////////////////////////////////////
 	if($query_st == ""){
-        //¥Ú¡¼¥¸Áí¿ô¼èÆÀ
+        //ãƒšãƒ¼ã‚¸ç·æ•°å–å¾—
         $page = ceil($dtcnt / $lim);
-		//$mode¤ÎifÊ¸¤Ï¡Ú¿·ÈÖÁÈ¡Û¤Î²èÌÌ¤Î¤ß¤Ç»ÈÍÑ
+		//$modeã®ifæ–‡ã¯ã€æ–°ç•ªçµ„ã€‘ã®ç”»é¢ã®ã¿ã§ä½¿ç”¨
 		if($mode == ''){
-			echo "$p/$page";         //  ¸½ºß¤Î¥Ú¡¼¥¸¿ô/¥Ú¡¼¥¸Áí¿ô
+			echo "$p/$page";         //  ç¾åœ¨ã®ãƒšãƒ¼ã‚¸æ•°/ãƒšãƒ¼ã‚¸ç·æ•°
 		}
-        //¥Ú¡¼¥¸¤Î¥ê¥ó¥¯É½¼¨
+        //ãƒšãƒ¼ã‚¸ã®ãƒªãƒ³ã‚¯è¡¨ç¤º
         for($i=1;$i <= $page; $i++){
             print("<a href=\"".$_SERVER["PHP_SELF"]."?p=$i\" > $i </a>");
         }
-        //Autopageing¤Î½èÍı
+        //Autopageingã®å‡¦ç†
         if($page >= $p2 ){
             print("<a rel=next href=\"".$_SERVER["PHP_SELF"]."?p=$p2\" > </a>");
         }
-	}else{      //query_st¤ËÃÍ¤¬Æş¤Ã¤Æ¤¤¤ì¤Ğ
+	}else{      //query_stã«å€¤ãŒå…¥ã£ã¦ã„ã‚Œã°
 		$query_st = $_SERVER['QUERY_STRING'];
         $page = ceil($dtcnt / $lim);
         echo "$p/$page";
-        //¥Ú¡¼¥¸¤Î¥ê¥ó¥¯É½¼¨
+        //ãƒšãƒ¼ã‚¸ã®ãƒªãƒ³ã‚¯è¡¨ç¤º
         for($i=1;$i <= $page; $i++){
-			$query_st =  preg_replace('/p=[0-9]+&/','',$query_st);    //p=0¡Á9&¤ò¶õÍó¤Ë¤¹¤ëÀµµ¬É½¸½
+			$query_st =  preg_replace('/p=[0-9]+&/','',$query_st);    //p=0ã€œ9&ã‚’ç©ºæ¬„ã«ã™ã‚‹æ­£è¦è¡¨ç¾
             print("<a href=\"".$_SERVER["PHP_SELF"]."?p=$i&$query_st\" > $i </a>");
         }
-        //Autopageing¤Î½èÍı
+        //Autopageingã®å‡¦ç†
         if($page >= $p2 ){
 			$query_st =  preg_replace('/p=[0-9]+&/','',$query_st);
             print("<a rel=next href=\"".$_SERVER["PHP_SELF"]."?p=$p2&$query_st\" > </a>");
@@ -766,13 +766,13 @@ function page_display($query_st,$p,$p2,$lim,$dtcnt,$mode){
 }// end page_display
 
 function getnextstationid($con){
-//stationid¤ÎºÇÂçÃÍ¤ò¼èÆÀ¤·¤Æ+1¤¹¤ë¡£
+//stationidã®æœ€å¤§å€¤ã‚’å–å¾—ã—ã¦+1ã™ã‚‹ã€‚
 $query2 = "SELECT max(stationid) FROM  foltia_station";
-$rs2 = sql_query($con, $query2, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+$rs2 = sql_query($con, $query2, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 $rowdata2 = $rs2->fetch();
-if (! $rowdata2) {      //¥ì¥³¡¼¥É¤Ë¥Ç¡¼¥¿¤¬Ìµ¤¤»ş¡¢$id =1
+if (! $rowdata2) {      //ãƒ¬ã‚³ãƒ¼ãƒ‰ã«ãƒ‡ãƒ¼ã‚¿ãŒç„¡ã„æ™‚ã€$id =1
 		$sid = 1 ;
-}else{                  //stationid¤ÎºÇÂçÃÍ¤ò$id¤ËÆş¤ì¤Æ¡¢+1¤¹¤ë¡£
+}else{                  //stationidã®æœ€å¤§å€¤ã‚’$idã«å…¥ã‚Œã¦ã€+1ã™ã‚‹ã€‚
 		$sid = $rowdata2[0];
 		$sid ++ ;
 }

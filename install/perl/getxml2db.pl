@@ -4,10 +4,10 @@
 # http://www.dcc-jpl.com/soft/foltia/
 #
 # usage :getxml2db [long]
-#¤·¤ç¤Ü¤¤¥«¥ì¥ó¥À¡¼<http://cal.syoboi.jp/>¤«¤éÈÖÁÈ¥Ç¡¼¥¿XML¤ò¼èÆÀ¤·foltia DB¤Ë¥¤¥ó¥İ¡¼¥È¤¹¤ë
+#ã—ã‚‡ã¼ã„ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼<http://cal.syoboi.jp/>ã‹ã‚‰ç•ªçµ„ãƒ‡ãƒ¼ã‚¿XMLã‚’å–å¾—ã—foltia DBã«ã‚¤ãƒ³ãƒãƒ¼ãƒˆã™ã‚‹
 #
-#¥ª¥×¥·¥ç¥ó
-#long:2½µ´ÖÊ¬¼è¤ê¹ş¤à¡£¤³¤Î¥â¡¼¥É¤Ç°ìÆü°ì²ó²ó¤»¤Ğ¤è¤¤¤Ç¤·¤ç¤¦¡£
+#ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+#long:2é€±é–“åˆ†å–ã‚Šè¾¼ã‚€ã€‚ã“ã®ãƒ¢ãƒ¼ãƒ‰ã§ä¸€æ—¥ä¸€å›å›ã›ã°ã‚ˆã„ã§ã—ã‚‡ã†ã€‚
 #
 # DCC-JPL Japan/foltia project
 #
@@ -17,7 +17,7 @@ use LWP::Simple;
 use Jcode;
 use Time::Local;
 use DBI;
-use DBD::Pg;
+
 use DBD::SQLite;
 use Digest::MD5 qw(md5_hex);
 
@@ -55,7 +55,7 @@ $dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
 $dbh->{AutoCommit} = 0;
 
-# If-Modified-Since»È¤¦¤è¤¦¤ËÊÑ¹¹#2008/11/14 
+# If-Modified-Sinceä½¿ã†ã‚ˆã†ã«å¤‰æ›´#2008/11/14 
 my  $CacheDir = '/tmp/shobocal';
 if (! -e $CacheDir) {
 	mkdir $CacheDir or die "cannot create $CacheDir: $!";
@@ -68,18 +68,18 @@ close(SHOBO);
 #my ($content) = get("$uri");
 #if ($content eq ""){
 #&writelog("getxml2db   no responce from $uri, exit:");
-#	exit;#¤·¤ç¤Ü¤«¤ë¤¬Íî¤Á¤Æ¤¤¤ë¤Ê¤É
+#	exit;#ã—ã‚‡ã¼ã‹ã‚‹ãŒè½ã¡ã¦ã„ã‚‹ãªã©
 #}
 #my (@line) = split(/\n/, $content);
 
 foreach(@line){
 s/\xef\xbd\x9e/\xe3\x80\x9c/g; #wavedash
 s/\xef\xbc\x8d/\xe2\x88\x92/g; #hyphenminus
-s/&#([0-9A-Fa-f]{2,6});/(chr($1))/eg; #'Í·µº²¦5D&#039;s'¤È¤«¤Î¿ôÃÍ»²¾ÈÂĞ±ş¤ò
+s/&#([0-9A-Fa-f]{2,6});/(chr($1))/eg; #'éŠæˆ¯ç‹5D&#039;s'ã¨ã‹ã®æ•°å€¤å‚ç…§å¯¾å¿œã‚’
 
-Jcode::convert(\$_,'euc','utf8'); 
+#Jcode::convert(\$_,'euc','utf8'); 
 
-#<ProgItem PID="21543" TID="528" StTime="20041114213000" EdTime="20041114220000" ChName="AT-X" Count="4" StOffset="0" SubTitle="¤¤¤ä¤À¤è¡¢¥µ¥è¥Ê¥é¡Ä" Title="¤ª¤È¤®¥¹¥È¡¼¥ê¡¼ Å·»È¤Î¤·¤Ã¤İ" ProgComment=""/>
+#<ProgItem PID="21543" TID="528" StTime="20041114213000" EdTime="20041114220000" ChName="AT-X" Count="4" StOffset="0" SubTitle="ã„ã‚„ã ã‚ˆã€ã‚µãƒ¨ãƒŠãƒ©â€¦" Title="ãŠã¨ãã‚¹ãƒˆãƒ¼ãƒªãƒ¼ å¤©ä½¿ã®ã—ã£ã½" ProgComment=""/>
 if (/^<ProgItem /){
 s/<ProgItem //i;
 s/\"\/>/\" /i;
@@ -97,8 +97,8 @@ s/(\w+)=/\$item{$1}=/gio;#by foltiaBBS
 #$item{ChName}='AT-X';
 #$item{Count}='4';
 #$item{StOffset}='0';
-#$item{SubTitle}='¤¤¤ä¤À¤è¡¢¥µ¥è¥Ê¥é¡Ä';
-#$item{Title}='¤ª¤È¤®¥¹¥È¡¼¥ê¡¼ Å·»È¤Î¤·¤Ã¤İ';
+#$item{SubTitle}='ã„ã‚„ã ã‚ˆã€ã‚µãƒ¨ãƒŠãƒ©â€¦';
+#$item{Title}='ãŠã¨ãã‚¹ãƒˆãƒ¼ãƒªãƒ¼ å¤©ä½¿ã®ã—ã£ã½';
 #$item{ProgComment}='';
 eval("$_");
 #Jcode::convert(\$item{Title},'euc');
@@ -128,14 +128,14 @@ $recstartdate = &calcoffsetdate($sttime ,$offsetmin );
 $recenddate = &calcoffsetdate($edtime ,$offsetmin );
 
 $stationid = &getstationid($item{ChName});
-#¥µ¥Ö¥¿¥¤¥È¥ëÄÉ²Ã-------------------------------------------------
-#ÈÖÁÈ¤¬¤¢¤ë¤«³ÎÇ§
+#ã‚µãƒ–ã‚¿ã‚¤ãƒˆãƒ«è¿½åŠ -------------------------------------------------
+#ç•ªçµ„ãŒã‚ã‚‹ã‹ç¢ºèª
 	$sth = $dbh->prepare($stmt{'getxml2db.1'});
 	$sth->execute($item{TID});
  @titlecount= $sth->fetchrow_array;
  
  if ($titlecount[0] == 0){
-#¤Ê¤±¤ì¤ĞÄÉ²Ã
+#ãªã‘ã‚Œã°è¿½åŠ 
 
 #200412012359
 $nomalstarttime = substr($sttime,8,4);
@@ -145,11 +145,11 @@ $nomalstarttime = substr($sttime,8,4);
 	    &writelog("getxml2db  ADD TV Progtam:$item{TID}:$programtitle");
 }else{
 #2006/2/26 
-#¤¢¤Ã¤¿¤é¡¢¥¿¥¤¥È¥ë³ÎÇ§¤·¤Æ
+#ã‚ã£ãŸã‚‰ã€ã‚¿ã‚¤ãƒˆãƒ«ç¢ºèªã—ã¦
 	    $sth = $dbh->prepare($stmt{'getxml2db.3'});
 	    $sth->execute($item{TID});
  @titlearray = $sth->fetchrow_array;
-#¹¹¿·¤Ê¤É¤µ¤ì¤Æ¤¿¤éupdate
+#æ›´æ–°ãªã©ã•ã‚Œã¦ãŸã‚‰update
 #print "$titlearray[0] / $programtitle\n";
  if ($titlearray[0] ne "$programtitlename" ){
 		$sth = $dbh->prepare($stmt{'getxml2db.4'});
@@ -159,15 +159,15 @@ $nomalstarttime = substr($sttime,8,4);
 }# end if TID
 
 
-#PID¤¬¤¢¤ë¤«³ÎÇ§
+#PIDãŒã‚ã‚‹ã‹ç¢ºèª
 	$sth = $dbh->prepare($stmt{'getxml2db.5'});
 	$sth->execute($item{'TID'}, $item{'PID'});
  @subticount= $sth->fetchrow_array;
  if ($subticount[0]  >= 1){
-	#PID¤¢¤Ã¤¿¤é¾å½ñ¤­¹¹¿·
-#¤³¤³¤Ç¤³¤ó¤Ê¥¨¥é¡¼½Ğ¤Æ¤ë
+	#PIDã‚ã£ãŸã‚‰ä¸Šæ›¸ãæ›´æ–°
+#ã“ã“ã§ã“ã‚“ãªã‚¨ãƒ©ãƒ¼å‡ºã¦ã‚‹
 #	DBD::Pg::st execute failed: ERROR:  invalid input syntax for type bigint: "" at /home/foltia/perl/getxml2db.pl line 147.
-#UPDATE  foltia_subtitle  SET stationid = '42',countno = '8',subtitle = 'µşÅÔ¹Ô¤­¤Ş¤¹' ,startdatetime = '200503010035'  ,enddatetime = '200503010050',startoffset  = '0' ,lengthmin = '15' WHERE tid = '550' AND pid =  '26000' 
+#UPDATE  foltia_subtitle  SET stationid = '42',countno = '8',subtitle = 'äº¬éƒ½è¡Œãã¾ã™' ,startdatetime = '200503010035'  ,enddatetime = '200503010050',startoffset  = '0' ,lengthmin = '15' WHERE tid = '550' AND pid =  '26000' 
 if ($item{Count} == ""){
 		$sth = $dbh->prepare($stmt{'getxml2db.6'});
 		$oserr = $sth->execute($stationid, undef, $programSubTitle, $recstartdate, $recenddate, $offsetmin, $length, $item{'TID'}, $item{'PID'});
@@ -176,10 +176,10 @@ if ($item{Count} == ""){
 		$oserr = $sth->execute($stationid, $item{'Count'}, $programSubTitle,  $recstartdate, $recenddate, $offsetmin, $length, $item{'TID'}, $item{'PID'});
 	    }
  }else{
-	#¤Ê¤±¤ì¤ĞÄÉ²Ã
+	#ãªã‘ã‚Œã°è¿½åŠ 
 	
-	#¤³¤Ã¤Á¤ËÆş¤ë»ş¹ï¤Ï¥ª¥Õ¥»¥Ã¥È¤µ¤ì¤¿»ş¹ï!
-	#¤½¤Î¤Ş¤Ş¥­¥å¡¼¤ËÆş¤ë·Á¤Ç
+	#ã“ã£ã¡ã«å…¥ã‚‹æ™‚åˆ»ã¯ã‚ªãƒ•ã‚»ãƒƒãƒˆã•ã‚ŒãŸæ™‚åˆ»!
+	#ãã®ã¾ã¾ã‚­ãƒ¥ãƒ¼ã«å…¥ã‚‹å½¢ã§
 	if ($item{Count} eq ""){
 		$sth = $dbh->prepare($stmt{'getxml2db.8'});
 		$oserr = $sth->execute($item{'PID'}, $item{'TID'}, $stationid, undef, $programSubTitle, $recstartdate, $recenddate, $offsetmin, $length);

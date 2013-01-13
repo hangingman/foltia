@@ -5,11 +5,11 @@
 
 accountregist.php
 
-ÌÜÅª
-¡¡´Ä¶­¥İ¥ê¥·¡¼¤Î¤¿¤á¤Î¥æ¡¼¥¶¿·µ¬ÅĞÏ¿
+ç›®çš„
+ã€€ç’°å¢ƒãƒãƒªã‚·ãƒ¼ã®ãŸã‚ã®ãƒ¦ãƒ¼ã‚¶æ–°è¦ç™»éŒ²
 
 
-°ú¿ô
+å¼•æ•°
 
 
  DCC-JPL Japan/foltia project
@@ -34,7 +34,7 @@ print "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/T
 <meta http-equiv=\"Content-Style-Type\" content=\"text/css\">
 <link rel=\"stylesheet\" type=\"text/css\" href=\"graytable.css\"> ";
 
-print "<title>foltia:¿·µ¬¥¢¥«¥¦¥ó¥ÈÅĞÏ¿</title>
+print "<title>foltia:æ–°è¦ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç™»éŒ²</title>
 </head>";
 }//end function printtitle()
 
@@ -43,26 +43,26 @@ printtitle();
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
 
 <p align="left"><font color="#494949" size="6">
-¿·µ¬¥¢¥«¥¦¥ó¥ÈÅĞÏ¿
+æ–°è¦ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç™»éŒ²
 </font></p>
 <hr size="4">
 <?php
-//ÃÍ¼èÆÀ
+//å€¤å–å¾—
 $username = getform(username);
 $userpasswd = getform(userpasswd);
 if ($username == "") {
-	print "<p align=\"left\">¿·µ¬¥¢¥«¥¦¥ó¥ÈÅĞÏ¿¤ò¤·¤Ş¤¹¡£</p>\n";
+	print "<p align=\"left\">æ–°è¦ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç™»éŒ²ã‚’ã—ã¾ã™ã€‚</p>\n";
 
 }else{
-//¤¹¤Ç¤Ë¤½¤Î¥æ¡¼¥¶¤¬Â¸ºß¤·¤Æ¤¤¤ë¤«¤É¤¦¤«³ÎÇ§
+//ã™ã§ã«ãã®ãƒ¦ãƒ¼ã‚¶ãŒå­˜åœ¨ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹ç¢ºèª
 if ($username != ""){
 $query = "
 SELECT count(memberid)
 FROM foltia_envpolicy 
 WHERE foltia_envpolicy.name  = ?  
 ";
-//	$isaccountexist = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$isaccountexist = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($username));
+//	$isaccountexist = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$isaccountexist = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($username));
 
 	$isaccountexistncount = $isaccountexist->fetchColumn(0);
 
@@ -70,22 +70,22 @@ WHERE foltia_envpolicy.name  = ?
 	//valid
 	}else{
 		$errflag = 1;
-		$errmsg = "¤½¤Î¥æ¡¼¥¶Ì¾¤Ï´û¤Ë»È¤ï¤ì¤Æ¤¤¤Ş¤¹¡£";
+		$errmsg = "ãã®ãƒ¦ãƒ¼ã‚¶åã¯æ—¢ã«ä½¿ã‚ã‚Œã¦ã„ã¾ã™ã€‚";
 	}
 }
 if ($userpasswd == ""){
 		$errflag = 2;
-		$errmsg = "¥Ñ¥¹¥ï¡¼¥É¤¬ÉÔÅ¬ÀÚ¤Ç¤¹¡£È¾³Ñ±Ñ¿ô¤ò»ØÄê¤·¤Æ²¼¤µ¤¤¡£";
+		$errmsg = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒä¸é©åˆ‡ã§ã™ã€‚åŠè§’è‹±æ•°ã‚’æŒ‡å®šã—ã¦ä¸‹ã•ã„ã€‚";
 }
 
 
 if ($errflag == 0){
-// next mid¤òÃµ¤¹
+// next midã‚’æ¢ã™
 $query = "
 SELECT max(memberid) 
 FROM  foltia_envpolicy 
 ";
-	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 	$maxid = $rs->fetchColumn(0);
 	if ($maxid) {
 		$nextcno = $maxid + 1;
@@ -93,17 +93,17 @@ FROM  foltia_envpolicy
 		$nextcno = 1;
 	}
 
-//ÅĞÏ¿
+//ç™»éŒ²
 //INSERT
 if ($demomode){
 }else{
 /*
-¥æ¡¼¥¶¥¯¥é¥¹
-0:ÆÃ¸¢´ÉÍı¼Ô
-1:´ÉÍı¼Ô:Í½Ìóºï½ü¡¢¥Õ¥¡¥¤¥ëºï½ü¤¬½ĞÍè¤ë
-2:ÍøÍÑ¼Ô:EPGÄÉ²Ã¡¢Í½ÌóÄÉ²Ã¤¬½ĞÍè¤ë
-3:¥Ó¥å¥¢¡¼:¥Õ¥¡¥¤¥ë¥À¥¦¥ó¥í¡¼¥É¤¬½ĞÍè¤ë
-4:¥²¥¹¥È:¥¤¥ó¥¿¡¼¥Õ¥§¥¤¥¹¤¬¸«¤ì¤ë
+ãƒ¦ãƒ¼ã‚¶ã‚¯ãƒ©ã‚¹
+0:ç‰¹æ¨©ç®¡ç†è€…
+1:ç®¡ç†è€…:äºˆç´„å‰Šé™¤ã€ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤ãŒå‡ºæ¥ã‚‹
+2:åˆ©ç”¨è€…:EPGè¿½åŠ ã€äºˆç´„è¿½åŠ ãŒå‡ºæ¥ã‚‹
+3:ãƒ“ãƒ¥ã‚¢ãƒ¼:ãƒ•ã‚¡ã‚¤ãƒ«ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ãŒå‡ºæ¥ã‚‹
+4:ã‚²ã‚¹ãƒˆ:ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ãŒè¦‹ã‚Œã‚‹
 */
 $remotehost = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
@@ -111,17 +111,17 @@ $query = "
 insert into foltia_envpolicy  
 values ( ?,'2',?,?,now(),?)";
 //print "$query <br>\n";
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($nextcno,$username,$userpasswd,$remotehost));
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($nextcno,$username,$userpasswd,$remotehost));
 
-print "¼¡¤Î¥¢¥«¥¦¥ó¥È¤òÅĞÏ¿¤·¤Ş¤·¤¿¡£<br>
-¥í¥°¥¤¥óÌ¾:$username<br>
-¥Ñ¥¹¥ï¡¼¥É:$userpasswd";
+print "æ¬¡ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’ç™»éŒ²ã—ã¾ã—ãŸã€‚<br>
+ãƒ­ã‚°ã‚¤ãƒ³å:$username<br>
+ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰:$userpasswd";
 
 if ($environmentpolicytoken != ""){
-	print "¡Ü¥»¥­¥å¥ê¥Æ¥£¥³¡¼¥É<br>\n";
+	print "ï¼‹ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ã‚³ãƒ¼ãƒ‰<br>\n";
 }
-print "<a href=\"./index.php\">¥í¥°¥¤¥ó</a><br>\n";
+print "<a href=\"./index.php\">ãƒ­ã‚°ã‚¤ãƒ³</a><br>\n";
 
 print "</body>
 </html>
@@ -129,24 +129,24 @@ print "</body>
 	$oserr = system("$toolpath/perl/envpolicyupdate.pl");
 exit;
 
-}//endif ¥Ç¥â¥â¡¼¥É
-}else{//error¥Õ¥é¥°¤¢¤Ã¤¿¤é
+}//endif ãƒ‡ãƒ¢ãƒ¢ãƒ¼ãƒ‰
+}else{//errorãƒ•ãƒ©ã‚°ã‚ã£ãŸã‚‰
 print "$errmsg / $errflag<br>\n";
 
-}//end if ¥¨¥é¡¼¤¸¤ã¤Ê¤±¤ì¤Ğ
+}//end if ã‚¨ãƒ©ãƒ¼ã˜ã‚ƒãªã‘ã‚Œã°
 
 }//end if ""
 ?>
 
 <form id="account" name="account" method="post" action="./accountregist.php">
-  <p>ÅĞÏ¿¥æ¡¼¥¶Ì¾:
+  <p>ç™»éŒ²ãƒ¦ãƒ¼ã‚¶å:
     <input name="username" type="text" id="username" size="19" value="" />
-  (È¾³Ñ±Ñ¿ô¤Î¤ß)</p>
-  <p>ÅĞÏ¿¥Ñ¥¹¥ï¡¼¥É:
+  (åŠè§’è‹±æ•°ã®ã¿)</p>
+  <p>ç™»éŒ²ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰:
     <input name="userpasswd" type="text" id="userpasswd" size="19" value="" />
-  (È¾³Ñ±Ñ¿ô¤Î¤ß)</p>
+  (åŠè§’è‹±æ•°ã®ã¿)</p>
 
-<input type="submit" value="¿·µ¬ÅĞÏ¿">¡¡
+<input type="submit" value="æ–°è¦ç™»éŒ²">ã€€
 </form>
 
 </body>

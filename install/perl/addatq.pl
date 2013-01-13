@@ -5,16 +5,16 @@
 #
 #addatq.pl
 #
-#TID¤È¶ÉID¤ò¼õ¤±¼è¤êatq¤ËÆş¤ì¤ë
+#TIDã¨å±€IDã‚’å—ã‘å–ã‚Šatqã«å…¥ã‚Œã‚‹
 # addatq.pl <TID> <StationID> [DELETE]
-# DELETE¥Õ¥é¥°¤¬¤Ä¤¯¤Èºï½ü¤Î¤ß¹Ô¤¦
+# DELETEãƒ•ãƒ©ã‚°ãŒã¤ãã¨å‰Šé™¤ã®ã¿è¡Œã†
 #
 # DCC-JPL Japan/foltia project
 #
 #
 
 use DBI;
-use DBD::Pg;
+
 use DBD::SQLite;
 use Schedule::At;
 use Time::Local;
@@ -27,17 +27,17 @@ push( @INC, "$path");
 
 require "foltialib.pl";
 
-#°ú¤­¿ô¤¬¥¢¥ë¤«?
+#å¼•ãæ•°ãŒã‚¢ãƒ«ã‹?
 $tid = $ARGV[0] ;
 $station = $ARGV[1];
 
 if (($tid eq "" )|| ($station eq "")){
-	#°ú¤­¿ô¤Ê¤·½Ğ¼Â¹Ô¤µ¤ì¤¿¤é¡¢½ªÎ»
+	#å¼•ãæ•°ãªã—å‡ºå®Ÿè¡Œã•ã‚ŒãŸã‚‰ã€çµ‚äº†
 	print "usage;addatq.pl <TID> <StationID> [DELETE]\n";
 	exit;
 }
 
-#DB¸¡º÷(TID¤ÈStationID¤«¤éPID¤Ø)
+#DBæ¤œç´¢(TIDã¨StationIDã‹ã‚‰PIDã¸)
 $dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
 if ($station == 0){
@@ -48,34 +48,34 @@ if ($station == 0){
     $sth->execute($tid, $station);
 }
  @titlecount = $sth->fetchrow_array;
-#·ï¿ô¿ô¤¨¤ë
+#ä»¶æ•°æ•°ãˆã‚‹
 
-#2°Ê¾å¤À¤Ã¤¿¤é
+#2ä»¥ä¸Šã ã£ãŸã‚‰
 if ($titlecount[0]  >= 2){
-    #Á´¶ÉÏ¿¤ê¤¬´Ş¤Ş¤ì¤Æ¤¤¤ë¤«Ä´¤Ù¤ë
+    #å…¨å±€éŒ²ã‚ŠãŒå«ã¾ã‚Œã¦ã„ã‚‹ã‹èª¿ã¹ã‚‹
     $kth = $dbh->prepare($stmt{'addatq.3'});
     $kth->execute($tid);
  	@reservecounts = $kth->fetchrow_array;
 
-	if($reservecounts[0] >= 1 ){#´Ş¤Ş¤ì¤Æ¤¤¤¿¤é
+	if($reservecounts[0] >= 1 ){#å«ã¾ã‚Œã¦ã„ãŸã‚‰
 		if($tid == 0){
-		#º£²ó¤Î°ú¤­¿ô¤¬SID 0¤À¤Ã¤¿¤é
-	    #Á´¶ÉÏ¿¤ê¤À¤±Í½Ìó
+		#ä»Šå›ã®å¼•ãæ•°ãŒSID 0ã ã£ãŸã‚‰
+	    #å…¨å±€éŒ²ã‚Šã ã‘äºˆç´„
 #		&writelog("addatq  DEBUG; ALL STATION RESERVE. TID=$tid SID=$station $titlecount[0] match:$stmt{'addatq.3'}");
 		&addcue;
 		}else{
-		#¤Û¤«¤ÎÁ´¶ÉÏ¿²èaddatq¤¬Í½ÌóÆş¤ì¤Æ¤¯¤ì¤ë¤«¤é¤Ê¤Ë¤â¤·¤Ê¤¤
+		#ã»ã‹ã®å…¨å±€éŒ²ç”»addatqãŒäºˆç´„å…¥ã‚Œã¦ãã‚Œã‚‹ã‹ã‚‰ãªã«ã‚‚ã—ãªã„
 #		&writelog("addatq  DEBUG; SKIP OPERSTION. TID=$tid SID=$station $titlecount[0] match:$stmt{'addatq.3'}");
 		exit;
-  		}#end if ¤Õ¤¯¤Ş¤ì¤Æ¤¤¤¿¤é
-	}#endif 2¤Ä°Ê¾å	
+  		}#end if ãµãã¾ã‚Œã¦ã„ãŸã‚‰
+	}#endif 2ã¤ä»¥ä¸Š	
 }elsif($titlecount[0]  == 1){
 		&addcue;
 }else{
     &writelog("addatq  error; reserve impossible . TID=$tid SID=$station $titlecount[0] match:$stmt{'addatq.3'}");
 }
 
-#µì½èÍı
+#æ—§å‡¦ç†
 # if ($titlecount[0]  == 1 ){
 # 	& addcue;
 # }else{
@@ -92,17 +92,17 @@ if ($station == 0){
 	$sth->execute($tid, $station);
 }
  @titlecount= $sth->fetchrow_array;
-$bitrate = $titlecount[2];#¥Ó¥Ã¥È¥ì¡¼¥È¼èÆÀ
+$bitrate = $titlecount[2];#ãƒ“ãƒƒãƒˆãƒ¬ãƒ¼ãƒˆå–å¾—
 
-#PIDÃê½Ğ
+#PIDæŠ½å‡º
     $now = &epoch2foldate(time());
     $twodaysafter = &epoch2foldate(time() + (60 * 60 * 24 * 2));
-#¥­¥å¡¼Æş¤ì¤ÏÄ¾¶á2Æü¸å¤Ş¤Ç
+#ã‚­ãƒ¥ãƒ¼å…¥ã‚Œã¯ç›´è¿‘2æ—¥å¾Œã¾ã§
 if ($station == 0 ){
 	$sth = $dbh->prepare($stmt{'addatq.addcue.3'});
 	$sth->execute($tid, $now, $twodaysafter);
 }else{
-#stationID¤«¤érecch
+#stationIDã‹ã‚‰recch
 	$stationh = $dbh->prepare($stmt{'addatq.addcue.4'});
 	$stationh->execute($station);
 @stationl =  $stationh->fetchrow_array;
@@ -124,18 +124,18 @@ $lengthmin,
 $atid ) = $sth->fetchrow_array()) {
 
 if ($station == 0 ){
-#stationID¤«¤érecch
+#stationIDã‹ã‚‰recch
 	    $stationh = $dbh->prepare($stmt{'addatq.addcue.6'});
 	    $stationh->execute($stationid);
 @stationl =  $stationh->fetchrow_array;
 $recch = $stationl[1];
 }
-#¥­¥å¡¼Æş¤ì
-	#¥×¥í¥»¥¹µ¯Æ°»ş¹ï¤ÏÈÖÁÈ³«»Ï»ş¹ï¤Î-1Ê¬
+#ã‚­ãƒ¥ãƒ¼å…¥ã‚Œ
+	#ãƒ—ãƒ­ã‚»ã‚¹èµ·å‹•æ™‚åˆ»ã¯ç•ªçµ„é–‹å§‹æ™‚åˆ»ã®-1åˆ†
 $atdateparam = &calcatqparam(300);
 $reclength = $lengthmin * 60;
 #&writelog("TIME $atdateparam COMMAND $toolpath/perl/tvrecording.pl $recch $reclength 0 0 $bitrate $tid $countno");
-#¥­¥å¡¼ºï½ü
+#ã‚­ãƒ¥ãƒ¼å‰Šé™¤
  Schedule::At::remove ( TAG => "$pid"."_X");
 	&writelog("addatq remove $pid");
 if ( $ARGV[2] eq "DELETE"){

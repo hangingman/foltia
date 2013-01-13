@@ -6,19 +6,19 @@
 #
 # epgimport.pl
 #
-# EPGÈÖÁÈÉ½¼èÆÀ
-# ts¤ò¼èÆÀ¤·¤Æepgdump·ÐÍ³¤Çepg¥Æ¡¼¥Ö¥ë¤Ë¥¤¥ó¥Ý¡¼¥È¤·¤Þ¤¹¡£
-# ÆâÉô¤Çxmltv2foltia.pl¤ò¸Æ¤ó¤Ç¼ÂºÝ¤ÎÄÉ²Ã½èÍý¤ò¹Ô¤¤¤Þ¤¹¡£
+# EPGç•ªçµ„è¡¨å–å¾—
+# tsã‚’å–å¾—ã—ã¦epgdumpçµŒç”±ã§epgãƒ†ãƒ¼ãƒ–ãƒ«ã«ã‚¤ãƒ³ãƒãƒ¼ãƒˆã—ã¾ã™ã€‚
+# å†…éƒ¨ã§xmltv2foltia.plã‚’å‘¼ã‚“ã§å®Ÿéš›ã®è¿½åŠ å‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚
 #
 # usage 
-# epgimport.pl [long]  #long¤¬¤Ä¤¯¤È°ì½µ´ÖÊ¬
-# epgimport.pl [stationid]  #ÊüÁ÷¶ÉID»ØÄê¤Ç¤½¤Î¥Á¥ã¥ó¥Í¥ë¤À¤±Ã»»þ´Ö¤Ç¼èÆÀ
+# epgimport.pl [long]  #longãŒã¤ãã¨ä¸€é€±é–“åˆ†
+# epgimport.pl [stationid]  #æ”¾é€å±€IDæŒ‡å®šã§ãã®ãƒãƒ£ãƒ³ãƒãƒ«ã ã‘çŸ­æ™‚é–“ã§å–å¾—
 #
 # DCC-JPL Japan/foltia project
 #
 
 use DBI;
-use DBD::Pg;
+
 use DBD::SQLite;
 #use Schedule::At;
 #use Time::Local;
@@ -35,8 +35,8 @@ require "foltialib.pl";
 my $ontvcode = "";
 my $channel = "";
 my @date = ();
-my $recpt1path = $toolpath . "/perl/tool/recpt1"; #¤Û¤«¤Î¥­¥ã¥×¥Á¥ã¥Ç¥Ð¥¤¥¹ºî¤Ã¤Æ¤ë¿Í¤Ï¥³¥³¤òÊÑ¹¹
-my $epgdumppath = $toolpath ."/perl/tool"; #epgdump¤Î¤¢¤ë¥Ç¥£¥ì¥¯¥È¥ê
+my $recpt1path = $toolpath . "/perl/tool/recpt1"; #ã»ã‹ã®ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ä½œã£ã¦ã‚‹äººã¯ã‚³ã‚³ã‚’å¤‰æ›´
+my $epgdumppath = $toolpath ."/perl/tool"; #epgdumpã®ã‚ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 my $xmloutpath = "/tmp";
 my %stations;
 my $uset = "";
@@ -49,9 +49,9 @@ my $cs1rectime = 0;
 my $cs2rectime = 0;
 
 
-#°ú¤­¿ô¤¬¥¢¥ë¤«?
+#å¼•ãæ•°ãŒã‚¢ãƒ«ã‹?
 if ( $ARGV[0] eq "long" ){
-	#Ä¹´üÈÖÁÈÉ½¼èÆÀ
+	#é•·æœŸç•ªçµ„è¡¨å–å¾—
 	$rectime = 60;
 	$bsrectime = 120;
 	$cs1rectime = 60;
@@ -63,18 +63,18 @@ if ( $ARGV[0] eq "long" ){
 	$cs1rectime = 15;
 	$cs2rectime = 5;
 }else{
-	#Ã»´üÈÖÁÈÉ½¼èÆÀ
+	#çŸ­æœŸç•ªçµ„è¡¨å–å¾—
 	$rectime = 3;
 	$bsrectime = 36;
 	$cs1rectime = 15;
 	$cs2rectime = 5;
 }
-#¥Ç¡¼¥¿ÎÌÈæ³Ó
-#3ÉÃ   16350 Aug 10 16:21 __27-epg-short.xml
-#12ÉÃ  56374 Aug 10 16:21 __27-epg-long.xml
-#60ÉÃ 127735 Aug 10 16:23 __27-epg-velylong.xml
+#ãƒ‡ãƒ¼ã‚¿é‡æ¯”è¼ƒ
+#3ç§’   16350 Aug 10 16:21 __27-epg-short.xml
+#12ç§’  56374 Aug 10 16:21 __27-epg-long.xml
+#60ç§’ 127735 Aug 10 16:23 __27-epg-velylong.xml
 
-#½ÅÊ£µ¯Æ°³ÎÇ§
+#é‡è¤‡èµ·å‹•ç¢ºèª
 $processes =  &processfind("epgimport.pl");
 if ($processes > 1 ){
 &writelog("epgimport processes exist. exit:");
@@ -84,12 +84,12 @@ exit;
 
 $dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
-#¶É»ØÄê¤¬¤¢¤ë¤Ê¤é¡¢Ã±°ìÊüÁ÷¶É»ØÄê¥â¡¼¥É
+#å±€æŒ‡å®šãŒã‚ã‚‹ãªã‚‰ã€å˜ä¸€æ”¾é€å±€æŒ‡å®šãƒ¢ãƒ¼ãƒ‰
 if ($stationid > 0){
 	$sth = $dbh->prepare($stmt{'epgimport.1'});
 	$sth->execute($stationid);
 	@data = $sth->fetchrow_array();
-	unless($data[0] == 1){#¶É¤Î¿ô¤¬1¤Ç¤Ê¤±¤ì¤Ð°Û¾ï½ªÎ»
+	unless($data[0] == 1){#å±€ã®æ•°ãŒ1ã§ãªã‘ã‚Œã°ç•°å¸¸çµ‚äº†
 		&writelog("epgimport ERROR Invalid station id ($stationid).");
 		exit 1;
 	}else{
@@ -100,20 +100,20 @@ if ($stationid > 0){
 	$ontvcode = $data[1];
 	if ($channel > 0){
 		&writelog("epgimport DEBUG Single station mode (ch:$channel / $ontvcode).");
-	}else{#¥é¥¸¥ª¶É¤Ê¤É¤Î¾ì¹ç
+	}else{#ãƒ©ã‚¸ã‚ªå±€ãªã©ã®å ´åˆ
 		&writelog("epgimport ABORT SID $stationid is not Digital TV ch.");
 		exit;
-	}#endif ¥é¥¸¥ª¶É¤«¤É¤¦¤«
+	}#endif ãƒ©ã‚¸ã‚ªå±€ã‹ã©ã†ã‹
 	}#end unless($data[0] == 1
 }#endif $stationid > 0
 
-#ÃÏ¥Ç¥¸----------------------------------------
-#¼õ¿®¶É³ÎÇ§
-if ($channel >= 13 && $channel <= 62){#¶É»ØÄê¤¬¤¢¤ë¤Ê¤é
+#åœ°ãƒ‡ã‚¸----------------------------------------
+#å—ä¿¡å±€ç¢ºèª
+if ($channel >= 13 && $channel <= 62){#å±€æŒ‡å®šãŒã‚ã‚‹ãªã‚‰
 	$stations{$channel} = $ontvcode;
 	$uset = 1;
 }elsif($channel >= 100){
-	$uset = 0; #ÃÏ¥Ç¥¸ÈÏ°Ï³°¤Î¶É
+	$uset = 0; #åœ°ãƒ‡ã‚¸ç¯„å›²å¤–ã®å±€
 }else{
 	$sth = $dbh->prepare($stmt{'epgimport.3'});
 	$sth->execute();
@@ -141,13 +141,13 @@ foreach $channel ( keys %stations ) {
 }#endif
 
 #BS----------------------------------------
-#¼õ¿®¶É³ÎÇ§
-if ($channel >= 100 && $channel <= 222 ){#¶É»ØÄê¤¬¤¢¤ë¤Ê¤é
+#å—ä¿¡å±€ç¢ºèª
+if ($channel >= 100 && $channel <= 222 ){#å±€æŒ‡å®šãŒã‚ã‚‹ãªã‚‰
 	$usebs = 1;
 }elsif($channel >= 13 && $channel <= 62){
-	$usebs = 0;	#ÃÏ¥Ç¥¸¶É»ØÄê¤Î¾ì¹ç¡¢¥¹¥­¥Ã¥×¡£
+	$usebs = 0;	#åœ°ãƒ‡ã‚¸å±€æŒ‡å®šã®å ´åˆã€ã‚¹ã‚­ãƒƒãƒ—ã€‚
 }elsif($channel >= 223){
-	$usebs = 0;	#CS¶É»ØÄê¤Î¾ì¹ç¤â¥¹¥­¥Ã¥×
+	$usebs = 0;	#CSå±€æŒ‡å®šã®å ´åˆã‚‚ã‚¹ã‚­ãƒƒãƒ—
 }else{
 	$sth = $dbh->prepare($stmt{'epgimport.4'});
 	$sth->execute();
@@ -177,9 +177,9 @@ if ($usebs == 1){
 
 
 #CS----------------------------------------
-#if ( $ARGV[0] eq "long" ){ #Ã»»þ´ÖÏ¿²è¤Ê¤é°Û¾ï¤Ë½Å¤¯¤Ï¤Ê¤é¤Ê¤¤¤³¤È¤òÈ¯¸«¤·¤¿
-#¼õ¿®¶É³ÎÇ§
-if ($channel >= 223  ){#¶É»ØÄê¤¬¤¢¤ë¤Ê¤é
+#if ( $ARGV[0] eq "long" ){ #çŸ­æ™‚é–“éŒ²ç”»ãªã‚‰ç•°å¸¸ã«é‡ãã¯ãªã‚‰ãªã„ã“ã¨ã‚’ç™ºè¦‹ã—ãŸ
+#å—ä¿¡å±€ç¢ºèª
+if ($channel >= 223  ){#å±€æŒ‡å®šãŒã‚ã‚‹ãªã‚‰
 	$usecs = 1;
 }else{
 	$sth = $dbh->prepare($stmt{'epgimport.5'});
@@ -191,7 +191,7 @@ if ($channel >= 223  ){#¶É»ØÄê¤¬¤¢¤ë¤Ê¤é
 }#end if
 
 if ($usecs == 1){
-#°ìµ¤¤ËÏ¿²è¤·¤Æ
+#ä¸€æ°—ã«éŒ²ç”»ã—ã¦
 	$channela = "CS8";
 	#print "$ontvcode $digitalch\n";
 	&chkrecordingschedule;
@@ -203,7 +203,7 @@ if ($usecs == 1){
 	#print "$recpt1path $channelb $bsrectime $recfolderpath/__$channelb.m2t\n";
 	$oserr = `$recpt1path $channelb $cs2rectime $recfolderpath/__$channelb.m2t`;
 
-#»þ´Ö¤Î¤«¤«¤ëepgdump¤Þ¤È¤á¤Æ¤¢¤È¤Þ¤ï¤·
+#æ™‚é–“ã®ã‹ã‹ã‚‹epgdumpã¾ã¨ã‚ã¦ã‚ã¨ã¾ã‚ã—
 	#print "nice -n 19 $epgdumppath/epgdump /CS $recfolderpath/__$channela.m2t $xmloutpath/__$channela-epg.xml\n";
 	$oserr = `$epgdumppath/epgdump /CS $recfolderpath/__$channela.m2t $xmloutpath/__$channela-epg.xml`;
 	#print "cat $xmloutpath/__$channela-epg.xml | $toolpath/perl/xmltv2foltia.pl\n";
@@ -221,21 +221,21 @@ if ($usecs == 1){
 	&writelog("epgimport DEBUG Skip CS.");
 }#endif use 
 #}else{
-#	if ($channel >= 223  ){#¶É»ØÄê¤¬¤¢¤ë¤Ê¤é
+#	if ($channel >= 223  ){#å±€æŒ‡å®šãŒã‚ã‚‹ãªã‚‰
 #		&writelog("epgimport ERROR CS Station No. was ignored. CS EPG get long mode only.");
 #	}
 #}#end if long
 
 
 sub chkrecordingschedule{
-#ÊüÁ÷Í½Äê¤Þ¤Ç¶á¤¯¤Ê¤Ã¤¿¤é¡¢¥Á¥å¡¼¥Ê¡¼»È¤¤¤Ä¤Å¤±¤Ê¤¤¤è¤¦¤ËEPG¼èÆÀÃæÃÇ
+#æ”¾é€äºˆå®šã¾ã§è¿‘ããªã£ãŸã‚‰ã€ãƒãƒ¥ãƒ¼ãƒŠãƒ¼ä½¿ã„ã¤ã¥ã‘ãªã„ã‚ˆã†ã«EPGå–å¾—ä¸­æ–­
 my $now = time() ;
 my $fiveminitsafter = time() + 60 * 4;
 my $rows = -2;
 $now = &epoch2foldate($now);
 $fiveminitsafter = &epoch2foldate($fiveminitsafter);
 
-#Ï¿²èÍ½Äê¼èÆÀ
+#éŒ²ç”»äºˆå®šå–å¾—
 $sth = $dbh->prepare($stmt{'epgimport.6'});
 $sth->execute($now,$fiveminitsafter,$now,$fiveminitsafter);
 

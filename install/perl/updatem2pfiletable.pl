@@ -5,16 +5,16 @@
 #
 # usage :updatem2pfiletable.pl
 #
-# m2pfile¤Î¥ê¥¹¥È¤ò¥Æ¡¼¥Ö¥ë¤ËÆþ¤ì¤ë
-# Á´delete¤·¤Æ¹¹¿·¤¹¤ë
-# ¤ª¤â¤Ë¥á¥ó¥Æ¥Ê¥ó¥¹ÍÑ
-# ¤Þ¤¿¤Ï°ìÆü°ì²ó¤°¤é¤¤cron¤Ç¼Â¹Ô¤µ¤»¤Æ¤â¤¤¤¤¤«¤â
+# m2pfileã®ãƒªã‚¹ãƒˆã‚’ãƒ†ãƒ¼ãƒ–ãƒ«ã«å…¥ã‚Œã‚‹
+# å…¨deleteã—ã¦æ›´æ–°ã™ã‚‹
+# ãŠã‚‚ã«ãƒ¡ãƒ³ãƒ†ãƒŠãƒ³ã‚¹ç”¨
+# ã¾ãŸã¯ä¸€æ—¥ä¸€å›žãã‚‰ã„cronã§å®Ÿè¡Œã•ã›ã¦ã‚‚ã„ã„ã‹ã‚‚
 #
 # DCC-JPL Japan/foltia project
 #
 
 use DBI;
-use DBD::Pg;
+
 use DBD::SQLite;
 
 $path = $0;
@@ -27,7 +27,7 @@ require "foltialib.pl";
 $dbh = DBI->connect($DSN,$DBUser,$DBPass) ||die $DBI::error;;
 
 $dbh->{AutoCommit} = 0;
-#¡¡¤Ò¤È¤Þ¤º¾Ã¤¹
+#ã€€ã²ã¨ã¾ãšæ¶ˆã™
 $sth = $dbh->prepare($stmt{'updatem2pfiletable.1'});
 	$sth->execute();
 while ($file = glob("$recfolderpath/*.m2?")) {
@@ -48,7 +48,7 @@ $oserr = $dbh->commit;
 # foltia_mp4files
 @mp4filelist = `find ${recfolderpath}/ | grep MP4`;#by foltia dev ticket #5 http://www.dcc-jpl.com/foltia/ticket/5
 
-#¡¡¤Ò¤È¤Þ¤º¾Ã¤¹
+#ã€€ã²ã¨ã¾ãšæ¶ˆã™
 $sth = $dbh->prepare($stmt{'updatem2pfiletable.3'});
 	$sth->execute();
 

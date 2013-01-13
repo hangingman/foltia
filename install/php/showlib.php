@@ -5,11 +5,11 @@
 
 showlib.php
 
-ÌÜÅª
-MPEG4Ï¿²è¥é¥¤¥Ö¥é¥ê¤òÉ½¼¨¤·¤Ş¤¹¡£
+ç›®çš„
+MPEG4éŒ²ç”»ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’è¡¨ç¤ºã—ã¾ã™ã€‚
 
-°ú¿ô
-¤Ê¤·
+å¼•æ•°
+ãªã—
 
  DCC-JPL Japan/foltia project
 
@@ -58,11 +58,11 @@ print "<meta http-equiv=\"Content-Style-Type\" content=\"text/css\">
 <?php
 
 ///////////////////////////////////////////////////////////
-//£±¥Ú¡¼¥¸¤ÎÉ½¼¨¥ì¥³¡¼¥É¿ô
+//ï¼‘ãƒšãƒ¼ã‚¸ã®è¡¨ç¤ºãƒ¬ã‚³ãƒ¼ãƒ‰æ•°
 $lim = 300;	
-//¥¯¥¨¥ê¼èÆÀ
+//ã‚¯ã‚¨ãƒªå–å¾—
 $p = getgetnumform(p);
-//¥Ú¡¼¥¸¼èÆÀ¤Î·×»»
+//ãƒšãƒ¼ã‚¸å–å¾—ã®è¨ˆç®—
 list($st,$p,$p2) = number_page($p,$lim);
 ///////////////////////////////////////////////////////////
 
@@ -79,27 +79,27 @@ if(ereg("iPhone",$useragent)){
 <div align=\"center\">
 ";
 	printhtmlpageheader();
-print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">Ï¿²è¥é¥¤¥Ö¥é¥êÉ½¼¨</font></p>
+print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">éŒ²ç”»ãƒ©ã‚¤ãƒ–ãƒ©ãƒªè¡¨ç¤º</font></p>
   <hr size=\"4\">
-<p align=\"left\">ºÆÀ¸²ÄÇ½¥é¥¤¥Ö¥é¥ê¤òÉ½¼¨¤·¤Ş¤¹¡£<br>
+<p align=\"left\">å†ç”Ÿå¯èƒ½ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’è¡¨ç¤ºã—ã¾ã™ã€‚<br>
 ";
 } 
 
 ////////////////////////////////////////////////////////
-//¥ì¥³¡¼¥É¤ÎÁí¿ô¼èÆÀ
+//ãƒ¬ã‚³ãƒ¼ãƒ‰ã®ç·æ•°å–å¾—
 $query = "
 SELECT
 COUNT(DISTINCT tid) 
 FROM   foltia_mp4files 
 ";
 
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 $rowdata = $rs->fetch();
 $dtcnt = htmlspecialchars($rowdata[0]);
 //echo $dtcnt;
 //
 if (! $rowdata) {
-	die_exit("ÈÖÁÈ¥Ç¡¼¥¿¤¬¤¢¤ê¤Ş¤»¤ó<BR>");
+	die_exit("ç•ªçµ„ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Šã¾ã›ã‚“<BR>");
 }
 
 ////////////////////////////////////////////////////////
@@ -107,7 +107,7 @@ if (! $rowdata) {
 //Autopager
 echo "<div id=contents class=autopagerize_page_element />";
 
-//¿·»ÅÍÍ /* 2006/10/26 */
+//æ–°ä»•æ§˜ /* 2006/10/26 */
 $query = "
 SELECT foltia_mp4files.tid,foltia_program.title , count(foltia_mp4files.mp4filename) 
 FROM   foltia_mp4files ,  foltia_program 
@@ -118,13 +118,13 @@ LIMIT $lim OFFSET $st
 ";
 
 
-//$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+//$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 $rowdata = $rs->fetch();
 
 if ($rowdata) {
 if(ereg("iPhone",$useragent)){
-	print "<ul id=\"home\" title=\"Ï¿²è¥é¥¤¥Ö¥é¥êÉ½¼¨\" selected=\"true\">";
+	print "<ul id=\"home\" title=\"éŒ²ç”»ãƒ©ã‚¤ãƒ–ãƒ©ãƒªè¡¨ç¤º\" selected=\"true\">";
 }else{
 
 print "
@@ -132,9 +132,9 @@ print "
 	<thead>
 		<tr>
 			<th align=\"left\">TID</th>
-			<th align=\"left\">¥¿¥¤¥È¥ë(ÆâÍÆ¥ê¥ó¥¯)</th>
-			<th align=\"left\">ÆâÍÆ¿ô</th>
-			<th align=\"left\">¥ê¥ó¥¯</th>
+			<th align=\"left\">ã‚¿ã‚¤ãƒˆãƒ«(å†…å®¹ãƒªãƒ³ã‚¯)</th>
+			<th align=\"left\">å†…å®¹æ•°</th>
+			<th align=\"left\">ãƒªãƒ³ã‚¯</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -158,7 +158,7 @@ print "
 <td>$tid<br></td>
 <td><a href=\"showlibc.php?tid=$tid\">$title</a></td>
 <td>$counts<br></td>
-<td><a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">¤·¤ç¤Ü¤«¤ë-$tid</a><br></td>
+<td><a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">ã—ã‚‡ã¼ã‹ã‚‹-$tid</a><br></td>
 </tr>\n
 ";
 }
@@ -173,7 +173,7 @@ print "
 
 ";
 ////////////////////////////////////////////////////////////////
-//Autopageing½èÍı¤È¥Ú¡¼¥¸¤Î¥ê¥ó¥¯¤òÉ½¼¨
+//Autopageingå‡¦ç†ã¨ãƒšãƒ¼ã‚¸ã®ãƒªãƒ³ã‚¯ã‚’è¡¨ç¤º
 page_display("",$p,$p2,$lim,$dtcnt,"");
 ///////////////////////////////////////////////////////////////
 
@@ -184,7 +184,7 @@ print "
 }
 
 }else{
-print "Ï¿²è¥Õ¥¡¥¤¥ë¤¬Â¸ºß¤·¤Ş¤»¤ó¡£</body></html>";
+print "éŒ²ç”»ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ã¾ã›ã‚“ã€‚</body></html>";
 
 }//end if
 
@@ -192,8 +192,8 @@ print "Ï¿²è¥Õ¥¡¥¤¥ë¤¬Â¸ºß¤·¤Ş¤»¤ó¡£</body></html>";
 
 
 /*
-//µì»ÅÍÍ
-//¥Ç¥£¥ì¥¯¥È¥ê¤«¤é¥Õ¥¡¥¤¥ë°ìÍ÷¤ò¼èÆÀ
+//æ—§ä»•æ§˜
+//ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§ã‚’å–å¾—
 	exec ("ls  $recfolderpath | grep localized | sort -r", $libdir);
 //print "libdir:$libdir<BR>\n";
 
@@ -208,7 +208,7 @@ foltia_program.tid,foltia_program.title
 FROM   foltia_program   
 WHERE foltia_program.tid = $filesplit[0] 
 ";
-$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
+$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
 $rowdata = $rs->fetch();
 //print" $fName./$rowdata[1]/$rowdata[2]/$rowdata[3]<BR>\n";
 $title = $rowdata[1];
@@ -221,15 +221,15 @@ print "
 <td>$tid<br></td>
 <td><a href=\"showlibc.php?tid=$tid\">$title</a></td>
 <td>";
-//·×¿ô
+//è¨ˆæ•°
 $counts = system ("ls  $recfolderpath/$fName/mp4/*.MP4 | wc -l");
 print "<br></td>
-<td><a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">¤·¤ç¤Ü¤«¤ë-$tid</a><br></td>
+<td><a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">ã—ã‚‡ã¼ã‹ã‚‹-$tid</a><br></td>
 </tr>\n
 ";
         }//end if ereg m2p
 		}//end foreach
-//µì»ÅÍÍ¥³¥³¤Ş¤Ç
+//æ—§ä»•æ§˜ã‚³ã‚³ã¾ã§
 */
 //$d->close();
 ?>

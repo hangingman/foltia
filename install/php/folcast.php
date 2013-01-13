@@ -5,14 +5,14 @@
 
 folcast.php
 
-ÌÜÅª
-foltia video podcast(folcast)ÍÑRSS¤ò½ĞÎÏ¤·¤Ş¤¹¡£
+ç›®çš„
+foltia video podcast(folcast)ç”¨RSSã‚’å‡ºåŠ›ã—ã¾ã™ã€‚
 
-¥ª¥×¥·¥ç¥ó
-tid:¥¿¥¤¥È¥ëID
-¡¡¾ÊÎ¬»ş¤Ï¿·µ¬Ï¿²èÁ´Éô
-max:É½¼¨¾å¸Â
-¡¡¾ÊÎ¬»ş¤Ï45·ï
+ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+tid:ã‚¿ã‚¤ãƒˆãƒ«ID
+ã€€çœç•¥æ™‚ã¯æ–°è¦éŒ²ç”»å…¨éƒ¨
+max:è¡¨ç¤ºä¸Šé™
+ã€€çœç•¥æ™‚ã¯45ä»¶
 
  DCC-JPL Japan/foltia project
 
@@ -41,7 +41,7 @@ $nowrfc822 =  date("r");
 $max = getgetnumform(max);
 
 if ($max > 0 ){
-	//·ï¿ô»ØÄê¤¬¤¢¤ì¤Ğ¤Ê¤Ë¤â¤·¤Ê¤¤
+	//ä»¶æ•°æŒ‡å®šãŒã‚ã‚Œã°ãªã«ã‚‚ã—ãªã„
 }else{
 	$max = 45;
 }
@@ -60,9 +60,9 @@ SELECT  foltia_program.tid,foltia_program.title
 FROM  foltia_program   
 WHERE foltia_program.tid = ?   
 ";
-//	$titlers = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$titlers = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($tid));
-//	$titlers = sql_query($con, $titlequery, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($tid));
+//	$titlers = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$titlers = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($tid));
+//	$titlers = sql_query($con, $titlequery, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($tid));
 	$rowdata = $titlers->fetch();
 	$rsstitle = htmlspecialchars($rowdata[1]);
 }else{
@@ -75,7 +75,7 @@ limit  ? offset 0
 
 
 
-	$rsstitle = "¿·µ¬Ï¿²è";
+	$rsstitle = "æ–°è¦éŒ²ç”»";
 }//if
 
 $header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> 
@@ -84,9 +84,9 @@ $header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
         <title>$rsstitle:Folcast</title> 
         <itunes:author>DCC-JPL Japan/foltia project</itunes:author> 
         <link>http://www.dcc-jpl.com/soft/foltia/</link> 
-        <description>¥Õ¥©¥ë¥Æ¥£¥¢¤¬Ì¤ÆÉ½èÍı¤ò¤ª½õ¤±¤·¤Á¤ã¤¤¤Ş¤¹</description> 
+        <description>ãƒ•ã‚©ãƒ«ãƒ†ã‚£ã‚¢ãŒæœªèª­å‡¦ç†ã‚’ãŠåŠ©ã‘ã—ã¡ã‚ƒã„ã¾ã™</description> 
         <itunes:subtitle>foltia video podcast :$rsstitle:Folcast</itunes:subtitle> 
-        <itunes:summary>¥Õ¥©¥ë¥Æ¥£¥¢¤¬Ì¤ÆÉ½èÍı¤ò¤ª½õ¤±¤·¤Á¤ã¤¤¤Ş¤¹</itunes:summary> 
+        <itunes:summary>ãƒ•ã‚©ãƒ«ãƒ†ã‚£ã‚¢ãŒæœªèª­å‡¦ç†ã‚’ãŠåŠ©ã‘ã—ã¡ã‚ƒã„ã¾ã™</itunes:summary> 
 		<language>ja</language>
         <copyright>foltia</copyright> 
         <itunes:owner> 
@@ -100,8 +100,8 @@ $header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 $header = mb_convert_encoding($header,"UTF-8", "EUC-JP");
 print $header;
 
-//	$rs = m_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿");
-	$rs = sql_query($con, $query, "DB¥¯¥¨¥ê¤Ë¼ºÇÔ¤·¤Ş¤·¤¿",array($max));
+//	$rs = m_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ");
+	$rs = sql_query($con, $query, "DBã‚¯ã‚¨ãƒªã«å¤±æ•—ã—ã¾ã—ãŸ",array($max));
 $rowdata = $rs->fetch();
 
 if (! $rowdata) {
@@ -114,7 +114,7 @@ $title = $rowdata[1];
 $title = htmlspecialchars($title);
 $countno = $rowdata[2];
 if ($countno > 0 ){
-	$countprint = "Âè".$countno."²ó";
+	$countprint = "ç¬¬".$countno."å›";
 }else{
 	$countprint="";
 }
@@ -140,7 +140,7 @@ if (file_exists("$recfolderpath/$tid.localized/mp4/$mp4filename")) {
 	$mp4filesize = 0;
 }
 
-if ($rowdata[0] == 0 ){//EPGÏ¿²è
+if ($rowdata[0] == 0 ){//EPGéŒ²ç”»
 	$showntitle = "$title $subtitle";
 }else{
 	$showntitle = "$title $countprint";
