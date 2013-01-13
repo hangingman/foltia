@@ -57,8 +57,8 @@ http://www.hizlab.net/app/
 
 	/* 全角カタカナ化してスペースを削除してインデックス用にする */
 	function name2read($name) {
-	$name = mb_convert_kana($name, "KVC", "EUC-JP");
-	$name = mb_convert_kana($name, "s", "EUC-JP");
+	$name = mb_convert_kana($name, "KVC", "UTF-8");
+	$name = mb_convert_kana($name, "s", "UTF-8");
 	$name = ereg_replace(" ", "", $name);
 
 		return $name;
@@ -66,7 +66,7 @@ http://www.hizlab.net/app/
 
 	/* 数字を半角化して数字化してインデックス用にする */
 	function pnum2dnum($num) {
-	$num = mb_convert_kana($num, "a", "EUC-JP");
+	$num = mb_convert_kana($num, "a", "UTF-8");
 	$num = ereg_replace("[^0-9]", "", $num);
 
 		return $num;
@@ -319,7 +319,7 @@ return ($endtime );
 
 
 function z2h($string){ //戻り値　半角化した文字
-	$stringh = mb_convert_kana($string, "a", "EUC-JP");
+	$stringh = mb_convert_kana($string, "a", "UTF-8");
  return ($stringh );
 }
 

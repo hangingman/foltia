@@ -37,9 +37,9 @@ $path = getgetform(path);
 $filename = getgetform(f);
 $blogwritepw = "$_POST[blogpw]" ;
 
-$blogtitle = stripslashes(mb_convert_encoding(urldecode($_POST[subjects]), "UTF-8", "EUC-JP"));
+$blogtitle = stripslashes(mb_convert_encoding(urldecode($_POST[subjects]), "UTF-8", "UTF-8"));
 //$blogtitle =  stripslashes(urldecode($_POST[subjects]));
-$blogmessages = stripslashes(mb_convert_encoding(urldecode($_POST[maintext]), "UTF-8", "EUC-JP"));
+$blogmessages = stripslashes(mb_convert_encoding(urldecode($_POST[maintext]), "UTF-8", "UTF-8"));
 
 
 
@@ -50,7 +50,7 @@ if (($tid == "") ||($filename == "") || ($path == "")) {
 $htmloutput = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">
 <html lang=\"ja\">
 <head>
-<meta http-equiv=\"Content-Type\" content=\"text/html; charset=EUC-JP\">
+<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">
 <meta http-equiv=\"Content-Style-Type\" content=\"text/css\">
 <link rel=\"stylesheet\" type=\"text/css\" href=\"graytable.css\"> 
 <title>Starlight Breaker -吾莨若</title>
@@ -58,7 +58,7 @@ $htmloutput = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.
 <body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#000000\" ALINK=\"#c6edff\" >
 <div align=\"center\">";
 
-$htmloutput =  mb_convert_encoding("$htmloutput","EUC-JP", "UTF-8");
+$htmloutput =  mb_convert_encoding("$htmloutput","UTF-8", "UTF-8");
 print "$htmloutput";
 
 
@@ -70,7 +70,7 @@ if (($tid == "") ||($filename == "") || ($path == "")) {
 }
 
 $htmloutput = " <p align=\"left\"><font color=\"#494949\" size=\"6\">吾莨若祉㏍</font></p>  <hr size=\"4\">";
-$htmloutput =  mb_convert_encoding($htmloutput,"EUC-JP", "UTF-8");
+$htmloutput =  mb_convert_encoding($htmloutput,"UTF-8", "UTF-8");
 print "$htmloutput";
 
 
@@ -124,12 +124,12 @@ print "<a href = \"$blogurl/?p=";
 echo $post->id;
 print "\">Go Entry</a><br /><hr>\n";
 
-$blogtitle =  mb_convert_encoding($blogtitle,"EUC-JP", "UTF-8");
+$blogtitle =  mb_convert_encoding($blogtitle,"UTF-8", "UTF-8");
 print "$blogtitle <br />\n";
 
 //print "<img src='$wordpressimgdir/$imgpathfilename' width='160' height='120' align=\"left\">\n";
 
-$blogmessages =  mb_convert_encoding($blogmessages,"EUC-JP", "UTF-8");
+$blogmessages =  mb_convert_encoding($blogmessages,"UTF-8", "UTF-8");
 print "$blogmessages <br />\n";
 
 

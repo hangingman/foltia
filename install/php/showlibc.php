@@ -39,7 +39,7 @@ if ($tid == "") {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="ja">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <?php
 if (file_exists  ( "./iui/iui.css"  )){
 	$useragent = $_SERVER['HTTP_USER_AGENT'];
@@ -88,7 +88,7 @@ $rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
 $syobocaldb = `curl "http://cal.syoboi.jp/db?Command=TitleLookup&TID=$tid" | head -2 `;
-$syobocaldb = mb_convert_encoding($syobocaldb, "EUC-JP", "UTF-8");
+$syobocaldb = mb_convert_encoding($syobocaldb, "UTF-8", "UTF-8");
 	$syobocaldb = preg_match("/<Title>.*<\/Title>/", $syobocaldb,$title);
 	$title = $title[0];
 	$title = strip_tags($title);

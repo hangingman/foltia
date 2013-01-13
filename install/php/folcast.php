@@ -97,7 +97,7 @@ $header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
         <itunes:category text=\"Technology\"></itunes:category> 
 
 ";
-$header = mb_convert_encoding($header,"UTF-8", "EUC-JP");
+$header = mb_convert_encoding($header,"UTF-8", "UTF-8");
 print $header;
 
 //	$rs = m_query($con, $query, "DBクエリに失敗しました");
@@ -108,7 +108,7 @@ if (! $rowdata) {
 				//die_exit("No items");	
 }else{
 	do {
-//$title = mb_convert_encoding($rowdata[1],"UTF-8", "EUC-JP");
+//$title = mb_convert_encoding($rowdata[1],"UTF-8", "UTF-8");
 $tid =  $rowdata[0];
 $title = $rowdata[1];
 $title = htmlspecialchars($title);
@@ -162,7 +162,7 @@ $item ="    <item>
         </item> 
 ";
 
-$item = mb_convert_encoding($item,"UTF-8", "EUC-JP");
+$item = mb_convert_encoding($item,"UTF-8", "UTF-8");
 print $item ;
 
 	} while ($rowdata = $rs->fetch()); //do

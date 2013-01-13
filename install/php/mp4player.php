@@ -41,14 +41,14 @@ WHERE pid = ? AND foltia_subtitle.tid = foltia_program.tid";
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($pid));
 $rowdata = $rs->fetch();
 
-//$title = htmlspecialchars(mb_convert_encoding($rowdata[0],"UTF-8", "EUC-JP"));
+//$title = htmlspecialchars(mb_convert_encoding($rowdata[0],"UTF-8", "UTF-8"));
 $title = htmlspecialchars($rowdata[0]);
 	if ($rowdata[1] == ""){
 	$countno = "";
 	}else{
 	$countno = "第".htmlspecialchars($rowdata[1])."話";
 	}
-//$subtitle = htmlspecialchars(mb_convert_encoding($rowdata[2],"UTF-8", "EUC-JP"));
+//$subtitle = htmlspecialchars(mb_convert_encoding($rowdata[2],"UTF-8", "UTF-8"));
 $subtitle = htmlspecialchars($rowdata[2]);
 $tid =  htmlspecialchars($rowdata[3]);
 $filename = htmlspecialchars($rowdata[4]);
@@ -59,7 +59,7 @@ header("Status: 404 Not Found",TRUE,404);
 print "<!DOCTYPE html>
 <html>
 <head>
-  <meta charset=\"EUC-JP\" />\n";
+  <meta charset=\"UTF-8\" />\n";
 	print "  <title>foltia HTML5 Video Player</title></head><body>No pid.</body></html>";
 	exit ;
 }
@@ -69,13 +69,13 @@ header("Status: 404 Not Found",TRUE,404);
 print "<!DOCTYPE html>
 <html>
 <head>
-  <meta charset=\"EUC-JP\" />\n";
+  <meta charset=\"UTF-8\" />\n";
 	print "  <title>foltia HTML5 Video Player</title></head><body>File not found.</body></html>";
 	exit ;
 }
 
 
-print "<!DOCTYPE html>\n<html>\n<head><meta charset=\"EUC-JP\" />\n\n
+print "<!DOCTYPE html>\n<html>\n<head><meta charset=\"UTF-8\" />\n\n
 <title>foltia HTML5 Video Player / $title $countno $subtitle</title>\n";
 $mp4videofileurl =  "http://". getserverfqdn() ."$httpmediamappath/$tid.localized/mp4/$filename";
 ?>
@@ -83,9 +83,9 @@ $mp4videofileurl =  "http://". getserverfqdn() ."$httpmediamappath/$tid.localize
 
 
   <!-- Include the VideoJS Library -->
-  <script src="./video-js/video.js" type="text/javascript" charset="EUC-JP"></script>
+  <script src="./video-js/video.js" type="text/javascript" charset="UTF-8"></script>
 
-  <script type="text/javascript" charset="EUC-JP">
+  <script type="text/javascript" charset="UTF-8">
     // Run the script on page load.
 
     // If using jQuery
@@ -105,7 +105,7 @@ $mp4videofileurl =  "http://". getserverfqdn() ."$httpmediamappath/$tid.localize
 
   </script>
   <!-- Include the VideoJS Stylesheet -->
-  <link rel="stylesheet" href="./video-js/video-js.css" type="text/css" media="screen" title="Video JS" charset="EUC-JP">
+  <link rel="stylesheet" href="./video-js/video-js.css" type="text/css" media="screen" title="Video JS" charset="UTF-8">
 </head>
 <body>
 
