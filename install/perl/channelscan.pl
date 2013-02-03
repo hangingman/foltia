@@ -1,21 +1,34 @@
 #!/usr/bin/perl
 #
-#
 # Anime recording system foltia
 # http://www.dcc-jpl.com/soft/foltia/
+# Copyright (C) 2013 DCC-JPL Japan/foltia project
+
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
 #
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+#
+# channelscan.pl
 # チャンネルスキャン
 # 初期インストール時に受信可能局をスキャンします
 #
-# DCC-JPL Japan/foltia project
-#
 
 my $recpt1path = "/home/foltia/perl/tool/recpt1"; #ほかのキャプチャデバイス作ってる人はココを変更
-my $epgdumppath = "/home/foltia/perl/tool"; #epgdumpのあるディレクトリ
-my $recfolderpath = "/home/foltia/php/tv";#tsを出力するディレクトリ
+my $epgdumppath = "/home/foltia/perl/tool";       #epgdumpのあるディレクトリ
+my $recfolderpath = "/home/foltia/php/tv";        #tsを出力するディレクトリ
 my $xmloutpath = "/tmp";
-my $channel = 13 ; #地デジチャンネルは13-62
+my $channel = 13 ;		                  #地デジチャンネルは13-62
 my $oserr = "";
 my $line = "";
 
@@ -28,68 +41,64 @@ print "XML OUT:$xmloutpath/\n";
 
 #ツールがあるか確認
 unless (-e "$recpt1path"){
-	print "Please install $recpt1path.\n";
-	exit 1;
+  print "Please install $recpt1path.\n";
+  exit 1;
 }
 unless (-e "$epgdumppath/epgdump"){
-	print "Please install $epgdumppath/epgdump.\n";
-	exit 1;
+  print "Please install $epgdumppath/epgdump.\n";
+  exit 1;
 }
 unless (-e "$recfolderpath"){
-	print "Please make directory $recfolderpath.\n";
-	exit 1;
+  print "Please make directory $recfolderpath.\n";
+  exit 1;
 }
 unless (-e "$xmloutpath"){
-	print "Please make directory $xmloutpath.\n";
-	exit 1;
+  print "Please make directory $xmloutpath.\n";
+  exit 1;
 }
 
 
 #地デジスキャンループ
-for ($channel = 13; $channel <= 62 ; $channel++){
-	print "\nChannel: $channel\n";
-	$oserr = `$recpt1path $channel 4 $recfolderpath/__$channel.m2t`;
-	$oserr = `$epgdumppath/epgdump $channel $recfolderpath/__$channel.m2t $xmloutpath/__$channel-epg.xml`;
+for ($channel = 13; $channel <= 62 ; $channel++) {
+  print "\nChannel: $channel\n";
+  $oserr = `$recpt1path $channel 4 $recfolderpath/__$channel.m2t`;
+  $oserr = `$epgdumppath/epgdump $channel $recfolderpath/__$channel.m2t $xmloutpath/__$channel-epg.xml`;
 
-	if (-s "$xmloutpath/__$channel-epg.xml" ){
-		print "\t\t This channel can view :  $channel \n";
-		open(XML, "< $xmloutpath/__$channel-epg.xml");
-		while ( $line = <XML>) {
-			#Jcode::convert(\$line,'euc','utf8');
-			if($line =~ /<display-name/){
-				$line =~ s/<.*?>//g;
-				#Jcode::convert(\$line,'utf8','euc');
-				print "\t\t $channel $line\n";
-			}#end if
-		}#end while
-		close(XML);
-	}else{
-		print "\t\t Not Available :  $channel \n";
-	}#end if 
-}#end for
+  if (-s "$xmloutpath/__$channel-epg.xml" ) {
+    print "\t\t This channel can view :  $channel \n";
+    open(XML, "< $xmloutpath/__$channel-epg.xml");
+    while ( $line = <XML>) {
+      if ($line =~ /<display-name/) {
+	$line =~ s/<.*?>//g;
+	print "\t\t $channel $line\n";
+      }				#end if
+    }				#end while
+    close(XML);
+  } else {
+    print "\t\t Not Available :  $channel \n";
+  }				#end if 
+}				#end for
 
 
 #BSデジタル
 $channel = 211;
-	print "\nBS Digital Scan\n";
-	$oserr = `$recpt1path $channel 4 $recfolderpath/__$channel.m2t`;
-	$oserr = `$epgdumppath/epgdump /BS $recfolderpath/__$channel.m2t $xmloutpath/__$channel-epg.xml`;
+print "\nBS Digital Scan\n";
+$oserr = `$recpt1path $channel 4 $recfolderpath/__$channel.m2t`;
+$oserr = `$epgdumppath/epgdump /BS $recfolderpath/__$channel.m2t $xmloutpath/__$channel-epg.xml`;
 
-	if (-s "$xmloutpath/__$channel-epg.xml" ){
-		print "\t\t BS Digital can view :   \n";
-		open(XML, "< $xmloutpath/__$channel-epg.xml");
-		while ( $line = <XML>) {
-			#Jcode::convert(\$line,'euc','utf8');
-			if($line =~ /<display-name/){
-				$line =~ s/<.*?>//g;
-				#Jcode::convert(\$line,'utf8','euc');
-				print "\t\t $line\n";
-			}#end if
-		}#end while
-		close(XML);
-	}else{
-		print "\t\t Not Available :  BS Digital \n";
-	}#end if 
+if (-s "$xmloutpath/__$channel-epg.xml" ) {
+  print "\t\t BS Digital can view :   \n";
+  open(XML, "< $xmloutpath/__$channel-epg.xml");
+  while ( $line = <XML>) {
+    if ($line =~ /<display-name/) {
+      $line =~ s/<.*?>//g;
+      print "\t\t $line\n";
+    }				#end if
+  }				#end while
+  close(XML);
+} else {
+  print "\t\t Not Available :  BS Digital \n";
+}				#end if 
 
 
 #  <channel id="3001.ontvjapan.com">
@@ -138,25 +147,25 @@ $channel = 211;
 
 #CSデジタル
 $channel = "CS8";
-	print "\nCS Digital Scan\n";
-	$oserr = `$recpt1path $channel 4 $recfolderpath/__$channel.m2t`;
-	$oserr = `$epgdumppath/epgdump /CS $recfolderpath/__$channel.m2t $xmloutpath/__$channel-epg.xml`;
+print "\nCS Digital Scan\n";
+$oserr = `$recpt1path $channel 4 $recfolderpath/__$channel.m2t`;
+$oserr = `$epgdumppath/epgdump /CS $recfolderpath/__$channel.m2t $xmloutpath/__$channel-epg.xml`;
 
-	if (-s "$xmloutpath/__$channel-epg.xml" ){
-		print "\t\t CS Digital can view :   \n";
-		open(XML, "< $xmloutpath/__$channel-epg.xml");
-		while ( $line = <XML>) {
-			#Jcode::convert(\$line,'euc','utf8');
-			if($line =~ /<display-name/){
-				$line =~ s/<.*?>//g;
+if (-s "$xmloutpath/__$channel-epg.xml" ) {
+  print "\t\t CS Digital can view :   \n";
+  open(XML, "< $xmloutpath/__$channel-epg.xml");
+  while ( $line = <XML>) {
+    #Jcode::convert(\$line,'euc','utf8');
+    if ($line =~ /<display-name/) {
+      $line =~ s/<.*?>//g;
 				#Jcode::convert(\$line,'utf8','euc');
-				print "\t\t $line\n";
-			}#end if
-		}#end while
-		close(XML);
-	}else{
-		print "\t\t Not Available :  CS Digital \n";
-	}#end if 
+      print "\t\t $line\n";
+    }				#end if
+  }				#end while
+  close(XML);
+} else {
+  print "\t\t Not Available :  CS Digital \n";
+}				#end if 
 
 #  <channel id="1002.ontvjapan.com">
 #    <display-name lang="ja_JP">スターｃｈプラス</display-name>

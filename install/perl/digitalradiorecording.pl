@@ -2,18 +2,31 @@
 #
 # Anime recording system foltia
 # http://www.dcc-jpl.com/soft/foltia/
+# Copyright (C) 2013 DCC-JPL Japan/foltia project
+
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
 #
-#digitalradiorecording.pl
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+#
+# digitalradiorecording.pl
 # IPサイマルラジオ「radiko」を録音する。
 #
-#usage digitalradiorecording.pl stationname length(sec) filename
-#引数
-#stationname : radikoの使う曲識別子 例:文化放送 QRR  [必須項目]
-#length(sec) :録画秒数 [必須項目]
-#filename :出力ファイル名 [必須項目]
-#
-# DCC-JPL Japan/foltia project
-#
+# usage digitalradiorecording.pl stationname length(sec) filename
+# 引数
+# stationname : radikoの使う曲識別子 例:文化放送 QRR  [必須項目]
+# length(sec) : 録画秒数 [必須項目]
+# filename    : 出力ファイル名 [必須項目]
 #
 
 $path = $0;
@@ -23,20 +36,16 @@ push( @INC, "$path");
 }
 
 #tvConfig.pl -------------------------------
-$extendrecendsec = 10;							#recording end second. 
-#$startupsleeptime = 52;					#process wait(MAX60sec)
-$startupsleeptime = 57;					#process wait(MAX60sec)
+$extendrecendsec = 10;		#recording end second.
+#$startupsleeptime = 52;	#process wait(MAX60sec)
+$startupsleeptime = 57;		#process wait(MAX60sec)
 #-------------------------------
 
 require 'foltialib.pl';
-
 # &writelog("digitalradiorecording.pl: DEBUG $ARGV[0] $ARGV[1] ");
-
 
 #準備
 &prepare;
-
-
 &calldigitalrecorder;
 
 # &writelog("digitaldigitalradiorecording:RECEND:$bandtype $recch $lengthsec $stationid $sleeptype $filename $tid $countno $unittype");
