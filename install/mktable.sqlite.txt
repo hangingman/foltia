@@ -1,5 +1,5 @@
 
-drop table  foltia_program ;
+drop table if exists  foltia_program ;
 
 create table foltia_program (
 tid integer PRIMARY KEY, 
@@ -19,7 +19,7 @@ create unique index foltia_program_tid_index on foltia_program (tid);
 -- REVOKE ALL on "foltia_program" from PUBLIC;
 -- GRANT UPDATE,SELECT,INSERT on "foltia_program" to "foltia";
 
-drop table  foltia_subtitle ;
+drop table if exists  foltia_subtitle ;
 
 create table foltia_subtitle (
 pid integer  PRIMARY KEY,
@@ -46,7 +46,7 @@ create  index foltia_subtitle_startdatetime_index on foltia_subtitle (startdatet
 -- REVOKE ALL on "foltia_subtitle" from PUBLIC;
 -- GRANT UPDATE,SELECT,INSERT on "foltia_subtitle" to "foltia";
 
-drop table foltia_tvrecord;
+drop table if exists foltia_tvrecord;
 create table foltia_tvrecord (
 tid integer  ,
 stationid integer,
@@ -59,7 +59,7 @@ create  index foltia_tvrecord_tid_index on foltia_tvrecord (tid);
 -- GRANT ALL on "foltia_tvrecord" to "foltia";
 
 
-drop table foltia_epg;
+drop table if exists foltia_epg;
 create table foltia_epg (
 epgid integer   PRIMARY KEY AUTOINCREMENT,
 startdatetime integer,
@@ -77,14 +77,14 @@ create  index foltia_epg_ontvchannel_index on foltia_epg (ontvchannel);
 -- REVOKE ALL on "foltia_epg" from PUBLIC;
 -- GRANT ALL on "foltia_epg" to "foltia";
 
-drop table foltia_m2pfiles;
+drop table if exists foltia_m2pfiles;
 create table foltia_m2pfiles (
 m2pfilename text  PRIMARY KEY
 );
 -- REVOKE ALL on "foltia_m2pfiles" from PUBLIC;
 -- GRANT ALL on "foltia_m2pfiles" to "foltia";
 
-drop table foltia_mp4files;
+drop table if exists foltia_mp4files;
 create table foltia_mp4files (
 tid integer,
 mp4filename text   PRIMARY KEY
@@ -92,7 +92,7 @@ mp4filename text   PRIMARY KEY
 -- REVOKE ALL on "foltia_mp4files" from PUBLIC;
 -- GRANT ALL on "foltia_mp4files" to "foltia";
 
-drop table foltia_station;
+drop table if exists foltia_station;
 CREATE TABLE foltia_station (
     stationid integer  PRIMARY KEY,
     stationname text,
@@ -149,7 +149,7 @@ INSERT INTO foltia_tvrecord VALUES (0,0,5,1);
 -- ALTER TABLE ONLY foltia_station
 --     ADD CONSTRAINT foltia_station_pkey PRIMARY KEY (stationid);
 
-drop table foltia_envpolicy;
+drop table if exists foltia_envpolicy;
 CREATE TABLE foltia_envpolicy (
 memberid integer  PRIMARY KEY,
 userclass integer,
