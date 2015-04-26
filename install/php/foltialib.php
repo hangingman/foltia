@@ -165,23 +165,6 @@ function m_close($dbh) {
 	return null;
 }
 
-//旧関数　sql_queryに置き換え
-function m_query($dbh, $query, $errmessage) {
-	try {
-		$rtn = $dbh->query($query);
-		return($rtn);
-	} catch (PDOException $e) {
-        /* エラーメッセージに SQL 文を出すのはセキュリティ上良くない！！ */
-        $msg = $errmessage . "<br>\n" .
-             $e->getMessage() . "<br>\n" .
-             var_export($e->errorInfo, true) . "<br>\n" .
-             "<small><code>" . htmlspecialchars($query) .
-             "</code></small>\n";
-        //		$dbh->rollBack();
-		$dbh = null;
-        die_exit($msg);
-    }
-}
 /* SQL 文を実行 */
 function sql_query($dbh, $query, $errmessage,$paramarray=null) {
 	try {

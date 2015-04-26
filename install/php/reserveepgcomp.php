@@ -93,7 +93,6 @@ if (($startdatetime > $now ) && ($enddatetime > $now ) && ($enddatetime  > $star
 
 //min pidを探す
 $query = "SELECT min(pid) FROM  foltia_subtitle ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました");
 	$rowdata = $rs->fetch();
 	if (! $rowdata) {
@@ -108,7 +107,6 @@ $query = "SELECT min(pid) FROM  foltia_subtitle ";
 	}
 // next 話数を探す
 $query = "SELECT max(countno) FROM  foltia_subtitle WHERE tid = 0";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました");
 	$rowdata = $rs->fetch();
 	if (! $rowdata) {
@@ -145,7 +143,6 @@ $memberid = getmymemberid($con);
 insert into foltia_subtitle  (pid ,tid ,stationid , countno ,subtitle ,
 startdatetime ,enddatetime ,startoffset , lengthmin , epgaddedby ) 
 values ( ?,'0',?,?,?,?,?,'0',?,?)";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($insertpid,$stationid,$nextcno,$subtitle,$startdatetime,$enddatetime,$lengthmin,$memberid));
 
 	//addatq.pl

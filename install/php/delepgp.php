@@ -72,7 +72,6 @@ foltia_station.stationid = foltia_subtitle.stationid AND
 foltia_subtitle.pid = ? 
  ";
 
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($pid));
 	$rowdata = $rs->fetch();
 	$rs->closeCursor();
@@ -115,7 +114,6 @@ if ($delflag == "1") {
 		DELETE  
 		FROM  foltia_subtitle  
 		WHERE foltia_subtitle.pid = ? AND  foltia_subtitle.tid = 0 ";
-//			$rs = m_query($con, $query, "DBクエリに失敗しました");
 			$rs = sql_query($con, $query, "DBクエリに失敗しました",array($pid));
 		}
 	}else{

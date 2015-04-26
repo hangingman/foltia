@@ -64,7 +64,7 @@ AND foltia_subtitle.enddatetime >= ?
 ORDER BY \"startdatetime\" ASC 
 LIMIT 1000
 	";
-//	$reservedrssametid = m_query($con, $query, "DBクエリに失敗しました");
+
 $reservedrssametid = sql_query($con, $query, "DBクエリに失敗しました",array($now));
 $rowdata = $reservedrssametid->fetch();
 if ($rowdata) {
@@ -103,7 +103,6 @@ WHERE foltia_tvrecord.stationid = 0 AND
 LIMIT 1000
 	";
 
-//$reservedrs = m_query($con, $query, "DBクエリに失敗しました");
 $query = "
 SELECT
  foltia_program.tid, stationname, foltia_program.title,
@@ -222,7 +221,6 @@ LIMIT $lim OFFSET $st
 
 }//end if
 
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($now));
 $rowdata = $rs->fetch();
 //

@@ -67,7 +67,6 @@ $now = date("YmdHi");
 
 //タイトル取得
 	$query = "select title from foltia_program where tid = ? ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
@@ -176,7 +175,6 @@ if ($station ==0){
 FROM foltia_tvrecord  
 WHERE tid = ? 
 ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
 }//endif
 
@@ -186,17 +184,14 @@ count(*)
 FROM foltia_tvrecord  
 WHERE tid = ?  AND stationid = ? 
 ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid,$station));
 	$maxrows = $rs->fetchColumn(0);
 		if ($maxrows == 0) { //新規追加
 				$query = "INSERT INTO  foltia_tvrecord  values (?,?,?,?)";
-//				$rs = m_query($con, $query, "DB書き込みに失敗しました");
 				$rs = sql_query($con, $query, "DB書き込みに失敗しました",array($tid,$station,$bitrate,$usedigital));
 		}else{//修正　(ビットレート)
 			$query = "UPDATE  foltia_tvrecord  SET 
   bitrate = ? , digital = ? WHERE tid = ? AND stationid = ? ";
-//			$rs = m_query($con, $query, "DB書き込みに失敗しました");
 			$rs = sql_query($con, $query, "DB書き込みに失敗しました",array( $bitrate, $usedigital , $tid , $station ));
 		}
 	

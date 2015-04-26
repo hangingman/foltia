@@ -70,7 +70,6 @@ foltia_tvrecord.stationid
 FROM  foltia_tvrecord , foltia_program , foltia_station 
 WHERE foltia_tvrecord.tid = foltia_program.tid  AND foltia_tvrecord.stationid = foltia_station .stationid  AND foltia_tvrecord.tid = ? AND foltia_tvrecord.stationid = ?  ";
 
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid,$sid));
 $rowdata = $rs->fetch();
 
@@ -106,7 +105,6 @@ DELETE
 FROM  foltia_tvrecord  
 WHERE foltia_tvrecord.tid = ? AND foltia_tvrecord.stationid = ?  ";
 $rs->closeCursor();
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid,$sid));
 }
 
@@ -166,7 +164,6 @@ WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = fo
  AND foltia_subtitle.startdatetime >= ?  AND foltia_program.tid = ?  
 ORDER BY foltia_subtitle.startdatetime  ASC
 ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$tid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {

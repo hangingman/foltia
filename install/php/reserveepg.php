@@ -57,7 +57,6 @@ $now = date("YmdHi");
 	FROM foltia_epg , foltia_station 
 	WHERE epgid = ? AND foltia_station.ontvcode = foltia_epg.ontvchannel
 	";//4812
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($epgid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
@@ -166,7 +165,6 @@ AND foltia_station.stationid = ?
 
 print "<form name=\"recordingsetting\" method=\"POST\" action=\"reserveepgcomp.php\">\n";
 
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($startfoltime,$endfoltime,$stationid,$startfoltime,$endfoltime,$stationid));
 $chkoverwrap = $rs->fetch();
 if (! $chkoverwrap) {

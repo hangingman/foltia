@@ -60,7 +60,6 @@ SELECT  foltia_program.tid,foltia_program.title
 FROM  foltia_program   
 WHERE foltia_program.tid = ?   
 ";
-//	$titlers = m_query($con, $query, "DBクエリに失敗しました");
 	$titlers = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
 //	$titlers = sql_query($con, $titlequery, "DBクエリに失敗しました",array($tid));
 	$rowdata = $titlers->fetch();
@@ -100,7 +99,6 @@ $header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 $header = mb_convert_encoding($header,"UTF-8", "UTF-8");
 print $header;
 
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($max));
 $rowdata = $rs->fetch();
 

@@ -144,7 +144,6 @@ FROM foltia_subtitle , foltia_program
 WHERE foltia_program.tid = foltia_subtitle.tid  
  AND foltia_subtitle.tid = ? 
 ";
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0]));
 				$rall = $rs->fetchAll();
 				$rowdata = $rall[0];
@@ -163,7 +162,6 @@ WHERE foltia_program.tid = foltia_subtitle.tid
  AND foltia_subtitle.tid = ? 
  AND foltia_subtitle.countno = ? 
 ";
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0],$filesplit[1]));
 				$rall = $rs->fetchAll();
 				$rowdata = $rall[0];
@@ -235,7 +233,6 @@ LIMIT $lim OFFSET $st
 ";
 }
 
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました");
 $rowdata = $rs->fetch();
 
@@ -337,7 +334,6 @@ WHERE foltia_program.tid = foltia_subtitle.tid
 ORDER BY foltia_program.tid DESC 
 ";
 
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました");
 	$rowdata = $rs->fetch();
 	if ($rowdata) {

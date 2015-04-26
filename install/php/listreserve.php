@@ -86,7 +86,6 @@ WHERE foltia_tvrecord.stationid = 0 AND
  foltia_subtitle.enddatetime >= ? ORDER BY x ASC
 	";
 
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$now));
 
 //チューナー数
@@ -177,7 +176,6 @@ foltia_subtitle.enddatetime > ?
 AND foltia_subtitle.startdatetime < ?  
 ";
 	$rclass = "";
-//	$overlap = m_query($con, $query, "DBクエリに失敗しました");
 	$overlap = sql_query($con, $query, "DBクエリに失敗しました",array($rowdata[5],$endtime,$rowdata[5],$endtime));
 			  $owrowall = $overlap->fetchAll();
 			  $overlapmaxrows = count($owrowall);
@@ -237,7 +235,6 @@ foltia_subtitle.enddatetime > ?
 AND foltia_subtitle.startdatetime < ?  
 AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' ) 
 	";
-//	$eoverlap = m_query($con, $query, "DBクエリに失敗しました");
 	$eoverlap = sql_query($con, $query, "DBクエリに失敗しました",array($rowdata[5], $endtime,$rowdata[5],  $endtime));
 			  $eowrowall = $eoverlap->fetchAll();
 			  $eoverlapmaxrows = count($eowrowall);
@@ -347,7 +344,6 @@ FROM  foltia_tvrecord , foltia_program , foltia_station
 WHERE foltia_tvrecord.tid = foltia_program.tid  AND foltia_tvrecord.stationid = foltia_station .stationid 
 ORDER BY foltia_program.tid  DESC
 ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました");
 $rowdata = $rs->fetch();			
 if (! $rowdata) {

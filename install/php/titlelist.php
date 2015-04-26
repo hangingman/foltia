@@ -62,7 +62,6 @@ FROM  foltia_program
 ORDER BY foltia_program.tid  DESC
 LIMIT $lim OFFSET $st
 	";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました");
 $rowdata = $rs->fetch();
           if (! $rowdata) {

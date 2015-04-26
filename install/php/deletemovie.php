@@ -120,7 +120,6 @@ $query = "
 DELETE  FROM  foltia_mp4files
 WHERE mp4filename = ?
 ";
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($fName));
 
 //削除処理
@@ -136,7 +135,6 @@ WHERE foltia_program.tid = foltia_subtitle.tid
 AND foltia_subtitle.m2pfilename =  ? 
 ";
 
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 //$rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0] ,$filesplit[1]));
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($fName));
 				$rall = $rs->fetchAll();
@@ -175,7 +173,6 @@ $query = "
 DELETE  FROM  foltia_m2pfiles  
 WHERE m2pfilename = ? 
 ";
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($fName));
 
 //削除処理

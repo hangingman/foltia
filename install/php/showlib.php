@@ -118,7 +118,6 @@ LIMIT $lim OFFSET $st
 ";
 
 
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました");
 $rowdata = $rs->fetch();
 

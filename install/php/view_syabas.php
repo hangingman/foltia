@@ -56,7 +56,6 @@ foltia_subtitle.pspfilename
 FROM foltia_subtitle , foltia_program ,foltia_station  
 WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
  AND foltia_subtitle.pid = ? ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($pid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {

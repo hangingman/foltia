@@ -53,7 +53,6 @@ $now = date("YmdHi");
 
 //タイトル取得
 	$query = "select title from foltia_program where tid = ? ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
@@ -102,7 +101,6 @@ WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = fo
  AND foltia_program.tid = ? 
 ORDER BY stationrecch DESC
 ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
@@ -181,7 +179,6 @@ WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = fo
  AND foltia_subtitle.startdatetime >= ?  AND foltia_program.tid = ? 
 ORDER BY foltia_subtitle.startdatetime  ASC
 ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$tid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
