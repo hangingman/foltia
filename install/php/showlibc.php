@@ -83,7 +83,6 @@ SELECT foltia_program.title
 FROM  foltia_program   
 WHERE foltia_program.tid = ? 
 ";
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
@@ -199,7 +198,6 @@ LIMIT $lim OFFSET $st
 ";
 
 $rs = "";
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
 $rowdata = $rs->fetch();
 if ($rowdata) {

@@ -30,16 +30,11 @@ login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
 }//end if login
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="ja">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" type="text/css" href="graytable.css"> 
-<title>foltia:ファイル削除</title>
-</head>
 
 <?php
+
+printtitle("<title>foltia:ファイル削除</title>", false);
+
 $now = date("YmdHi");   
 
 $delete = $_POST['delete'];
@@ -120,7 +115,6 @@ $query = "
 DELETE  FROM  foltia_mp4files
 WHERE mp4filename = ?
 ";
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($fName));
 
 //削除処理
@@ -136,7 +130,6 @@ WHERE foltia_program.tid = foltia_subtitle.tid
 AND foltia_subtitle.m2pfilename =  ? 
 ";
 
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 //$rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0] ,$filesplit[1]));
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($fName));
 				$rall = $rs->fetchAll();
@@ -175,7 +168,6 @@ $query = "
 DELETE  FROM  foltia_m2pfiles  
 WHERE m2pfilename = ? 
 ";
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($fName));
 
 //削除処理

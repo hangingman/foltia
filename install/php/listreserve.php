@@ -39,16 +39,10 @@ if ($useenvironmentpolicy == 1){
 $userclass = getuserclass($con);
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="ja">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" type="text/css" href="graytable.css"> 
-<title>foltia:record plan</title>
-</head>
 
 <?php
+printtitle("<title>foltia:record plan</title>", false);
+
 $mymemberid = getmymemberid($con);
 $now = getgetnumform(startdate);
 if ($now == ""){
@@ -86,7 +80,6 @@ WHERE foltia_tvrecord.stationid = 0 AND
  foltia_subtitle.enddatetime >= ? ORDER BY x ASC
 	";
 
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$now));
 
 //チューナー数
@@ -177,7 +170,6 @@ foltia_subtitle.enddatetime > ?
 AND foltia_subtitle.startdatetime < ?  
 ";
 	$rclass = "";
-//	$overlap = m_query($con, $query, "DBクエリに失敗しました");
 	$overlap = sql_query($con, $query, "DBクエリに失敗しました",array($rowdata[5],$endtime,$rowdata[5],$endtime));
 			  $owrowall = $overlap->fetchAll();
 			  $overlapmaxrows = count($owrowall);
@@ -237,7 +229,6 @@ foltia_subtitle.enddatetime > ?
 AND foltia_subtitle.startdatetime < ?  
 AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' ) 
 	";
-//	$eoverlap = m_query($con, $query, "DBクエリに失敗しました");
 	$eoverlap = sql_query($con, $query, "DBクエリに失敗しました",array($rowdata[5], $endtime,$rowdata[5],  $endtime));
 			  $eowrowall = $eoverlap->fetchAll();
 			  $eoverlapmaxrows = count($eowrowall);
@@ -347,7 +338,6 @@ FROM  foltia_tvrecord , foltia_program , foltia_station
 WHERE foltia_tvrecord.tid = foltia_program.tid  AND foltia_tvrecord.stationid = foltia_station .stationid 
 ORDER BY foltia_program.tid  DESC
 ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました");
 $rowdata = $rs->fetch();			
 if (! $rowdata) {

@@ -32,16 +32,10 @@ login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
 }//end if login
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="ja">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" type="text/css" href="graytable.css"> 
-<title>foltia</title>
-</head>
 
 <?php
+
+printtitle("<title>foltia</title>", false);
 
 //////////////////////////////////////////////////////////
 //１ページの表示レコード数
@@ -62,7 +56,6 @@ FROM  foltia_program
 ORDER BY foltia_program.tid  DESC
 LIMIT $lim OFFSET $st
 	";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました");
 $rowdata = $rs->fetch();
           if (! $rowdata) {

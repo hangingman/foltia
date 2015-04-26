@@ -29,24 +29,15 @@ if ($useenvironmentpolicy == 1){
 	}
 }//end if login
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="ja">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" type="text/css" href="graytable.css"> 
 
 <?php
 
-  
 $epgid = getgetnumform(epgid);
-		if ($epgid == "") {
-		print "	<title>foltia:EPG予約:Error</title></head>\n";
-		die_exit("登録番組がありません<BR>");
-		}
-print "	<title>foltia:EPG予約:$epgid</title>
-</head>\n";
+if ($epgid == "") {
+    printtitle_and_die("<title>foltia:EPG予約:Error</title>", "登録番組がありません<BR>");
+}
 
+printtitle("<title>foltia:EPG予約:$epgid</title>", false);
 
 $now = date("YmdHi");   
 
@@ -57,7 +48,6 @@ $now = date("YmdHi");
 	FROM foltia_epg , foltia_station 
 	WHERE epgid = ? AND foltia_station.ontvcode = foltia_epg.ontvchannel
 	";//4812
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($epgid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
@@ -166,7 +156,6 @@ AND foltia_station.stationid = ?
 
 print "<form name=\"recordingsetting\" method=\"POST\" action=\"reserveepgcomp.php\">\n";
 
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($startfoltime,$endfoltime,$stationid,$startfoltime,$endfoltime,$stationid));
 $chkoverwrap = $rs->fetch();
 if (! $chkoverwrap) {

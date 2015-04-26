@@ -30,15 +30,11 @@ if ($useenvironmentpolicy == 1){
 	}
 }//end if login
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="ja">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" type="text/css" href="graytable.css"> 
-<title>foltia:EPG番組表</title>
-</head>
+
 <?php
+
+printtitle("<title>foltia:EPG番組表</title>", false);
+
 $start = getgetnumform("start");
 
 if ($start == ""){
@@ -126,7 +122,6 @@ $day7 = date ("m/d(D)",mktime($beginhour , 0 , 0, $beginmonth , $beginday +7 , $
 $maxdisplay = 8;
 
 $query = "SELECT count(*) FROM foltia_station WHERE \"ontvcode\" LIKE '%ontvjapan%'";
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました");
 $maxrows = $rs->fetchColumn(0);
 if ($maxrows > $maxdisplay){
@@ -204,7 +199,6 @@ ORDER BY stationid ASC , stationrecch
 LIMIT ? OFFSET ?
 ";
 
-//$slistrs = m_query($con, $query, "DBクエリに失敗しました");
 $slistrs = sql_query($con, $query, "DBクエリに失敗しました",array($maxdisplay,$offset));
 while ($rowdata = $slistrs->fetch()) {
 	$stationhash[] = $rowdata[3];
@@ -228,7 +222,6 @@ AND startdatetime  >= ?
 AND startdatetime  < ? 
 ORDER BY foltia_epg.startdatetime  ASC	";
 
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($maxdisplay,$offset,$start,$epgend));
 
 //print "$query<br>\n";
@@ -260,7 +253,6 @@ startdatetime  < ?
 ORDER BY foltia_epg.startdatetime  ASC
 	";
 
-//	$statiodh = m_query($con, $query, "DBクエリに失敗しました");
 	$statiodh = sql_query($con, $query, "DBクエリに失敗しました",array($stationname,$epgstart,$epgend));
 	$stationrowdata = $statiodh->fetch();
 	if (! $stationrowdata) {

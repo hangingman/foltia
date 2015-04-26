@@ -48,7 +48,6 @@ SELECT count(memberid)
 FROM foltia_envpolicy 
 WHERE foltia_envpolicy.name  = ?  
 ";
-//	$isaccountexist = m_query($con, $query, "DBクエリに失敗しました");
 	$isaccountexist = sql_query($con, $query, "DBクエリに失敗しました",array($username));
 
 	$isaccountexistncount = $isaccountexist->fetchColumn(0);
@@ -98,7 +97,6 @@ $query = "
 insert into foltia_envpolicy  
 values ( ?,'2',?,?,now(),?)";
 //print "$query <br>\n";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($nextcno,$username,$userpasswd,$remotehost));
 
 print "次のアカウントを登録しました。<br>

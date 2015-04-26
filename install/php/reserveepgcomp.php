@@ -35,35 +35,30 @@ login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
 
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="ja">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" type="text/css" href="graytable.css"> 
-<body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
+
 
 <?php 
 
+$epgid = getgetnumform(epgid);
+if ($epgid == "") {
+    printtitle_and_die("<title>foltia:EPG予約:Error</title>", "登録番組がありません<BR>");
+}
+
+printtitle("<title>foltia:EPG予約:完了", false);
+
+?>
+
+<body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
+
+<?php
 	printhtmlpageheader();
 ?>
+
   <p align="left"><font color="#494949" size="6">番組予約</font></p>
   <hr size="4">
+
 <?php
 
-/* $stationid = getnumform(stationid);
-$subtitle = getform(subtitle);
-$startdatetime = getnumform(startdatetime);
-$enddatetime = getnumform(enddatetime);
-$lengthmin = getnumform(lengthmin); */
-$epgid = getnumform(epgid);
-
-		if ($epgid == "" ) {
-		print "	<title>foltia:EPG予約:Error</title></head>\n";
-		die_exit("登録番組がありません<BR>");
-		}
-print "	<title>foltia:EPG予約:完了</title>
-</head>\n";
 $now = date("YmdHi");   
 //タイトル取得
 	$query = "
@@ -93,7 +88,6 @@ if (($startdatetime > $now ) && ($enddatetime > $now ) && ($enddatetime  > $star
 
 //min pidを探す
 $query = "SELECT min(pid) FROM  foltia_subtitle ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました");
 	$rowdata = $rs->fetch();
 	if (! $rowdata) {
@@ -108,7 +102,6 @@ $query = "SELECT min(pid) FROM  foltia_subtitle ";
 	}
 // next 話数を探す
 $query = "SELECT max(countno) FROM  foltia_subtitle WHERE tid = 0";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました");
 	$rowdata = $rs->fetch();
 	if (! $rowdata) {
@@ -145,7 +138,6 @@ $memberid = getmymemberid($con);
 insert into foltia_subtitle  (pid ,tid ,stationid , countno ,subtitle ,
 startdatetime ,enddatetime ,startoffset , lengthmin , epgaddedby ) 
 values ( ?,'0',?,?,?,?,?,'0',?,?)";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($insertpid,$stationid,$nextcno,$subtitle,$startdatetime,$enddatetime,$lengthmin,$memberid));
 
 	//addatq.pl

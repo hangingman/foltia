@@ -85,7 +85,6 @@ $query = "
 SELECT stationname  
 FROM foltia_station 
 WHERE stationid = ? ";
-//	$stationvalid = m_query($con, $query, "DBクエリに失敗しました");
 	$stationvalid = sql_query($con, $query, "DBクエリに失敗しました",array($recstid));
 		$recstationname = $stationvalid->fetch();
 		$stationvalid->closeCursor();
@@ -117,7 +116,6 @@ if (($startdatetime > $now ) && ($enddatetime > $now ) && ($enddatetime  > $star
 
 //min pidを探す
 $query = "SELECT min(pid) FROM  foltia_subtitle ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました");
 	$rowdata = $rs->fetch();
 	$rs->closeCursor();
@@ -133,7 +131,6 @@ $query = "SELECT min(pid) FROM  foltia_subtitle ";
 	}
 // next 話数を探す
 $query = "SELECT max(countno) FROM  foltia_subtitle WHERE tid = 0";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました");
 			$rowdata = $rs->fetch();
 			$rs->closeCursor();
@@ -156,7 +153,6 @@ if ($demomode){
 startdatetime ,enddatetime ,startoffset , lengthmin , epgaddedby )  
 	values ( ?,'0',?,?,?,?,?,'0',?,?)";
 	
-//		$rs = m_query($con, $query, "DBクエリに失敗しました");
 //print "【DEBUG】$insertpid,$recstid,$nextcno,$pname,$startdatetime,$enddatetime ,$lengthmin,$memberid <br>\n";
 		$rs = sql_query($con, $query, "DBクエリに失敗しました",array($insertpid,$recstid,$nextcno,$pname,$startdatetime,$enddatetime ,$lengthmin,$memberid));
 	
@@ -248,7 +244,6 @@ FROM foltia_station
 WHERE stationrecch > -2 AND stationrecch < 1 
 ORDER BY x ASC";
 
-//	$stations = m_query($con, $query, "DBクエリに失敗しました");
 	$stations = sql_query($con, $query, "DBクエリに失敗しました");
 $rowdata = $stations->fetch();	
 if ($rowdata) {

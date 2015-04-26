@@ -21,43 +21,39 @@ include("./foltialib.php");
 $con = m_connect();
 
 if ($useenvironmentpolicy == 1){
-if (!isset($_SERVER['PHP_AUTH_USER'])) {
-    header("WWW-Authenticate: Basic realm=\"foltia\"");
-    header("HTTP/1.0 401 Unauthorized");
-	redirectlogin();
-    exit;
-} else {
-login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
-}
+    if (!isset($_SERVER['PHP_AUTH_USER'])) {
+        header("WWW-Authenticate: Basic realm=\"foltia\"");
+        header("HTTP/1.0 401 Unauthorized");
+        redirectlogin();
+        exit;
+    } else {
+        login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
+    }
 }//end if login
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="ja">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" type="text/css" href="graytable.css"> 
-<title>foltia:delete schedule</title>
-</head>
 
 <?php
 
-    $tid = getgetnumform("tid");
-		if ($tid == "") {
-		die_exit("番組がありません<BR>");
-		}
-    $sid = getgetnumform("sid");
-		if ($sid == "") {
-		die_exit("局がありません<BR>");
-		}
+printtitle("<title>foltia:delete schedule</title>", false);
+
+$tid = getgetnumform("tid");
+if ($tid == "") {
+    die_exit("番組がありません<BR>");
+}
+$sid = getgetnumform("sid");
+if ($sid == "") {
+    die_exit("局がありません<BR>");
+}
 
 $now = date("YmdHi");   
+
 ?>
+
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
 
 <?php 
-	printhtmlpageheader();
+     printhtmlpageheader();
 
 //タイトル取得
 $query = "
@@ -70,8 +66,7 @@ foltia_tvrecord.stationid
 FROM  foltia_tvrecord , foltia_program , foltia_station 
 WHERE foltia_tvrecord.tid = foltia_program.tid  AND foltia_tvrecord.stationid = foltia_station .stationid  AND foltia_tvrecord.tid = ? AND foltia_tvrecord.stationid = ?  ";
 
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid,$sid));
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid,$sid));
 $rowdata = $rs->fetch();
 
 if (! $rowdata ) {
@@ -87,8 +82,9 @@ $delflag = getgetnumform(delflag);
 
 ?>
 
-  <p align="left"><font color="#494949" size="6">予約解除</font></p>
-  <hr size="4">
+<p align="left"><font color="#494949" size="6">予約解除</font></p>
+<hr size="4">
+
 <?php
 if ($delflag == "1") {
 	print "「".$title."」の自動録画予約を解除しました。 <br>\n";
@@ -106,19 +102,16 @@ DELETE
 FROM  foltia_tvrecord  
 WHERE foltia_tvrecord.tid = ? AND foltia_tvrecord.stationid = ?  ";
 $rs->closeCursor();
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid,$sid));
 }
 
 }else{
 	print "「".$title."」の自動録画予約を解除します。 <br>\n";
-
-print "<form name=\"deletereserve\" method=\"GET\" action=\"delreserve.php\">
-<input type=\"submit\" value=\"予約解除\" >\n";
-
+    print "<form name=\"deletereserve\" method=\"GET\" action=\"delreserve.php\"><input type=\"submit\" value=\"予約解除\" >\n";
 }
 
-?>  
+?>
+  
 <br>
 <table width="100%" border="0">
   <tr>
@@ -166,12 +159,12 @@ WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = fo
  AND foltia_subtitle.startdatetime >= ?  AND foltia_program.tid = ?  
 ORDER BY foltia_subtitle.startdatetime  ASC
 ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$tid));
+
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$tid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
-		echo("放映予定はありません<BR>");
-}else{
+    echo("放映予定はありません<BR>");
+} else {
 	$maxcols = $rs->columnCount();
 ?>
   <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%" BGCOLOR="#bcf1be">
@@ -201,8 +194,6 @@ if (! $rowdata) {
 		?>
 	</tbody>
 </table>
-
-
 
 </body>
 </html>

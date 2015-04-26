@@ -13,29 +13,89 @@ include("./foltia_config2.php");
 /* エラー表示の抑制 */
 //error_reporting(0);
 
-//タイトル・メタタグの表示
-function printtitle($title, $use_warndiskfreearea) {
-
-    $header = <<<EOF
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+$foltia_header = <<<EOF
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Style-Type" content="text/css">
+<meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="graytable.css">
+
 EOF
 ;
 
-    print $header;
+// タイトル・メタタグの表示
+function printtitle($title, $use_warndiskfreearea) {
+
+    print $foltia_header;
 
     if ($use_warndiskfreearea) {
         //ディスク空き容量によって背景色表示変更
         warndiskfreearea();
     }
 
-    //print "<title>foltia:放映予定</title>
+    // print "<title>foltia:放映予定</title>
     print $title;
+    printcssinfo();
     print "</head>";
+}
+
+// タイトル・メタタグの表示
+function printtitle_with_script($title, $scriptpath) {
+
+    print $foltia_header;
+
+    // print "<title>foltia:放映予定</title>
+    print $title;
+    printcssinfo();
+
+    if ($scriptpath != "") {
+        print "<script src=\"{$scriptpath}\" language=\"JavaScript\" type=\"text/javascript\"></script>";
+    }
+
+    print "</head>";
+}
+
+// タイトル・メタタグの表示
+function printtitle_and_die($title, $element) {
+
+    print $foltia_header;
+
+    // print "<title>foltia:放映予定</title>
+    print $title;
+    printcssinfo();
+    die_exit($element);
+}
+
+// css情報を取得して出力する
+function printcssinfo() {
+
+    $sb_admin = "bower_components/startbootstrap-sb-admin";
+
+    $css = <<<EOF
+
+<!-- Bootstrap Core CSS -->
+<link href="{$sb_admin}/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link href="{$sb_admin}/css/sb-admin.css" rel="stylesheet">
+
+<!-- Morris Charts CSS -->
+<link href="{$sb_admin}/css/plugins/morris.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<link href="{$sb_admin}/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+EOF
+;
+
+    print $css;
 }
 	
 //GET用フォームデコード
@@ -49,7 +109,6 @@ function getgetform($key) {
 }
 //GET用数字フォームデコード
 function getgetnumform($key) {
-    //    if ($_GET["{$key}"] != "") {
     if (isset($_GET["{$key}"] )) {
 		$value = $_GET["{$key}"];
 		$value = ereg_replace("[^-0-9]", "", $value);
@@ -165,23 +224,6 @@ function m_close($dbh) {
 	return null;
 }
 
-//旧関数　sql_queryに置き換え
-function m_query($dbh, $query, $errmessage) {
-	try {
-		$rtn = $dbh->query($query);
-		return($rtn);
-	} catch (PDOException $e) {
-        /* エラーメッセージに SQL 文を出すのはセキュリティ上良くない！！ */
-        $msg = $errmessage . "<br>\n" .
-             $e->getMessage() . "<br>\n" .
-             var_export($e->errorInfo, true) . "<br>\n" .
-             "<small><code>" . htmlspecialchars($query) .
-             "</code></small>\n";
-        //		$dbh->rollBack();
-		$dbh = null;
-        die_exit($msg);
-    }
-}
 /* SQL 文を実行 */
 function sql_query($dbh, $query, $errmessage,$paramarray=null) {
 	try {
@@ -266,7 +308,20 @@ function printhtmlpageheader(){
     $serveruri = getserveruri();
     $username = $_SERVER['PHP_AUTH_USER'];
 
-    print "<p align='left'><font color='#494949'><A HREF = 'http://www.dcc-jpl.com/soft/foltia/' target=\"_blank\">foltia</A>　| <A HREF = './index.php'>放映予定</A> | <A HREF = './index.php?mode=new'>新番組</A> | <A HREF = './listreserve.php'>予約一覧</A> | <A HREF = './titlelist.php'>番組一覧</A> | <A HREF = './viewepg.php'>番組表</A> | 録画一覧(<A HREF = './showplaylist.php'>録画順</A>・<A HREF = './showplaylist.php?list=title'>番組順</A>・<A HREF = './showplaylist.php?list=raw'>全</A>) | <A HREF = './showlib.php'>録画ライブラリ</A> |  <A HREF = './folcast.php'>Folcast</A>[<a href=\"itpc://$serveruri/folcast.php\">iTunesに登録</a>] | ";
+    $header = <<<EOF
+<p align='left'><font color='#494949'>
+<A HREF = 'http://www.dcc-jpl.com/soft/foltia/' target="_blank">foltia</A>　| 
+<A HREF = './index.php'>放映予定</A> | 
+<A HREF = './index.php?mode=new'>新番組</A> | 
+<A HREF = './listreserve.php'>予約一覧</A> | 
+<A HREF = './titlelist.php'>番組一覧</A> | 
+<A HREF = './viewepg.php'>番組表</A> | 
+録画一覧(<A HREF = './showplaylist.php'>録画順</A>・<A HREF = './showplaylist.php?list=title'>番組順</A>・<A HREF = './showplaylist.php?list=raw'>全</A>) | 
+<A HREF = './showlib.php'>録画ライブラリ</A> |  
+<A HREF = './folcast.php'>Folcast</A>[<a href="itpc://$serveruri/folcast.php">iTunesに登録</a>] | 
+EOF
+;
+    print $header;
     if ($useenvironmentpolicy == 1){
         print "【 $username 】";
     }
@@ -600,7 +655,7 @@ WHERE foltia_envpolicy.name  = '$name'
 function redirectlogin(){
     global $environmentpolicytoken;
 
-    print "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n";
+    print "<!DOCTYPE html>\n";
     print "<html><head>\n";
     print "<title>foltia:Invalid login</title>\n";
     print "</head><body>\n";
@@ -613,8 +668,6 @@ function redirectlogin(){
     print "</p><hr>\n";
     print "<address>foltia by DCC-JPL Japan/foltia Project.  <a href = \"http://www.dcc-jpl.com/soft/foltia/\">http://www.dcc-jpl.com/soft/foltia/</a></address>\n";
     print "</body></html>\n";
-
-
 
     exit;
 }//end function redirectlogin

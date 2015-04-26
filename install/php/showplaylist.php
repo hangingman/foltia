@@ -35,23 +35,13 @@ if ($useenvironmentpolicy == 1){
 
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="ja">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" type="text/css" href="graytable.css"> 
+
 <?php
 
 // Syabas 判定
 $useragent = $_SERVER['HTTP_USER_AGENT'];
 
-//ディスク空き容量によって背景色表示変更
-warndiskfreearea();
-
-print "<title>foltia:recorded file list</title>
-</head>";
-
+printtitle("<title>foltia:recorded file list</title>", true);
 
 /////////////////////////////////////////////////??????
 //１ページの表示レコード数
@@ -144,7 +134,6 @@ FROM foltia_subtitle , foltia_program
 WHERE foltia_program.tid = foltia_subtitle.tid  
  AND foltia_subtitle.tid = ? 
 ";
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0]));
 				$rall = $rs->fetchAll();
 				$rowdata = $rall[0];
@@ -163,7 +152,6 @@ WHERE foltia_program.tid = foltia_subtitle.tid
  AND foltia_subtitle.tid = ? 
  AND foltia_subtitle.countno = ? 
 ";
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0],$filesplit[1]));
 				$rall = $rs->fetchAll();
 				$rowdata = $rall[0];
@@ -235,7 +223,6 @@ LIMIT $lim OFFSET $st
 ";
 }
 
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました");
 $rowdata = $rs->fetch();
 
@@ -337,7 +324,6 @@ WHERE foltia_program.tid = foltia_subtitle.tid
 ORDER BY foltia_program.tid DESC 
 ";
 
-//$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rs = sql_query($con, $query, "DBクエリに失敗しました");
 	$rowdata = $rs->fetch();
 	if ($rowdata) {

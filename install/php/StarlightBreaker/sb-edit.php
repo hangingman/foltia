@@ -38,14 +38,10 @@ if (($pid == "") ||($filename == "")) {
 }
 ?>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="ja">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" type="text/css" href="graytable.css"> 
-<title>Starlight Breaker -編集</title>
-</head>
+<?php
+printtitle("<title>Starlight Breaker - 編集</title>", false);
+?>
+
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
 <div align="center">
 
@@ -74,7 +70,6 @@ FROM foltia_subtitle , foltia_program ,foltia_station
 WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
 AND foltia_subtitle.pid = ? 
 ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($pid));
 $rows = pg_num_rows($rs);
 if ($rows == 0){

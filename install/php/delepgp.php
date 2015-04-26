@@ -32,14 +32,11 @@ login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
 
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="ja">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" type="text/css" href="graytable.css"> 
-<title>foltia:delete EPG Program</title>
-</head>
+
+<?php
+printtitle("<title>foltia:delete EPG Program</title>", false);
+?>
+
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
 
 <?php
@@ -72,7 +69,6 @@ foltia_station.stationid = foltia_subtitle.stationid AND
 foltia_subtitle.pid = ? 
  ";
 
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($pid));
 	$rowdata = $rs->fetch();
 	$rs->closeCursor();
@@ -115,7 +111,6 @@ if ($delflag == "1") {
 		DELETE  
 		FROM  foltia_subtitle  
 		WHERE foltia_subtitle.pid = ? AND  foltia_subtitle.tid = 0 ";
-//			$rs = m_query($con, $query, "DBクエリに失敗しました");
 			$rs = sql_query($con, $query, "DBクエリに失敗しました",array($pid));
 		}
 	}else{

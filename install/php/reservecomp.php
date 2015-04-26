@@ -32,17 +32,10 @@ login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
 }//end if login
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="ja">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" type="text/css" href="graytable.css"> 
-<title>foltia</title>
-</head>
 
 <?php
 
+printtitle("<title>foltia</title>", false);
 
 $tid = getgetnumform(tid);
 		if ($tid == "") {
@@ -67,7 +60,6 @@ $now = date("YmdHi");
 
 //タイトル取得
 	$query = "select title from foltia_program where tid = ? ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
@@ -176,7 +168,6 @@ if ($station ==0){
 FROM foltia_tvrecord  
 WHERE tid = ? 
 ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
 }//endif
 
@@ -186,17 +177,14 @@ count(*)
 FROM foltia_tvrecord  
 WHERE tid = ?  AND stationid = ? 
 ";
-//	$rs = m_query($con, $query, "DBクエリに失敗しました");
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid,$station));
 	$maxrows = $rs->fetchColumn(0);
 		if ($maxrows == 0) { //新規追加
 				$query = "INSERT INTO  foltia_tvrecord  values (?,?,?,?)";
-//				$rs = m_query($con, $query, "DB書き込みに失敗しました");
 				$rs = sql_query($con, $query, "DB書き込みに失敗しました",array($tid,$station,$bitrate,$usedigital));
 		}else{//修正　(ビットレート)
 			$query = "UPDATE  foltia_tvrecord  SET 
   bitrate = ? , digital = ? WHERE tid = ? AND stationid = ? ";
-//			$rs = m_query($con, $query, "DB書き込みに失敗しました");
 			$rs = sql_query($con, $query, "DB書き込みに失敗しました",array( $bitrate, $usedigital , $tid , $station ));
 		}
 	
