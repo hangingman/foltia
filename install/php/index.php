@@ -36,22 +36,6 @@ $now = getgetnumform(date);
 if(($now < 200001010000 ) || ($now > 209912342353 )){ 
 	$now = date("YmdHi");   
 }
-function printtitle(){
-
-print "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">
-<html lang=\"ja\">
-<head>
-<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">
-<meta http-equiv=\"Content-Style-Type\" content=\"text/css\">
-<link rel=\"stylesheet\" type=\"text/css\" href=\"graytable.css\"> ";
-//ディスク空き容量によって背景色表示変更
-warndiskfreearea();
-print "<title>foltia:放映予定</title>
-</head>";
-
-
-}//end function printtitle()
-
 
 //////////////////////////
 //ページの表示レコード数
@@ -245,7 +229,7 @@ $rowdata = $rs->fetch();
 //
 if (! $rowdata) {
 header("Status: 404 Not Found",TRUE,404);
-printtitle();
+printtitle("<title>foltia:放映予定</title>", true);
 print "<body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#000000\" ALINK=\"#c6edff\" >
 <div align=\"center\">\n";
 printhtmlpageheader();
@@ -254,7 +238,7 @@ print "<hr size=\"4\">\n";
 
 }//endif
 
-printtitle();
+printtitle("<title>foltia:放映予定</title>", true);
 ?>
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
 <div align="center">
