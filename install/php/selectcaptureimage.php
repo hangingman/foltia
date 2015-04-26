@@ -38,19 +38,15 @@ if ($pid == "") {
 }
 ?>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="ja">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" type="text/css" href="graytable.css"> 
-<title>Starlight Breaker -キャプチャ画像選択</title>
-<script src="http://images.apple.com/main/js/ac_quicktime.js" language="JavaScript" type="text/javascript"></script>
-</head>
+<?php
+         printtitle_with_script("<title>Starlight Breaker -キャプチャ画像選択</title>", "http://images.apple.com/main/js/ac_quicktime.js");
+?>
+
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
 <div align="center">
 
 <?php
+
 printhtmlpageheader();
 
 if ($pid == "") {
