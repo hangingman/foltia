@@ -1,0 +1,28 @@
+{
+  "name": "foltia",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Hiroyuki-Nagata/foltia",
+  "description": "beautiful js/css for foltia",
+  "main": "index.js",
+  "keywords": [
+    "video",
+    "perl",
+    "php"
+  ],
+  "authors": [
+    "hiroyuki.nagata"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "2",
+    "bootstrap": "3",
+    "startbootstrap-sb-admin": "IronSummitMedia/startbootstrap-sb-admin#~1.0.3"
+  }
+}
