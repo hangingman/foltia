@@ -22,6 +22,7 @@
   ],
   "dependencies": {
     "jquery": "2",
-    "bootstrap": "3"
+    "bootstrap": "3",
+    "startbootstrap-sb-admin": "IronSummitMedia/startbootstrap-sb-admin#~1.0.3"
   }
 }
