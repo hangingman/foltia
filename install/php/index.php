@@ -226,10 +226,13 @@ $rowdata = $rs->fetch();
 //
 //
 if (! $rowdata) {
+
 header("Status: 404 Not Found",TRUE,404);
 printtitle("<title>foltia:放映予定</title>", true);
-print "<body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#000000\" ALINK=\"#c6edff\" >
-<div align=\"center\">\n";
+
+print "<body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#000000\" ALINK=\"#c6edff\" ><div id=\"wrapper\"><div align=\"center\">\n";
+    
+print_navigate_bar();
 printhtmlpageheader();
 print "<hr size=\"4\">\n";
 		die_exit("番組データがありません<BR>");
@@ -239,8 +242,10 @@ print "<hr size=\"4\">\n";
 printtitle("<title>foltia:放映予定</title>", true);
 ?>
 <body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
+<div id="wrapper">
 <div align="center">
 <?php 
+print_navigate_bar();
 printhtmlpageheader();
 ?>
   <p align="left"><font color="#494949" size="6">
@@ -342,5 +347,6 @@ page_display("",$p,$p2,$lim,$dtcnt,$mode);
 /////////////////////////////////////////////////
 ?>
 
+</div>
 </body>
 </html>

@@ -97,6 +97,87 @@ EOF
 
     print $css;
 }
+
+function print_navigate_bar() {
+
+    $nav = <<<EOF
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<!-- ヘッダ部分 -->
+	<div class="navbar-header">
+		<a class="navbar-brand" href="http://www.dcc-jpl.com/soft/foltia/">foltia</a>
+	</div>
+
+	<!-- Top Menu Items -->
+	<ul class="nav navbar-right top-nav">
+		<!-- メッセージ表示（お知らせに使う） -->
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
+			<ul class="dropdown-menu message-dropdown">
+			</ul>
+		</li>
+		<!-- ログインユーザー名表示（ログインする設定にしている場合のみ） -->
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> foltia <b class="caret"></b></a>
+			<ul class="dropdown-menu">
+				<li>
+					<a href="#"><i class="fa fa-fw fa-power-off"></i>ログアウト</a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+
+	<!-- 左側・foltiaの各ページへのリンク -->
+	<div class="collapse navbar-collapse navbar-ex1-collapse">
+		<ul class="nav navbar-nav side-nav">
+
+			<li>
+				<a href="./index.php"><i class="fa fa-fw fa-table"></i> 放映予定</a>
+			</li>
+			<li>
+				<a href="./index.php?mode=new"><i class="fa fa-fw fa-bell"></i> 新番組</a>
+			</li>
+			<li>
+				<a href="./listreserve.php"><i class="fa fa-fw fa-dashboard"></i> 予約一覧</a>
+			</li>
+			<li>
+				<a href="./titlelist.php"><i class="fa fa-fw fa-edit"></i> 番組一覧</a>
+			</li>
+			<li>
+				<a href="./viewepg.php"><i class="fa fa-fw fa-desktop"></i> EPG番組表</a>
+			</li>
+
+			<li>
+				<a href="./index.php"><i class="fa fa-fw fa-wrench"></i> 設定</a>
+			</li>
+
+			<li>
+				<a href="./index.php"><i class="fa fa-fw fa-arrows-v"></i> 録画一覧 <i class="fa fa-fw fa-caret-down"></i></a>
+				<li>
+					<a href="./showplaylist.php">録画順</a>
+				</li>
+				<li>
+					<a href="./showplaylist.php?list=title">番組順</a>
+				</li>
+				<li>
+					<a href="./showplaylist.php?list=raw">全部</a>
+				</li>
+			</li>
+			<li>
+				<a href="./showlib.php"><i class="fa fa-fw fa-table"></i> 録画ライブラリ</a>
+			</li>
+			<li> 
+				<a href="./folcast.php"><i class="fa fa-fw fa-table"></i> iTunesに登録</a>
+			</li>
+		</ul>
+	</div>
+	<!-- /.navbar-collapse -->
+</nav>
+EOF
+;
+
+    print $nav;
+}
 	
 //GET用フォームデコード
 function getgetform($key) {
@@ -308,19 +389,21 @@ function printhtmlpageheader(){
     $serveruri = getserveruri();
     $username = $_SERVER['PHP_AUTH_USER'];
 
-    $header = <<<EOF
-<p align='left'><font color='#494949'>
-<A HREF = 'http://www.dcc-jpl.com/soft/foltia/' target="_blank">foltia</A>　| 
-<A HREF = './index.php'>放映予定</A> | 
-<A HREF = './index.php?mode=new'>新番組</A> | 
-<A HREF = './listreserve.php'>予約一覧</A> | 
-<A HREF = './titlelist.php'>番組一覧</A> | 
-<A HREF = './viewepg.php'>番組表</A> | 
-録画一覧(<A HREF = './showplaylist.php'>録画順</A>・<A HREF = './showplaylist.php?list=title'>番組順</A>・<A HREF = './showplaylist.php?list=raw'>全</A>) | 
-<A HREF = './showlib.php'>録画ライブラリ</A> |  
-<A HREF = './folcast.php'>Folcast</A>[<a href="itpc://$serveruri/folcast.php">iTunesに登録</a>] | 
-EOF
-;
+    print_navigate_bar();
+
+//     $header = <<<EOF
+// <p align='left'><font color='#494949'>
+// <A HREF = 'http://www.dcc-jpl.com/soft/foltia/' target="_blank">foltia</A>　| 
+// <A HREF = './index.php'>放映予定</A> | 
+// <A HREF = './index.php?mode=new'>新番組</A> | 
+// <A HREF = './listreserve.php'>予約一覧</A> | 
+// <A HREF = './titlelist.php'>番組一覧</A> | 
+// <A HREF = './viewepg.php'>番組表</A> | 
+// 録画一覧(<A HREF = './showplaylist.php'>録画順</A>・<A HREF = './showplaylist.php?list=title'>番組順</A>・<A HREF = './showplaylist.php?list=raw'>全</A>) | 
+// <A HREF = './showlib.php'>録画ライブラリ</A> |  
+// <A HREF = './folcast.php'>Folcast</A>[<a href="itpc://$serveruri/folcast.php">iTunesに登録</a>] | 
+// EOF
+// ;
     print $header;
     if ($useenvironmentpolicy == 1){
         print "【 $username 】";
