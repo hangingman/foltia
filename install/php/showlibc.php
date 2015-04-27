@@ -58,7 +58,7 @@ print "<meta http-equiv=\"Content-Style-Type\" content=\"text/css\">
 }
 if ($tid == "") {
 	print "<title>foltia:Lib</title>
-</head><body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#000000\" ALINK=\"#c6edff\" > \n";
+</head><body> \n";
 		printhtmlpageheader();
 		die_exit("再生可能番組がありません<BR>");
 	}
@@ -110,7 +110,7 @@ if(ereg("iPhone",$useragent)){
 ";
 }else{
 
-print "<body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#000000\" ALINK=\"#c6edff\" >
+print "<body>
 <div align=\"center\">
 ";
 	printhtmlpageheader();

@@ -18,7 +18,6 @@ $foltia_header = <<<EOF
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" href="graytable.css">
 
 EOF
 ;
@@ -375,13 +374,6 @@ function m_showtable($rs) {
     return $maxrows;
 }
 
-
-function m_viewdata($dbh, $code) {
-
-    /*これ使ってないよね?*/
-}
-	
-
 function printhtmlpageheader(){
 
     global $useenvironmentpolicy;
@@ -391,19 +383,6 @@ function printhtmlpageheader(){
 
     print_navigate_bar();
 
-//     $header = <<<EOF
-// <p align='left'><font color='#494949'>
-// <A HREF = 'http://www.dcc-jpl.com/soft/foltia/' target="_blank">foltia</A>　| 
-// <A HREF = './index.php'>放映予定</A> | 
-// <A HREF = './index.php?mode=new'>新番組</A> | 
-// <A HREF = './listreserve.php'>予約一覧</A> | 
-// <A HREF = './titlelist.php'>番組一覧</A> | 
-// <A HREF = './viewepg.php'>番組表</A> | 
-// 録画一覧(<A HREF = './showplaylist.php'>録画順</A>・<A HREF = './showplaylist.php?list=title'>番組順</A>・<A HREF = './showplaylist.php?list=raw'>全</A>) | 
-// <A HREF = './showlib.php'>録画ライブラリ</A> |  
-// <A HREF = './folcast.php'>Folcast</A>[<a href="itpc://$serveruri/folcast.php">iTunesに登録</a>] | 
-// EOF
-// ;
     print $header;
     if ($useenvironmentpolicy == 1){
         print "【 $username 】";

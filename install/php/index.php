@@ -21,15 +21,15 @@ now:YmdHi形式で日付を指定するとその日からの番組表が表示�
 include("./foltialib.php");
 $con = m_connect();
 
-if ($useenvironmentpolicy == 1){
-	if (!isset($_SERVER['PHP_AUTH_USER'])) {
-	    header("WWW-Authenticate: Basic realm=\"foltia\"");
-	    header("HTTP/1.0 401 Unauthorized");
-		redirectlogin();
-	    exit;
-	} else {
+if ($useenvironmentpolicy == 1) {
+    if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	header("WWW-Authenticate: Basic realm=\"foltia\"");
+	header("HTTP/1.0 401 Unauthorized");
+	redirectlogin();
+	exit;
+    } else {
 	login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
-	}
+    }
 }//end if login
 
 $now = getgetnumform(date);
@@ -68,14 +68,14 @@ LIMIT 1000
 $reservedrssametid = sql_query($con, $query, "DBクエリに失敗しました",array($now));
 $rowdata = $reservedrssametid->fetch();
 if ($rowdata) {
-	do {
-		$reservedpidsametid[] = $rowdata[7];
-	} while ($rowdata = $reservedrssametid->fetch());
-
-	$rowdata = "";
-	}else{
-	$reservedpidsametid = array();
-	}//end if
+    do {
+	$reservedpidsametid[] = $rowdata[7];
+    } while ($rowdata = $reservedrssametid->fetch());
+    
+    $rowdata = "";
+} else {
+    $reservedpidsametid = array();
+}//end if
 $reservedrssametid->closeCursor();
 
 //録画番組検索
@@ -132,8 +132,8 @@ if ($rowdata) {
 	do {
 		$reservedpid[] = $rowdata[8];
 	} while ($rowdata = $reservedrs->fetch());
-	}else{
-	$reservedpid = array();
+	} else {
+		$reservedpid = array();
 	}//end if
 
 $mode = getgetform(mode);
@@ -223,14 +223,13 @@ LIMIT $lim OFFSET $st
 
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($now));
 $rowdata = $rs->fetch();
-//
-//
+
 if (! $rowdata) {
 
 header("Status: 404 Not Found",TRUE,404);
 printtitle("<title>foltia:放映予定</title>", true);
 
-print "<body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#000000\" ALINK=\"#c6edff\" ><div id=\"wrapper\"><div align=\"center\">\n";
+print "<body><div id=\"wrapper\"><div align=\"center\">\n";
     
 print_navigate_bar();
 printhtmlpageheader();
@@ -241,7 +240,7 @@ print "<hr size=\"4\">\n";
 
 printtitle("<title>foltia:放映予定</title>", true);
 ?>
-<body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
+<body>
 <div id="wrapper">
 <div align="center">
 <?php 

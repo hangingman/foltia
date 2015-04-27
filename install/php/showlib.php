@@ -75,7 +75,7 @@ if(ereg("iPhone",$useragent)){
     </div>
 ";
 }else{
-	print "<body BGCOLOR=\"#ffffff\" TEXT=\"#494949\" LINK=\"#0047ff\" VLINK=\"#000000\" ALINK=\"#c6edff\" >
+	print "<body>
 <div align=\"center\">
 ";
 	printhtmlpageheader();

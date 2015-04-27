@@ -48,7 +48,7 @@ printtitle("<title>foltia:EPG予約:完了", false);
 
 ?>
 
-<body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
+<body>
 
 <?php
 	printhtmlpageheader();

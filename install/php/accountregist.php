@@ -27,7 +27,7 @@ $errmsg = "";
 
 printtitle("<title>foltia:新規アカウント登録</title>", false);
 ?>
-<body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
+<body>
 
 <p align="left"><font color="#494949" size="6">
 新規アカウント登録

@@ -56,7 +56,7 @@ if (! $rowdata) {
 
 		//$title = htmlspecialchars($rowdata[0]);
 ?>
-<body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
+<body>
 
 <?php 
 	printhtmlpageheader();

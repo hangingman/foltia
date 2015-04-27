@@ -37,7 +37,7 @@ login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
 printtitle("<title>foltia:delete EPG Program</title>", false);
 ?>
 
-<body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
+<body>
 
 <?php
 

@@ -42,7 +42,7 @@ if ($pid == "") {
          printtitle_with_script("<title>Starlight Breaker -キャプチャ画像選択</title>", "http://images.apple.com/main/js/ac_quicktime.js");
 ?>
 
-<body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
+<body>
 <div align="center">
 
 <?php
