@@ -147,7 +147,7 @@ function print_navigate_bar() {
 			</li>
 
 			<li>
-				<a href="./index.php"><i class="fa fa-fw fa-wrench"></i> 設定</a>
+				<a href="./settings.php"><i class="fa fa-fw fa-wrench"></i> 設定</a>
 			</li>
 
 			<li>
