@@ -45,7 +45,7 @@ printtitle("<title>Starlight Breaker - 書き込み</title>", false);
 
 ?>
 
-<body BGCOLOR="#ffffff" TEXT="#494949" LINK="#0047ff" VLINK="#000000" ALINK="#c6edff" >
+<body>
 <div align="center">
 
 <?php

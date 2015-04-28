@@ -1,0 +1,2248 @@
+Non-maintainer upload
+
+commit f8d777f
+Author: Hiroyuki-Nagata <newserver002@gmail.com>
+Date:   2015-04-27
+
+    Delete duplicate function and rewrite
+    Fix encoding of "StarlightBreaker/sb-write.php"
+
+install/php/StarlightBreaker/sb-edit.php
+install/php/StarlightBreaker/sb-write.php
+install/php/delepgp.php
+install/php/deletemovie.php
+install/php/delreserve.php
+install/php/foltialib.php
+install/php/listreserve.php
+install/php/reservecomp.php
+install/php/reserveepg.php
+install/php/reserveepgcomp.php
+install/php/reserveprogram.php
+install/php/selectcaptureimage.php
+install/php/showplaylist.php
+install/php/titlelist.php
+install/php/viewepg.php
+
+commit b75f3d6
+Author: Hiroyuki-Nagata <newserver002@gmail.com>
+Date:   2015-04-27
+
+    Delete unused and commentouted function m_query, (find ./ -name \*.php -print | xargs sed -i '/\/\/.*m_query/d')
+
+install/php/StarlightBreaker/sb-edit.php
+install/php/accountregist.php
+install/php/delepgp.php
+install/php/deletemovie.php
+install/php/delreserve.php
+install/php/folcast.php
+install/php/foltialib.php
+install/php/index.php
+install/php/listreserve.php
+install/php/m.php
+install/php/reservecomp.php
+install/php/reserveepg.php
+install/php/reserveepgcomp.php
+install/php/reserveprogram.php
+install/php/showlib.php
+install/php/showlibc.php
+install/php/showplaylist.php
+install/php/titlelist.php
+install/php/view_syabas.php
+install/php/viewepg.php
+
+commit d75956a
+Author: Hiroyuki-Nagata <newserver002@gmail.com>
+Date:   2015-04-27
+
+    Enable to use SB Admin
+
+install/bower.json
+
+commit deeb861
+Author: Hiroyuki-Nagata <newserver002@gmail.com>
+Date:   2015-04-27
+
+    Delete duplicate code
+
+install/php/accountregist.php
+install/php/foltialib.php
+install/php/index.php
+install/php/m.php
+
+commit 80bddf0
+Author: Hiroyuki-Nagata <newserver002@gmail.com>
+Date:   2015-04-26
+
+    Change permission
+
+README.md
+doc/CHANGES.txt
+doc/img/blockdiagram.png
+doc/img/env1.png
+doc/img/env2.png
+doc/img/env3.png
+doc/img/env4.png
+doc/img/foltia_vodcast.jpg
+doc/img/foltia_vodcast_s.jpg
+doc/img/iPhone_20080928-23.jpg
+doc/img/iPhone_20080928-25.jpg
+doc/img/iPhone_20080928-27.jpg
+doc/img/iPhone_20080928-30.jpg
+doc/img/screen01.png
+doc/img/screen02.png
+doc/img/screen03.png
+doc/img/screen04.png
+doc/img/screen05.png
+doc/img/screen06.png
+doc/img/screen07.png
+doc/img/screen08.png
+doc/img/screen09.jpg
+doc/img/screen10.png
+doc/img/screen11.png
+doc/img/screen12.png
+doc/img/screen13.png
+doc/img/screen14.png
+doc/img/screen15.png
+doc/img/screen16.png
+doc/img/screen17.png
+doc/img/screen18.png
+doc/img/screen19.png
+doc/img/styles.css
+doc/img/syoboi.png
+doc/index.html
+doc/manual/default.css
+doc/manual/fcinstall.html
+doc/manual/index.html
+doc/manual/install.html
+doc/manual/ivtv.html
+doc/manual/operation.html
+doc/manual/start.html
+epgdumpr2/Makefile
+epgdumpr2/aribstr.c
+epgdumpr2/aribstr.h
+epgdumpr2/eit.c
+epgdumpr2/eit.h
+epgdumpr2/epgdump.c
+epgdumpr2/readme.txt
+epgdumpr2/sdt.c
+epgdumpr2/sdt.h
+epgdumpr2/tags
+epgdumpr2/ts.c
+epgdumpr2/ts.h
+epgdumpr2/ts_ctl.h
+epgdumpr2/util.c
+epgdumpr2/util.h
+epgdumpr2/xmldata.c
+install/mktable-insert.sqlite.txt
+install/mktable.sqlite.txt
+install/perl/db/Pg.pl
+install/perl/db/SQLite.pl
+install/perl/envpolicyupdate.pl
+install/php/StarlightBreaker/sb-config.php.template
+install/php/StarlightBreaker/sb-edit.php
+install/php/StarlightBreaker/sb-write.php
+install/php/accountregist.php
+install/php/delepgp.php
+install/php/deletemovie.php
+install/php/delreserve.php
+install/php/folcast.php
+install/php/foltia_config2.php.template
+install/php/foltialib.php
+install/php/img/icon.png
+install/php/img/no-thumbnail-img.png
+install/php/img/videoplayer.png
+install/php/listreserve.php
+install/php/m.php
+install/php/mp4player.php
+install/php/myfoltia.php
+install/php/reservecomp.php
+install/php/reserveepg.php
+install/php/reserveepgcomp.php
+install/php/reserveprogram.php
+install/php/selectcaptureimage.php
+install/php/showlib.php
+install/php/showlibc.php
+install/php/showplaylist.php
+install/php/titlelist.php
+install/php/view_syabas.php
+install/php/viewepg.php
+
+commit 3f1cd4b
+Author: Hiroyuki-Nagata <newserver002@gmail.com>
+Date:   2015-04-26
+
+    Update .gitignore and bower.json for UI
+
+.gitignore
+install/.bowerrc
+install/bower.json
+
+commit adc0b8e
+Author: hiroyuki nagata <newserver002@gmail.com>
+Date:   2015-04-08
+
+    DROP TABLE実行時のエラーの抑制
+
+install/mktable.sqlite.txt
+
+commit fe7a48f
+Author: hiroyuki nagata <newserver002@gmail.com>
+Date:   2015-04-08
+
+    confファイルをUTF-8に変更
+
+install/perl/foltia_conf1.pl.template
+install/php/foltia_config2.php.template
+
+commit ecc9e6c
+Author: hiroyuki nagata <newserver002@gmail.com>
+Date:   2015-04-07
+
+    Postgresql用のSQLファイルを削除
+    Chef用に番組表テーブル作成用SQLを分割
+
+install/mktable-insert.sqlite.txt
+install/mktable.sqlite.txt
+install/mktable.txt
+
+commit 461b0de
+Author: Hiroyuki-Nagata <newserver002@gmail.com>
+Date:   2013-02-03
+
+    record-v4l2.pl以外のPerlスクリプトにGPLの文言を入れた
+
+README.md
+install/perl/addatq.pl
+install/perl/addpidatq.pl
+install/perl/captureimagemaker.pl
+install/perl/changestbch.pl
+install/perl/channelscan.pl
+install/perl/cron_foltia_dayly.sh
+install/perl/deletemovie.pl
+install/perl/digitalradiorecording.pl
+install/perl/digitaltvrecording.pl
+install/perl/envpolicyupdate.pl
+install/perl/epgimport.pl
+install/perl/folprep.pl
+install/perl/foltia_conf1.pl.template
+install/perl/foltialib.pl
+install/perl/getxml2db.pl
+install/perl/ipodtranscode.pl
+install/perl/mklocalizeddir.pl
+install/perl/recwrap.pl
+install/perl/schedulecheck.pl
+install/perl/singletranscode.pl
+install/perl/tvrecording.pl
+install/perl/updatem2pfiletable.pl
+install/perl/xmltv2foltia.pl
+
+commit 2650a75
+Author: Hiroyuki-Nagata <newserver002@gmail.com>
+Date:   2013-01-13
+
+    HTMLのcharsetをUTF-8に変更
+    READMEを作成
+
+README.md
+install/php/StarlightBreaker/sb-edit.php
+install/php/StarlightBreaker/sb-write.php
+install/php/accountregist.php
+install/php/delepgp.php
+install/php/deletemovie.php
+install/php/delreserve.php
+install/php/folcast.php
+install/php/foltialib.php
+install/php/index.php
+install/php/listreserve.php
+install/php/m.php
+install/php/mp4player.php
+install/php/reservecomp.php
+install/php/reserveepg.php
+install/php/reserveepgcomp.php
+install/php/reserveprogram.php
+install/php/selectcaptureimage.php
+install/php/showlib.php
+install/php/showlibc.php
+install/php/showplaylist.php
+install/php/titlelist.php
+install/php/viewepg.php
+
+commit ba0f9c4
+Author: Hiroyuki-Nagata <newserver002@gmail.com>
+Date:   2013-01-13
+
+    宗子さんのSVNを自分のgithubに移動
+    使用する文字コードをUTF-8に変更
+
+doc/CHANGES.txt
+install/mktable.sqlite.txt
+install/mktable.txt
+install/perl/addatq.pl
+install/perl/addpidatq.pl
+install/perl/captureimagemaker.pl
+install/perl/changestbch.pl
+install/perl/channelscan.pl
+install/perl/cron_foltia_dayly.sh
+install/perl/deletemovie.pl
+install/perl/digitalradiorecording.pl
+install/perl/digitaltvrecording.pl
+install/perl/envpolicyupdate.pl
+install/perl/epgimport.pl
+install/perl/folprep.pl
+install/perl/foltialib.pl
+install/perl/getxml2db.pl
+install/perl/ipodtranscode.pl
+install/perl/mklocalizeddir.pl
+install/perl/recwrap.pl
+install/perl/schedulecheck.pl
+install/perl/singletranscode.pl
+install/perl/tvrecording.pl
+install/perl/updatem2pfiletable.pl
+install/perl/xmltv2foltia.pl
+install/php/StarlightBreaker/sb-edit.php
+install/php/StarlightBreaker/sb-write.php
+install/php/accountregist.php
+install/php/delepgp.php
+install/php/deletemovie.php
+install/php/delreserve.php
+install/php/folcast.php
+install/php/foltialib.php
+install/php/graytable.css
+install/php/index.php
+install/php/listreserve.php
+install/php/m.php
+install/php/mp4player.php
+install/php/myfoltia.php
+install/php/reservecomp.php
+install/php/reserveepg.php
+install/php/reserveepgcomp.php
+install/php/reserveprogram.php
+install/php/selectcaptureimage.php
+install/php/showlib.php
+install/php/showlibc.php
+install/php/showplaylist.php
+install/php/titlelist.php
+install/php/view_syabas.php
+install/php/viewepg.php
+
+commit e6a6c6c
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2012-07-26
+
+    110度CS(スカパー! e2)のキッズステーションHDチャンネル変更対応
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@143 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+epgdumpr2/epgdump.c
+epgdumpr2/xmldata.c
+
+commit 72b6353
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2012-07-02
+
+    ネットワーク(CS1/CS2)修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@142 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+epgdumpr2/epgdump.c
+epgdumpr2/xmldata.c
+
+commit a828024
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2012-07-01
+
+    110度CS(e2)放送局情報を2012/7/1現在のものに更新
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@141 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+epgdumpr2/epgdump.c
+epgdumpr2/xmldata.c
+
+commit 72d2f86
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2012-06-18
+
+    110度CS(e2)放送局情報を2012/6/5現在のものに更新
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@140 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+epgdumpr2/epgdump.c
+epgdumpr2/xmldata.c
+
+commit 8b359be
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2012-05-08
+
+    スペースシャワーTVプラス、追加
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@139 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+epgdumpr2/epgdump.c
+epgdumpr2/xmldata.c
+
+commit a50c07b
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2011-10-20
+
+    radiko/らじる録音のリトライ機能追加
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@138 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/recwrap.pl
+
+commit d94c587
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2011-10-11
+
+    BS新規追加局対応(recpt1も更新が必要)
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@137 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+epgdumpr2/epgdump.c
+epgdumpr2/xmldata.c
+
+commit bd203c8
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2011-04-30
+
+    foltiaで利用しているepgdumpを追加
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@136 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+epgdumpr2/Makefile
+epgdumpr2/aribstr.c
+epgdumpr2/aribstr.h
+epgdumpr2/eit.c
+epgdumpr2/eit.h
+epgdumpr2/epgdump.c
+epgdumpr2/readme.txt
+epgdumpr2/sdt.c
+epgdumpr2/sdt.h
+epgdumpr2/tags
+epgdumpr2/ts.c
+epgdumpr2/ts.h
+epgdumpr2/ts_ctl.h
+epgdumpr2/util.c
+epgdumpr2/util.h
+epgdumpr2/xmldata.c
+
+commit 1720012
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-11-04
+
+    mp4videoplayerが使っているFlash Playerのバージョンを引き上げ。
+    コンフィグのデフォルト値を変更
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@135 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/foltia_config2.php.template
+install/php/mp4player.php
+
+commit 3c7ae4d
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-10-29
+
+    WOWOWで<title lang="ja_JP">【無】</title>こんな番組名のEPGのとき、番組名が空白になってしまう問題を修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@134 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/xmltv2foltia.pl
+
+commit cf5fcd9
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-10-25
+
+    XMLのなかに生記号が出現していたので文字実体参照を使うように変更。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@133 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/folcast.php
+
+commit 2cece10
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-10-25
+
+    チェンジセット130での更新がSQL直書きだったのを修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@132 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/db/Pg.pl
+install/perl/xmltv2foltia.pl
+
+commit 7330ecb
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-10-25
+
+    デジタル録画時に重複録画数がエンコーダ数を超えたときの対策を強化
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@131 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/digitaltvrecording.pl
+install/perl/foltia_conf1.pl.template
+install/perl/recwrap.pl
+install/php/foltialib.php
+
+commit 44d4ba3
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-10-25
+
+    野球などで番組延長時に延長番組の古いデータを消してなかった不具合を修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@130 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/xmltv2foltia.pl
+
+commit cf634da
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-10-22
+
+    TSファイル取得時間を見直して、110度CSの取得が異常に重い問題に対処しました。
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@129 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/epgimport.pl
+
+commit e7b053d
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-10-20
+
+    short open tag利用箇所を一括修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@128 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/delreserve.php
+install/php/foltialib.php
+install/php/listreserve.php
+install/php/m.php
+install/php/reservecomp.php
+install/php/reserveprogram.php
+
+commit 7bf0f3e
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-10-20
+
+    セミコロンが抜けていた文法間違い修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@127 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/reserveprogram.php
+
+commit d0b9b48
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-10-20
+
+    reserveprogram.php
+    short open tagを利用していたのを修正。
+    
+    showplaylist.php
+    AutoPagerize未使用時にタグが閉じていなかったのを修正
+    
+    selectcaptureimage.php
+    録画局が存在していないときの対策を追加。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@126 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/reserveprogram.php
+install/php/selectcaptureimage.php
+install/php/showplaylist.php
+
+commit 1b37853
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-10-19
+
+    MP4変換時に、
+    ・tss.pyでHDストリーム分離
+    ・それに失敗したらWINE経由でTsSplitter.exeで分離
+    という工程を踏むように変更。
+    HDストリームのみのTSは変換終了後破棄。
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@125 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/ipodtranscode.pl
+
+commit c0f4401
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-10-13
+
+    MP4録画ライブラリでの削除機能追加
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@124 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/db/Pg.pl
+install/perl/deletemovie.pl
+install/perl/foltialib.pl
+install/php/deletemovie.php
+install/php/showlibc.php
+
+commit 52bca81
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-10-13
+
+    過去のEPGを消してしまう不具合を修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@123 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/xmltv2foltia.pl
+
+commit 9176afe
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-10-07
+
+    EPGのDB格納形式を全角英数から半角英数に変更。
+    EPGタイトルが消えてしまう不具合修正。
+    DBへ重複登録されてしまう不具合を修正。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@122 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/db/Pg.pl
+install/perl/xmltv2foltia.pl
+install/php/reserveepg.php
+install/php/reserveepgcomp.php
+
+commit 32f5af3
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-10-04
+
+    PostgreSQL使用時の不具合を解消。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@121 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/db/Pg.pl
+install/perl/xmltv2foltia.pl
+
+commit c20a2ce
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-10-04
+
+    ・古いEPGが予期せず消えてしまっている不具合を修正。
+    ・EPG表示画面に番組終了時刻も表示するモードを新設(デフォルトではオフ)。
+    ・EPG画面の下部にもナビゲーション追加。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@120 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/xmltv2foltia.pl
+install/php/viewepg.php
+
+commit 9dfed60
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-10-01
+
+    AutoPagerize対応
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@119 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/foltialib.php
+install/php/index.php
+install/php/showlib.php
+install/php/showlibc.php
+install/php/showplaylist.php
+install/php/titlelist.php
+install/php/viewepg.php
+
+commit 6e73c07
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-09-30
+
+    文字コードをUTF-8からEUC-JPに変更
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@118 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/mp4player.php
+
+commit 64c9fd1
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-09-30
+
+    録画ライブラリのサムネイルをクリックしたときの処理をMPEG4リンクからHTML5 Video Playerに変更。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@117 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/showlibc.php
+
+commit 895cab6
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-09-30
+
+    HTML Video5 Player対応。
+    http://videojs.com/ のライブラリを./video-js/ディレクトリに入れて下さい。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@116 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/img/videoplayer.png
+install/php/mp4player.php
+install/php/showlibc.php
+
+commit d4f9327
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-09-30
+
+    recpt1を使う環境でBS/CSが録れていなかった問題を解消。
+    EPG録画の時のファイル名をデジタル録画の場合は録画チャンネルに変更。
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@115 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/digitaltvrecording.pl
+install/perl/recwrap.pl
+
+commit 1b3dfac
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-09-15
+
+    PostgreSQLで録画一覧(全)にチャンネルスキャン時に出来るようなMPEGファイルがあった場合のエラー処理追加
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@114 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/showplaylist.php
+
+commit d21dbaa
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-09-13
+
+    PostgreSQLでEPG周りが動いていなかった部分を対応
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@113 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/mktable.txt
+install/perl/db/Pg.pl
+install/perl/db/SQLite.pl
+
+commit 8a1eb75
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-08-22
+
+    ・ラジオ局録音の場合はepgimport実行しないように修正
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@112 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/epgimport.pl
+install/perl/folprep.pl
+
+commit 9476c96
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-08-16
+
+    ・放送波からのEPG番組表取得に対応。
+    ・foltia_epgテーブル構成変更
+    ・folcast.phpがSQLiteでまったく動作していなかったのを修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@111 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/mktable.sqlite.txt
+install/mktable.txt
+install/perl/channelscan.pl
+install/perl/cron_foltia_dayly.sh
+install/perl/db/Pg.pl
+install/perl/digitaltvrecording.pl
+install/perl/epgimport.pl
+install/perl/folprep.pl
+install/perl/foltialib.pl
+install/perl/ipodtranscode.pl
+install/perl/schedulecheck.pl
+install/perl/xmltv2foltia.pl
+install/php/folcast.php
+install/php/viewepg.php
+
+commit e33fa50
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-08-05
+
+    チューナーに空きがないときに、確認するデバイスにPT1/PT2が含まれていなかったことを修正。
+    
+    foltiaBBSの
+    「もうすぐ終了する番組のプロセスをkill
+    投稿日 2010年08月05日03時19分33秒 投稿者 Nis」から
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@110 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/recwrap.pl
+
+commit 1102065
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-07-14
+
+    番組名などの文字化け対応、cal_chk.xmlの利用廃止などこちらのBBSで頂いたコードと情報の反映>ありがとうございました
+    >Re:番組名が化ける
+    >投稿日 2010年07月14日01時25分20秒 投稿者 Tosy
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@109 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/getxml2db.pl
+
+commit 3815f3a
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-07-09
+
+    二重予約の対処。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@108 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/m.php
+
+commit 5b0ad4e
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-07-09
+
+    EPG予約削除に失敗する問題を解決。
+    EPG予約に失敗することがある問題を解決。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@107 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/delepgp.php
+install/php/m.php
+
+commit 46e7c10
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-06-30
+
+    録画一覧（全）の出力がされてないのを修正。
+    aacも表示対象に含まれるように修正。
+    (foltia簡易BBS 録画一覧（全）
+    投稿日 2010年06月29日23時18分50秒 投稿者 Nis  より)
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@106 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/showplaylist.php
+
+commit 5fcb6ef
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-06-08
+
+    録音スクリプトのオプションを-pを-sに変更。
+    http://www.dcc-jpl.com/diary/2010/06/06/foltia_radiko/
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@105 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/digitalradiorecording.pl
+
+commit adb54f4
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-05-30
+
+    ψ（プサイ）さんより提供されたパッチを適用。
+    ・EPG録画の予約を解除するdelepgp.phpが必ず「登録番組がありません」を返してしまうようなので、その修正。
+    ・m.phpで録画局を入れていないときのチェックが無かったので追加。
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@104 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/delepgp.php
+install/php/m.php
+
+commit 0753af6
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-05-05
+
+    PHP tag short open style修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@103 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/index.php
+install/php/listreserve.php
+install/php/showplaylist.php
+install/php/titlelist.php
+
+commit c3f885c
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-04-19
+
+    正しく動いていなかったSQLを修正
+    (ありがとうございました > http://d.hatena.ne.jp/fujitakastyle/20100418/1271592904 )
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@102 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/folcast.php
+
+commit 564b849
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-04-19
+
+    改行コードがCR/LFになっていたのを修正
+    (ありがとうございました >　 http://d.hatena.ne.jp/bsdaemon/20100417/1271480522 )
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@101 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/updatem2pfiletable.pl
+
+commit a088010
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-04-11
+
+    radiko対策を再び(rtmpe使うように)
+    
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@100 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/digitalradiorecording.pl
+
+commit b61e4f0
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-04-07
+
+    radikoのffmpegブロック対策
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@99 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/digitalradiorecording.pl
+install/perl/digitaltvrecording.pl
+
+commit 13c3d9b
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-04-02
+
+    radiko録音対応(追加忘れ)
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@98 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/digitalradiorecording.pl
+
+commit 433a671
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-04-02
+
+    radiko録音対応
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@97 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/db/Pg.pl
+install/perl/deletemovie.pl
+install/perl/ipodtranscode.pl
+install/perl/recwrap.pl
+install/perl/updatem2pfiletable.pl
+install/php/deletemovie.php
+install/php/m.php
+
+commit 1fdc609
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-03-06
+
+    foltialib.phpのsql_query()のデフォルト引数追加
+    (foltia簡易BBS:foltialib.phpのsql_queryの呼び出し:投稿日 2010年03月06日07時21分45秒 投稿者 ψ（プサイ）)
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@96 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/foltialib.php
+
+commit 29104c9
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-02-28
+
+    チケット9
+    BS-TBS
+    Twelve
+    追加反映
+    http://www.dcc-jpl.com/foltia/ticket/9
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@95 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/mktable.sqlite.txt
+install/mktable.txt
+
+commit ac1cd05
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-02-28
+
+    SQLite採用
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@94 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/mktable.sqlite.txt
+install/perl/addatq.pl
+install/perl/addpidatq.pl
+install/perl/captureimagemaker.pl
+install/perl/changestbch.pl
+install/perl/db/Pg.pl
+install/perl/db/SQLite.pl
+install/perl/deletemovie.pl
+install/perl/digitaltvrecording.pl
+install/perl/envpolicyupdate.pl
+install/perl/folprep.pl
+install/perl/foltia_conf1.pl.template
+install/perl/foltialib.pl
+install/perl/getxml2db.pl
+install/perl/ipodtranscode.pl
+install/perl/mklocalizeddir.pl
+install/perl/recwrap.pl
+install/perl/schedulecheck.pl
+install/perl/singletranscode.pl
+install/perl/tvrecording.pl
+install/perl/updatem2pfiletable.pl
+install/perl/xmltv2foltia.pl
+install/php/StarlightBreaker/sb-edit.php
+install/php/accountregist.php
+install/php/delepgp.php
+install/php/deletemovie.php
+install/php/delreserve.php
+install/php/folcast.php
+install/php/foltia_config2.php.template
+install/php/foltialib.php
+install/php/graytable.css
+install/php/index.php
+install/php/listreserve.php
+install/php/m.php
+install/php/reservecomp.php
+install/php/reserveepg.php
+install/php/reserveepgcomp.php
+install/php/reserveprogram.php
+install/php/selectcaptureimage.php
+install/php/showlib.php
+install/php/showlibc.php
+install/php/showplaylist.php
+install/php/titlelist.php
+install/php/view_syabas.php
+install/php/viewepg.php
+
+commit 979766e
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2010-02-28
+
+    SQLite採用
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@93 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/mktable.txt
+
+commit 963f4f0
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2009-07-10
+
+    mktable.txt:
+    foltia_m2pfilesテーブルのm2pfilenameをPRIMARY KEYに。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@92 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/mktable.txt
+
+commit d11c520
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2009-05-05
+
+    PT1対応。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@91 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+doc/index.html
+install/perl/digitaltvrecording.pl
+install/perl/recwrap.pl
+install/php/viewepg.php
+
+commit 5c72821
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2009-04-30
+
+    listreserve.php:
+    チケット#7適用。
+    http://www.dcc-jpl.com/foltia/ticket/7
+    表記ミス修正。
+    
+    foltialib.php:
+    表記ミス修正。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@90 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/listreserve.php
+
+commit e0b2f3a
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2009-04-30
+
+    表記ミス修正
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@89 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/foltialib.php
+install/php/listreserve.php
+
+commit 4f11795
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2009-01-12
+
+    sb-edit.php:
+    foltialib.phpを変更したら書き込むHTMLタグをエスケープしてしまっていた箇所を修正。
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@88 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/StarlightBreaker/sb-edit.php
+
+commit 3214b66
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2009-01-10
+
+    foltialib.php:
+    escape_string()とhtmlspecialchars()をまともに使えてなかった箇所を修正。
+    SQLインジェクションの可能性があった箇所を修正。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@87 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/foltialib.php
+
+commit 73b0f27
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2009-01-10
+
+    view_syabas.php:
+    getgetnumform使うように変更。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@86 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/view_syabas.php
+
+commit 1e869f5
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2009-01-10
+
+    selectcaptureimage.php:
+    getgetnumform使う様に変更。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@85 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/selectcaptureimage.php
+
+commit 3f7ee94
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2009-01-10
+
+    SQLが不正だったのを修正。
+    数字の評価をする関数getgetnumformを負の数にも対応。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@84 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/delepgp.php
+install/php/foltialib.php
+
+commit 7d72f05
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2008-12-30
+
+    foltiaHD最初のリリース。
+    デジタル録画はFriio/Friio BS/CSのみに対応。
+    ivtvは1.0系使用になりました。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@83 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/img/iPhone_20080928-23.jpg
+doc/img/iPhone_20080928-25.jpg
+doc/img/iPhone_20080928-27.jpg
+doc/img/iPhone_20080928-30.jpg
+doc/img/screen02.png
+doc/index.html
+install/mktable.txt
+install/perl/addpidatq.pl
+install/perl/captureimagemaker.pl
+install/perl/deletemovie.pl
+install/perl/digitaltvrecording.pl
+install/perl/foltia_conf1.pl.template
+install/perl/foltialib.pl
+install/perl/ipodtranscode.pl
+install/perl/record-v4l2.pl
+install/perl/recwrap.pl
+install/perl/tvrecording.pl
+install/perl/updatem2pfiletable.pl
+install/php/foltia_config2.php.template
+install/php/img/icon.png
+install/php/index.php
+install/php/listreserve.php
+install/php/m.php
+install/php/reservecomp.php
+install/php/reserveepgcomp.php
+install/php/reserveprogram.php
+install/php/selectcaptureimage.php
+install/php/showlib.php
+install/php/showlibc.php
+install/php/showplaylist.php
+
+commit 20ea91c
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2008-11-15
+
+    getxml2db.pl:
+    If-Modified-Sinceの条件付きGETに対応。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@82 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/perl/getxml2db.pl
+
+commit cea5b01
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2008-06-30
+
+    rename StarlightBreaker dir name (remove empty)
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@81 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/StarlightBreaker /sb-config.php.template
+install/php/StarlightBreaker /sb-edit.php
+install/php/StarlightBreaker /sb-write.php
+install/php/StarlightBreaker/sb-config.php.template
+install/php/StarlightBreaker/sb-edit.php
+install/php/StarlightBreaker/sb-write.php
+
+commit 6255c7d
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2008-06-30
+
+    Starlight Breaker update:apply env polycy
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@80 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/StarlightBreaker /sb-edit.php
+install/php/StarlightBreaker /sb-write.php
+
+commit ca47d57
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2008-06-27
+
+    tvrecording.pl:
+    　foltia簡易BBSで指摘されたXML解析の正規表現修正。
+    getxml2db.pl:
+    　foltia簡易BBSで指摘されたログ出力項目の修正。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@79 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/perl/getxml2db.pl
+install/perl/tvrecording.pl
+
+commit 9b88d98
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2008-06-07
+
+    タグ修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@78 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/index.html
+
+commit 8c9ac68
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2008-03-17
+
+    m.php
+    　環境ポリシー対応が不十分だったところを修正。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@77 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/m.php
+
+commit a84d927
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2008-03-14
+
+    カラ削除のときの対策。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@76 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/deletemovie.php
+
+commit 6eee042
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2008-02-25
+
+    ログイン処理修正
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@75 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/foltialib.php
+install/php/m.php
+
+commit dc37e16
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2008-02-07
+
+    番組別FolcastにiTunesに追加メニューが正常動作していなかったところを修正。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@74 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/showlibc.php
+
+commit 2776ead
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2008-01-28
+
+    番組別FolcastにiTunesに追加メニューを追加。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@73 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/showlibc.php
+
+commit 06a8360
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2008-01-24
+
+    作り掛けの機能をコミットしてしまったのを修正
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@72 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/m.php
+
+commit c2d3194
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2008-01-24
+
+    環境ポリシー機能搭載(追加)
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@71 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+
+commit be89abb
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2008-01-24
+
+    環境ポリシー機能搭載
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@70 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/img/env1.png
+doc/img/env2.png
+doc/img/env3.png
+doc/img/env4.png
+doc/index.html
+install/mktable.txt
+install/perl/envpolicyupdate.pl
+install/perl/foltia_conf1.pl.template
+install/perl/foltialib.pl
+install/perl/ipodtranscode.pl
+install/perl/recwrap.pl
+install/php/accountregist.php
+install/php/delepgp.php
+install/php/deletemovie.php
+install/php/delreserve.php
+install/php/folcast.php
+install/php/foltia_config2.php.template
+install/php/foltialib.php
+install/php/index.php
+install/php/listreserve.php
+install/php/m.php
+install/php/myfoltia.php
+install/php/reservecomp.php
+install/php/reserveepg.php
+install/php/reserveepgcomp.php
+install/php/reserveprogram.php
+install/php/selectcaptureimage.php
+install/php/showlib.php
+install/php/showlibc.php
+install/php/showplaylist.php
+install/php/titlelist.php
+install/php/view_syabas.php
+install/php/viewepg.php
+
+commit 47de627
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-12-05
+
+    　MP4ファイルリストを作成するときの処理をより効率化。
+    　しょぼかる放送局名変更にあわせて初期テーブル修正。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@69 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/mktable.txt
+install/perl/updatem2pfiletable.pl
+
+commit 212a1b5
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-10-29
+
+    showlib.php:
+    　folcast RSSをヘッダに追加。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@68 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/showlib.php
+
+commit 0c2eeae
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-10-24
+
+    空き容量ゼロのときに背景を黒にする機能を追加。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@67 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/foltialib.php
+
+commit 54ac1d7
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-10-15
+
+    シンタックスエラー修正
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@66 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/perl/cron_foltia_dayly.sh
+
+commit c0baf5f
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-09-26
+
+    MP4ライブラリ表示画面での
+    ・サムネールがない場合に代替画像表示する機能を追加。(./img/no-thumbnail-img.png)
+    ・HTML修正。
+    ・キャプチャ画像の存在判定を修正。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@65 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/img/no-thumbnail-img.png
+install/php/showlibc.php
+
+commit bc087f5
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-09-25
+
+    Folcast RSSのタイトル表示形式をタイトル表示形式を変更。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@64 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/folcast.php
+
+commit daf447a
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-09-25
+
+    予約一覧時のlistreserve.phpの新引数startdate追加。特定日付からの予約状況を表示。
+    チューナー重複時の表示ルール変更。
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@63 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+doc/index.html
+install/php/listreserve.php
+
+commit b997b84
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-09-06
+
+    iPhoneサイズ(480x320)のトラコンオプション追加。
+    (changeset 61はバグ入り)
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@62 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/ipodtranscode.pl
+
+commit 24ff51f
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-09-06
+
+    iPhoneサイズ(480x320)のトラコンオプション追加。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@61 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+doc/index.html
+install/perl/ipodtranscode.pl
+
+commit 3b4d85b
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-07-28
+
+    recwrap.pl:
+    　多重トラコン抑制。
+    　激しいCPU負荷のかかるH.264トランスコード処理はCPUコア数を上限としたプロセス数までしか同時起動しないように。わりと大ざっぱな実装。
+    
+    getxml2db.pl:
+    　アニメ番組名とサブタイトル&amp;の実態参照を解くように変更。
+    　データ追加で不具合がでてたのでAutoCommit使うように戻した。
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@60 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/perl/getxml2db.pl
+install/perl/recwrap.pl
+
+commit 71b8eeb
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-07-10
+
+    パッチ適用:チケット #4 Syabas(Mediawiz,LinkPlayer,etc...)での再生対応パッチ http://www.dcc-jpl.com/foltia/ticket/4
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@59 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/showplaylist.php
+install/php/view_syabas.php
+
+commit 133616c
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-06-06
+
+    AutoCommitを使用せずに高速化をした。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@58 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/perl/getxml2db.pl
+
+commit 9a0d8d5
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-06-06
+
+    AutoCommitを使用せずに高速化をした。
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@57 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/perl/updatem2pfiletable.pl
+install/php/StarlightBreaker /sb-edit.php
+
+commit 2c60012
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-05-07
+
+    アニメ感想ブログラクチン書き込みツール、Starlight Breakerの評価版公開
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@56 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/StarlightBreaker /sb-config.php.template
+install/php/StarlightBreaker /sb-edit.php
+install/php/StarlightBreaker /sb-write.php
+install/php/selectcaptureimage.php
+
+commit fe8c0bc
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-05-07
+
+    履歴ドキュメント更新
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@55 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+
+commit df9bf99
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-05-07
+
+    foltia dev Ticket #5 反映
+    http://www.dcc-jpl.com/foltia/ticket/5
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@54 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/updatem2pfiletable.pl
+
+commit 0bb001f
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-04-05
+
+    ディスク空き容量表示関数バグ修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@53 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/foltialib.php
+
+commit a3bcadc
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-04-05
+
+    録画ユニット数判定ミス修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@52 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/listreserve.php
+
+commit 410f46c
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-04-04
+
+    予約一覧でのチューナー重複検出機能を追加
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@51 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+doc/img/screen09.jpg
+doc/img/screen09.png
+doc/index.html
+install/php/foltia_config2.php.template
+install/php/graytable.css
+install/php/listreserve.php
+
+commit 6f74913
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-04-04
+
+    新規追加の放送局をデフォルトで受信不可能にするべきだったのを、不具合修正。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@50 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/perl/foltialib.pl
+
+commit 0b9e93b
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-04-03
+
+    マニュアル、ffmpegビルドの項に追記
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@49 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/index.html
+
+commit 154eabb
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-03-25
+
+    タグ微修正
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@48 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/index.html
+
+commit 12f89cf
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-03-24
+
+    マニュアルfoltia_stationの項に追記
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@47 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/index.html
+
+commit 9c5116f
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-03-16
+
+    開始時刻、録画時間、録画局を個別に指定する手動番組予約機能追加。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@46 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+doc/img/screen05.png
+doc/img/screen19.png
+doc/index.html
+install/mktable.txt
+install/php/foltialib.php
+install/php/m.php
+install/php/viewepg.php
+
+commit 765a37a
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-02-15
+
+    しょぼいカレンダーへのリンクスタイルが古かったのを修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@45 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/listreserve.php
+
+commit e254d00
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-02-10
+
+    デバイスビジーで録画デバイスをつかめなかった場合のリカバリ機構で二重にプロセス起動時にスリープしてたのを修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@44 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/perl/recwrap.pl
+install/perl/tvrecording.pl
+
+commit 4671b47
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-01-28
+
+    デバイスビジーで録画デバイスをつかめなかった場合のリカバリ機構搭載
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@43 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/perl/recwrap.pl
+install/perl/tvrecording.pl
+
+commit 1169360
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-01-28
+
+    現在時刻の番組が正しく表示出来てない場合があるのを修正。
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@42 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/viewepg.php
+
+commit 6810ae5
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-01-19
+
+    　EPG予約の際に、既に予約があるかの検出を既存予約が[全局録画]の場合検出出来ていなかったのを修正。
+    　キャプチャ表示画面で不正PIDのときのエラー処理の追加。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@41 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/reserveepg.php
+install/php/selectcaptureimage.php
+
+commit 1ba2c21
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-01-17
+
+    EPG番組表の音楽のジャンルの色を変更
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@40 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/php/graytable.css
+
+commit cdc3dce
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-01-16
+
+    EPG番組表のセル内どこをクリックしても予約出来るように改良。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@39 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/graytable.css
+install/php/viewepg.php
+
+commit 4adc8e9
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-01-13
+
+    EPG番組表をジャンルごとにカラー塗り分け
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@38 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+doc/img/screen05.png
+install/perl/xmltv2foltia.pl
+install/php/graytable.css
+install/php/reserveepg.php
+install/php/viewepg.php
+
+commit 453107f
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-01-08
+
+    ショボかるへのリンクを修正。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@37 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/selectcaptureimage.php
+
+commit 408a7bd
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-01-08
+
+    EPG番組表の表示スタイルを、横軸がそろうように改良。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@36 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+doc/img/screen05.png
+doc/index.html
+install/php/graytable.css
+install/php/viewepg.php
+
+commit 6318330
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-01-04
+
+    mp4pspの起動をフルパスに修正。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@35 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/perl/ipodtranscode.pl
+
+commit 8141d30
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-01-04
+
+    再起動してもビデオキャプチャデバイスが読めるようにする方法追記。
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@34 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/img/styles.css
+doc/index.html
+
+commit 0c63741
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-01-04
+
+    キャプチャカード情報を追記
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@33 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/index.html
+
+commit 76a7024
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2007-01-02
+
+    　録画ディスクの空き容量が少なくなってくると一部ページの背景を色変えて警告する機能追加。
+    　100GB以下:黄灰
+    　50GB以下:赤灰
+    　30GB以下:赤
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@32 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/foltialib.php
+install/php/index.php
+install/php/showplaylist.php
+
+commit 19d97f6
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-28
+
+    日付表示形式をより見やすいスタイルに変更。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@31 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/reserveprogram.php
+
+commit 3736a31
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-27
+
+    XMLTVとキャプチャカードの情報更新
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@30 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/index.html
+
+commit f49d736
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-24
+
+    時間計算間違って録画終了が十秒程度早くなりすぎていたのを修正
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@29 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/tvrecording.pl
+
+commit cacbc37
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-24
+
+    録画開始前の余裕時間を約15秒増やした。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@28 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/perl/tvrecording.pl
+
+commit 15502e5
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-23
+
+    コメント修正
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@27 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/xmltv2foltia.pl
+
+commit ab9bd69
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-23
+
+    デフォルトコンフィグ変更
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@26 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/cron_foltia_dayly.sh
+
+commit ff2e886
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-22
+
+    サブタイトルのしょぼいカレンダーへのリンク追加。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@25 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/selectcaptureimage.php
+
+commit e015de9
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-18
+
+    出力にContent-Disposition:ヘッダ追加
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@24 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/folcast.php
+
+commit 988b9f0
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-18
+
+    録画ライブラリ、サブタイトルへのリンク追加、ページタイトルに番組名表示。
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@23 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/showlibc.php
+
+commit 03a0adc
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-14
+
+    マニュアル更新
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@22 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/img/screen11.png
+doc/img/screen12.png
+doc/index.html
+
+commit f6ad160
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-14
+
+    プロセス状態表示スタイル変更、マニュアル追記
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@21 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+doc/img/screen09.png
+doc/img/screen18.png
+doc/index.html
+install/perl/getxml2db.pl
+install/php/foltialib.php
+
+commit a8c895a
+Author: yuta <yuta@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-12
+
+    install.html修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@20 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/manual/install.html
+
+commit 38b999b
+Author: yuta <yuta@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-12
+
+    ffmpeg H264対応
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@19 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/manual/install.html
+doc/manual/operation.html
+
+commit 24ef41b
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-12
+
+    エスケープもれの修正。
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@18 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/perl/getxml2db.pl
+
+commit 083e830
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-10
+
+    しょぼいカレンダーへのリンク修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@17 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/php/deletemovie.php
+install/php/showplaylist.php
+
+commit 63d4259
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-09
+
+    set mime-type
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@16 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+commit 77d6a98
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-08
+
+    16:9エンコードオプション指定間違い修正
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@15 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+install/perl/ipodtranscode.pl
+
+commit a5e7e05
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-08
+
+    16:9エンコードオプション指定間違い修正
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@14 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+
+commit ff56e5f
+Author: yuta <yuta@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-08
+
+    operation.html文字コード修正
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@13 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/manual/operation.html
+
+commit 7014bc1
+Author: yuta <yuta@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-08
+
+    css追記
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@12 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/manual/default.css
+
+commit c43e7bc
+Author: yuta <yuta@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-08
+
+    マニュアル追記
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@11 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/manual/install.html
+doc/manual/operation.html
+doc/manual/start.html
+
+commit 91401a0
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-07
+
+    css修正
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@10 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+commit 6d1a1f7
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-07
+
+    css修正
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@9 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/img/styles.css
+
+commit 5667aed
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-07
+
+    新エンコーダによりH.264対応、
+    複数同時録画時の信頼性向上、など
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@8 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+doc/img/styles.css
+doc/index.html
+doc/manual/default.css
+doc/manual/install.html
+install/perl/foltia_conf1.pl.template
+install/perl/ipodtranscode.pl
+install/perl/recwrap.pl
+install/perl/tvrecording.pl
+install/php/folcast.php
+install/php/foltia_config2.php.template
+
+commit 1fec108
+Author: yuta <yuta@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-06
+
+    foltia manual commit
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@7 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/manual/fcinstall.html
+doc/manual/foltia.html
+doc/manual/foltiainstall.html
+doc/manual/foltiaivtv.html
+doc/manual/foltiastart.html
+doc/manual/index.html
+doc/manual/install.html
+doc/manual/ivtv.html
+doc/manual/operation.html
+doc/manual/start.html
+
+commit b437f04
+Author: yuta <yuta@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-06
+
+    foltia manual commit
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@6 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/manual/default.css
+doc/manual/fcinstall.html
+doc/manual/foltia.html
+doc/manual/foltiainstall.html
+doc/manual/foltiaivtv.html
+doc/manual/foltiastart.html
+doc/manual/index.html
+
+commit c25ccf3
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-05
+
+    set mime-type
+    
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@5 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+commit faf3512
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-01
+
+    svn propset mime/keyword update
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@4 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+commit 87eab8a
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-01
+
+    1st version document(日文)
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@3 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/index.html
+
+commit 9877d99
+Author: sorshi <sorshi@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-12-01
+
+    1st version document(日文)
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@2 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/img/blockdiagram.png
+doc/img/foltia_vodcast.jpg
+doc/img/foltia_vodcast_s.jpg
+doc/img/screen01.png
+doc/img/screen02.png
+doc/img/screen03.png
+doc/img/screen04.png
+doc/img/screen05.png
+doc/img/screen06.png
+doc/img/screen07.png
+doc/img/screen08.png
+doc/img/screen09.png
+doc/img/screen10.png
+doc/img/screen11.png
+doc/img/screen12.png
+doc/img/screen13.png
+doc/img/screen14.png
+doc/img/screen15.png
+doc/img/screen16.png
+doc/img/screen17.png
+doc/img/styles.css
+doc/img/syoboi.png
+
+commit 5c5f20e
+Author: jplcom <jplcom@811c5640-5c23-0410-a611-fd7ef4895f6f>
+Date:   2006-11-29
+
+    initial import
+    
+    git-svn-id: http://svn.dcc-jpl.com/foltia/trunk@1 811c5640-5c23-0410-a611-fd7ef4895f6f
+
+doc/CHANGES.txt
+install/mktable.txt
+install/perl/addatq.pl
+install/perl/addpidatq.pl
+install/perl/captureimagemaker.pl
+install/perl/changestbch.pl
+install/perl/cron_foltia_dayly.sh
+install/perl/deletemovie.pl
+install/perl/folprep.pl
+install/perl/foltia_conf1.pl.template
+install/perl/foltialib.pl
+install/perl/getxml2db.pl
+install/perl/mklocalizeddir.pl
+install/perl/recwrap.pl
+install/perl/schedulecheck.pl
+install/perl/singletranscode.pl
+install/perl/transcode/vfr4psp.sh
+install/perl/tvrecording.pl
+install/perl/updatem2pfiletable.pl
+install/perl/xmltv2foltia.pl
+install/php/delepgp.php
+install/php/deletemovie.php
+install/php/delreserve.php
+install/php/folcast.php
+install/php/foltia_config2.php.template
+install/php/foltialib.php
+install/php/graytable.css
+install/php/index.php
+install/php/listreserve.php
+install/php/reservecomp.php
+install/php/reserveepg.php
+install/php/reserveepgcomp.php
+install/php/reserveprogram.php
+install/php/selectcaptureimage.php
+install/php/showlib.php
+install/php/showlibc.php
+install/php/showplaylist.php
+install/php/titlelist.php
+install/php/viewepg.php

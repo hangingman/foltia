@@ -1,5 +1,5 @@
 <?php
-		
+
 include("./foltia_config2.php");
 
 /*
@@ -18,7 +18,6 @@ $foltia_header = <<<EOF
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" href="graytable.css">
 
 EOF
 ;
@@ -97,74 +96,155 @@ EOF
 
     print $css;
 }
-	
-//GET用フォームデコード
+
+function print_navigate_bar() {
+
+    $nav = <<<EOF
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<!-- ヘッダ部分 -->
+	<div class="navbar-header">
+		<a class="navbar-brand" href="http://www.dcc-jpl.com/soft/foltia/">foltia</a>
+	</div>
+
+	<!-- Top Menu Items -->
+	<ul class="nav navbar-right top-nav">
+		<!-- メッセージ表示（お知らせに使う） -->
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
+			<ul class="dropdown-menu message-dropdown">
+			</ul>
+		</li>
+		<!-- ログインユーザー名表示（ログインする設定にしている場合のみ） -->
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> foltia <b class="caret"></b></a>
+			<ul class="dropdown-menu">
+				<li>
+					<a href="#"><i class="fa fa-fw fa-power-off"></i>ログアウト</a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+
+	<!-- 左側・foltiaの各ページへのリンク -->
+	<div class="collapse navbar-collapse navbar-ex1-collapse">
+		<ul class="nav navbar-nav side-nav">
+
+			<li>
+				<a href="./index.php"><i class="fa fa-fw fa-table"></i> 放映予定</a>
+			</li>
+			<li>
+				<a href="./index.php?mode=new"><i class="fa fa-fw fa-bell"></i> 新番組</a>
+			</li>
+			<li>
+				<a href="./listreserve.php"><i class="fa fa-fw fa-dashboard"></i> 予約一覧</a>
+			</li>
+			<li>
+				<a href="./titlelist.php"><i class="fa fa-fw fa-edit"></i> 番組一覧</a>
+			</li>
+			<li>
+				<a href="./viewepg.php"><i class="fa fa-fw fa-desktop"></i> EPG番組表</a>
+			</li>
+
+			<li>
+				<a href="./settings.php"><i class="fa fa-fw fa-wrench"></i> 設定</a>
+			</li>
+
+			<li>
+				<a href="./index.php"><i class="fa fa-fw fa-arrows-v"></i> 録画一覧 <i class="fa fa-fw fa-caret-down"></i></a>
+				<li>
+					<a href="./showplaylist.php">録画順</a>
+				</li>
+				<li>
+					<a href="./showplaylist.php?list=title">番組順</a>
+				</li>
+				<li>
+					<a href="./showplaylist.php?list=raw">全部</a>
+				</li>
+			</li>
+			<li>
+				<a href="./showlib.php"><i class="fa fa-fw fa-table"></i> 録画ライブラリ</a>
+			</li>
+			<li> 
+				<a href="./folcast.php"><i class="fa fa-fw fa-table"></i> iTunesに登録</a>
+			</li>
+		</ul>
+	</div>
+	<!-- /.navbar-collapse -->
+</nav>
+EOF
+;
+
+    print $nav;
+}
+    
+// GET用フォームデコード
 function getgetform($key) {
     if ($_GET["{$key}"] != "") {
-		$value = $_GET["{$key}"];
-        $value = escape_string($value);
-        $value = htmlspecialchars($value);
-        return ($value);
+	$value = $_GET["{$key}"];
+	$value = escape_string($value);
+	$value = htmlspecialchars($value);
+	return ($value);
     }
 }
 //GET用数字フォームデコード
 function getgetnumform($key) {
     if (isset($_GET["{$key}"] )) {
-		$value = $_GET["{$key}"];
-		$value = ereg_replace("[^-0-9]", "", $value);
-		$value = escape_numeric($value);
-        return ($value);
+	$value = $_GET["{$key}"];
+	$value = ereg_replace("[^-0-9]", "", $value);
+	$value = escape_numeric($value);
+	return ($value);
     }
 }
-	
+
 //フォームデコード
 function getform($key) {
     if ($_POST["{$key}"] != "") {
-		$value = $_POST["{$key}"];
-        $value = escape_string($value);
-        $value = htmlspecialchars($value);
-        return ($value);
+	$value = $_POST["{$key}"];
+	$value = escape_string($value);
+	$value = htmlspecialchars($value);
+	return ($value);
     }
 }
 //数字専用フォームデコード
 function getnumform($key) {
     if ($_POST["{$key}"] != "") {
-		$value = $_POST["{$key}"];
-		$value = escape_string($value);
-        $value = htmlspecialchars($value);
-        $value = ereg_replace("[^0-9]", "", $value);
-		$value = escape_numeric($value);
-        return ($value);
+	$value = $_POST["{$key}"];
+	$value = escape_string($value);
+	$value = htmlspecialchars($value);
+	$value = ereg_replace("[^0-9]", "", $value);
+	$value = escape_numeric($value);
+	return ($value);
     }
 }
 
 /* 全角カタカナ化してスペースを削除してインデックス用にする */
 function name2read($name) {
-	$name = mb_convert_kana($name, "KVC", "UTF-8");
-	$name = mb_convert_kana($name, "s", "UTF-8");
-	$name = ereg_replace(" ", "", $name);
+    $name = mb_convert_kana($name, "KVC", "UTF-8");
+    $name = mb_convert_kana($name, "s", "UTF-8");
+    $name = ereg_replace(" ", "", $name);
 
     return $name;
 }
 
 /* 数字を半角化して数字化してインデックス用にする */
 function pnum2dnum($num) {
-	$num = mb_convert_kana($num, "a", "UTF-8");
-	$num = ereg_replace("[^0-9]", "", $num);
+    $num = mb_convert_kana($num, "a", "UTF-8");
+    $num = ereg_replace("[^0-9]", "", $num);
 
     return $num;
 }
-	
+
 /* 終了関数の定義 */
 function die_exit($message) {
-    ?>
-    <p class="error"><?php print "$message"; ?></p>
-    <div class="index"><a href="./">トップ</a></div>
-	</body>
-    </html><?php
-          exit;
+?>
+<p class="error"><?php print "$message"; ?></p>
+<div class="index"><a href="./">トップ</a></div>
+</body>
+</html><?php
+						 exit;
 }
-	
+
 /* 入力した値のサイズをチェック */
 function check_length($str, $maxlen, $must, $name) {
     $len = strlen($str);
@@ -182,20 +262,20 @@ function escape_string($sql, $quote = FALSE) {
         return "null";
     }
     if (preg_match("/^pgsql/", DSN)){
-		return ($quote ? "'" : "") .
+	return ($quote ? "'" : "") .
                                    pg_escape_string($sql) .
                                    ($quote ? "'" : "");
     }else if (preg_match("/^sqlite/", DSN)){
-		/*	return ($quote ? "'" : "") .
-            sqlite_escape_string($sql) .
-            ($quote ? "'" : "");
-		*/
-		return($sql);
+	/*	return ($quote ? "'" : "") .
+		sqlite_escape_string($sql) .
+		($quote ? "'" : "");
+	*/
+	return($sql);
     }else{
         return "null";
     }
 } 
-	
+
 /* SQL 数値のエスケープ */
 function escape_numeric($sql) {
     if (strlen($sql) == 0) {
@@ -206,31 +286,31 @@ function escape_numeric($sql) {
     }
     return $sql;
 }
-	
+
 /* DBに接続 */
 function m_connect() { 
-	try {
-		$dbh = new PDO(DSN);
-		$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		return($dbh);
-	} catch (PDOException $e) {
-		die_exit($e->getMessage() . ": データベースに接続出来ませんでした。");
+    try {
+	$dbh = new PDO(DSN);
+	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	return($dbh);
+    } catch (PDOException $e) {
+	die_exit($e->getMessage() . ": データベースに接続出来ませんでした。");
     }
     /* データベースと、PHP の内部文字コードが違う場合 */
 }
 
 /* データベースとの接続を切り離す */
 function m_close($dbh) {
-	return null;
+    return null;
 }
 
 /* SQL 文を実行 */
 function sql_query($dbh, $query, $errmessage,$paramarray=null) {
-	try {
-		$rtn = $dbh->prepare("$query");
-		$rtn->execute($paramarray);
-		return($rtn);
-	} catch (PDOException $e) {
+    try {
+	$rtn = $dbh->prepare("$query");
+	$rtn->execute($paramarray);
+	return($rtn);
+    } catch (PDOException $e) {
         /* エラーメッセージに SQL 文を出すのはセキュリティ上良くない！！ */
         $msg = $errmessage . "<br>\n" .
              $e->getMessage() . "<br>\n" .
@@ -238,7 +318,7 @@ function sql_query($dbh, $query, $errmessage,$paramarray=null) {
              "<small><code>" . htmlspecialchars($query) .
              "</code></small>\n";
         //		$dbh->rollBack();
-		$dbh = null;
+	$dbh = null;
         die_exit($msg);
     }
 }
@@ -246,60 +326,53 @@ function sql_query($dbh, $query, $errmessage,$paramarray=null) {
 /* select した結果をテーブルで表示 */
 function m_showtable($rs) {
     /* 検索件数 */
-	$maxrows = 0;
-		
-	$rowdata = $rs->fetch();
-	if (! $rowdata) {
+    $maxrows = 0;
+    
+    $rowdata = $rs->fetch();
+    if (! $rowdata) {
         echo("<p class=\"msg\">データが存在しません</p>\n");
         return 0;
     }
-		
+    
     /* フィールド数 */
-	$maxcols = $rs->columnCount();
+    $maxcols = $rs->columnCount();
     ?>
-    <table class="list" summary="データ検索結果を表示" border="1">
-	<thead>
+<table class="list" summary="データ検索結果を表示" border="1">
+  <thead>
     <tr>
-<?php
-    /* テーブルのヘッダーを出力 */
-    for ($col = 1; $col < $maxcols; $col++) {
-        /* pg_field_name() はフィールド名を返す */
-        $meta = $rs->getColumnMeta($col);
-        $f_name = htmlspecialchars($meta["name"]);
-        echo("<th abbr=\"$f_name\">$f_name</th>\n");
-    }
-    ?>
+      <?php
+	    /* テーブルのヘッダーを出力 */
+	    for ($col = 1; $col < $maxcols; $col++) {
+		/* pg_field_name() はフィールド名を返す */
+		$meta = $rs->getColumnMeta($col);
+		$f_name = htmlspecialchars($meta["name"]);
+		echo("<th abbr=\"$f_name\">$f_name</th>\n");
+	    }
+      ?>
     </tr>
-	</thead>
-	<tbody>
-<?php
-    /* テーブルのデータを出力 */
-    do {
-        $maxrows++;
+  </thead>
+  <tbody>
+    <?php
+	  /* テーブルのデータを出力 */
+	  do {
+	      $maxrows++;
 
-        echo("<tr>\n");
-        /* １列目にリンクを張る */
-        echo("<td><a href=\"edit.php?q_code=" .
+	      echo("<tr>\n");
+	      /* １列目にリンクを張る */
+	      echo("<td><a href=\"edit.php?q_code=" .
              urlencode($rowdata[0]) . "\">" .
-             htmlspecialchars($rowdata[1]) . "</a></td>\n");
-        for ($col = 2; $col < $maxcols; $col++) { /* 列に対応 */
-            echo("<td>".htmlspecialchars($rowdata[$col])."<br></td>\n");
-        }
-        echo("</tr>\n");
-    } while ($rowdata = $rs->fetch());
+		   htmlspecialchars($rowdata[1]) . "</a></td>\n");
+	      for ($col = 2; $col < $maxcols; $col++) { /* 列に対応 */
+		  echo("<td>".htmlspecialchars($rowdata[$col])."<br></td>\n");
+	      }
+	      echo("</tr>\n");
+	  } while ($rowdata = $rs->fetch());
     ?>
-	</tbody>
-    </table>
+  </tbody>
+</table>
 <?php
-    return $maxrows;
+	return $maxrows;
 }
-
-
-function m_viewdata($dbh, $code) {
-
-    /*これ使ってないよね?*/
-}
-	
 
 function printhtmlpageheader(){
 
@@ -308,19 +381,8 @@ function printhtmlpageheader(){
     $serveruri = getserveruri();
     $username = $_SERVER['PHP_AUTH_USER'];
 
-    $header = <<<EOF
-<p align='left'><font color='#494949'>
-<A HREF = 'http://www.dcc-jpl.com/soft/foltia/' target="_blank">foltia</A>　| 
-<A HREF = './index.php'>放映予定</A> | 
-<A HREF = './index.php?mode=new'>新番組</A> | 
-<A HREF = './listreserve.php'>予約一覧</A> | 
-<A HREF = './titlelist.php'>番組一覧</A> | 
-<A HREF = './viewepg.php'>番組表</A> | 
-録画一覧(<A HREF = './showplaylist.php'>録画順</A>・<A HREF = './showplaylist.php?list=title'>番組順</A>・<A HREF = './showplaylist.php?list=raw'>全</A>) | 
-<A HREF = './showlib.php'>録画ライブラリ</A> |  
-<A HREF = './folcast.php'>Folcast</A>[<a href="itpc://$serveruri/folcast.php">iTunesに登録</a>] | 
-EOF
-;
+    print_navigate_bar();
+
     print $header;
     if ($useenvironmentpolicy == 1){
         print "【 $username 】";
@@ -350,15 +412,15 @@ enddatetime  > $epgstart  AND
 startdatetime  < $epgend  
 ORDER BY foltia_epg.startdatetime  ASC
 	";
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
-	$rowdata = $rs->fetch();
-	if (! $rowdata) {
-		print("番組データがありません<BR>");			
+    $rs = m_query($con, $query, "DBクエリに失敗しました");
+    $rowdata = $rs->fetch();
+    if (! $rowdata) {
+	print("番組データがありません<BR>");			
     }else{
         print "<table width=\"100%\"  border=\"0\">\n";
         //print "<ul><!-- ($maxrows) $query -->\n";
 
-		do {
+	do {
             $printstarttime = substr($rowdata[0],8,2) . ":" .  substr($rowdata[0],10,2);
             $tdclass = "t".substr($rowdata[0],8,2) .  substr($rowdata[0],10,2);
             $title = htmlspecialchars($rowdata[3]);
@@ -377,7 +439,7 @@ ORDER BY foltia_epg.startdatetime  ASC
               $printstarttime  <A HREF=\"./reserveepg.php?epgid=$epgid\">$title</A> $desc($rowdata[0] - $rowdata[1])
               </li>\n";
             */
-		} while ($rowdata = $rs->fetch());//do
+	} while ($rowdata = $rs->fetch());//do
         //print "</ul>\n";
         print "</table>\n";
 
@@ -398,31 +460,31 @@ function calcendtime($start,$lengthmin){//戻り値　終了時刻(Ex:2005101701
 
 
 function z2h($string){ //戻り値　半角化した文字
-	$stringh = mb_convert_kana($string, "a", "UTF-8");
+    $stringh = mb_convert_kana($string, "a", "UTF-8");
     return ($stringh );
 }
 
 function foldate2rfc822($start){//戻り値　RFC822スタイルの時刻表記
-	$startyear =   substr($start,0,4);
-	$startmonth =   substr($start,4,2);
-	$startday =   substr($start,6,2);
-	$starthour =   substr($start,8,2);
-	$startmin =   substr($start,10,2);
+    $startyear =   substr($start,0,4);
+    $startmonth =   substr($start,4,2);
+    $startday =   substr($start,6,2);
+    $starthour =   substr($start,8,2);
+    $startmin =   substr($start,10,2);
 
-	$rfc822 = date ("r",mktime($starthour  , $startmin , 0, $startmonth  , $startday, $startyear));
-	
-	return ($rfc822);
+    $rfc822 = date ("r",mktime($starthour  , $startmin , 0, $startmonth  , $startday, $startyear));
+    
+    return ($rfc822);
 }//end sub
 
 function foldate2print($start){//戻り値　日本語風時刻表記
-	$startyear =   substr($start,0,4);
-	$startmonth =   substr($start,4,2);
-	$startday =   substr($start,6,2);
-	$starthour =   substr($start,8,2);
-	$startmin =   substr($start,10,2);
+    $startyear =   substr($start,0,4);
+    $startmonth =   substr($start,4,2);
+    $startday =   substr($start,6,2);
+    $starthour =   substr($start,8,2);
+    $startmin =   substr($start,10,2);
 
-	$printabledate = date ("Y/m/d H:i",mktime($starthour  , $startmin , 0, $startmonth  , $startday, $startyear));	
-	return ($printabledate);
+    $printabledate = date ("Y/m/d H:i",mktime($starthour  , $startmin , 0, $startmonth  , $startday, $startyear));	
+    return ($printabledate);
 }//end sub
 
 function getserveruri(){//戻り値　サーバアドレス Ex.www.dcc-jpl.com:8800/soft/foltia/
