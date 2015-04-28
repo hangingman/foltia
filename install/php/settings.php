@@ -16,6 +16,7 @@ settings.php
 */
 
 include("./foltialib.php");
+include("./sqlite_accessor.php");
 $con = m_connect();
 
 
@@ -77,7 +78,9 @@ printhtmlpageheader();
 	<!-- ページのコンテンツ -->
 	<div class="row">
 	  <div class="col-lg-6">
-	    <h2>&nbsp;foltiaが使用する物理チャンネル設定</h2>
+	    <h2>&nbsp;foltiaが使用する物理チャンネルの設定</h2>
+	    <p>&nbsp;・録画に使用するチャンネルをここで設定してください</p>
+
 	    <div class="table-responsive">
 	      <table class="table table-bordered table-hover">
 
@@ -85,12 +88,40 @@ printhtmlpageheader();
 		<thead>
                   <tr>
 		    <th>No.</th>
-		    <th>使用する</th>
+		    <th>使用/不使用</th>
                     <th>局名</th>
 		    <th>物理チャンネル</th>
+		    <th></th>
                   </tr>
                 </thead>
+		<?php
 
+echo "<tbody>\n";
+
+$station_array = get_foltia_station_data($con);
+
+for ($i = 0; $i < count($station_array); $i++) {
+
+    $row = $station_array[$i];
+    $stationid = $row['stationid'];
+    $stationname = $row['stationname'];
+    $stationrecch = $row['stationrecch'];
+
+    echo "<tr>\n";
+    echo "<td>$stationid</td>";
+    if (true) {
+	echo "<td><button type=\"button\" class=\"btn btn-sm btn-success\">録画に使用する</button></td>";
+    } else {
+	echo "<td><button type=\"button\" class=\"btn btn-sm btn-default\">録画に使用しない</button></td>";
+    }
+    echo "<td>$stationname</td>";
+    echo "<td><input class=\"form-control\" placeholder=\"$stationrecch\" value=\"$stationrecch\"></td>";
+    echo "<td><button type=\"button\" class=\"btn btn-sm btn-primary\">登録する</button></td>";
+    echo "</tr>\n";
+}
+echo "</tbody>\n";
+
+		?>
 	      </table>
 	    </div>
 	  </div>

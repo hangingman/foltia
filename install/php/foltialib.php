@@ -22,6 +22,15 @@ $foltia_header = <<<EOF
 EOF
 ;
 
+// infoログ出力
+function logging($message) {
+
+    $log = '/home/foltia/debuglog.txt';
+    $current = file_get_contents($log);
+    $current .= "$message\n";
+    file_put_contents($log, $current);
+}
+
 // タイトル・メタタグの表示
 function printtitle($title, $use_warndiskfreearea) {
 
@@ -305,7 +314,7 @@ function m_close($dbh) {
 }
 
 /* SQL 文を実行 */
-function sql_query($dbh, $query, $errmessage,$paramarray=null) {
+function sql_query($dbh, $query, $errmessage, $paramarray = null) {
     try {
 	$rtn = $dbh->prepare("$query");
 	$rtn->execute($paramarray);
