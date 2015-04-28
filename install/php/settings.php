@@ -35,7 +35,7 @@ if ($useenvironmentpolicy == 1){
 
 <?php
 
-printtitle("<title>foltia:設定</title>", false);
+printtitle_with_script("<title>foltia:設定</title>", "bower_components/jquery/dist/jquery.min.js");
 
 ?>
 
@@ -97,8 +97,10 @@ printhtmlpageheader();
 		<?php
 
 echo "<tbody>\n";
+echo "<form action=\"settings.php\" method=\"post\">";
 
 $station_array = get_foltia_station_data($con);
+$used_station_map = get_used_foltia_station_map($con);
 
 for ($i = 0; $i < count($station_array); $i++) {
 
@@ -109,16 +111,19 @@ for ($i = 0; $i < count($station_array); $i++) {
 
     echo "<tr>\n";
     echo "<td>$stationid</td>";
-    if (true) {
-	echo "<td><button type=\"button\" class=\"btn btn-sm btn-success\">録画に使用する</button></td>";
+    if ( array_key_exists($stationid, $used_station_map) ) {
+	echo "<td><button id=\"$stationid\" type=\"button\" class=\"btn btn-sm btn-success\">録画に使用する</button></td>";
+	$stationrecch = $used_station_map['$stationid'];
     } else {
-	echo "<td><button type=\"button\" class=\"btn btn-sm btn-default\">録画に使用しない</button></td>";
+	echo "<td><button id=\"$stationid\" type=\"button\" class=\"btn btn-sm btn-default\">録画に使用しない</button></td>";
     }
+
     echo "<td>$stationname</td>";
-    echo "<td><input class=\"form-control\" placeholder=\"$stationrecch\" value=\"$stationrecch\"></td>";
-    echo "<td><button type=\"button\" class=\"btn btn-sm btn-primary\">登録する</button></td>";
+    echo "<td><input class=\"form-control\" name=\"stationrecch\" placeholder=\"$stationrecch\" value=\"$stationrecch\"></td>";
+    echo "<td><button type=\"submit\" class=\"btn btn-sm btn-primary\">登録する</button></td>";
     echo "</tr>\n";
 }
+echo "</form>\n";
 echo "</tbody>\n";
 
 		?>
@@ -131,5 +136,26 @@ echo "</tbody>\n";
     </div>
   </div>
   </div>
+
+
+<script type="text/javascript">
+
+$(function() {
+	$("button").click(function() {
+		var num = $(this).attr('id');
+		if ( num ) {
+			if ( $(this).hasClass("btn btn-sm btn-success") ) {
+				$(this).attr('class', 'btn btn-sm btn-default');
+				$(this).html('録画に使用しない');
+			} else {
+				$(this).attr('class', 'btn btn-sm btn-success');
+				$(this).html('録画に使用する');
+			}
+		}
+	});
+});
+
+</script>
+
 </body>
 </html>

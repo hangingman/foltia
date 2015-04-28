@@ -37,5 +37,26 @@ function get_foltia_station_data($con) {
     return $station_array;
 }
 
+// 使用されている放送局のmap情報を取得する
+function get_used_foltia_station_map($con) {
+
+    $used_station_map = array();
+    $query = "SELECT stationid, stationrecch FROM foltia_station";
+    $rs = sql_query($con, $query, "DBクエリに失敗しました");
+
+    $row = $rs->fetch();
+    if ($row) {
+	do {
+	    $stationid = $row['stationid'];
+	    $stationrecch = $row['stationrecch'];
+
+	    $used_station_map['$stationid'] = $stationrecch;
+
+	} while ($row = $rs->fetch());
+    }
+
+    return $used_station_map;
+}
+
 
 ?>
