@@ -320,15 +320,13 @@ function sql_query($dbh, $query, $errmessage, $paramarray = null) {
 	$rtn->execute($paramarray);
 	return($rtn);
     } catch (PDOException $e) {
-        /* エラーメッセージに SQL 文を出すのはセキュリティ上良くない！！ */
-        $msg = $errmessage . "<br>\n" .
-             $e->getMessage() . "<br>\n" .
-             var_export($e->errorInfo, true) . "<br>\n" .
-             "<small><code>" . htmlspecialchars($query) .
-             "</code></small>\n";
-        //		$dbh->rollBack();
+        /* to debuglog */
+        $msg = $errmessage                   . "\n" .
+             $e->getMessage()                . "\n" .
+             var_export($e->errorInfo, true) . "\n" . $query;
+
 	$dbh = null;
-        die_exit($msg);
+	logging($msg);
     }
 }
 

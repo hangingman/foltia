@@ -58,5 +58,44 @@ function get_used_foltia_station_map($con) {
     return $used_station_map;
 }
 
+// 指定された放送局情報をfoltia_stationのテーブルに突っ込む
+function set_foltia_station_recch($con, $post_map) {
+
+    //$query = "DELETE FROM foltia_station WHERE stationid = {$post_map['stationid']}";
+    //sql_query($con, $query, "DBクエリに失敗しました");
+
+    $query = <<<EOF
+INSERT INTO foltia_station (
+    stationid,
+    stationname, 
+    stationrecch,
+    stationcallsign,
+    stationuri,  
+    tunertype,   
+    tunerch,     
+    device,	     
+    ontvcode,    
+    digitalch,
+    digitalstationband
+) SELECT 
+    stationid,
+    stationname,
+    '{$post_map['stationrecch']}' as stationrecch,
+    stationcallsign,
+    stationuri,  
+    tunertype,   
+    tunerch,     
+    device,	     
+    ontvcode,    
+    digitalch,
+    digitalstationband
+FROM foltia_station_temp WHERE stationid = '{$post_map['stationid']}'
+
+EOF
+;
+    logging($query);
+    $rs = sql_query($con, $query, "DBクエリに失敗しました");
+    logging(var_dump($rs));
+}
 
 ?>

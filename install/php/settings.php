@@ -20,7 +20,7 @@ include("./sqlite_accessor.php");
 $con = m_connect();
 
 
-if ($useenvironmentpolicy == 1){
+if ($useenvironmentpolicy == 1) {
     if (!isset($_SERVER['PHP_AUTH_USER'])) {
 	header("WWW-Authenticate: Basic realm=\"foltia\"");
 	header("HTTP/1.0 401 Unauthorized");
@@ -30,6 +30,14 @@ if ($useenvironmentpolicy == 1){
 	login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
     }
 }//end if login
+
+if ( $_POST ) {
+    // POSTを処理してリロード
+    logging("Change setting for stationid: " . $_POST['stationid'] . ", stationrecch: " . $_POST['stationrecch']);
+    set_foltia_station_recch($con, $_POST);
+    header("Location: {$_SERVER['PHP_SELF']}");
+    exit;
+}
 
 ?>
 
@@ -97,7 +105,6 @@ printhtmlpageheader();
 		<?php
 
 echo "<tbody>\n";
-echo "<form action=\"settings.php\" method=\"post\">";
 
 $station_array = get_foltia_station_data($con);
 $used_station_map = get_used_foltia_station_map($con);
@@ -113,17 +120,18 @@ for ($i = 0; $i < count($station_array); $i++) {
     echo "<td>$stationid</td>";
     if ( array_key_exists($stationid, $used_station_map) ) {
 	echo "<td><button id=\"$stationid\" type=\"button\" class=\"btn btn-sm btn-success\">録画に使用する</button></td>";
-	$stationrecch = $used_station_map['$stationid'];
+	//logger(var_dump($used_station_map));
+	$stationrecch = $used_station_map['stationid'];
+	logging("stationrecch: " . $stationrecch);
     } else {
 	echo "<td><button id=\"$stationid\" type=\"button\" class=\"btn btn-sm btn-default\">録画に使用しない</button></td>";
     }
 
     echo "<td>$stationname</td>";
-    echo "<td><input class=\"form-control\" name=\"stationrecch\" placeholder=\"$stationrecch\" value=\"$stationrecch\"></td>";
+    echo "<td><input class=\"form-control\" name=\"stationrecch\" placeholder=\"{$stationrecch}\" value=\"{$stationrecch}\"></td>";
     echo "<td><button type=\"submit\" class=\"btn btn-sm btn-primary\">登録する</button></td>";
     echo "</tr>\n";
 }
-echo "</form>\n";
 echo "</tbody>\n";
 
 		?>
@@ -141,6 +149,23 @@ echo "</tbody>\n";
 <script type="text/javascript">
 
 $(function() {
+
+	$(":button:submit").click(function() {
+
+		var stationid = $(this).parent().parent().find('td:eq(0)').text();
+		var stationrecch = $(this).parent().parent().find('input:eq(0)').attr('value');
+
+		$.ajax({
+			type: "POST",
+			url: "settings.php",
+			data: {
+				"stationid": stationid,
+				"stationrecch": stationrecch
+			},
+			timeout:10000
+		});
+	});
+
 	$("button").click(function() {
 		var num = $(this).attr('id');
 		if ( num ) {
