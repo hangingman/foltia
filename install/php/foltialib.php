@@ -22,6 +22,15 @@ $foltia_header = <<<EOF
 EOF
 ;
 
+// infoログ出力
+function logging($message) {
+
+    $log = '/home/foltia/debuglog.txt';
+    $current = file_get_contents($log);
+    $current .= "$message\n";
+    file_put_contents($log, $current);
+}
+
 // タイトル・メタタグの表示
 function printtitle($title, $use_warndiskfreearea) {
 
@@ -305,21 +314,19 @@ function m_close($dbh) {
 }
 
 /* SQL 文を実行 */
-function sql_query($dbh, $query, $errmessage,$paramarray=null) {
+function sql_query($dbh, $query, $errmessage, $paramarray = null) {
     try {
 	$rtn = $dbh->prepare("$query");
 	$rtn->execute($paramarray);
 	return($rtn);
     } catch (PDOException $e) {
-        /* エラーメッセージに SQL 文を出すのはセキュリティ上良くない！！ */
-        $msg = $errmessage . "<br>\n" .
-             $e->getMessage() . "<br>\n" .
-             var_export($e->errorInfo, true) . "<br>\n" .
-             "<small><code>" . htmlspecialchars($query) .
-             "</code></small>\n";
-        //		$dbh->rollBack();
+        /* to debuglog */
+        $msg = $errmessage                   . "\n" .
+             $e->getMessage()                . "\n" .
+             var_export($e->errorInfo, true) . "\n" . $query;
+
 	$dbh = null;
-        die_exit($msg);
+	logging($msg);
     }
 }
 
