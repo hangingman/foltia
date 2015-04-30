@@ -93,8 +93,17 @@ EOF
 ;
     logging($query);
     $rs = sql_query($con, $query, "DBクエリに失敗しました");
+}
 
-    return;
+// 指定された放送局情報をデータベースから削除する
+function delete_foltia_station_recch($con, $delete_map) {
+
+    $query = <<<EOF
+DELETE FROM foltia_station WHERE stationid = '{$delete_map['stationid']}'
+EOF
+;
+    logging($query);
+    $rs = sql_query($con, $query, "DBクエリに失敗しました");
 }
 
 ?>

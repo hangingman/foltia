@@ -31,12 +31,20 @@ if ($useenvironmentpolicy == 1) {
     }
 }//end if login
 
-if ( $_POST ) {
-    // POSTを処理してリロード
-    logging("Change setting for stationid: " . $_POST['stationid'] . ", stationrecch: " . $_POST['stationrecch']);
-    set_foltia_station_recch($con, $_POST);
-    header('Location: ' . $_SERVER[ 'PHP_SELF' ]);
-    exit;
+// receive request
+$method = $_SERVER['REQUEST_METHOD'];
+
+switch ($method) {
+case 'PUT':
+    logging("Change setting for stationid: " . $_PUT['stationid'] . ", stationrecch: " . $_PUT['stationrecch']);
+    set_foltia_station_recch($con, $_PUT);
+    break;
+case 'POST':
+    logging("Delete setting for stationid: " . $_POST['stationid'] . ", stationrecch: " . $_POST['stationrecch']);
+    delete_foltia_station_recch($con, $_POST);
+    break;
+default:
+    break;
 }
 
 ?>
@@ -89,6 +97,10 @@ printhtmlpageheader();
 	    <h2>&nbsp;foltiaが使用する物理チャンネルの設定</h2>
 	    <p>&nbsp;・録画に使用するチャンネルをここで設定してください</p>
 
+
+
+
+
 	    <div class="table-responsive">
 	      <table class="table table-bordered table-hover">
 
@@ -122,13 +134,16 @@ for ($i = 0; $i < count($station_array); $i++) {
     if ( array_key_exists($stationid, $used_station_map) ) {
 	echo "<td><button id=\"$stationid\" type=\"button\" class=\"btn btn-sm btn-success\">録画に使用する</button></td>";
 	$stationrecch = $used_station_map[$stationid];
+	echo "<td>$stationname</td>";
+	echo "<td><input class=\"form-control\" name=\"stationrecch\" placeholder=\"{$stationrecch}\" value=\"{$stationrecch}\"></td>";
+	echo "<td><button name=\"post\" type=\"submit\" class=\"btn btn-sm btn-danger\">削除する</button></td>";
     } else {
 	echo "<td><button id=\"$stationid\" type=\"button\" class=\"btn btn-sm btn-default\">録画に使用しない</button></td>";
+	echo "<td>$stationname</td>";
+	echo "<td><input class=\"form-control\" name=\"stationrecch\" placeholder=\"{$stationrecch}\" value=\"{$stationrecch}\"></td>";
+	echo "<td><button name=\"put\" type=\"submit\" class=\"btn btn-sm btn-primary\">登録する</button></td>";
     }
-
-    echo "<td>$stationname</td>";
-    echo "<td><input class=\"form-control\" name=\"stationrecch\" placeholder=\"{$stationrecch}\" value=\"{$stationrecch}\"></td>";
-    echo "<td><button type=\"submit\" class=\"btn btn-sm btn-primary\">登録する</button></td>";
+    
     echo "</tr>\n";
 }
 echo "</tbody>\n";
@@ -153,9 +168,10 @@ $(function() {
 
 		var stationid = $(this).parent().parent().find('td:eq(0)').text();
 		var stationrecch = $(this).parent().parent().find('input:eq(0)').attr('value');
+		var type = $(this).attr('name');
 
 		$.ajax({
-			type: "POST",
+			type: type,
 			url: "settings.php",
 			data: {
 				"stationid": stationid,
