@@ -49,9 +49,7 @@ function get_used_foltia_station_map($con) {
 	do {
 	    $stationid = $row['stationid'];
 	    $stationrecch = $row['stationrecch'];
-
-	    $used_station_map['$stationid'] = $stationrecch;
-
+	    $used_station_map[$stationid] = $stationrecch;
 	} while ($row = $rs->fetch());
     }
 
@@ -95,7 +93,8 @@ EOF
 ;
     logging($query);
     $rs = sql_query($con, $query, "DBクエリに失敗しました");
-    logging(var_dump($rs));
+
+    return;
 }
 
 ?>

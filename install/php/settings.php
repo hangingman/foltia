@@ -35,7 +35,7 @@ if ( $_POST ) {
     // POSTを処理してリロード
     logging("Change setting for stationid: " . $_POST['stationid'] . ", stationrecch: " . $_POST['stationrecch']);
     set_foltia_station_recch($con, $_POST);
-    header("Location: {$_SERVER['PHP_SELF']}");
+    header('Location: ' . $_SERVER[ 'PHP_SELF' ]);
     exit;
 }
 
@@ -118,11 +118,10 @@ for ($i = 0; $i < count($station_array); $i++) {
 
     echo "<tr>\n";
     echo "<td>$stationid</td>";
+
     if ( array_key_exists($stationid, $used_station_map) ) {
 	echo "<td><button id=\"$stationid\" type=\"button\" class=\"btn btn-sm btn-success\">録画に使用する</button></td>";
-	//logger(var_dump($used_station_map));
-	$stationrecch = $used_station_map['stationid'];
-	logging("stationrecch: " . $stationrecch);
+	$stationrecch = $used_station_map[$stationid];
     } else {
 	echo "<td><button id=\"$stationid\" type=\"button\" class=\"btn btn-sm btn-default\">録画に使用しない</button></td>";
     }
@@ -163,6 +162,8 @@ $(function() {
 				"stationrecch": stationrecch
 			},
 			timeout:10000
+		}).done(function(data){
+			window.location.reload(true);
 		});
 	});
 
