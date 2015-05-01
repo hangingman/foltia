@@ -146,78 +146,89 @@ printtitle("<title>foltia:放映予定</title>", true);
 	?>
 	<!-- /.row -->
 
-	<table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
-	  <thead>
-	    <tr>
-	      <th align="left">TID</th>
-	      <th align="left">放映局</th>
-	      <th align="left">タイトル</th>
-	      <th align="left">話数</th>
-	      <th align="left">サブタイトル</th>
-	      <th align="left">開始時刻(ズレ)</th>
-	      <th align="left">総尺</th>
-	    </tr>
-	  </thead>
+	<!-- ページのコンテンツ -->
+	<div class="row">
+	  <div class="col-lg-6">
 
-	<tbody>
 
-	  <?php
-    /* テーブルのデータを出力 */
-    do {
-	//他局で同一番組録画済みなら色変え
-	if (in_array($rowdata[7], $reservedpidsametid)) {
-	    $rclass = "reservedtitle";
-	}else{
-	    $rclass = "";
-	}
-	//録画予約済みなら色変え
-	if (in_array($rowdata[7], $reservedpid)) {
-	    $rclass = "reserved";
-	}
-	$pid = htmlspecialchars($rowdata[7]);
+	    <div class="table-responsive">
+	      <table class="table table-bordered table-hover">
 
-	$tid = htmlspecialchars($rowdata[0]);
-	$title = htmlspecialchars($rowdata[2]);
-	$subtitle =  htmlspecialchars($rowdata[4]);
+		<!-- テーブルのヘッダ -->
+		<thead>
+		  <tr>
+		    <th>TID</th>
+		    <th>放映局</th>
+		    <th>タイトル</th>
+		    <th>話数</th>
+		    <th>サブタイトル</th>
+		    <th>開始時刻(ズレ)</th>
+		    <th>総尺</th>
+		  </tr>
+		</thead>
 
-	echo("<tr class=\"$rclass\">\n");
-	// TID
-	print "<td>";
-	if ($tid == 0 ){
-	    print "$tid";
-	}else{
-	    print "<a href=\"reserveprogram.php?tid=$tid\">$tid</a>";
-	}
-	print "</td>\n";
-	// 放映局
-	echo("<td>".htmlspecialchars($rowdata[1])."<br></td>\n");
-	// タイトル
-	print "<td>";
-	if ($tid == 0 ){
-	    print "$title";
-	}else{
-	    print "<a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a>";
-					}
-					print "</td>\n";
-					 // 話数
-					echo("<td>".htmlspecialchars($rowdata[3])."<br></td>\n");
-					// サブタイ
-					if ($pid > 0 ){
-					print "<td><a href=\"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$subtitle<br></td>\n";
-					}else{
-					print "<td>$subtitle<br></td>\n";
-					}
-					// 開始時刻(ズレ)
-					echo("<td>".htmlspecialchars(foldate2print($rowdata[5]))."<br>(".htmlspecialchars($rowdata[8]).")</td>\n");
-					// 総尺
-					echo("<td>".htmlspecialchars($rowdata[6])."<br></td>\n");
+		<tbody>
 
-				echo("</tr>\n");
+		  <?php
+	      /* テーブルのデータを出力 */
+	      do {
+		  //他局で同一番組録画済みなら色変え
+		  if (in_array($rowdata[7], $reservedpidsametid)) {
+		      $rclass = "reservedtitle";
+		  }else{
+		      $rclass = "";
+		  }
+		  //録画予約済みなら色変え
+		  if (in_array($rowdata[7], $reservedpid)) {
+		      $rclass = "reserved";
+		  }
+		  $pid = htmlspecialchars($rowdata[7]);
+		  $tid = htmlspecialchars($rowdata[0]);
+		  $title = htmlspecialchars($rowdata[2]);
+		  $subtitle =  htmlspecialchars($rowdata[4]);
+
+		  echo("<tr class=\"$rclass\">\n");
+		  // TID
+		  print "<td>";
+		  if ($tid == 0) {
+		      print "$tid";
+		  } else {
+		      print "<a href=\"reserveprogram.php?tid=$tid\">$tid</a>";
+		  }
+		  print "</td>\n";
+		  // 放映局
+		  echo("<td>".htmlspecialchars($rowdata[1])."<br></td>\n");
+		  // タイトル
+		  print "<td>";
+		  if ($tid == 0) {
+		      print "$title";
+		  } else {
+		      print "<a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a>";
+                  }
+		  print "</td>\n";
+		  // 話数
+		  echo("<td>".htmlspecialchars($rowdata[3])."<br></td>\n");
+		  // サブタイ
+		  if ($pid > 0 ){
+		      print "<td><a href=\"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$subtitle<br></td>\n";
+                  } else {
+		      print "<td>$subtitle<br></td>\n";
+		  }
+		  // 開始時刻(ズレ)
+		  echo("<td>".htmlspecialchars(foldate2print($rowdata[5]))."<br>(".htmlspecialchars($rowdata[8]).")</td>\n");
+		  // 総尺
+		  echo("<td>".htmlspecialchars($rowdata[6])."<br></td>\n");
+		  echo("</tr>\n");
      
 	} while ($rowdata = $rs->fetch());
+
 		?>
-	</tbody>
-</table>
+
+		</tbody>
+	      </table>
+	    </div>
+	  </div>
+	</div>
 
 <?php
 /////////////////////////////////////////////////
