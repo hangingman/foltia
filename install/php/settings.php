@@ -36,8 +36,9 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
 case 'PUT':
-    logging("Change setting for stationid: " . $_PUT['stationid'] . ", stationrecch: " . $_PUT['stationrecch']);
-    set_foltia_station_recch($con, $_PUT);
+    parse_str(file_get_contents("php://input"), $post_vars);
+    logging("Change setting for stationid: " . $post_vars['stationid'] . ", stationrecch: " . $post_vars['stationrecch']);
+    set_foltia_station_recch($con, $post_vars);
     break;
 case 'POST':
     logging("Delete setting for stationid: " . $_POST['stationid'] . ", stationrecch: " . $_POST['stationrecch']);
@@ -56,8 +57,9 @@ printtitle_with_script("<title>foltia:設定</title>", "bower_components/jquery/
 ?>
 
 <body>
-  <!-- ナビゲーションバーなど -->
+  
   <div id="wrapper">
+    <!-- ナビゲーションバーなど -->
     <div align="center">
 
 <?php
@@ -167,7 +169,7 @@ $(function() {
 	$(":button:submit").click(function() {
 
 		var stationid = $(this).parent().parent().find('td:eq(0)').text();
-		var stationrecch = $(this).parent().parent().find('input:eq(0)').attr('value');
+		var stationrecch = $(this).parent().parent().find('input:eq(0)').val();
 		var type = $(this).attr('name');
 
 		$.ajax({

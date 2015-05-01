@@ -19,6 +19,7 @@ now:YmdHi形式で日付を指定するとその日からの番組表が表示�
 */
 
 include("./foltialib.php");
+include("./sqlite_accessor.php");
 $con = m_connect();
 
 if ($useenvironmentpolicy == 1) {
@@ -32,192 +33,36 @@ if ($useenvironmentpolicy == 1) {
     }
 }//end if login
 
+$mode = getgetform(mode);
+
 $now = getgetnumform(date);
 if(($now < 200001010000 ) || ($now > 209912342353 )){ 
 	$now = date("YmdHi");   
 }
 
-//////////////////////////
 //ページの表示レコード数
 $lim = 300;		
 //クエリ取得
 $p = getgetnumform(p);
 //ページ取得の計算
 list($st,$p,$p2) = number_page($p,$lim);
-////////////////////////////
-
 //同一番組他局検索
-$query = "
-SELECT
-foltia_program .tid,
-foltia_program .title,
-foltia_subtitle.countno,
-foltia_subtitle.subtitle,
-foltia_subtitle.startdatetime ,
-foltia_subtitle.lengthmin ,
-foltia_tvrecord.bitrate ,
-foltia_subtitle.pid  
-FROM foltia_subtitle , foltia_program  ,foltia_tvrecord
-WHERE foltia_tvrecord.tid = foltia_program.tid 
-AND foltia_program.tid = foltia_subtitle.tid 
-AND foltia_subtitle.enddatetime >= ? 
-ORDER BY \"startdatetime\" ASC 
-LIMIT 1000
-	";
-
-$reservedrssametid = sql_query($con, $query, "DBクエリに失敗しました",array($now));
-$rowdata = $reservedrssametid->fetch();
-if ($rowdata) {
-    do {
-	$reservedpidsametid[] = $rowdata[7];
-    } while ($rowdata = $reservedrssametid->fetch());
-    
-    $rowdata = "";
-} else {
-    $reservedpidsametid = array();
-}//end if
-$reservedrssametid->closeCursor();
-
+$reservedpidsametid = get_reserved_rs_same_tid($con);
 //録画番組検索
-$query = "
-SELECT
- foltia_program.tid, stationname, foltia_program.title,
- foltia_subtitle.countno, foltia_subtitle.subtitle,
- foltia_subtitle.startdatetime as x, foltia_subtitle.lengthmin,
- foltia_tvrecord.bitrate, foltia_subtitle.pid
-FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
-WHERE foltia_tvrecord.tid = foltia_program.tid AND foltia_tvrecord.stationid = foltia_station .stationid AND foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid
-AND foltia_subtitle.enddatetime >= '$now'
-UNION
-SELECT
- foltia_program.tid, stationname, foltia_program.title,
- foltia_subtitle.countno, foltia_subtitle.subtitle,
- foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
- foltia_tvrecord.bitrate, foltia_subtitle.pid
-FROM foltia_tvrecord
-LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
-LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
-LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
-WHERE foltia_tvrecord.stationid = 0 AND
- foltia_subtitle.enddatetime >= '$now' ORDER BY x ASC
-LIMIT 1000
-	";
-
-$query = "
-SELECT
- foltia_program.tid, stationname, foltia_program.title,
- foltia_subtitle.countno, foltia_subtitle.subtitle,
- foltia_subtitle.startdatetime as x, foltia_subtitle.lengthmin,
- foltia_tvrecord.bitrate, foltia_subtitle.pid
-FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
-WHERE foltia_tvrecord.tid = foltia_program.tid AND foltia_tvrecord.stationid = foltia_station .stationid AND foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid
-AND foltia_subtitle.enddatetime >= ? 
-UNION
-SELECT
- foltia_program.tid, stationname, foltia_program.title,
- foltia_subtitle.countno, foltia_subtitle.subtitle,
- foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
- foltia_tvrecord.bitrate, foltia_subtitle.pid
-FROM foltia_tvrecord
-LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
-LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
-LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
-WHERE foltia_tvrecord.stationid = 0 AND
- foltia_subtitle.enddatetime >= ? ORDER BY x ASC
-	";
-$reservedrs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$now));
-
-$rowdata = $reservedrs->fetch();
-if ($rowdata) {
-	do {
-		$reservedpid[] = $rowdata[8];
-	} while ($rowdata = $reservedrs->fetch());
-	} else {
-		$reservedpid = array();
-	}//end if
-
-$mode = getgetform(mode);
+$reservedpid = get_reserved_rs_tid($con, $now);
 
 if ($mode == "new"){
-//新番組表示モード
-	$query = "
-	SELECT 
- foltia_program.tid, stationname, foltia_program.title,
- foltia_subtitle.countno, foltia_subtitle.subtitle,
- foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
- foltia_subtitle.pid, foltia_subtitle.startoffset
-FROM foltia_subtitle , foltia_program ,foltia_station  
-WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
- AND foltia_subtitle.enddatetime >= '$now'  AND foltia_subtitle.countno = '1' 
-ORDER BY foltia_subtitle.startdatetime  ASC 
-LIMIT 1000
-	";
-$query = "
-	SELECT 
- foltia_program.tid, stationname, foltia_program.title,
- foltia_subtitle.countno, foltia_subtitle.subtitle,
- foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
- foltia_subtitle.pid, foltia_subtitle.startoffset
-FROM foltia_subtitle , foltia_program ,foltia_station  
-WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
- AND foltia_subtitle.enddatetime >= ?  AND foltia_subtitle.countno = '1' 
-ORDER BY foltia_subtitle.startdatetime  ASC 
-LIMIT 1000
-	";
+    //新番組表示モード
+    $query = get_query_for_new_program($con);
 
 }else{
 
-$query = "
-	SELECT 
- foltia_program.tid, stationname, foltia_program.title,
- foltia_subtitle.countno, foltia_subtitle.subtitle,
- foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
- foltia_subtitle.pid, foltia_subtitle.startoffset
-FROM foltia_subtitle , foltia_program ,foltia_station  
-WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
- AND foltia_subtitle.enddatetime >= '$now'  
-ORDER BY foltia_subtitle.startdatetime  ASC 
-LIMIT 1000
-	";
-
-/////////////////////////////////////////////////////////////
-//レコード総数取得
-$query = "
-	SELECT
-COUNT(*) AS cnt 
-FROM foltia_subtitle , foltia_program ,foltia_station  
-WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
- AND foltia_subtitle.enddatetime >= ?  
-LIMIT 1000 
-	";
-
-$rs = sql_query($con, $query, "DBクエリに失敗しました",array($now));
-$rowdata = $rs->fetch();
-
-$dtcnt = htmlspecialchars($rowdata[0]);
-//	echo $dtcnt;
-
-if (! $rowdata) {
-	die_exit("番組データがありません<BR>");
-}//endif
-////////////////////////////////////////////////////////////
-
-//レコード表示
-$query = "
-	SELECT 
- foltia_program.tid, stationname, foltia_program.title,
- foltia_subtitle.countno, foltia_subtitle.subtitle,
- foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
- foltia_subtitle.pid, foltia_subtitle.startoffset
-FROM foltia_subtitle , foltia_program ,foltia_station  
-WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
- AND foltia_subtitle.enddatetime >= ?  
-ORDER BY foltia_subtitle.startdatetime  ASC 
-LIMIT $lim OFFSET $st 
-	";
-
-
-/////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+    //レコード総数取得
+    $dtcnt = get_all_record_or_die($con, $now);
+    //レコード表示
+    $query = get_query_for_program($con, $lim, $st);
+    ////////////////////////////////////////////////////////////
 
 }//end if
 
@@ -226,118 +71,164 @@ $rowdata = $rs->fetch();
 
 if (! $rowdata) {
 
-header("Status: 404 Not Found",TRUE,404);
-printtitle("<title>foltia:放映予定</title>", true);
-
-print "<body><div id=\"wrapper\"><div align=\"center\">\n";
-    
-print_navigate_bar();
-printhtmlpageheader();
-print "<hr size=\"4\">\n";
-		die_exit("番組データがありません<BR>");
+    header("Status: 404 Not Found",TRUE,404);
+    printtitle("<title>foltia:放映予定</title>", true);
+    print "<body><div id=\"wrapper\"><div align=\"center\">\n";    
+    print_navigate_bar();
+    printhtmlpageheader();
+    print "<hr size=\"4\">\n";
+    die_exit("番組データがありません<BR>");
 
 }//endif
 
 printtitle("<title>foltia:放映予定</title>", true);
+
 ?>
+
 <body>
-<div id="wrapper">
-<div align="center">
-<?php 
-print_navigate_bar();
-printhtmlpageheader();
-?>
-  <p align="left"><font color="#494949" size="6">
-<?php
-if ($mode == "new"){
-	print "新番組放映予定";
-}else{
-	print "放映予定";
-}
-?>
-</font></p>
-  <hr size="4">
-<p align="left">放映番組リストを表示します。</p>
+  <div id="wrapper">
 
-<?php
-		/* フィールド数 */
-    $maxcols = $rs->columnCount();
+    <!-- ナビゲーションバーなど -->
+    <div align="center">
 
-//Autopager
-echo "<div id=contents class=autopagerize_page_element />";
+      <?php 
 
-		?>
-  <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
-	<thead>
-		<tr>
-			<th align="left">TID</th>
-			<th align="left">放映局</th>
-			<th align="left">タイトル</th>
-			<th align="left">話数</th>
-			<th align="left">サブタイトル</th>
-			<th align="left">開始時刻(ズレ)</th>
-			<th align="left">総尺</th>
-		</tr>
-	</thead>
+    print_navigate_bar();
+    printhtmlpageheader();
 
-	<tbody>
+      ?>
+
+    </div>
+
+
+    <!-- 表示するページ FIXME: テンプレートが有効に使える場面であるためあとで重複コードは排除する -->
+    <div id="page-wrapper">
+      <div id="container-fluid">
+
+	<!-- ページタイトル -->
+	<div class="row">
+          <div class="col-lg-12">
+            <h1 class="page-header">
+              &nbsp;
+	      <?php
+		if ($mode == "new"){
+		print "新番組放映予定";
+		}else{
+		print "放映予定";
+		}
+	      ?>
+            </h1>
+	    
+	    <p align="left">放映番組リストを表示します。</p>
+
+            <ol class="breadcrumb">
+              <li>
+		<i class="fa fa-fw fa-table"></i>  <a href="./index.php"> 放映予定</a>
+              </li>
+              <li class="active">
 		<?php
-			/* テーブルのデータを出力 */
-     do {
-//他局で同一番組録画済みなら色変え
-if (in_array($rowdata[7], $reservedpidsametid)) {
-$rclass = "reservedtitle";
-}else{
-$rclass = "";
-}
-//録画予約済みなら色変え
-if (in_array($rowdata[7], $reservedpid)) {
-$rclass = "reserved";
-}
-$pid = htmlspecialchars($rowdata[7]);
+		  if ($mode == "new") {
+		  print "<i class=\"fa fa-fw fa-bell\"></i>  <a href=\"./index.php?mode=new\"> 新番組</a>";
+		  }else{
+		  print "<i class=\"fa fa-fw fa-table\"></i>  <a href=\"./index.php\"> 放映予定</a>";
+		  }		  
+		?>
+              </li>
+            </ol>
+          </div>
+	</div>
 
-$tid = htmlspecialchars($rowdata[0]);
-$title = htmlspecialchars($rowdata[2]);
-$subtitle =  htmlspecialchars($rowdata[4]);
+	<?php
+	  /* フィールド数 */
+	  $maxcols = $rs->columnCount();
+	  //Autopager
+	  echo "<div id=contents class=autopagerize_page_element />";
+	?>
+	<!-- /.row -->
 
-				echo("<tr class=\"$rclass\">\n");
-					// TID
-					print "<td>";
-					if ($tid == 0 ){
-					print "$tid";
-					}else{
-					print "<a href=\"reserveprogram.php?tid=$tid\">$tid</a>";
-					}
-					print "</td>\n";
-				     // 放映局
-				     echo("<td>".htmlspecialchars($rowdata[1])."<br></td>\n");
-				     // タイトル
-					print "<td>";
-					if ($tid == 0 ){
-					print "$title";
-					}else{
-					print "<a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a>";
-					}
-					print "</td>\n";
-					 // 話数
-					echo("<td>".htmlspecialchars($rowdata[3])."<br></td>\n");
-					// サブタイ
-					if ($pid > 0 ){
-					print "<td><a href=\"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$subtitle<br></td>\n";
-					}else{
-					print "<td>$subtitle<br></td>\n";
-					}
-					// 開始時刻(ズレ)
-					echo("<td>".htmlspecialchars(foldate2print($rowdata[5]))."<br>(".htmlspecialchars($rowdata[8]).")</td>\n");
-					// 総尺
-					echo("<td>".htmlspecialchars($rowdata[6])."<br></td>\n");
+	<!-- ページのコンテンツ -->
+	<div class="row">
+	  <div class="col-lg-6">
 
-				echo("</tr>\n");
+
+	    <div class="table-responsive">
+	      <table class="table table-bordered table-hover">
+
+		<!-- テーブルのヘッダ -->
+		<thead>
+		  <tr>
+		    <th>TID</th>
+		    <th>放映局</th>
+		    <th>タイトル</th>
+		    <th>話数</th>
+		    <th>サブタイトル</th>
+		    <th>開始時刻(ズレ)</th>
+		    <th>総尺</th>
+		  </tr>
+		</thead>
+
+		<tbody>
+
+		  <?php
+	      /* テーブルのデータを出力 */
+	      do {
+		  //他局で同一番組録画済みなら色変え
+		  if (in_array($rowdata[7], $reservedpidsametid)) {
+		      $rclass = "reservedtitle";
+		  }else{
+		      $rclass = "";
+		  }
+		  //録画予約済みなら色変え
+		  if (in_array($rowdata[7], $reservedpid)) {
+		      $rclass = "reserved";
+		  }
+		  $pid = htmlspecialchars($rowdata[7]);
+		  $tid = htmlspecialchars($rowdata[0]);
+		  $title = htmlspecialchars($rowdata[2]);
+		  $subtitle =  htmlspecialchars($rowdata[4]);
+
+		  echo("<tr class=\"$rclass\">\n");
+		  // TID
+		  print "<td>";
+		  if ($tid == 0) {
+		      print "$tid";
+		  } else {
+		      print "<a href=\"reserveprogram.php?tid=$tid\">$tid</a>";
+		  }
+		  print "</td>\n";
+		  // 放映局
+		  echo("<td>".htmlspecialchars($rowdata[1])."<br></td>\n");
+		  // タイトル
+		  print "<td>";
+		  if ($tid == 0) {
+		      print "$title";
+		  } else {
+		      print "<a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a>";
+                  }
+		  print "</td>\n";
+		  // 話数
+		  echo("<td>".htmlspecialchars($rowdata[3])."<br></td>\n");
+		  // サブタイ
+		  if ($pid > 0 ){
+		      print "<td><a href=\"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$subtitle<br></td>\n";
+                  } else {
+		      print "<td>$subtitle<br></td>\n";
+		  }
+		  // 開始時刻(ズレ)
+		  echo("<td>".htmlspecialchars(foldate2print($rowdata[5]))."<br>(".htmlspecialchars($rowdata[8]).")</td>\n");
+		  // 総尺
+		  echo("<td>".htmlspecialchars($rowdata[6])."<br></td>\n");
+		  echo("</tr>\n");
      
 	} while ($rowdata = $rs->fetch());
+
 		?>
-	</tbody>
-</table>
+
+		</tbody>
+	      </table>
+	    </div>
+	  </div>
+	</div>
 
 <?php
 /////////////////////////////////////////////////
@@ -346,6 +237,7 @@ page_display("",$p,$p2,$lim,$dtcnt,$mode);
 /////////////////////////////////////////////////
 ?>
 
-</div>
-</body>
+      </div>
+    </div>
+  </body>
 </html>
