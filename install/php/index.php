@@ -19,6 +19,7 @@ now:YmdHi形式で日付を指定するとその日からの番組表が表示�
 */
 
 include("./foltialib.php");
+include("./sqlite_accessor.php");
 $con = m_connect();
 
 if ($useenvironmentpolicy == 1) {
@@ -47,36 +48,7 @@ list($st,$p,$p2) = number_page($p,$lim);
 ////////////////////////////
 
 //同一番組他局検索
-$query = "
-SELECT
-foltia_program .tid,
-foltia_program .title,
-foltia_subtitle.countno,
-foltia_subtitle.subtitle,
-foltia_subtitle.startdatetime ,
-foltia_subtitle.lengthmin ,
-foltia_tvrecord.bitrate ,
-foltia_subtitle.pid  
-FROM foltia_subtitle , foltia_program  ,foltia_tvrecord
-WHERE foltia_tvrecord.tid = foltia_program.tid 
-AND foltia_program.tid = foltia_subtitle.tid 
-AND foltia_subtitle.enddatetime >= ? 
-ORDER BY \"startdatetime\" ASC 
-LIMIT 1000
-	";
-
-$reservedrssametid = sql_query($con, $query, "DBクエリに失敗しました",array($now));
-$rowdata = $reservedrssametid->fetch();
-if ($rowdata) {
-    do {
-	$reservedpidsametid[] = $rowdata[7];
-    } while ($rowdata = $reservedrssametid->fetch());
-    
-    $rowdata = "";
-} else {
-    $reservedpidsametid = array();
-}//end if
-$reservedrssametid->closeCursor();
+$reservedpidsametid = get_reserved_rs_same_tid($con);
 
 //録画番組検索
 $query = "
@@ -139,85 +111,17 @@ if ($rowdata) {
 $mode = getgetform(mode);
 
 if ($mode == "new"){
-//新番組表示モード
-	$query = "
-	SELECT 
- foltia_program.tid, stationname, foltia_program.title,
- foltia_subtitle.countno, foltia_subtitle.subtitle,
- foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
- foltia_subtitle.pid, foltia_subtitle.startoffset
-FROM foltia_subtitle , foltia_program ,foltia_station  
-WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
- AND foltia_subtitle.enddatetime >= '$now'  AND foltia_subtitle.countno = '1' 
-ORDER BY foltia_subtitle.startdatetime  ASC 
-LIMIT 1000
-	";
-$query = "
-	SELECT 
- foltia_program.tid, stationname, foltia_program.title,
- foltia_subtitle.countno, foltia_subtitle.subtitle,
- foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
- foltia_subtitle.pid, foltia_subtitle.startoffset
-FROM foltia_subtitle , foltia_program ,foltia_station  
-WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
- AND foltia_subtitle.enddatetime >= ?  AND foltia_subtitle.countno = '1' 
-ORDER BY foltia_subtitle.startdatetime  ASC 
-LIMIT 1000
-	";
+    //新番組表示モード
+    $query = get_query_for_new_program($con);
 
 }else{
 
-$query = "
-	SELECT 
- foltia_program.tid, stationname, foltia_program.title,
- foltia_subtitle.countno, foltia_subtitle.subtitle,
- foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
- foltia_subtitle.pid, foltia_subtitle.startoffset
-FROM foltia_subtitle , foltia_program ,foltia_station  
-WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
- AND foltia_subtitle.enddatetime >= '$now'  
-ORDER BY foltia_subtitle.startdatetime  ASC 
-LIMIT 1000
-	";
-
-/////////////////////////////////////////////////////////////
-//レコード総数取得
-$query = "
-	SELECT
-COUNT(*) AS cnt 
-FROM foltia_subtitle , foltia_program ,foltia_station  
-WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
- AND foltia_subtitle.enddatetime >= ?  
-LIMIT 1000 
-	";
-
-$rs = sql_query($con, $query, "DBクエリに失敗しました",array($now));
-$rowdata = $rs->fetch();
-
-$dtcnt = htmlspecialchars($rowdata[0]);
-//	echo $dtcnt;
-
-if (! $rowdata) {
-	die_exit("番組データがありません<BR>");
-}//endif
-////////////////////////////////////////////////////////////
-
-//レコード表示
-$query = "
-	SELECT 
- foltia_program.tid, stationname, foltia_program.title,
- foltia_subtitle.countno, foltia_subtitle.subtitle,
- foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
- foltia_subtitle.pid, foltia_subtitle.startoffset
-FROM foltia_subtitle , foltia_program ,foltia_station  
-WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
- AND foltia_subtitle.enddatetime >= ?  
-ORDER BY foltia_subtitle.startdatetime  ASC 
-LIMIT $lim OFFSET $st 
-	";
-
-
-/////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+    //レコード総数取得
+    $dtcnt = get_all_record_or_die($con, $now);
+    //レコード表示
+    $query = get_query_for_program($con, $lim, $st);
+    ////////////////////////////////////////////////////////////
 
 }//end if
 
@@ -226,20 +130,20 @@ $rowdata = $rs->fetch();
 
 if (! $rowdata) {
 
-header("Status: 404 Not Found",TRUE,404);
-printtitle("<title>foltia:放映予定</title>", true);
-
-print "<body><div id=\"wrapper\"><div align=\"center\">\n";
-    
-print_navigate_bar();
-printhtmlpageheader();
-print "<hr size=\"4\">\n";
-		die_exit("番組データがありません<BR>");
+    header("Status: 404 Not Found",TRUE,404);
+    printtitle("<title>foltia:放映予定</title>", true);
+    print "<body><div id=\"wrapper\"><div align=\"center\">\n";    
+    print_navigate_bar();
+    printhtmlpageheader();
+    print "<hr size=\"4\">\n";
+    die_exit("番組データがありません<BR>");
 
 }//endif
 
 printtitle("<title>foltia:放映予定</title>", true);
+
 ?>
+
 <body>
 <div id="wrapper">
 <div align="center">
