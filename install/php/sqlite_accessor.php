@@ -106,6 +106,51 @@ EOF
     $rs = sql_query($con, $query, "DBクエリに失敗しました");
 }
 
+// 録画番組検索
+function get_reserved_rs_tid($con, $now) {
+
+    $query = <<<EOF
+SELECT
+    foltia_program.tid, stationname, foltia_program.title,
+    foltia_subtitle.countno, foltia_subtitle.subtitle,
+    foltia_subtitle.startdatetime as x, foltia_subtitle.lengthmin,
+    foltia_tvrecord.bitrate, foltia_subtitle.pid
+FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
+WHERE foltia_tvrecord.tid = foltia_program.tid
+    AND foltia_tvrecord.stationid = foltia_station.stationid
+    AND foltia_program.tid = foltia_subtitle.tid 
+    AND foltia_station.stationid = foltia_subtitle.stationid
+    AND foltia_subtitle.enddatetime >= ? 
+UNION
+SELECT
+    foltia_program.tid, stationname, foltia_program.title,
+    foltia_subtitle.countno, foltia_subtitle.subtitle,
+    foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
+    foltia_tvrecord.bitrate, foltia_subtitle.pid
+FROM foltia_tvrecord
+
+LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
+LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
+LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
+WHERE foltia_tvrecord.stationid = 0
+    AND foltia_subtitle.enddatetime >= ? ORDER BY x ASC
+
+EOF
+;
+
+    $reservedrs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$now));
+    $rowdata = $reservedrs->fetch();
+    if ($rowdata) {
+        do {
+	    $reservedpid[] = $rowdata[8];
+	} while ($rowdata = $reservedrs->fetch());
+	} else {
+	    $reservedpid = array();
+	}//end if
+
+    return $reservedpid;
+}
+
 // 同一番組他局検索
 function get_reserved_rs_same_tid($con) {
 

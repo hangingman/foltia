@@ -33,82 +33,23 @@ if ($useenvironmentpolicy == 1) {
     }
 }//end if login
 
+$mode = getgetform(mode);
+
 $now = getgetnumform(date);
 if(($now < 200001010000 ) || ($now > 209912342353 )){ 
 	$now = date("YmdHi");   
 }
 
-//////////////////////////
 //ページの表示レコード数
 $lim = 300;		
 //クエリ取得
 $p = getgetnumform(p);
 //ページ取得の計算
 list($st,$p,$p2) = number_page($p,$lim);
-////////////////////////////
-
 //同一番組他局検索
 $reservedpidsametid = get_reserved_rs_same_tid($con);
-
 //録画番組検索
-$query = "
-SELECT
- foltia_program.tid, stationname, foltia_program.title,
- foltia_subtitle.countno, foltia_subtitle.subtitle,
- foltia_subtitle.startdatetime as x, foltia_subtitle.lengthmin,
- foltia_tvrecord.bitrate, foltia_subtitle.pid
-FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
-WHERE foltia_tvrecord.tid = foltia_program.tid AND foltia_tvrecord.stationid = foltia_station .stationid AND foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid
-AND foltia_subtitle.enddatetime >= '$now'
-UNION
-SELECT
- foltia_program.tid, stationname, foltia_program.title,
- foltia_subtitle.countno, foltia_subtitle.subtitle,
- foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
- foltia_tvrecord.bitrate, foltia_subtitle.pid
-FROM foltia_tvrecord
-LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
-LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
-LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
-WHERE foltia_tvrecord.stationid = 0 AND
- foltia_subtitle.enddatetime >= '$now' ORDER BY x ASC
-LIMIT 1000
-	";
-
-$query = "
-SELECT
- foltia_program.tid, stationname, foltia_program.title,
- foltia_subtitle.countno, foltia_subtitle.subtitle,
- foltia_subtitle.startdatetime as x, foltia_subtitle.lengthmin,
- foltia_tvrecord.bitrate, foltia_subtitle.pid
-FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
-WHERE foltia_tvrecord.tid = foltia_program.tid AND foltia_tvrecord.stationid = foltia_station .stationid AND foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid
-AND foltia_subtitle.enddatetime >= ? 
-UNION
-SELECT
- foltia_program.tid, stationname, foltia_program.title,
- foltia_subtitle.countno, foltia_subtitle.subtitle,
- foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
- foltia_tvrecord.bitrate, foltia_subtitle.pid
-FROM foltia_tvrecord
-LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
-LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
-LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
-WHERE foltia_tvrecord.stationid = 0 AND
- foltia_subtitle.enddatetime >= ? ORDER BY x ASC
-	";
-$reservedrs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$now));
-
-$rowdata = $reservedrs->fetch();
-if ($rowdata) {
-	do {
-		$reservedpid[] = $rowdata[8];
-	} while ($rowdata = $reservedrs->fetch());
-	} else {
-		$reservedpid = array();
-	}//end if
-
-$mode = getgetform(mode);
+$reservedpid = get_reserved_rs_tid($con, $now);
 
 if ($mode == "new"){
     //新番組表示モード
@@ -147,17 +88,20 @@ printtitle("<title>foltia:放映予定</title>", true);
 <body>
 <div id="wrapper">
 <div align="center">
+
 <?php 
-print_navigate_bar();
-printhtmlpageheader();
+
+    print_navigate_bar();
+    printhtmlpageheader();
+
 ?>
   <p align="left"><font color="#494949" size="6">
 <?php
-if ($mode == "new"){
+    if ($mode == "new"){
 	print "新番組放映予定";
-}else{
+    }else{
 	print "放映予定";
-}
+    }
 ?>
 </font></p>
   <hr size="4">
