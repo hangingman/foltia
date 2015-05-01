@@ -57,8 +57,9 @@ printtitle_with_script("<title>foltia:設定</title>", "bower_components/jquery/
 ?>
 
 <body>
-  <!-- ナビゲーションバーなど -->
+  
   <div id="wrapper">
+    <!-- ナビゲーションバーなど -->
     <div align="center">
 
 <?php

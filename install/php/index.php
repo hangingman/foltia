@@ -86,85 +86,117 @@ printtitle("<title>foltia:放映予定</title>", true);
 ?>
 
 <body>
-<div id="wrapper">
-<div align="center">
+  <div id="wrapper">
 
-<?php 
+    <!-- ナビゲーションバーなど -->
+    <div align="center">
+
+      <?php 
 
     print_navigate_bar();
     printhtmlpageheader();
 
-?>
-  <p align="left"><font color="#494949" size="6">
-<?php
-    if ($mode == "new"){
-	print "新番組放映予定";
-    }else{
-	print "放映予定";
-    }
-?>
-</font></p>
-  <hr size="4">
-<p align="left">放映番組リストを表示します。</p>
+      ?>
 
-<?php
-		/* フィールド数 */
-    $maxcols = $rs->columnCount();
+    </div>
 
-//Autopager
-echo "<div id=contents class=autopagerize_page_element />";
 
+    <!-- 表示するページ FIXME: テンプレートが有効に使える場面であるためあとで重複コードは排除する -->
+    <div id="page-wrapper">
+      <div id="container-fluid">
+
+	<!-- ページタイトル -->
+	<div class="row">
+          <div class="col-lg-12">
+            <h1 class="page-header">
+              &nbsp;
+	      <?php
+		if ($mode == "new"){
+		print "新番組放映予定";
+		}else{
+		print "放映予定";
+		}
+	      ?>
+            </h1>
+	    
+	    <p align="left">放映番組リストを表示します。</p>
+
+            <ol class="breadcrumb">
+              <li>
+		<i class="fa fa-fw fa-table"></i>  <a href="./index.php"> 放映予定</a>
+              </li>
+              <li class="active">
+		<?php
+		  if ($mode == "new") {
+		  print "<i class=\"fa fa-fw fa-bell\"></i>  <a href=\"./index.php?mode=new\"> 新番組</a>";
+		  }else{
+		  print "<i class=\"fa fa-fw fa-table\"></i>  <a href=\"./index.php\"> 放映予定</a>";
+		  }		  
 		?>
-  <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
-	<thead>
-		<tr>
-			<th align="left">TID</th>
-			<th align="left">放映局</th>
-			<th align="left">タイトル</th>
-			<th align="left">話数</th>
-			<th align="left">サブタイトル</th>
-			<th align="left">開始時刻(ズレ)</th>
-			<th align="left">総尺</th>
-		</tr>
-	</thead>
+              </li>
+            </ol>
+          </div>
+	</div>
+
+	<?php
+	  /* フィールド数 */
+	  $maxcols = $rs->columnCount();
+	  //Autopager
+	  echo "<div id=contents class=autopagerize_page_element />";
+	?>
+	<!-- /.row -->
+
+	<table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
+	  <thead>
+	    <tr>
+	      <th align="left">TID</th>
+	      <th align="left">放映局</th>
+	      <th align="left">タイトル</th>
+	      <th align="left">話数</th>
+	      <th align="left">サブタイトル</th>
+	      <th align="left">開始時刻(ズレ)</th>
+	      <th align="left">総尺</th>
+	    </tr>
+	  </thead>
 
 	<tbody>
-		<?php
-			/* テーブルのデータを出力 */
-     do {
-//他局で同一番組録画済みなら色変え
-if (in_array($rowdata[7], $reservedpidsametid)) {
-$rclass = "reservedtitle";
-}else{
-$rclass = "";
-}
-//録画予約済みなら色変え
-if (in_array($rowdata[7], $reservedpid)) {
-$rclass = "reserved";
-}
-$pid = htmlspecialchars($rowdata[7]);
 
-$tid = htmlspecialchars($rowdata[0]);
-$title = htmlspecialchars($rowdata[2]);
-$subtitle =  htmlspecialchars($rowdata[4]);
+	  <?php
+    /* テーブルのデータを出力 */
+    do {
+	//他局で同一番組録画済みなら色変え
+	if (in_array($rowdata[7], $reservedpidsametid)) {
+	    $rclass = "reservedtitle";
+	}else{
+	    $rclass = "";
+	}
+	//録画予約済みなら色変え
+	if (in_array($rowdata[7], $reservedpid)) {
+	    $rclass = "reserved";
+	}
+	$pid = htmlspecialchars($rowdata[7]);
 
-				echo("<tr class=\"$rclass\">\n");
-					// TID
-					print "<td>";
-					if ($tid == 0 ){
-					print "$tid";
-					}else{
-					print "<a href=\"reserveprogram.php?tid=$tid\">$tid</a>";
-					}
-					print "</td>\n";
-				     // 放映局
-				     echo("<td>".htmlspecialchars($rowdata[1])."<br></td>\n");
-				     // タイトル
-					print "<td>";
-					if ($tid == 0 ){
-					print "$title";
-					}else{
-					print "<a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a>";
+	$tid = htmlspecialchars($rowdata[0]);
+	$title = htmlspecialchars($rowdata[2]);
+	$subtitle =  htmlspecialchars($rowdata[4]);
+
+	echo("<tr class=\"$rclass\">\n");
+	// TID
+	print "<td>";
+	if ($tid == 0 ){
+	    print "$tid";
+	}else{
+	    print "<a href=\"reserveprogram.php?tid=$tid\">$tid</a>";
+	}
+	print "</td>\n";
+	// 放映局
+	echo("<td>".htmlspecialchars($rowdata[1])."<br></td>\n");
+	// タイトル
+	print "<td>";
+	if ($tid == 0 ){
+	    print "$title";
+	}else{
+	    print "<a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a>";
 					}
 					print "</td>\n";
 					 // 話数
@@ -194,6 +226,7 @@ page_display("",$p,$p2,$lim,$dtcnt,$mode);
 /////////////////////////////////////////////////
 ?>
 
-</div>
-</body>
+      </div>
+    </div>
+  </body>
 </html>
