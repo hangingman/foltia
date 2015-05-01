@@ -57,58 +57,81 @@ $dtcnt = get_all_title_count_or_die($con);
 ?>
 
 <body>
-<div align="center">
+  <div id="wrapper">
 
-<?php 
-printhtmlpageheader();
-?>
-  <p align="left"><font color="#494949" size="6">番組一覧</font></p>
-  <hr size="4">
-<p align="left">全番組リストを表示します。</p>
+    <!-- ナビゲーションバーなど -->
+    <div align="center">
+      <?php printhtmlpageheader(); ?>
+    </div>
 
-<?php
+    <!-- 表示するページ FIXME: テンプレートが有効に使える場面であるためあとで重複コードは排除する -->
+    <div id="page-wrapper">
+      <div id="container-fluid">
 
-// 		/* フィールド数 */
-// $maxcols = $rs->columnCount();
-	
-//Autopager 
-echo "<div id=contents class=autopagerize_page_element />";
-?>
+	<!-- ページタイトル -->
+	<div class="row">
+          <div class="col-lg-12">
+            <h1 class="page-header">
+              &nbsp;番組一覧
+            </h1>
+	    
+	    <p align="left">全番組リストを表示します。</p>
 
-  <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
-	<thead>
-		<tr>
-			<th align="left">TID</th>
-			<th align="left">タイトル</th>
-			<th align="left">MPEG4リンク</th>
-		</tr>
-	</thead>
-	
-	<tbody>
-		<?php
-			/* テーブルのデータを出力 */
+            <ol class="breadcrumb">
+              <li>
+		<i class="fa fa-fw fa-table"></i>  <a href="./index.php"> 放映予定</a>
+              </li>
+              <li class="active">
+		<i class="fa fa-fw fa-edit"></i>  <a href="./titlelist.php"> 番組一覧</a>
+              </li>
+            </ol>
+          </div>
+	</div>
 
-  do {
-				echo("<tr>\n");
+	<?php	//Autopager 
+       echo "<div id=contents class=autopagerize_page_element />";
+	?>
+	<!-- /.row -->
 
-				//TID
-					echo("<td><a href=\"reserveprogram.php?tid=" .
-					htmlspecialchars($rowdata[0])  . "\">" .
-					htmlspecialchars($rowdata[0]) . "</a></td>\n");
-				      //タイトル
-				        echo("<td><a href=\"http://cal.syoboi.jp/progedit.php?TID=" .
+
+	<!-- ページのコンテンツ -->
+	<div class="row">
+	  <div class="col-lg-6">
+	    <div class="table-responsive">
+
+	      <table class="table table-bordered table-hover">
+		<thead>
+		  <tr>
+		    <th align="left">TID</th>
+		    <th align="left">タイトル</th>
+		    <th align="left">MPEG4リンク</th>
+		  </tr>
+		</thead>
+		
+		<tbody>
+		  <?php
+       /* テーブルのデータを出力 */
+       do {
+	   echo("<tr>\n");
+	   //TID
+	   echo("<td><a href=\"reserveprogram.php?tid=" . htmlspecialchars($rowdata[0])  . "\">" . htmlspecialchars($rowdata[0]) . "</a></td>\n");
+	   //タイトル
+	   echo("<td><a href=\"http://cal.syoboi.jp/progedit.php?TID=" .
 					htmlspecialchars($rowdata[0])  . "\" target=\"_blank\">" .
 					htmlspecialchars($rowdata[1]) . "</a></td>\n");
 					print "<td><A HREF = \"showlibc.php?tid=".htmlspecialchars($rowdata[0])."\">mp4</A></td>\n";
 
-				echo("</tr>\n");
+	   echo("</tr>\n");
+
     } while ($rowdata = $rs->fetch());
 
 		?>
 
-	</tbody>
-</table>
-
+	      </tbody>
+	    </table>
+	    </div>
+	  </div>
+	</div>
 <?php
 
 /////////////////////////////////////////////////////////
@@ -117,5 +140,8 @@ page_display("",$p,$p2,$lim,$dtcnt,"");
 ////////////////////////////////////////////////////////
 
 ?>
-</body>
+
+      </div>
+    </div>
+  </body>
 </html>
