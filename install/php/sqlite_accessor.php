@@ -260,4 +260,49 @@ EOF
     return $dtcnt;
 }
 
+// タイトルリスト取得
+function get_all_titlelist_or_die($con, $lim, $st) {
+
+    $query = <<<EOF
+SELECT 
+    foltia_program.tid,
+    foltia_program.title 
+FROM foltia_program 
+ORDER BY foltia_program.tid DESC
+LIMIT {$lim} OFFSET {$st}
+EOF
+;
+
+    $rs = sql_query($con, $query, "DBクエリに失敗しました");
+    $rowdata = $rs->fetch();
+    if (! $rowdata) {
+	die_exit("番組データがありません<BR>");
+    }
+
+    /* フィールド数 */
+    $maxcols = $rs->columnCount();
+
+    return array($rowdata, $maxcols, $rs);
+}
+
+// タイトル総数取得
+function get_all_title_count_or_die($con) {
+
+    $query = "SELECT COUNT(*) AS cnt FROM foltia_program";
+    $rs = sql_query($con, $query, "DBクエリに失敗しました");
+    $rowdata = $rs->fetch();
+    if (! $rowdata) {
+	die_exit("番組データがありません<BR>");
+    }
+    //行数取得
+    $dtcnt =  $rowdata[0];
+    return $dtcnt;
+}
+
+
+
+
+
+
+
 ?>

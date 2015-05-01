@@ -17,18 +17,19 @@ titlelist.php
 */
 
 include("./foltialib.php");
+include("./sqlite_accessor.php");
 $con = m_connect();
 
 
 if ($useenvironmentpolicy == 1){
-if (!isset($_SERVER['PHP_AUTH_USER'])) {
-    header("WWW-Authenticate: Basic realm=\"foltia\"");
-    header("HTTP/1.0 401 Unauthorized");
+    if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	header("WWW-Authenticate: Basic realm=\"foltia\"");
+	header("HTTP/1.0 401 Unauthorized");
 	redirectlogin();
-    exit;
-} else {
-login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
-}
+	exit;
+    } else {
+	login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
+    }
 }//end if login
 
 ?>
@@ -46,32 +47,12 @@ $p = getgetnumform(p);
 list($st,$p,$p2) = number_page($p,$lim);
 ///////////////////////////////////////////////////////////
 
-	$now = date("YmdHi");   
-
-	$query = "
-SELECT 
-foltia_program.tid,
-foltia_program .title 
-FROM  foltia_program 
-ORDER BY foltia_program.tid  DESC
-LIMIT $lim OFFSET $st
-	";
-$rs = sql_query($con, $query, "DBクエリに失敗しました");
-$rowdata = $rs->fetch();
-          if (! $rowdata) {
-                die_exit("番組データがありません<BR>");
-                }
-
-	$query2 = "
-SELECT COUNT(*) AS cnt FROM foltia_program 
-	";
-$rs2 = sql_query($con, $query2, "DBクエリに失敗しました");
-$rowdata2 = $rs2->fetch();
-          if (! $rowdata2) {
-                die_exit("番組データがありません<BR>");
-          }
+$now = date("YmdHi");
+   
+// タイトルリスト取得
+list($rowdata, $maxcols, $rs) = get_all_titlelist_or_die($con, $lim, $st);
 //行数取得
-$dtcnt =  $rowdata2[0];
+$dtcnt = get_all_title_count_or_die($con);
 
 ?>
 
@@ -86,8 +67,9 @@ printhtmlpageheader();
 <p align="left">全番組リストを表示します。</p>
 
 <?php
-		/* フィールド数 */
-$maxcols = $rs->columnCount();
+
+// 		/* フィールド数 */
+// $maxcols = $rs->columnCount();
 	
 //Autopager 
 echo "<div id=contents class=autopagerize_page_element />";
