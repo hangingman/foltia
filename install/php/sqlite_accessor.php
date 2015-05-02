@@ -299,10 +299,147 @@ function get_all_title_count_or_die($con) {
     return $dtcnt;
 }
 
+// 予約一覧用ResultSetの取得
+function get_all_list_reserve($con, $now) {
 
+	$query = <<<EOF
+SELECT
+    foltia_program.tid, stationname, foltia_program.title,
+    foltia_subtitle.countno, foltia_subtitle.subtitle,
+    foltia_subtitle.startdatetime as x, foltia_subtitle.lengthmin,
+    foltia_tvrecord.bitrate, foltia_subtitle.startoffset,
+    foltia_subtitle.pid, foltia_subtitle.epgaddedby,
+    foltia_tvrecord.digital 
+FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
+WHERE foltia_tvrecord.tid = foltia_program.tid
+    AND foltia_tvrecord.stationid = foltia_station.stationid
+    AND foltia_program.tid = foltia_subtitle.tid
+    AND foltia_station.stationid = foltia_subtitle.stationid
+    AND foltia_subtitle.enddatetime >= ? 
+UNION
+SELECT
+    foltia_program.tid, stationname, foltia_program.title,
+    foltia_subtitle.countno, foltia_subtitle.subtitle,
+    foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
+    foltia_tvrecord.bitrate,  foltia_subtitle.startoffset,
+    foltia_subtitle.pid,  foltia_subtitle.epgaddedby,
+    foltia_tvrecord.digital 
+FROM foltia_tvrecord
+LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
+LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
+LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
+WHERE foltia_tvrecord.stationid = 0 
+    AND foltia_subtitle.enddatetime >= ? ORDER BY x ASC
 
+EOF
+;
 
+	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$now));
 
+	return $rs;
+}
 
+// 重複しているオンボードチューナー録画のリストを取得する
+function get_overlap_recording($con, $rowdata, $endtime) {
+
+    //番組の開始時刻より遅い時刻に終了し、終了時刻より前にはじまる番組があるかどうか
+    $query = <<<EOF
+SELECT
+    foltia_program.tid, stationname, foltia_program.title,
+    foltia_subtitle.countno, foltia_subtitle.subtitle,
+    foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
+    foltia_tvrecord.bitrate, foltia_subtitle.startoffset,
+    foltia_subtitle.pid, foltia_tvrecord.digital
+FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
+WHERE foltia_tvrecord.tid = foltia_program.tid
+    AND foltia_tvrecord.stationid = foltia_station.stationid
+    AND foltia_program.tid = foltia_subtitle.tid
+    AND foltia_station.stationid = foltia_subtitle.stationid
+    AND foltia_subtitle.enddatetime > ? 
+    AND foltia_subtitle.startdatetime < ?  
+UNION
+SELECT
+    foltia_program.tid, stationname, foltia_program.title,
+    foltia_subtitle.countno, foltia_subtitle.subtitle,
+    foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
+    foltia_tvrecord.bitrate, foltia_subtitle.startoffset,
+    foltia_subtitle.pid, foltia_tvrecord.digital
+FROM foltia_tvrecord
+LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
+LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
+LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
+WHERE foltia_tvrecord.stationid = 0
+    AND foltia_subtitle.enddatetime > ?	 
+    AND foltia_subtitle.startdatetime < ?  
+EOF
+;
+
+    return sql_query($con, $query, "DBクエリに失敗しました",array($rowdata[5],$endtime,$rowdata[5],$endtime));
+}
+
+// 重複している外部チューナー録画のリストを取得する
+function get_eoverlap_recording($con, $rowdata, $endtime) {
+
+    $query = <<<EOF
+SELECT
+    foltia_program.tid, stationname, foltia_program.title,
+    foltia_subtitle.countno, foltia_subtitle.subtitle,
+    foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
+    foltia_tvrecord.bitrate, foltia_subtitle.startoffset,
+    foltia_subtitle.pid, foltia_tvrecord.digital
+FROM foltia_subtitle , foltia_program ,foltia_station ,foltia_tvrecord
+WHERE foltia_tvrecord.tid = foltia_program.tid
+    AND foltia_tvrecord.stationid = foltia_station.stationid 
+    AND foltia_program.tid = foltia_subtitle.tid 
+    AND foltia_station.stationid = foltia_subtitle.stationid
+    AND foltia_subtitle.enddatetime > ? 
+    AND foltia_subtitle.startdatetime < ?  
+    AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' ) 
+UNION
+SELECT
+    foltia_program.tid, stationname, foltia_program.title,
+    foltia_subtitle.countno, foltia_subtitle.subtitle,
+    foltia_subtitle.startdatetime, foltia_subtitle.lengthmin,
+    foltia_tvrecord.bitrate, foltia_subtitle.startoffset,
+    foltia_subtitle.pid, foltia_tvrecord.digital
+FROM foltia_tvrecord
+LEFT OUTER JOIN foltia_subtitle on (foltia_tvrecord.tid = foltia_subtitle.tid )
+LEFT OUTER JOIN foltia_program on (foltia_tvrecord.tid = foltia_program.tid )
+LEFT OUTER JOIN foltia_station on (foltia_subtitle.stationid = foltia_station.stationid )
+WHERE foltia_tvrecord.stationid = 0 
+    AND foltia_subtitle.enddatetime > ?	 
+    AND foltia_subtitle.startdatetime < ?  
+    AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' ) 
+
+EOF
+;
+    return sql_query($con, $query, "DBクエリに失敗しました", array($rowdata[5], $endtime, $rowdata[5], $endtime));
+}
+
+// 録画中のtitldのidがあることをチェックする
+function set_maxcols_for_update($con, $maxcols) {
+
+	$query = <<<EOF
+SELECT 
+    foltia_program.tid, stationname, foltia_program.title,
+    foltia_tvrecord.bitrate, foltia_tvrecord.stationid, 
+    foltia_tvrecord.digital   
+FROM  foltia_tvrecord , foltia_program , foltia_station 
+WHERE foltia_tvrecord.tid = foltia_program.tid
+    AND foltia_tvrecord.stationid = foltia_station.stationid 
+ORDER BY foltia_program.tid DESC
+EOF
+;
+
+	$rs = sql_query($con, $query, "DBクエリに失敗しました");
+	$rowdata = $rs->fetch();
+			
+	if (! $rowdata) {
+	    //なければなにもしない
+	} else {
+	    // あれば更新
+	    $maxcols = $rs->columnCount();
+	}
+}
 
 ?>
