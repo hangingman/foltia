@@ -18,7 +18,7 @@ f:file name
 include("./foltialib.php");
 $con = m_connect();
 
-if ($useenvironmentpolicy == 1){
+if ($useenvironmentpolicy == 1) {
 	if (!isset($_SERVER['PHP_AUTH_USER'])) {
 	    header("WWW-Authenticate: Basic realm=\"foltia\"");
 	    header("HTTP/1.0 401 Unauthorized");
@@ -72,14 +72,14 @@ AND foltia_subtitle.pid = ?
 ";
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($pid));
 $rows = pg_num_rows($rs);
-if ($rows == 0){
+if ($rows == 0) {
 	print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">書き込み編集</font></p>
   <hr size=\"4\">
 <p align=\"left\">
 録画記録がありません。<br>
 ";
 
-}else{
+} else {
 $rowdata = pg_fetch_row($rs, 0);
 
 print "  <p align=\"left\"><font color=\"#494949\" size=\"6\">書き込み編集 </font></p>
@@ -92,9 +92,9 @@ print "$title</a> $countno " ;
 
 $tid = $rowdata[0];
 $subtitle = htmlspecialchars($rowdata[4]) ;
-if ($tid > 0){
+if ($tid > 0) {
 print "<a href = \"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$subtitle</a> ";
-}else{
+} else {
 print "$subtitle ";
 }
 print htmlspecialchars($rowdata[1]) . " ";
@@ -120,7 +120,7 @@ print "</div>\n";
 print "<img src='http://$serveruri$httpmediamappath/$tid.localized/img/$path/$filename' width='160' height='120' alt='$tid:$countno:$filetid' align=\"left\">\n";
 
 
-if (getform(preview) == 1){
+if (getform(preview) == 1) {
 //プレビュー表示
 // htmlspecialchars(stripslashes( )) 
 $subject = getform(subject); 
@@ -164,14 +164,14 @@ print "本文(source view):<br />". htmlspecialchars(stripslashes( $maintext)) .
 print "<form id=\"form2\" name=\"form2\" method=\"post\" action=\"./sb-write.php?tid=$tid&path=$path&f=$filename\"><input type=\"password\" name=\"blogpw\">[ <a href = \"./sb-write.php?tid=$tid&path=$path&f=$filename\" target=\"_blank\">Send Picture Only</a> ] [ <input type=\"hidden\" name=\"subjects\" value=\"" . urlencode(stripslashes($subject)) . "\" /><input type=\"hidden\" name=\"maintext\" value=\"" . urlencode(stripslashes($maintext)) . "\" /><input type=submit value=\" Blog Write \"> ]</form>";
 
 
-}else{//編集書き込みモード
+} else {//編集書き込みモード
 //タイトル
-if ($tid == 0){
+if ($tid == 0) {
 	$subjects = "「".$subtitle."」";
-}else{
-	if ($countno == ""){
+} else {
+	if ($countno == "") {
 	$subjects = "$title 「".$subtitle."」";
-	}else{
+	} else {
 	$subjects = "$title ＃". $countno ." 「".$subtitle."」";
 	}
 }
@@ -192,11 +192,11 @@ print "<form id=\"form1\" name=\"form1\" method=\"post\" action=\"./sb-edit.php?
 
             <textarea name=\"textarea\" rows=\"40\" cols=\"55\">
 ";
-if ($tid > 0){
+if ($tid > 0) {
 print "
 <br />
 参考リンク:<a href = \"http://cal.syoboi.jp/tid/$tid/\" target=\"_blank\"> $title</a> "; 
-	if ($countno != ""){ 
+	if ($countno != "") { 
 	print "第". $countno ."話 ";
 	}
 print"<a href = \"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$subtitle</a> (情報:<a href = \"http://cal.syoboi.jp/\">しょぼいカレンダー</a>)";

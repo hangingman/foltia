@@ -1,17 +1,17 @@
 <?php
 /*
- Anime recording system foltia
- http://www.dcc-jpl.com/soft/foltia/
+  Anime recording system foltia
+  http://www.dcc-jpl.com/soft/foltia/
 
-settings.php
+  settings.php
 
-目的
-取得する放送局の物理チャンネルを設定します
+  目的
+  取得する放送局の物理チャンネルを設定します
 
-引数
-なし
+  引数
+  なし
 
- DCC-JPL Japan/foltia project
+  DCC-JPL Japan/foltia project
 
 */
 
@@ -180,7 +180,7 @@ $(function() {
 				"stationrecch": stationrecch
 			},
 			timeout:10000
-		}).done(function(data){
+		}).done(function(data) {
 			window.location.reload(true);
 		});
 	});

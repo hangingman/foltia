@@ -1,20 +1,20 @@
 <?php
 /*
- Anime recording system foltia
- http://www.dcc-jpl.com/soft/foltia/
+  Anime recording system foltia
+  http://www.dcc-jpl.com/soft/foltia/
 
-index.php
+  index.php
 
-目的
-全番組放映予定を表示します。
-録画予約されている番組は別色でわかりやすく表現されています。
+  目的
+  全番組放映予定を表示します。
+  録画予約されている番組は別色でわかりやすく表現されています。
 
 
-オプション
-mode:"new"を指定すると、新番組(第1話)のみの表示となる。
-now:YmdHi形式で日付を指定するとその日からの番組表が表示される。
+  オプション
+  mode:"new"を指定すると、新番組(第1話)のみの表示となる。
+  now:YmdHi形式で日付を指定するとその日からの番組表が表示される。
 
- DCC-JPL Japan/foltia project
+  DCC-JPL Japan/foltia project
 
 */
 
@@ -36,8 +36,8 @@ if ($useenvironmentpolicy == 1) {
 $mode = getgetform(mode);
 
 $now = getgetnumform(date);
-if(($now < 200001010000 ) || ($now > 209912342353 )){ 
-	$now = date("YmdHi");   
+if(($now < 200001010000 ) || ($now > 209912342353 )) { 
+    $now = date("YmdHi");   
 }
 
 //ページの表示レコード数
@@ -51,11 +51,11 @@ $reservedpidsametid = get_reserved_rs_same_tid($con);
 //録画番組検索
 $reservedpid = get_reserved_rs_tid($con, $now);
 
-if ($mode == "new"){
+if ($mode == "new") {
     //新番組表示モード
     $query = get_query_for_new_program($con);
 
-}else{
+} else {
 
     ////////////////////////////////////////////////////////////
     //レコード総数取得
@@ -94,7 +94,7 @@ printtitle("<title>foltia:放映予定</title>", true);
       <?php 
 
     print_navigate_bar();
-    printhtmlpageheader();
+printhtmlpageheader();
 
       ?>
 
@@ -111,10 +111,10 @@ printtitle("<title>foltia:放映予定</title>", true);
             <h1 class="page-header">
               &nbsp;
 	      <?php
-		if ($mode == "new"){
-		print "新番組放映予定";
-		}else{
-		print "放映予定";
+		if ($mode == "new") {
+		    print "新番組放映予定";
+		} else {
+		    print "放映予定";
 		}
 	      ?>
             </h1>
@@ -127,11 +127,11 @@ printtitle("<title>foltia:放映予定</title>", true);
               </li>
               <li class="active">
 		<?php
-		  if ($mode == "new") {
-		  print "<i class=\"fa fa-fw fa-bell\"></i>  <a href=\"./index.php?mode=new\"> 新番組</a>";
-		  }else{
-		  print "<i class=\"fa fa-fw fa-table\"></i>  <a href=\"./index.php\"> 放映予定</a>";
-		  }		  
+			  if ($mode == "new") {
+			      print "<i class=\"fa fa-fw fa-bell\"></i>  <a href=\"./index.php?mode=new\"> 新番組</a>";
+			  } else {
+			      print "<i class=\"fa fa-fw fa-table\"></i>  <a href=\"./index.php\"> 放映予定</a>";
+			  }		  
 		?>
               </li>
             </ol>
@@ -175,7 +175,7 @@ printtitle("<title>foltia:放映予定</title>", true);
 		  //他局で同一番組録画済みなら色変え
 		  if (in_array($rowdata[7], $reservedpidsametid)) {
 		      $rclass = "reservedtitle";
-		  }else{
+		  } else {
 		      $rclass = "";
 		  }
 		  //録画予約済みなら色変え
@@ -209,7 +209,7 @@ printtitle("<title>foltia:放映予定</title>", true);
 		  // 話数
 		  echo("<td>".htmlspecialchars($rowdata[3])."<br></td>\n");
 		  // サブタイ
-		  if ($pid > 0 ){
+		  if ($pid > 0 ) {
 		      print "<td><a href=\"http://cal.syoboi.jp/tid/$tid/time#$pid\" target=\"_blank\">$subtitle<br></td>\n";
                   } else {
 		      print "<td>$subtitle<br></td>\n";

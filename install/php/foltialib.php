@@ -20,7 +20,7 @@ $foltia_header = <<<EOF
 <meta charset="UTF-8">
 
 EOF
-;
+	       ;
 
 // infoログ出力
 function logging($message) {
@@ -101,7 +101,7 @@ function printcssinfo() {
 <![endif]-->
 
 EOF
-;
+	 ;
 
     print $css;
 }
@@ -182,11 +182,11 @@ function print_navigate_bar() {
 	<!-- /.navbar-collapse -->
 </nav>
 EOF
-;
+	 ;
 
     print $nav;
 }
-    
+
 // GET用フォームデコード
 function getgetform($key) {
     if ($_GET["{$key}"] != "") {
@@ -270,17 +270,17 @@ function escape_string($sql, $quote = FALSE) {
     if ($quote && strlen($sql) == 0) {
         return "null";
     }
-    if (preg_match("/^pgsql/", DSN)){
+    if (preg_match("/^pgsql/", DSN)) {
 	return ($quote ? "'" : "") .
                                    pg_escape_string($sql) .
                                    ($quote ? "'" : "");
-    }else if (preg_match("/^sqlite/", DSN)){
+    }else if (preg_match("/^sqlite/", DSN)) {
 	/*	return ($quote ? "'" : "") .
 		sqlite_escape_string($sql) .
 		($quote ? "'" : "");
 	*/
 	return($sql);
-    }else{
+    } else {
         return "null";
     }
 } 
@@ -367,7 +367,7 @@ function m_showtable($rs) {
 	      echo("<tr>\n");
 	      /* １列目にリンクを張る */
 	      echo("<td><a href=\"edit.php?q_code=" .
-             urlencode($rowdata[0]) . "\">" .
+		   urlencode($rowdata[0]) . "\">" .
 		   htmlspecialchars($rowdata[1]) . "</a></td>\n");
 	      for ($col = 2; $col < $maxcols; $col++) { /* 列に対応 */
 		  echo("<td>".htmlspecialchars($rowdata[$col])."<br></td>\n");
@@ -381,7 +381,7 @@ function m_showtable($rs) {
 	return $maxrows;
 }
 
-function printhtmlpageheader(){
+function printhtmlpageheader() {
 
     global $useenvironmentpolicy;
 
@@ -391,7 +391,7 @@ function printhtmlpageheader(){
     print_navigate_bar();
 
     print $header;
-    if ($useenvironmentpolicy == 1){
+    if ($useenvironmentpolicy == 1) {
         print "【 $username 】";
     }
 
@@ -400,7 +400,7 @@ function printhtmlpageheader(){
 }
 
 
-function renderepgstation($con,$stationname,$start){ //戻り値　なし　EPGの局表示
+function renderepgstation($con,$stationname,$start) { //戻り値　なし　EPGの局表示
 
     $now = date("YmdHi");
     $today = date("Ymd");   
@@ -423,9 +423,8 @@ ORDER BY foltia_epg.startdatetime  ASC
     $rowdata = $rs->fetch();
     if (! $rowdata) {
 	print("番組データがありません<BR>");			
-    }else{
+    } else {
         print "<table width=\"100%\"  border=\"0\">\n";
-        //print "<ul><!-- ($maxrows) $query -->\n";
 
 	do {
             $printstarttime = substr($rowdata[0],8,2) . ":" .  substr($rowdata[0],10,2);
@@ -442,18 +441,14 @@ ORDER BY foltia_epg.startdatetime  ASC
         <td height = \"$height\" >$printstarttime  <A HREF=\"./reserveepg.php?epgid=$epgid\">$title</A> $desc <!-- $rowdata[0] - $rowdata[1] --></td>
       </tr>
 ";
-            /*print"<li style=\"height:" . $height ."px;\" class=\"$tdclass\">
-              $printstarttime  <A HREF=\"./reserveepg.php?epgid=$epgid\">$title</A> $desc($rowdata[0] - $rowdata[1])
-              </li>\n";
-            */
+
 	} while ($rowdata = $rs->fetch());//do
-        //print "</ul>\n";
         print "</table>\n";
 
     }//if
 }//end function
 
-function calcendtime($start,$lengthmin){//戻り値　終了時刻(Ex:200510170130) 
+function calcendtime($start,$lengthmin) {//戻り値　終了時刻(Ex:200510170130) 
     $startyear =   substr($start,0,4);
     $startmonth =   substr($start,4,2);
     $startday =   substr($start,6,2);
@@ -466,12 +461,12 @@ function calcendtime($start,$lengthmin){//戻り値　終了時刻(Ex:2005101701
 }//end function
 
 
-function z2h($string){ //戻り値　半角化した文字
+function z2h($string) { //戻り値　半角化した文字
     $stringh = mb_convert_kana($string, "a", "UTF-8");
     return ($stringh );
 }
 
-function foldate2rfc822($start){//戻り値　RFC822スタイルの時刻表記
+function foldate2rfc822($start) {//戻り値　RFC822スタイルの時刻表記
     $startyear =   substr($start,0,4);
     $startmonth =   substr($start,4,2);
     $startday =   substr($start,6,2);
@@ -483,7 +478,7 @@ function foldate2rfc822($start){//戻り値　RFC822スタイルの時刻表記
     return ($rfc822);
 }//end sub
 
-function foldate2print($start){//戻り値　日本語風時刻表記
+function foldate2print($start) {//戻り値　日本語風時刻表記
     $startyear =   substr($start,0,4);
     $startmonth =   substr($start,4,2);
     $startday =   substr($start,6,2);
@@ -494,15 +489,15 @@ function foldate2print($start){//戻り値　日本語風時刻表記
     return ($printabledate);
 }//end sub
 
-function getserveruri(){//戻り値　サーバアドレス Ex.www.dcc-jpl.com:8800/soft/foltia/
+function getserveruri() {//戻り値　サーバアドレス Ex.www.dcc-jpl.com:8800/soft/foltia/
 
     //リンクURI組み立て
     $sv6 = $_SERVER['SCRIPT_NAME'];///dameNews/sarasorjyu/archives.php
     $sv8 = $_SERVER['SERVER_NAME'];//sync.dcc-jpl.com
     $sv9 = $_SERVER['SERVER_PORT'];
-    if ($sv9 == 80){
+    if ($sv9 == 80) {
         $port = "";
-    }else{
+    } else {
         $port = ":$sv9";
     }
     $a = split("/", $sv6);
@@ -515,15 +510,15 @@ function getserveruri(){//戻り値　サーバアドレス Ex.www.dcc-jpl.com:8
 }//end sub
 
 
-function getserverfqdn(){//戻り値　サーバアドレス Ex.www.dcc-jpl.com:8800
+function getserverfqdn() {//戻り値　サーバアドレス Ex.www.dcc-jpl.com:8800
 
     //リンクURI組み立て
     $sv6 = $_SERVER['SCRIPT_NAME'];///dameNews/sarasorjyu/archives.php
     $sv8 = $_SERVER['SERVER_NAME'];//sync.dcc-jpl.com
     $sv9 = $_SERVER['SERVER_PORT'];
-    if ($sv9 == 80){
+    if ($sv9 == 80) {
         $port = "";
-    }else{
+    } else {
         $port = ":$sv9";
     }
     $a = split("/", $sv6);
@@ -536,7 +531,7 @@ function getserverfqdn(){//戻り値　サーバアドレス Ex.www.dcc-jpl.com:
 }//end sub
 
 
-function printdiskusage(){//戻り値　なし
+function printdiskusage() {//戻り値　なし
     list (, $all, $use , $free, $usepercent) =  getdiskusage();
 
     print "
@@ -548,21 +543,21 @@ function printdiskusage(){//戻り値　なし
 }//end sub
 
 
-function getdiskusage(){//戻り値　配列　[,全体容量, 使用容量 , 空き容量, 利用割合]
+function getdiskusage() {//戻り値　配列　[,全体容量, 使用容量 , 空き容量, 利用割合]
 
     global $recfolderpath,$recfolderpath;
 
     //	exec ( "df -h  $recfolderpath | grep $recfolderpath", $hdfreearea);
     //	$freearea = preg_split ("/[\s,]+/", $hdfreearea[0]);
-	exec ( "df -hP  $recfolderpath", $hdfreearea);
-	$freearea = preg_split ("/[\s,]+/", $hdfreearea[count($hdfreearea)-1]);
+    exec ( "df -hP  $recfolderpath", $hdfreearea);
+    $freearea = preg_split ("/[\s,]+/", $hdfreearea[count($hdfreearea)-1]);
 
     return $freearea;
-	
+    
 }//endsub
 
 
-function printtrcnprocesses(){
+function printtrcnprocesses() {
 
     $ffmpegprocesses = `ps ax | grep ffmpeg | grep -v grep |  wc -l `;
     $uptime = exec('uptime');
@@ -575,26 +570,26 @@ function printtrcnprocesses(){
 }//endsub
 
 
-function warndiskfreearea(){
+function warndiskfreearea() {
 
     global $demomode;
 
-    if ($demomode){
+    if ($demomode) {
         print "<!-- demo mode -->";
-    }else{
+    } else {
 
         global $recfolderpath,$hdfreearea ;
 
         exec ( "df   $recfolderpath | grep $recfolderpath", $hdfreearea);
         $freearea = preg_split ("/[\s,]+/", $hdfreearea[0]);
         $freebytes = $freearea[3];
-        if ($freebytes == "" ){
+        if ($freebytes == "" ) {
             //
             //print "<!-- err:\$freebytes is null -->";
-        }elseif($freebytes > 1024*1024*100 ){// 100GB以上あいてれば
+        } elseif($freebytes > 1024*1024*100 ) {// 100GB以上あいてれば
             //なにもしない
             print "<style type=\"text/css\"><!-- --></style>";
-        }elseif($freebytes > 1024*1024*50 ){// 100GB以下
+        } elseif($freebytes > 1024*1024*50 ) {// 100GB以下
             print "<style type=\"text/css\"><!--
 	body {
 	background-color: #CCCC99;
@@ -602,7 +597,7 @@ function warndiskfreearea(){
 -->
 </style>
 ";
-        }elseif($freebytes > 1024*1024*30 ){// 50GB以下
+        } elseif($freebytes > 1024*1024*30 ) {// 50GB以下
             print "<style type=\"text/css\"><!--
 	body {
 	background-color:#CC6666;
@@ -610,7 +605,7 @@ function warndiskfreearea(){
 -->
 </style>
 ";
-        }elseif($freebytes > 0 ){// 30GB以下
+        } elseif($freebytes > 0 ) {// 30GB以下
             print "<style type=\"text/css\"><!--
 	body {
 	background-color:#FF0000;
@@ -618,7 +613,7 @@ function warndiskfreearea(){
 -->
 </style>
 ";
-        }else{ //空き容量 0バイト
+        } else { //空き容量 0バイト
             print "<style type=\"text/css\"><!--
 	body {
 	background-color:#000000;
@@ -634,9 +629,9 @@ function warndiskfreearea(){
 
 
 
-function foldatevalidation($foldate){
+function foldatevalidation($foldate) {
 
-    if (strlen($foldate) == 12 ){
+    if (strlen($foldate) == 12 ) {
 
         $startyear =   substr($foldate,0,4);
         $startmonth =   substr($foldate,4,2);
@@ -646,13 +641,13 @@ function foldatevalidation($foldate){
 
         $startepoch = date ("U",mktime($starthour  , $startmin , 0, $startmonth  , $startday, $startyear));	
         $nowe = time();
-        if ($startepoch > $nowe){
+        if ($startepoch > $nowe) {
             //print "$foldate:$startepoch:$nowe";
             return TRUE;
-        }else{
+        } else {
             return FALSE;
         }	//end if $startepoch > $nowe
-    }else{
+    } else {
         return FALSE;
     }//end if ($foldate) == 12 
 
@@ -660,17 +655,17 @@ function foldatevalidation($foldate){
 
 
 
-function login($con,$name,$passwd){
+function login($con,$name,$passwd) {
     global $environmentpolicytoken;
 
     //入力内容確認
-    if (((mb_ereg('[^0-9a-zA-Z]', $name)) ||(mb_ereg('[^0-9a-zA-Z]', $passwd) ))){
+    if (((mb_ereg('[^0-9a-zA-Z]', $name)) ||(mb_ereg('[^0-9a-zA-Z]', $passwd) ))) {
 	
         //print "エラー処理\n";
         //print "<!-- DEBUG name/passwd format error-->";
         redirectlogin();
 	
-    }else{
+    } else {
         //print "正常処理\n";
         //db検索
         escape_string($name);
@@ -682,34 +677,34 @@ FROM foltia_envpolicy
 WHERE foltia_envpolicy.name  = '$name'  
 	";
         $useraccount = m_query($con, $query, "DBクエリに失敗しました");
-		$rowdata = $useraccount->fetch();
-		if (! $rowdata) {
-			header("HTTP/1.0 401 Unauthorized");
-			redirectlogin();
-		}
+	$rowdata = $useraccount->fetch();
+	if (! $rowdata) {
+	    header("HTTP/1.0 401 Unauthorized");
+	    redirectlogin();
+	}
 	
-		$memberid = $rowdata[0];
-		$userclass = $rowdata[1];
-		$username =  $rowdata[2];
-		$dbpasswd = $rowdata[3];
+	$memberid = $rowdata[0];
+	$userclass = $rowdata[1];
+	$username =  $rowdata[2];
+	$dbpasswd = $rowdata[3];
 
-		$rowdata = $useraccount->fetch();
-		if ($rowdata) {
+	$rowdata = $useraccount->fetch();
+	if ($rowdata) {
             header("HTTP/1.0 401 Unauthorized");
             redirectlogin();
-		}
+	}
 
         // passwdをdbから取りだし
-        if ($userclass == 0){
+        if ($userclass == 0) {
             $dbpasswd = "$dbpasswd";
-        }else{
+        } else {
             // db passwdとトークンを連結し
             $dbpasswd = "$dbpasswd"."$environmentpolicytoken";
         }
         //それが入力と一致すれば認証
         if ($passwd == $dbpasswd) {
             //print "認証成功<br>$dbpasswd  $passwd\n";
-        }else{
+        } else {
             //print "認証失敗<br>$dbpasswd  $passwd\n";
             header("HTTP/1.0 401 Unauthorized");
             //print "<!-- DEBUG passwd unmatch error>";
@@ -721,7 +716,7 @@ WHERE foltia_envpolicy.name  = '$name'
 
 
 
-function redirectlogin(){
+function redirectlogin() {
     global $environmentpolicytoken;
 
     print "<!DOCTYPE html>\n";
@@ -730,8 +725,8 @@ function redirectlogin(){
     print "</head><body>\n";
     print "<h1>Invalid login</h1>";
     print "<p>foltiaヘのアクセスにはログインが必要です。再ログインはリロードやブラウザ再起動で、新規アカウント登録は<a href=\"./accountregist.php\">こちらから。</a></p>";
-    if ($environmentpolicytoken == ""){
-    }else{
+    if ($environmentpolicytoken == "") {
+    } else {
         print "<p>突然この画面が表示された場合にはセキュリティコードが変更されたかも知れません。</p>";
     }
     print "</p><hr>\n";
@@ -741,103 +736,103 @@ function redirectlogin(){
     exit;
 }//end function redirectlogin
 
-function getuserclass($con){
+function getuserclass($con) {
     global $useenvironmentpolicy;
     $username = $_SERVER['PHP_AUTH_USER'];
 
-    if ($useenvironmentpolicy == 1){
+    if ($useenvironmentpolicy == 1) {
         $query = "
 SELECT memberid ,userclass,name,passwd1 
 FROM foltia_envpolicy 
 WHERE foltia_envpolicy.name  = '$username'  
 	";
-		$useraccount = m_query($con, $query, "DBクエリに失敗しました");
-		$rowdata = $useraccount->fetch();
-		if (! $rowdata) {
-			return (99);
-		}
+	$useraccount = m_query($con, $query, "DBクエリに失敗しました");
+	$rowdata = $useraccount->fetch();
+	if (! $rowdata) {
+	    return (99);
+	}
 	
-		$userclass = $rowdata[1];
+	$userclass = $rowdata[1];
 
-		$rowdata = $useraccount->fetch();
-		if ($rowdata) {
-			return (99);
-		}
+	$rowdata = $useraccount->fetch();
+	if ($rowdata) {
+	    return (99);
+	}
 
-		return ($userclass);
+	return ($userclass);
 	
-    }else{
+    } else {
         return (0);//環境ポリシー使わないときはつねに特権モード
     }//end if
 }//end function getuserclass
 
 
 
-function getmymemberid($con){
+function getmymemberid($con) {
     global $useenvironmentpolicy;
     $username = $_SERVER['PHP_AUTH_USER'];
 
-    if ($useenvironmentpolicy == 1){
+    if ($useenvironmentpolicy == 1) {
         $query = "
 SELECT memberid ,userclass,name,passwd1 
 FROM foltia_envpolicy 
 WHERE foltia_envpolicy.name  = '$username'  
 	";
-		$useraccount = m_query($con, $query, "DBクエリに失敗しました");
-		$rowdata = $useraccount->fetch();
-		if (! $rowdata) {
+	$useraccount = m_query($con, $query, "DBクエリに失敗しました");
+	$rowdata = $useraccount->fetch();
+	if (! $rowdata) {
             return (-1);//エラー
-		}
+	}
 
-		$memberid = $rowdata[0];
+	$memberid = $rowdata[0];
 
-		$rowdata = $useraccount->fetch();
-		if ($rowdata) {
-			return (-1);
-		}
+	$rowdata = $useraccount->fetch();
+	if ($rowdata) {
+	    return (-1);
+	}
 
-		return ($memberid);
+	return ($memberid);
 	
-    }else{
+    } else {
         return (0);//環境ポリシー使わないときはつねに特権モード
     }//end if
 }//end function getuserclass
 
 
-function getmemberid2name($con,$memberid){
+function getmemberid2name($con,$memberid) {
     global $useenvironmentpolicy;
     //$username = $_SERVER['PHP_AUTH_USER'];
 
-    if ($useenvironmentpolicy == 1){
+    if ($useenvironmentpolicy == 1) {
         $query = "
 SELECT memberid ,userclass,name,passwd1 
 FROM foltia_envpolicy 
 WHERE foltia_envpolicy.memberid  = '$memberid'  
 	";
-		$useraccount = m_query($con, $query, "DBクエリに失敗しました");
-		$rowdata = $useraccount->fetch();
-		if (! $rowdata) {
+	$useraccount = m_query($con, $query, "DBクエリに失敗しました");
+	$rowdata = $useraccount->fetch();
+	if (! $rowdata) {
             return ("");//エラー
-		}
+	}
 	
-		$name = $rowdata[2];
+	$name = $rowdata[2];
 
-		$rowdata = $useraccount->fetch();
-		if ($rowdata) {
+	$rowdata = $useraccount->fetch();
+	if ($rowdata) {
             return ("");
-		}
+	}
 
-		return ($name);
+	return ($name);
 
-	}else{
-		return ("");
-	}//end if
+    } else {
+	return ("");
+    }//end if
 
 }//end function getmemberid2name
 
 
 
-function number_page($p,$lim){
+function number_page($p,$lim) {
     //Autopager・ページリンクで使用している関数
     //下記は関数をしているファイル名
     //index.php  showplaylist.php  titlelist.php  showlib.php  showlibc.php
@@ -847,25 +842,25 @@ function number_page($p,$lim){
     // 第２引数 : $lim     : １ページあたりに表示するレコード数
     ///////////////////////////////////////////////////////////////////////////
 
-	if($p == 0){
-		$p2 = 2;        //$p2の初期値設定
-	}else{
-		$p2 = $p;       //次のページ数の値を$p2に代入する
-		$p2++;
-	}
+    if($p == 0) {
+	$p2 = 2;        //$p2の初期値設定
+    } else {
+	$p2 = $p;       //次のページ数の値を$p2に代入する
+	$p2++;
+    }
 
-	if($p < 1){
-		$p = 1;
-	}
-	//表示するページの値を取得
-	$st = ($p -1) * $lim;
+    if($p < 1) {
+	$p = 1;
+    }
+    //表示するページの値を取得
+    $st = ($p -1) * $lim;
 
-	//
-	return array($st,$p,$p2);
+    //
+    return array($st,$p,$p2);
 }//end number_page
 
 
-function page_display($query_st,$p,$p2,$lim,$dtcnt,$mode){
+function page_display($query_st,$p,$p2,$lim,$dtcnt,$mode) {
     //Autopager・ページリンクで使用している関数
     //下記は関数を使用しているファイル名
     //index.php　showplaylist.php　titlelist.php　showlib.php　showlibc.php
@@ -878,49 +873,49 @@ function page_display($query_st,$p,$p2,$lim,$dtcnt,$mode){
     // 第５引数 ： $dtcnt        : レコードの総数
     // 第６引数 ： $mode         :【新番組】mode=newのときにリンクページを表示させないフラグ(index.phpのみで使用)
     ////////////////////////////////////////////////////////////////////////////
-	if($query_st == ""){
+    if($query_st == "") {
         //ページ総数取得
         $page = ceil($dtcnt / $lim);
-		//$modeのif文は【新番組】の画面のみで使用
-		if($mode == ''){
-			echo "$p/$page";         //  現在のページ数/ページ総数
-		}
+	//$modeのif文は【新番組】の画面のみで使用
+	if($mode == '') {
+	    echo "$p/$page";         //  現在のページ数/ページ総数
+	}
         //ページのリンク表示
-        for($i=1;$i <= $page; $i++){
+        for($i=1;$i <= $page; $i++) {
             print("<a href=\"".$_SERVER["PHP_SELF"]."?p=$i\" > $i </a>");
         }
         //Autopageingの処理
-        if($page >= $p2 ){
+        if($page >= $p2 ) {
             print("<a rel=next href=\"".$_SERVER["PHP_SELF"]."?p=$p2\" > </a>");
         }
-	}else{      //query_stに値が入っていれば
-		$query_st = $_SERVER['QUERY_STRING'];
+    } else {      //query_stに値が入っていれば
+	$query_st = $_SERVER['QUERY_STRING'];
         $page = ceil($dtcnt / $lim);
         echo "$p/$page";
         //ページのリンク表示
-        for($i=1;$i <= $page; $i++){
-			$query_st =  preg_replace('/p=[0-9]+&/','',$query_st);    //p=0〜9&を空欄にする正規表現
+        for($i=1;$i <= $page; $i++) {
+	    $query_st =  preg_replace('/p=[0-9]+&/','',$query_st);    //p=0〜9&を空欄にする正規表現
             print("<a href=\"".$_SERVER["PHP_SELF"]."?p=$i&$query_st\" > $i </a>");
         }
         //Autopageingの処理
-        if($page >= $p2 ){
-			$query_st =  preg_replace('/p=[0-9]+&/','',$query_st);
+        if($page >= $p2 ) {
+	    $query_st =  preg_replace('/p=[0-9]+&/','',$query_st);
             print("<a rel=next href=\"".$_SERVER["PHP_SELF"]."?p=$p2&$query_st\" > </a>");
-		}
 	}
+    }
     return array($p2,$page);
 }// end page_display
 
-function getnextstationid($con){
+function getnextstationid($con) {
     //stationidの最大値を取得して+1する。
     $query2 = "SELECT max(stationid) FROM  foltia_station";
     $rs2 = sql_query($con, $query2, "DBクエリに失敗しました");
     $rowdata2 = $rs2->fetch();
     if (! $rowdata2) {      //レコードにデータが無い時、$id =1
-		$sid = 1 ;
-    }else{                  //stationidの最大値を$idに入れて、+1する。
-		$sid = $rowdata2[0];
-		$sid ++ ;
+	$sid = 1 ;
+    } else {                  //stationidの最大値を$idに入れて、+1する。
+	$sid = $rowdata2[0];
+	$sid ++ ;
     }
     return ($sid);
 }//end getnextstationid

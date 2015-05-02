@@ -1,17 +1,17 @@
 <?php
 /*
- Anime recording system foltia
- http://www.dcc-jpl.com/soft/foltia/
+  Anime recording system foltia
+  http://www.dcc-jpl.com/soft/foltia/
 
-settings.php
+  settings.php
 
-目的
-SQLへのアクセスを行うコードをユーリーティ関数として使用する
+  目的
+  SQLへのアクセスを行うコードをユーリーティ関数として使用する
 
-引数
-DBへのコネクション
+  引数
+  DBへのコネクション
 
- DCC-JPL Japan/foltia project
+  DCC-JPL Japan/foltia project
 
 */
 
@@ -90,7 +90,7 @@ INSERT INTO foltia_station (
 FROM foltia_station_temp WHERE stationid = '{$post_map['stationid']}'
 
 EOF
-;
+	   ;
     logging($query);
     $rs = sql_query($con, $query, "DBクエリに失敗しました");
 }
@@ -101,7 +101,7 @@ function delete_foltia_station_recch($con, $delete_map) {
     $query = <<<EOF
 DELETE FROM foltia_station WHERE stationid = '{$delete_map['stationid']}'
 EOF
-;
+	   ;
     logging($query);
     $rs = sql_query($con, $query, "DBクエリに失敗しました");
 }
@@ -136,7 +136,7 @@ WHERE foltia_tvrecord.stationid = 0
     AND foltia_subtitle.enddatetime >= ? ORDER BY x ASC
 
 EOF
-;
+	   ;
 
     $reservedrs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$now));
     $rowdata = $reservedrs->fetch();
@@ -144,9 +144,9 @@ EOF
         do {
 	    $reservedpid[] = $rowdata[8];
 	} while ($rowdata = $reservedrs->fetch());
-	} else {
-	    $reservedpid = array();
-	}//end if
+    } else {
+	$reservedpid = array();
+    }//end if
 
     return $reservedpid;
 }
@@ -171,7 +171,7 @@ WHERE foltia_tvrecord.tid = foltia_program.tid
 ORDER BY startdatetime ASC 
 LIMIT 1000
 EOF
-;
+	   ;
 
     $reservedrssametid = sql_query($con, $query, "DBクエリに失敗しました",array($now));
     $rowdata = $reservedrssametid->fetch();
@@ -179,7 +179,7 @@ EOF
 	do {
 	    $reservedpidsametid[] = $rowdata[7];
 	} while ($rowdata = $reservedrssametid->fetch());
-    
+	
 	$rowdata = "";
     } else {
 	$reservedpidsametid = array();
@@ -207,7 +207,7 @@ ORDER BY foltia_subtitle.startdatetime ASC
 LIMIT 1000
 
 EOF
-;
+	   ;
 
     return $query;
 }
@@ -229,7 +229,7 @@ ORDER BY foltia_subtitle.startdatetime  ASC
 LIMIT {$lim} OFFSET {$st}
 
 EOF
-;
+	   ;
 
     return $query;
 }
@@ -247,7 +247,7 @@ WHERE foltia_program.tid = foltia_subtitle.tid
 LIMIT 1000 
 
 EOF
-;
+	   ;
 
     $rs = sql_query($con, $query, "DBクエリに失敗しました",array($now));
     $rowdata = $rs->fetch();
@@ -271,7 +271,7 @@ FROM foltia_program
 ORDER BY foltia_program.tid DESC
 LIMIT {$lim} OFFSET {$st}
 EOF
-;
+	   ;
 
     $rs = sql_query($con, $query, "DBクエリに失敗しました");
     $rowdata = $rs->fetch();
@@ -302,7 +302,7 @@ function get_all_title_count_or_die($con) {
 // 予約一覧用ResultSetの取得
 function get_all_list_reserve($con, $now) {
 
-	$query = <<<EOF
+    $query = <<<EOF
 SELECT
     foltia_program.tid, stationname, foltia_program.title,
     foltia_subtitle.countno, foltia_subtitle.subtitle,
@@ -332,11 +332,11 @@ WHERE foltia_tvrecord.stationid = 0
     AND foltia_subtitle.enddatetime >= ? ORDER BY x ASC
 
 EOF
-;
+	   ;
 
-	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$now));
+    $rs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$now));
 
-	return $rs;
+    return $rs;
 }
 
 // 重複しているオンボードチューナー録画のリストを取得する
@@ -372,7 +372,7 @@ WHERE foltia_tvrecord.stationid = 0
     AND foltia_subtitle.enddatetime > ?	 
     AND foltia_subtitle.startdatetime < ?  
 EOF
-;
+	   ;
 
     return sql_query($con, $query, "DBクエリに失敗しました",array($rowdata[5],$endtime,$rowdata[5],$endtime));
 }
@@ -412,14 +412,14 @@ WHERE foltia_tvrecord.stationid = 0
     AND  (foltia_station.stationrecch = '0' OR  foltia_station.stationrecch = '-1' ) 
 
 EOF
-;
+	   ;
     return sql_query($con, $query, "DBクエリに失敗しました", array($rowdata[5], $endtime, $rowdata[5], $endtime));
 }
 
 // 録画中のtitldのidがあることをチェックする
 function set_maxcols_for_update($con, $maxcols) {
 
-	$query = <<<EOF
+    $query = <<<EOF
 SELECT 
     foltia_program.tid, stationname, foltia_program.title,
     foltia_tvrecord.bitrate, foltia_tvrecord.stationid, 
@@ -429,17 +429,17 @@ WHERE foltia_tvrecord.tid = foltia_program.tid
     AND foltia_tvrecord.stationid = foltia_station.stationid 
 ORDER BY foltia_program.tid DESC
 EOF
-;
+	   ;
 
-	$rs = sql_query($con, $query, "DBクエリに失敗しました");
-	$rowdata = $rs->fetch();
-			
-	if (! $rowdata) {
-	    //なければなにもしない
-	} else {
-	    // あれば更新
-	    $maxcols = $rs->columnCount();
-	}
+    $rs = sql_query($con, $query, "DBクエリに失敗しました");
+    $rowdata = $rs->fetch();
+    
+    if (! $rowdata) {
+	//なければなにもしない
+    } else {
+	// あれば更新
+	$maxcols = $rs->columnCount();
+    }
 }
 
 // 録画候補局検索
@@ -452,7 +452,7 @@ WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = fo
     AND foltia_program.tid = ? 
 ORDER BY stationrecch DESC
 EOF
-;
+	   ;
 
     $rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
     return $rs->fetch();
@@ -476,7 +476,7 @@ WHERE foltia_program.tid = foltia_subtitle.tid
     AND foltia_program.tid = ? 
 ORDER BY foltia_subtitle.startdatetime ASC
 EOF
-;
+	   ;
 
     $rs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$tid));
     $rowdata = $rs->fetch();

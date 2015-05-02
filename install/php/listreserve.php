@@ -1,19 +1,19 @@
 <?php
 /*
- Anime recording system foltia
- http://www.dcc-jpl.com/soft/foltia/
+  Anime recording system foltia
+  http://www.dcc-jpl.com/soft/foltia/
 
-listreserve.php
+  listreserve.php
 
-目的
-録画予約番組放映予定と予約番組名を表示します。
+  目的
+  録画予約番組放映予定と予約番組名を表示します。
 
-引数
-r:録画デバイス数
-startdate:特定日付からの予約状況。YYYYmmddHHii形式で。表示数に限定かけてないのでレコード数が大量になると重くなるかも知れません。
+  引数
+  r:録画デバイス数
+  startdate:特定日付からの予約状況。YYYYmmddHHii形式で。表示数に限定かけてないのでレコード数が大量になると重くなるかも知れません。
 
 
- DCC-JPL Japan/foltia project
+  DCC-JPL Japan/foltia project
 */
 
 include("./foltialib.php");
@@ -219,42 +219,42 @@ if (! $rowdata) {
 			   print "しない";
 		       }
 		       echo("<br></td>\n");
-				echo("</tr>\n");
-		  } while ($rowdata = $rs->fetch());
-		?>
-	</tbody>
+		       echo("</tr>\n");
+		   } while ($rowdata = $rs->fetch());
+	  ?>
+</tbody>
 </table>
 
 
 <table>
-	<tr><td>アナログ重複表示</td><td><br /></td></tr>
-	<tr><td>エンコーダ数</td><td><?php print "$recunits"; ?></td></tr>
-	<tr class="overwraped"><td>チューナー重複</td><td><br /></td></tr>
-	<tr class="exoverwraped"><td>外部入力重複</td><td><br /></td></tr>
+  <tr><td>アナログ重複表示</td><td><br /></td></tr>
+  <tr><td>エンコーダ数</td><td><?php print "$recunits"; ?></td></tr>
+  <tr class="overwraped"><td>チューナー重複</td><td><br /></td></tr>
+  <tr class="exoverwraped"><td>外部入力重複</td><td><br /></td></tr>
 </table>
 
 
 <?php
-	set_maxcols_for_update($con, $maxcols);
+								set_maxcols_for_update($con, $maxcols);
 ?>
 
 <p align="left">録画予約番組タイトルを表示します。</p>
-  <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
-	<thead>
-		<tr>
-			<th align="left">予約解除</th>
-			<th align="left">TID</th>
-			<th align="left">放映局</th>
-			<th align="left">タイトル</th>
-			<th align="left">録画リスト</th>
-			<th align="left">画質</th>
-			<th align="left">デジタル優先</th>
+<table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
+  <thead>
+    <tr>
+      <th align="left">予約解除</th>
+      <th align="left">TID</th>
+      <th align="left">放映局</th>
+      <th align="left">タイトル</th>
+      <th align="left">録画リスト</th>
+      <th align="left">画質</th>
+      <th align="left">デジタル優先</th>
 
-		</tr>
-	</thead>
+    </tr>
+  </thead>
 
-	<tbody>
-		<?php
+  <tbody>
+    <?php
 	/* テーブルのデータを出力 */
 	do {
 	    $tid = htmlspecialchars($rowdata[0]);
@@ -264,7 +264,7 @@ if (! $rowdata) {
 		//予約解除
 		if ( $userclass <= 1) {
 		    echo("<td><a href=\"delreserve.php?tid=$tid&sid=" .
-					htmlspecialchars($rowdata[4])  . "\">解除</a></td>\n");
+			 htmlspecialchars($rowdata[4])  . "\">解除</a></td>\n");
 		} else {
 		    echo("<td>−</td>");		
 		}
@@ -274,7 +274,7 @@ if (! $rowdata) {
 		echo("<td>".htmlspecialchars($rowdata[1])."<br></td>\n");
 		//タイトル
 		echo("<td><a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">" .
-				     htmlspecialchars($rowdata[2]) . "</a></td>\n");
+		     htmlspecialchars($rowdata[2]) . "</a></td>\n");
 
 		//MP4
 		echo("<td><a href=\"showlibc.php?tid=$tid\">mp4</a></td>\n");
@@ -306,8 +306,8 @@ if (! $rowdata) {
 	    }//if tid 0
 	} while ($rowdata = $rs->fetch());
 }//else
-		?>
-	</tbody>
+    ?>
+  </tbody>
 </table>
 
 

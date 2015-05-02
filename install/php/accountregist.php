@@ -40,9 +40,9 @@ $userpasswd = getform(userpasswd);
 if ($username == "") {
 	print "<p align=\"left\">新規アカウント登録をします。</p>\n";
 
-}else{
+} else {
 //すでにそのユーザが存在しているかどうか確認
-if ($username != ""){
+if ($username != "") {
 $query = "
 SELECT count(memberid)
 FROM foltia_envpolicy 
@@ -52,20 +52,20 @@ WHERE foltia_envpolicy.name  = ?
 
 	$isaccountexistncount = $isaccountexist->fetchColumn(0);
 
-	if ($isaccountexistncount == 0){
+	if ($isaccountexistncount == 0) {
 	//valid
-	}else{
+	} else {
 		$errflag = 1;
 		$errmsg = "そのユーザ名は既に使われています。";
 	}
 }
-if ($userpasswd == ""){
+if ($userpasswd == "") {
 		$errflag = 2;
 		$errmsg = "パスワードが不適切です。半角英数を指定して下さい。";
 }
 
 
-if ($errflag == 0){
+if ($errflag == 0) {
 // next midを探す
 $query = "
 SELECT max(memberid) 
@@ -75,14 +75,14 @@ FROM  foltia_envpolicy
 	$maxid = $rs->fetchColumn(0);
 	if ($maxid) {
 		$nextcno = $maxid + 1;
-	}else{
+	} else {
 		$nextcno = 1;
 	}
 
 //登録
 //INSERT
-if ($demomode){
-}else{
+if ($demomode) {
+} else {
 /*
 ユーザクラス
 0:特権管理者
@@ -103,7 +103,7 @@ print "次のアカウントを登録しました。<br>
 ログイン名:$username<br>
 パスワード:$userpasswd";
 
-if ($environmentpolicytoken != ""){
+if ($environmentpolicytoken != "") {
 	print "＋セキュリティコード<br>\n";
 }
 print "<a href=\"./index.php\">ログイン</a><br>\n";
@@ -115,7 +115,7 @@ print "</body>
 exit;
 
 }//endif デモモード
-}else{//errorフラグあったら
+} else {//errorフラグあったら
 print "$errmsg / $errflag<br>\n";
 
 }//end if エラーじゃなければ

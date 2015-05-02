@@ -17,7 +17,7 @@ f:filename (00000102.jpg)
 include("./foltialib.php");
 $con = m_connect();
 
-if ($useenvironmentpolicy == 1){
+if ($useenvironmentpolicy == 1) {
 	if (!isset($_SERVER['PHP_AUTH_USER'])) {
 	    header("WWW-Authenticate: Basic realm=\"foltia\"");
 	    header("HTTP/1.0 401 Unauthorized");

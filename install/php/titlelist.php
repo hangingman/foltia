@@ -1,18 +1,18 @@
 <?php
 /*
- Anime recording system foltia
- http://www.dcc-jpl.com/soft/foltia/
+  Anime recording system foltia
+  http://www.dcc-jpl.com/soft/foltia/
 
-titlelist.php
+  titlelist.php
 
-目的
-全番組一覧を表示します。
-録画有無にかかわらず情報を保持しているもの全てを表示します
+  目的
+  全番組一覧を表示します。
+  録画有無にかかわらず情報を保持しているもの全てを表示します
 
-引数
-なし
+  引数
+  なし
 
- DCC-JPL Japan/foltia project
+  DCC-JPL Japan/foltia project
 
 */
 
@@ -21,7 +21,7 @@ include("./sqlite_accessor.php");
 $con = m_connect();
 
 
-if ($useenvironmentpolicy == 1){
+if ($useenvironmentpolicy == 1) {
     if (!isset($_SERVER['PHP_AUTH_USER'])) {
 	header("WWW-Authenticate: Basic realm=\"foltia\"");
 	header("HTTP/1.0 401 Unauthorized");
@@ -36,7 +36,7 @@ if ($useenvironmentpolicy == 1){
 
 <?php
 
-printtitle("<title>foltia</title>", false);
+    printtitle("<title>foltia</title>", false);
 
 //////////////////////////////////////////////////////////
 //１ページの表示レコード数
@@ -48,7 +48,7 @@ list($st,$p,$p2) = number_page($p,$lim);
 ///////////////////////////////////////////////////////////
 
 $now = date("YmdHi");
-   
+
 // タイトルリスト取得
 list($rowdata, $maxcols, $rs) = get_all_titlelist_or_die($con, $lim, $st);
 //行数取得

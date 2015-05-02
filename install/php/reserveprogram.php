@@ -35,6 +35,7 @@ if ($useenvironmentpolicy == 1) {
 <?php
 
     $tid = getgetnumform(tid);
+
 if ($tid == "") {
     printtitle_and_die("<title>foltia</title>", "登録番組がありません<BR>");
 }
@@ -61,10 +62,14 @@ $title = htmlspecialchars($rowdata[0]);
     printhtmlpageheader();
   ?>
 
-  <p align="left"><font color="#494949" size="6">番組予約</font></p>
-  <hr size="4">
+  <!-- 表示するページ FIXME: テンプレートが有効に使える場面であるためあとで重複コードは排除する -->
+  <div id="page-wrapper">
+    <div id="container-fluid">
 
-    <?php
+      <p align="left"><font color="#494949" size="6">番組予約</font></p>
+      <hr size="4">
+
+	<?php
        if ($tid == 0) {
 	   print "<p>EPG予約の追加は「<a href=\"./viewepg.php\">番組表</a>」メニューから行って下さい。</p>\n</body>\n</html>\n";
 	   exit ;
@@ -112,7 +117,7 @@ if (! $rowdata) {
 	      <td>
 		<select name="usedigital">
 		  <?php
-    if ($usedigital == 1) {
+    if ( $usedigital == 1 ) {
 	print "
 		<option value=\"1\" selected>する</option>
 		<option value=\"0\">しない</option>
@@ -153,7 +158,8 @@ if (! $rowdata) {
 	  <?php
 
 	    list($rs, $rowdata) = get_plan_of_program($con, $now, $tid);
-if (! $rowdata) {
+
+if ( ! $rowdata ) {
     echo("放映予定はありません<BR>");
 } else {
     $maxcols = $rs->columnCount();
@@ -189,5 +195,8 @@ if (! $rowdata) {
 	      ?>
 	    </tbody>
 	  </table>
+
+      </div>
+    </div>
 	</body>
       </html>
