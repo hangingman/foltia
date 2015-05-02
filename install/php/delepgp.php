@@ -19,7 +19,7 @@ delflag:確認フラグ
 include("./foltialib.php");
 $con = m_connect();
 
-if ($useenvironmentpolicy == 1){
+if ($useenvironmentpolicy == 1) {
 if (!isset($_SERVER['PHP_AUTH_USER'])) {
     header("WWW-Authenticate: Basic realm=\"foltia\"");
     header("HTTP/1.0 401 Unauthorized");
@@ -96,13 +96,13 @@ $delflag = getgetnumform(delflag);
 <?php
 if ($delflag == "1") {
 	//時刻確認
-	if ($now < $starttime ){
+	if ($now < $starttime ) {
 		print "EPG予約「".$subtitle."」の録画予約を解除しました。 <br>\n";
 		
 		//削除処理
-		if (($demomode) || ($protectmode) ){
+		if (($demomode) || ($protectmode) ) {
 		//demomodeやprotectmodeならなにもしない
-		}else{
+		} else {
 		//キュー更新
 //		$oserr = system("$toolpath/perl/addatq.pl 0 $stationid ");
 		$oserr = system("$toolpath/perl/addpidatq.pl $pid ");
@@ -113,19 +113,19 @@ if ($delflag == "1") {
 		WHERE foltia_subtitle.pid = ? AND  foltia_subtitle.tid = 0 ";
 			$rs = sql_query($con, $query, "DBクエリに失敗しました",array($pid));
 		}
-	}else{
+	} else {
 		print "<strong>過去番組は予約削除出来ません。</strong>";
 	}//end if
 
-}else{//delflagが1じゃなければ
+} else {//delflagが1じゃなければ
 
 	//時刻確認
-	if ($now < $starttime ){
+	if ($now < $starttime ) {
 	print "EPG予約「".$subtitle."」の録画予約を解除します。 <br>\n";
 
 	print "<form name=\"deletereserve\" method=\"GET\" action=\"delepgp.php\">
 	<input type=\"submit\" value=\"予約解除\" >\n";
-	}else{
+	} else {
 	print "<strong>過去番組は予約削除出来ません。</strong>";
 	}//end if
 }
@@ -146,7 +146,7 @@ print "<br>
 
 if ($delflag == "1") {
 
-}else{
+} else {
 print "
 <input type=\"hidden\" name=\"pid\" value=\"$pid\">
 <input type=\"hidden\" name=\"delflag\" value=\"1\">

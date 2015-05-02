@@ -1,32 +1,32 @@
 <?php
 /*
- Anime recording system foltia
- http://www.dcc-jpl.com/soft/foltia/
+  Anime recording system foltia
+  http://www.dcc-jpl.com/soft/foltia/
 
-showlib.php
+  showlib.php
 
-目的
-MPEG4録画ライブラリを表示します。
+  目的
+  MPEG4録画ライブラリを表示します。
 
-引数
-なし
+  引数
+  なし
 
- DCC-JPL Japan/foltia project
+  DCC-JPL Japan/foltia project
 
 */
 
 include("./foltialib.php");
 $con = m_connect();
 
-if ($useenvironmentpolicy == 1){
-	if (!isset($_SERVER['PHP_AUTH_USER'])) {
-	    header("WWW-Authenticate: Basic realm=\"foltia\"");
-	    header("HTTP/1.0 401 Unauthorized");
-		redirectlogin();
-	    exit;
-	} else {
+if ($useenvironmentpolicy == 1) {
+    if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	header("WWW-Authenticate: Basic realm=\"foltia\"");
+	header("HTTP/1.0 401 Unauthorized");
+	redirectlogin();
+	exit;
+    } else {
 	login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
-	}
+    }
 }//end if login
 
 
@@ -34,28 +34,28 @@ if ($useenvironmentpolicy == 1){
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="ja">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<?php
-if (file_exists  ( "./iui/iui.css"  )){
-	$useragent = $_SERVER['HTTP_USER_AGENT'];
-}
-if(ereg("iPhone",$useragent)){
-print "<meta name=\"viewport\" content=\"width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;\"/>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <?php
+			  if (file_exists  ( "./iui/iui.css"  )) {
+			      $useragent = $_SERVER['HTTP_USER_AGENT'];
+			  }
+if(ereg("iPhone",$useragent)) {
+    print "<meta name=\"viewport\" content=\"width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;\"/>
 <link rel=\"apple-touch-icon\" type=\"image/png\" href=\"./img/icon.png\" />
 
 <style type=\"text/css\" media=\"screen\">@import \"./iui/iui.css\";</style>
 <script type=\"application/x-javascript\" src=\"./iui/iui.js\"></script>";
-}else{
-print "<meta http-equiv=\"Content-Style-Type\" content=\"text/css\">
+} else {
+    print "<meta http-equiv=\"Content-Style-Type\" content=\"text/css\">
 <link rel=\"stylesheet\" type=\"text/css\" href=\"graytable.css\"> 
 <link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\"./folcast.php\" />";
 }
-?>
-<title>foltia:MP4 Lib</title>
-</head>
+      ?>
+      <title>foltia:MP4 Lib</title>
+    </head>
 
-<?php
+    <?php
 
 ///////////////////////////////////////////////////////////
 //１ページの表示レコード数
@@ -67,14 +67,14 @@ list($st,$p,$p2) = number_page($p,$lim);
 ///////////////////////////////////////////////////////////
 
 $now = date("YmdHi");  
-if(ereg("iPhone",$useragent)){
+if(ereg("iPhone",$useragent)) {
 	print "<body onclick=\"console.log('Hello', event.target);\">
     <div class=\"toolbar\">
         <h1 id=\"pageTitle\"></h1>
         <a id=\"backButton\" class=\"button\" href=\"#\"></a>
     </div>
 ";
-}else{
+} else {
 	print "<body>
 <div align=\"center\">
 ";
@@ -122,9 +122,9 @@ $rs = sql_query($con, $query, "DBクエリに失敗しました");
 $rowdata = $rs->fetch();
 
 if ($rowdata) {
-if(ereg("iPhone",$useragent)){
+if(ereg("iPhone",$useragent)) {
 	print "<ul id=\"home\" title=\"録画ライブラリ表示\" selected=\"true\">";
-}else{
+} else {
 
 print "
   <table BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"2\" WIDTH=\"100%\">
@@ -149,9 +149,9 @@ $title = htmlspecialchars($title);
 $counts = htmlspecialchars($counts);
 
 
-if(ereg("iPhone",$useragent)){
+if(ereg("iPhone",$useragent)) {
 print "<li><a href=\"showlibc.php?tid=$tid\" target=\"_self\">$title</a></li>\n";
-}else{
+} else {
 print "
 <tr>
 <td>$tid<br></td>
@@ -163,9 +163,9 @@ print "
 }
 	} while ($rowdata = $rs->fetch());
 
-if(ereg("iPhone",$useragent)){
+if(ereg("iPhone",$useragent)) {
 	print "</ul>\n</body>\n</html>\n";
-}else{
+} else {
 print "
 	</tbody>
 </table>
@@ -182,7 +182,7 @@ print "
 ";
 }
 
-}else{
+} else {
 print "録画ファイルが存在しません。</body></html>";
 
 }//end if
@@ -198,8 +198,8 @@ print "録画ファイルが存在しません。</body></html>";
 
 foreach($libdir as $fName) {
 
-if(($fName == ".") or ($fName == "..") ){ continue; }
-	if (ereg(".localized", $fName)){
+if(($fName == ".") or ($fName == "..") ) { continue; }
+	if (ereg(".localized", $fName)) {
 		$filesplit = split("\.",$fName);
 $query = "
 SELECT 

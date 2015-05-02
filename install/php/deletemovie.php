@@ -18,7 +18,7 @@ showplaylist.phpから削除対象mpeg2リスト。
 include("./foltialib.php");
 $con = m_connect();
 
-if ($useenvironmentpolicy == 1){
+if ($useenvironmentpolicy == 1) {
 if (!isset($_SERVER['PHP_AUTH_USER'])) {
     header("WWW-Authenticate: Basic realm=\"foltia\"");
     header("HTTP/1.0 401 Unauthorized");
@@ -49,13 +49,13 @@ printhtmlpageheader();
   <p align="left"><font color="#494949" size="6">録画番組削除</font></p>
   <hr size="4">
 <?php
-if ($delete == ""){
+if ($delete == "") {
 	print "<p align=\"left\">削除番組はありません。</p>\n";
-}else{
+} else {
 
 
 $userclass = getuserclass($con);
-if ( $userclass <= 1){
+if ( $userclass <= 1) {
 
 print "<p align=\"left\">次の番組を削除しました。</p>
   <table BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"2\" WIDTH=\"100%\">
@@ -71,7 +71,7 @@ print "<p align=\"left\">次の番組を削除しました。</p>
 
 foreach ($delete as $fName) {
 
-if( preg_match('/.MP4$/',$fName)){   //拡張子がMP4なら録画ライブラリ番組個別表示での削除 (showlibc.php)
+if( preg_match('/.MP4$/',$fName)) {   //拡張子がMP4なら録画ライブラリ番組個別表示での削除 (showlibc.php)
 $query = "
 SELECT
 foltia_subtitle.pspfilename,
@@ -95,9 +95,9 @@ print "
 <td>$fName<br></td>
 <td>";
 
-if ($tid > 0 ){
+if ($tid > 0 ) {
         print "<a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a>";
-}else{
+} else {
         print "$title";
 }
 
@@ -108,8 +108,8 @@ print "</td>
 ";
 
 //DBから削除
-if ($demomode){
-}else{
+if ($demomode) {
+} else {
 
 $query = "
 DELETE  FROM  foltia_mp4files
@@ -121,7 +121,7 @@ $rs = sql_query($con, $query, "DBクエリに失敗しました",array($fName));
 $oserr = system("$toolpath/perl/deletemovie.pl $fName");
 }//end if demomode
 
-}else{       //拡張子がMP4以外なら 録画一覧（録画順・番組順）の削除(showplaylist.php)
+} else {       //拡張子がMP4以外なら 録画一覧（録画順・番組順）の削除(showplaylist.php)
 
 $query = "
 SELECT foltia_program.tid,foltia_program.title,foltia_subtitle.countno,foltia_subtitle.subtitle 
@@ -148,9 +148,9 @@ print "
 <td>$fName<br></td>
 <td>";
 
-if ($tid > 0 ){
+if ($tid > 0 ) {
 	print "<a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a>";
-}else{
+} else {
 	print "$title";
 }
 
@@ -161,8 +161,8 @@ print "</td>
 ";
 
 //DBから削除
-if ($demomode){
-}else{
+if ($demomode) {
+} else {
 
 $query = "
 DELETE  FROM  foltia_m2pfiles  
@@ -180,7 +180,7 @@ $oserr = system("$toolpath/perl/deletemovie.pl $fName");
 
 print "	</tbody></table>\n";
 
-}else{//権限なし
+} else {//権限なし
 	print "<p align=\"left\">ファイル削除権限がありません。</p>";
 }
 }//if $delete == ""

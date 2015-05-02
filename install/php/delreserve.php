@@ -20,7 +20,7 @@ delflag:確認フラグ
 include("./foltialib.php");
 $con = m_connect();
 
-if ($useenvironmentpolicy == 1){
+if ($useenvironmentpolicy == 1) {
     if (!isset($_SERVER['PHP_AUTH_USER'])) {
         header("WWW-Authenticate: Basic realm=\"foltia\"");
         header("HTTP/1.0 401 Unauthorized");
@@ -90,9 +90,9 @@ if ($delflag == "1") {
 	print "「".$title."」の自動録画予約を解除しました。 <br>\n";
 
 //削除処理
-if (($demomode) || ($protectmode) ){
+if (($demomode) || ($protectmode) ) {
 //demomodeやprotectmodeならなにもしない
-}else{
+} else {
 
 //キュー削除プログラムをキック
 $oserr = system("$toolpath/perl/addatq.pl $tid $sid DELETE");
@@ -105,7 +105,7 @@ $rs->closeCursor();
 	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid,$sid));
 }
 
-}else{
+} else {
 	print "「".$title."」の自動録画予約を解除します。 <br>\n";
     print "<form name=\"deletereserve\" method=\"GET\" action=\"delreserve.php\"><input type=\"submit\" value=\"予約解除\" >\n";
 }
@@ -130,7 +130,7 @@ $rs->closeCursor();
 <?php
 if ($delflag == "1") {
 
-}else{
+} else {
 print "
 <input type=\"hidden\" name=\"tid\" value=\"$tid\">
 <input type=\"hidden\" name=\"sid\" value=\"$sid\">

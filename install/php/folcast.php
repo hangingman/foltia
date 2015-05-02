@@ -24,7 +24,7 @@ header('Content-Disposition: attachment; filename="folcast.xml"');
 include("./foltialib.php");
 $con = m_connect();
 /*
-if ($useenvironmentpolicy == 1){
+if ($useenvironmentpolicy == 1) {
 	if (!isset($_SERVER['PHP_AUTH_USER'])) {
 	    header("WWW-Authenticate: Basic realm=\"foltia\"");
 	    header("HTTP/1.0 401 Unauthorized");
@@ -40,13 +40,13 @@ $nowrfc822 =  date("r");
 
 $max = getgetnumform(max);
 
-if ($max > 0 ){
+if ($max > 0 ) {
 	//件数指定があればなにもしない
-}else{
+} else {
 	$max = 45;
 }
 $tid = getgetnumform(tid);
-if (($tid >= 0 ) && ($tid != "")){
+if (($tid >= 0 ) && ($tid != "")) {
 
 $query = "
 SELECT  foltia_program.tid,foltia_program.title,
@@ -64,7 +64,7 @@ WHERE foltia_program.tid = ?
 //	$titlers = sql_query($con, $titlequery, "DBクエリに失敗しました",array($tid));
 	$rowdata = $titlers->fetch();
 	$rsstitle = htmlspecialchars($rowdata[1]);
-}else{
+} else {
 
 $query = "
 SELECT  foltia_program.tid,foltia_program.title,
@@ -104,16 +104,16 @@ $rowdata = $rs->fetch();
 
 if (! $rowdata) {
 				//die_exit("No items");	
-}else{
+} else {
 	do {
 //$title = mb_convert_encoding($rowdata[1],"UTF-8", "UTF-8");
 $tid =  $rowdata[0];
 $title = $rowdata[1];
 $title = htmlspecialchars($title);
 $countno = $rowdata[2];
-if ($countno > 0 ){
+if ($countno > 0 ) {
 	$countprint = "第".$countno."回";
-}else{
+} else {
 	$countprint="";
 }
 $subtitle = $rowdata[3];
@@ -138,9 +138,9 @@ if (file_exists("$recfolderpath/$tid.localized/mp4/$mp4filename")) {
 	$mp4filesize = 0;
 }
 
-if ($rowdata[0] == 0 ){//EPG録画
+if ($rowdata[0] == 0 ) {//EPG録画
 	$showntitle = "$title $subtitle";
-}else{
+} else {
 	$showntitle = "$title $countprint";
 }
 

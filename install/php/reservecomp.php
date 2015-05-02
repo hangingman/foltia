@@ -1,90 +1,90 @@
 <?php
 /*
- Anime recording system foltia
- http://www.dcc-jpl.com/soft/foltia/
+  Anime recording system foltia
+  http://www.dcc-jpl.com/soft/foltia/
 
-reserveprogram.php
+  reserveprogram.php
 
-目的
-番組の予約登録をします。
+  目的
+  番組の予約登録をします。
 
-引数
-tid:タイトルID
-station:録画局
-bitrate:録画ビットレート(単位:Mbps)
+  引数
+  tid:タイトルID
+  station:録画局
+  bitrate:録画ビットレート(単位:Mbps)
 
- DCC-JPL Japan/foltia project
+  DCC-JPL Japan/foltia project
 
 */
 
 include("./foltialib.php");
 $con = m_connect();
 
-if ($useenvironmentpolicy == 1){
-if (!isset($_SERVER['PHP_AUTH_USER'])) {
-    header("WWW-Authenticate: Basic realm=\"foltia\"");
-    header("HTTP/1.0 401 Unauthorized");
+if ($useenvironmentpolicy == 1) {
+    if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	header("WWW-Authenticate: Basic realm=\"foltia\"");
+	header("HTTP/1.0 401 Unauthorized");
 	redirectlogin();
-    exit;
-} else {
-login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
-}
+	exit;
+    } else {
+	login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
+    }
 }//end if login
 
 ?>
 
 <?php
 
-printtitle("<title>foltia</title>", false);
+    printtitle("<title>foltia</title>", false);
 
 $tid = getgetnumform(tid);
-		if ($tid == "") {
-		die_exit("番組が指定されていません<BR>");
-		}
+if ($tid == "") {
+    die_exit("番組が指定されていません<BR>");
+}
 
 $station = getgetnumform(station);
-		if ($station == "") {
-		$station = 0;
-		}
+if ($station == "") {
+    $station = 0;
+}
 $usedigital = getgetnumform(usedigital);
-		if ($usedigital == "") {
-		$usedigital = 0;
-		}
+if ($usedigital == "") {
+    $usedigital = 0;
+}
 $bitrate = getgetnumform(bitrate);
-		if ($bitrate == "") {
-		$bitrate = 5;
-		}
+if ($bitrate == "") {
+    $bitrate = 5;
+}
 
 
 $now = date("YmdHi");   
 
 //タイトル取得
-	$query = "select title from foltia_program where tid = ? ";
-	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
+$query = "select title from foltia_program where tid = ? ";
+$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
-		$title = "(未登録)";
-		}else{
-		$title = htmlspecialchars($rowdata[0]);
-		}
+    $title = "(未登録)";
+} else {
+    $title = htmlspecialchars($rowdata[0]);
+}
 
 ?>
 <body>
 
-<?php 
-	printhtmlpageheader();
-?>
+  <?php 
+    printhtmlpageheader();
+  ?>
   <p align="left"><font color="#494949" size="6">予約完了</font></p>
   <hr size="4">
 
-「<?php print "$title"; ?>」を番組予約モードで予約しました。 <br>
- <br>
-予約スケジュール <BR>
+    「<?php print "$title"; ?>」を番組予約モードで予約しました。 <br>
+    <br>
+      予約スケジュール <BR>
 
-<?php
+      <?php
 
-if ($station != 0){
-//局限定
+    if ($station != 0) {
+	//局限定
 	$query = "
 SELECT 
 foltia_subtitle.pid ,  
@@ -101,8 +101,8 @@ WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = fo
 ORDER BY foltia_subtitle.startdatetime  ASC
 ";
 
-}else{
-//全局
+    } else {
+	//全局
 	$query = "
 SELECT 
 foltia_subtitle.pid ,  
@@ -118,83 +118,83 @@ WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = fo
 ORDER BY foltia_subtitle.startdatetime  ASC
 ";
 
-}
-	$rs = m_query($con, $query, "DBクエリに失敗しました");
+    }
+$rs = m_query($con, $query, "DBクエリに失敗しました");
 $rowdata = $rs->fetch();
 if (! $rowdata) {
-		echo("放映予定はいまのところありません<BR>");
-		}
-		else{
-	$maxcols = $rs->columnCount();
-?>
-  <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%" BGCOLOR="#bcf1be">
+    echo("放映予定はいまのところありません<BR>");
+}
+else{
+    $maxcols = $rs->columnCount();
+      ?>
+      <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%" BGCOLOR="#bcf1be">
 	<thead>
-		<tr>
-			<th align="left">PID</th>
-			<th align="left">放映局</th>
-			<th align="left">話数</th>
-			<th align="left">サブタイトル</th>
-			<th align="left">開始時刻</th>
-			<th align="left">総尺</th>
-			<th align="left">時刻ずれ</th>
+	  <tr>
+	    <th align="left">PID</th>
+	    <th align="left">放映局</th>
+	    <th align="left">話数</th>
+	    <th align="left">サブタイトル</th>
+	    <th align="left">開始時刻</th>
+	    <th align="left">総尺</th>
+	    <th align="left">時刻ずれ</th>
 
-		</tr>
+	  </tr>
 	</thead>
 
 	<tbody>
-		<?php
-			/* テーブルのデータを出力 */
-       do {
-				echo("<tr>\n");
-				for ($col = 0; $col < $maxcols; $col++) { /* 列に対応 */
-					echo("<td>".htmlspecialchars($rowdata[$col])."<br></td>\n");
-				}
-				echo("</tr>\n");
-       } while ($rowdata = $rs->fetch());
-		}//end if
-		?>
+	  <?php
+		   /* テーブルのデータを出力 */
+		   do {
+		       echo("<tr>\n");
+		       for ($col = 0; $col < $maxcols; $col++) { /* 列に対応 */
+			   echo("<td>".htmlspecialchars($rowdata[$col])."<br></td>\n");
+		       }
+		       echo("</tr>\n");
+		   } while ($rowdata = $rs->fetch());
+}//end if
+	  ?>
 	</tbody>
-</table>
+      </table>
 
 
-<?php
-if ($demomode){
-}else{
-//foltia_tvrecord　書き込み
-//既存が予約あって、新着が全局予約だったら
-if ($station ==0){
-	//既存局を消す
-		$query = "DELETE 
+      <?php
+	    if ($demomode) {
+	    } else {
+		//foltia_tvrecord　書き込み
+		//既存が予約あって、新着が全局予約だったら
+		if ($station ==0) {
+		    //既存局を消す
+		    $query = "DELETE 
 FROM foltia_tvrecord  
 WHERE tid = ? 
 ";
-	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
-}//endif
+		    $rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
+		}//endif
 
-	$query = "
+		$query = "
 SELECT 
 count(*) 
 FROM foltia_tvrecord  
 WHERE tid = ?  AND stationid = ? 
 ";
-	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid,$station));
-	$maxrows = $rs->fetchColumn(0);
+		$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid,$station));
+		$maxrows = $rs->fetchColumn(0);
 		if ($maxrows == 0) { //新規追加
-				$query = "INSERT INTO  foltia_tvrecord  values (?,?,?,?)";
-				$rs = sql_query($con, $query, "DB書き込みに失敗しました",array($tid,$station,$bitrate,$usedigital));
-		}else{//修正　(ビットレート)
-			$query = "UPDATE  foltia_tvrecord  SET 
+		    $query = "INSERT INTO  foltia_tvrecord  values (?,?,?,?)";
+		    $rs = sql_query($con, $query, "DB書き込みに失敗しました",array($tid,$station,$bitrate,$usedigital));
+		} else {//修正　(ビットレート)
+		    $query = "UPDATE  foltia_tvrecord  SET 
   bitrate = ? , digital = ? WHERE tid = ? AND stationid = ? ";
-			$rs = sql_query($con, $query, "DB書き込みに失敗しました",array( $bitrate, $usedigital , $tid , $station ));
+		    $rs = sql_query($con, $query, "DB書き込みに失敗しました",array( $bitrate, $usedigital , $tid , $station ));
 		}
-	
-//キュー入れプログラムをキック
-//引数　TID チャンネルID
-//echo("$toolpath/perl/addatq.pl $tid $station");
-$oserr = system("$toolpath/perl/addatq.pl $tid $station");
-}//end if demomode
-?>
+		
+		//キュー入れプログラムをキック
+		//引数　TID チャンネルID
+		//echo("$toolpath/perl/addatq.pl $tid $station");
+		$oserr = system("$toolpath/perl/addatq.pl $tid $station");
+	    }//end if demomode
+      ?>
 
 
-</body>
-</html>
+    </body>
+  </html>

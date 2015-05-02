@@ -1,41 +1,42 @@
 <?php
 /*
- Anime recording system foltia
- http://www.dcc-jpl.com/soft/foltia/
+  Anime recording system foltia
+  http://www.dcc-jpl.com/soft/foltia/
 
-titlelist.php
+  titlelist.php
 
-目的
-全番組一覧を表示します。
-録画有無にかかわらず情報を保持しているもの全てを表示します
+  目的
+  全番組一覧を表示します。
+  録画有無にかかわらず情報を保持しているもの全てを表示します
 
-引数
-なし
+  引数
+  なし
 
- DCC-JPL Japan/foltia project
+  DCC-JPL Japan/foltia project
 
 */
 
 include("./foltialib.php");
+include("./sqlite_accessor.php");
 $con = m_connect();
 
 
-if ($useenvironmentpolicy == 1){
-if (!isset($_SERVER['PHP_AUTH_USER'])) {
-    header("WWW-Authenticate: Basic realm=\"foltia\"");
-    header("HTTP/1.0 401 Unauthorized");
+if ($useenvironmentpolicy == 1) {
+    if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	header("WWW-Authenticate: Basic realm=\"foltia\"");
+	header("HTTP/1.0 401 Unauthorized");
 	redirectlogin();
-    exit;
-} else {
-login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
-}
+	exit;
+    } else {
+	login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
+    }
 }//end if login
 
 ?>
 
 <?php
 
-printtitle("<title>foltia</title>", false);
+    printtitle("<title>foltia</title>", false);
 
 //////////////////////////////////////////////////////////
 //１ページの表示レコード数
@@ -46,87 +47,91 @@ $p = getgetnumform(p);
 list($st,$p,$p2) = number_page($p,$lim);
 ///////////////////////////////////////////////////////////
 
-	$now = date("YmdHi");   
+$now = date("YmdHi");
 
-	$query = "
-SELECT 
-foltia_program.tid,
-foltia_program .title 
-FROM  foltia_program 
-ORDER BY foltia_program.tid  DESC
-LIMIT $lim OFFSET $st
-	";
-$rs = sql_query($con, $query, "DBクエリに失敗しました");
-$rowdata = $rs->fetch();
-          if (! $rowdata) {
-                die_exit("番組データがありません<BR>");
-                }
-
-	$query2 = "
-SELECT COUNT(*) AS cnt FROM foltia_program 
-	";
-$rs2 = sql_query($con, $query2, "DBクエリに失敗しました");
-$rowdata2 = $rs2->fetch();
-          if (! $rowdata2) {
-                die_exit("番組データがありません<BR>");
-          }
+// タイトルリスト取得
+list($rowdata, $maxcols, $rs) = get_all_titlelist_or_die($con, $lim, $st);
 //行数取得
-$dtcnt =  $rowdata2[0];
+$dtcnt = get_all_title_count_or_die($con);
 
 ?>
 
 <body>
-<div align="center">
+  <div id="wrapper">
 
-<?php 
-printhtmlpageheader();
-?>
-  <p align="left"><font color="#494949" size="6">番組一覧</font></p>
-  <hr size="4">
-<p align="left">全番組リストを表示します。</p>
+    <!-- ナビゲーションバーなど -->
+    <div align="center">
+      <?php printhtmlpageheader(); ?>
+    </div>
 
-<?php
-		/* フィールド数 */
-$maxcols = $rs->columnCount();
-	
-//Autopager 
-echo "<div id=contents class=autopagerize_page_element />";
-?>
+    <!-- 表示するページ FIXME: テンプレートが有効に使える場面であるためあとで重複コードは排除する -->
+    <div id="page-wrapper">
+      <div id="container-fluid">
 
-  <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
-	<thead>
-		<tr>
-			<th align="left">TID</th>
-			<th align="left">タイトル</th>
-			<th align="left">MPEG4リンク</th>
-		</tr>
-	</thead>
-	
-	<tbody>
-		<?php
-			/* テーブルのデータを出力 */
+	<!-- ページタイトル -->
+	<div class="row">
+          <div class="col-lg-12">
+            <h1 class="page-header">
+              &nbsp;番組一覧
+            </h1>
+	    
+	    <p align="left">全番組リストを表示します。</p>
 
-  do {
-				echo("<tr>\n");
+            <ol class="breadcrumb">
+              <li>
+		<i class="fa fa-fw fa-table"></i>  <a href="./index.php"> 放映予定</a>
+              </li>
+              <li class="active">
+		<i class="fa fa-fw fa-edit"></i>  <a href="./titlelist.php"> 番組一覧</a>
+              </li>
+            </ol>
+          </div>
+	</div>
 
-				//TID
-					echo("<td><a href=\"reserveprogram.php?tid=" .
-					htmlspecialchars($rowdata[0])  . "\">" .
-					htmlspecialchars($rowdata[0]) . "</a></td>\n");
-				      //タイトル
-				        echo("<td><a href=\"http://cal.syoboi.jp/progedit.php?TID=" .
+	<?php	//Autopager 
+       echo "<div id=contents class=autopagerize_page_element />";
+	?>
+	<!-- /.row -->
+
+
+	<!-- ページのコンテンツ -->
+	<div class="row">
+	  <div class="col-lg-6">
+	    <div class="table-responsive">
+
+	      <table class="table table-bordered table-hover">
+		<thead>
+		  <tr>
+		    <th align="left">TID</th>
+		    <th align="left">タイトル</th>
+		    <th align="left">MPEG4リンク</th>
+		  </tr>
+		</thead>
+		
+		<tbody>
+		  <?php
+       /* テーブルのデータを出力 */
+       do {
+	   echo("<tr>\n");
+	   //TID
+	   echo("<td><a href=\"reserveprogram.php?tid=" . htmlspecialchars($rowdata[0])  . "\">" . htmlspecialchars($rowdata[0]) . "</a></td>\n");
+	   //タイトル
+	   echo("<td><a href=\"http://cal.syoboi.jp/progedit.php?TID=" .
 					htmlspecialchars($rowdata[0])  . "\" target=\"_blank\">" .
 					htmlspecialchars($rowdata[1]) . "</a></td>\n");
 					print "<td><A HREF = \"showlibc.php?tid=".htmlspecialchars($rowdata[0])."\">mp4</A></td>\n";
 
-				echo("</tr>\n");
+	   echo("</tr>\n");
+
     } while ($rowdata = $rs->fetch());
 
 		?>
 
-	</tbody>
-</table>
-
+	      </tbody>
+	    </table>
+	    </div>
+	  </div>
+	</div>
 <?php
 
 /////////////////////////////////////////////////////////
@@ -135,5 +140,8 @@ page_display("",$p,$p2,$lim,$dtcnt,"");
 ////////////////////////////////////////////////////////
 
 ?>
-</body>
+
+      </div>
+    </div>
+  </body>
 </html>
