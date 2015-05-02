@@ -16,17 +16,18 @@ tid:タイトルID
 */
 
 include("./foltialib.php");
+include("./sqlite_accessor.php");
 $con = m_connect();
 
 if ($useenvironmentpolicy == 1){
-	if (!isset($_SERVER['PHP_AUTH_USER'])) {
-	    header("WWW-Authenticate: Basic realm=\"foltia\"");
-	    header("HTTP/1.0 401 Unauthorized");
-		redirectlogin();
-	    exit;
-	} else {
+    if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	header("WWW-Authenticate: Basic realm=\"foltia\"");
+	header("HTTP/1.0 401 Unauthorized");
+	redirectlogin();
+	exit;
+    } else {
 	login($con,$_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
-	}
+    }
 }//end if login
 
 ?>
@@ -43,57 +44,50 @@ printtitle("<title>foltia</title>", false);
 $now = date("YmdHi");   
 
 //タイトル取得
-	$query = "select title from foltia_program where tid = ? ";
+$query = "select title from foltia_program where tid = ? ";
 $rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
 $rowdata = $rs->fetch();
 if (! $rowdata) {
-		die_exit("登録番組がありません<BR>");
-		}
+    die_exit("登録番組がありません<BR>");
+}
 
-		$title = htmlspecialchars($rowdata[0]);
+$title = htmlspecialchars($rowdata[0]);
+
 ?>
+
 <body>
 
 <?php 
-	printhtmlpageheader();
+    printhtmlpageheader();
 ?>
 
-  <p align="left"><font color="#494949" size="6">番組予約</font></p>
-  <hr size="4">
+<p align="left"><font color="#494949" size="6">番組予約</font></p>
+<hr size="4">
 
 <?php
-if ($tid == 0){
-	print "<p>EPG予約の追加は「<a href=\"./viewepg.php\">番組表</a>」メニューから行って下さい。</p>\n</body>\n</html>\n";
-	exit ;
-}
-
+       if ($tid == 0) {
+	   print "<p>EPG予約の追加は「<a href=\"./viewepg.php\">番組表</a>」メニューから行って下さい。</p>\n</body>\n</html>\n";
+	   exit ;
+       }
 ?>
 
 「<?php print "$title"; ?>」を番組予約モードで録画予約します。 <br>
-
   
 <form name="recordingsetting" method="GET" action="reservecomp.php">
-<input type="submit" value="予約" >
-<br>
-<table width="100%" border="0">
-  <tr>
-    <td>放送局</td>
-    <td>デジタル録画優先</td>
-    <td>アナログビットレート</td>
-  </tr>
-  <tr>
-    <td>
-<?php	
-	//録画候補局検索
-		$query = "
-SELECT distinct  foltia_station.stationid , stationname , foltia_station.stationrecch 
-FROM foltia_subtitle , foltia_program ,foltia_station  
-WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
- AND foltia_program.tid = ? 
-ORDER BY stationrecch DESC
-";
-$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
-$rowdata = $rs->fetch();
+  <input type="submit" value="予約" >
+    <br>
+      <table width="100%" border="0">
+	<tr>
+	  <td>放送局</td>
+	  <td>デジタル録画優先</td>
+	  <td>アナログビットレート</td>
+	</tr>
+	<tr>
+	  <td>
+	    <?php	
+       //録画候補局検索
+       $rowdata = get_record_candidate($con, $tid);
+
 if (! $rowdata) {
 		echo("放映局情報がまだはいってません<BR>");
 		}
@@ -157,21 +151,8 @@ if (! $rowdata) {
 今後の放映予定 </p>
 
 <?php
-	$query = "
-SELECT 
-stationname,
-foltia_subtitle.countno,
-foltia_subtitle.subtitle,
-foltia_subtitle.startdatetime ,
-foltia_subtitle.lengthmin ,
-foltia_subtitle.startoffset 
-FROM foltia_subtitle , foltia_program ,foltia_station  
-WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
- AND foltia_subtitle.startdatetime >= ?  AND foltia_program.tid = ? 
-ORDER BY foltia_subtitle.startdatetime  ASC
-";
-$rs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$tid));
-$rowdata = $rs->fetch();
+
+list($rs, $rowdata) = get_plan_of_program($con, $now, $tid);
 if (! $rowdata) {
 		echo("放映予定はありません<BR>");
 		}

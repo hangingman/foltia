@@ -442,4 +442,46 @@ EOF
 	}
 }
 
+// 録画候補局検索
+function get_record_candidate($con, $tid) {
+
+    $query = <<<EOF
+SELECT distinct  foltia_station.stationid , stationname , foltia_station.stationrecch 
+FROM foltia_subtitle , foltia_program ,foltia_station  
+WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
+    AND foltia_program.tid = ? 
+ORDER BY stationrecch DESC
+EOF
+;
+
+    $rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
+    return $rs->fetch();
+}
+
+// 今後の放送予定取得
+function get_plan_of_program($con, $now, $tid) {
+
+    $query = <<<EOF
+SELECT 
+    stationname,
+    foltia_subtitle.countno,
+    foltia_subtitle.subtitle,
+    foltia_subtitle.startdatetime ,
+    foltia_subtitle.lengthmin ,
+    foltia_subtitle.startoffset 
+FROM foltia_subtitle , foltia_program ,foltia_station  
+WHERE foltia_program.tid = foltia_subtitle.tid
+    AND foltia_station.stationid = foltia_subtitle.stationid 
+    AND foltia_subtitle.startdatetime >= ?
+    AND foltia_program.tid = ? 
+ORDER BY foltia_subtitle.startdatetime ASC
+EOF
+;
+
+    $rs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$tid));
+    $rowdata = $rs->fetch();
+
+    return array($rs, $rowdata);
+}
+
 ?>
