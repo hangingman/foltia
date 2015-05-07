@@ -30,11 +30,7 @@ if ($useenvironmentpolicy == 1) {
     }
 }//end if login
 
-?>
-
-<?php
-
-    $tid = getgetnumform(tid);
+$tid = getgetnumform(tid);
 
 if ($tid == "") {
     printtitle_and_die("<title>foltia</title>", "登録番組がありません<BR>");
@@ -56,40 +52,71 @@ $title = htmlspecialchars($rowdata[0]);
 
 ?>
 
+
 <body>
+  <div id="wrapper">
+
 
   <?php 
+
     printhtmlpageheader();
+
   ?>
 
   <!-- 表示するページ FIXME: テンプレートが有効に使える場面であるためあとで重複コードは排除する -->
   <div id="page-wrapper">
     <div id="container-fluid">
 
-      <p align="left"><font color="#494949" size="6">番組予約</font></p>
-      <hr size="4">
+      <!-- ページタイトル -->
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="page-header">
+            &nbsp;番組予約
+	  </h1>
 
-	<?php
+	  <?php
+
        if ($tid == 0) {
 	   print "<p>EPG予約の追加は「<a href=\"./viewepg.php\">番組表</a>」メニューから行って下さい。</p>\n</body>\n</html>\n";
 	   exit ;
        }
-    ?>
 
-    「<?php print "$title"; ?>」を番組予約モードで録画予約します。 <br>
-    
-    <form name="recordingsetting" method="GET" action="reservecomp.php">
-      <input type="submit" value="予約" >
-	<br>
-	  <table width="100%" border="0">
-	    <tr>
-	      <td>放送局</td>
-	      <td>デジタル録画優先</td>
-	      <td>アナログビットレート</td>
-	    </tr>
-	    <tr>
-	      <td>
-		<?php
+	?>
+
+	<p align="left">「<?php print "$title"; ?>」を番組予約モードで録画予約します。</p>
+	<ol class="breadcrumb">
+	  <li>
+	    <i class="fa fa-fw fa-table"></i>  <a href="./index.php"> 放映予定</a>
+	  </li>
+	  <li class="active">
+	    <i class=\"fa fa-fw fa-table\"></i>  <a href=\"./index.php\"> 放映予定</a>
+	  </li>
+	</ol>
+        </div>
+      </div>    
+      <!-- /.row -->
+
+
+      <!-- ページのコンテンツ -->
+      <div class="row">
+	<div class="col-lg-6">
+
+
+	  <form name="recordingsetting" method="GET" action="reservecomp.php">
+	    <input type="submit" value="予約" >
+	      <br>
+		<br>
+
+		<div class="table-responsive">
+		  <table class="table table-bordered table-hover">
+		    <tr>
+		      <td>放送局</td>
+		      <td>デジタル録画優先</td>
+		      <td>アナログビットレート</td>
+		    </tr>
+		    <tr>
+		      <td>
+			<?php
 
        //録画候補局検索
        $rowdata = get_record_candidate($con, $tid);
@@ -102,8 +129,8 @@ if (! $rowdata) {
     /* テーブルのデータを出力 */
     do {
 	echo("<option value=\"");
-				echo(htmlspecialchars($rowdata[0]));
-				echo("\">");
+	echo(htmlspecialchars($rowdata[0]));
+	echo("\">");
 	echo(htmlspecialchars($rowdata[1]));
 	echo("</option>\n");
     } while ($rowdata = $rs->fetch());
@@ -117,6 +144,7 @@ if (! $rowdata) {
 	      <td>
 		<select name="usedigital">
 		  <?php
+
     if ( $usedigital == 1 ) {
 	print "
 		<option value=\"1\" selected>する</option>
@@ -149,6 +177,7 @@ if (! $rowdata) {
 	      </select></td>
 	    </tr>
 	  </table>
+	</div>
 	  <input type="hidden" name="tid" value="<?php print "$tid"; ?>">
 	</form>
 	<p>&nbsp; </p>
@@ -163,8 +192,9 @@ if ( ! $rowdata ) {
     echo("放映予定はありません<BR>");
 } else {
     $maxcols = $rs->columnCount();
+
 	  ?>
-	  <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%" BGCOLOR="#bcf1be">
+	  <table class="table table-bordered table-hover">
 	    <thead>
 	      <tr>
 		<th align="left">放映局</th>
@@ -195,8 +225,10 @@ if ( ! $rowdata ) {
 	      ?>
 	    </tbody>
 	  </table>
-
+	</div>
       </div>
     </div>
-	</body>
-      </html>
+  </div>
+</div>
+</body>
+</html>
