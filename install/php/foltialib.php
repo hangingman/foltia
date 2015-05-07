@@ -13,14 +13,13 @@ include("./foltia_config2.php");
 /* エラー表示の抑制 */
 //error_reporting(0);
 
-$foltia_header = <<<EOF
+$foltia_header = "
 <!DOCTYPE html>
-<html lang="ja">
+<html lang=\"ja\">
 <head>
-<meta charset="UTF-8">
+<meta charset=\"UTF-8\">
 
-EOF
-	       ;
+";
 
 // infoログ出力
 function logging($message) {
@@ -34,7 +33,7 @@ function logging($message) {
 // タイトル・メタタグの表示
 function printtitle($title, $use_warndiskfreearea) {
 
-    print $foltia_header;
+    print @$foltia_header;
 
     if ($use_warndiskfreearea) {
         //ディスク空き容量によって背景色表示変更
@@ -50,7 +49,7 @@ function printtitle($title, $use_warndiskfreearea) {
 // タイトル・メタタグの表示
 function printtitle_with_script($title, $scriptpath) {
 
-    print $foltia_header;
+    print @$foltia_header;
 
     // print "<title>foltia:放映予定</title>
     print $title;
@@ -66,7 +65,7 @@ function printtitle_with_script($title, $scriptpath) {
 // タイトル・メタタグの表示
 function printtitle_and_die($title, $element) {
 
-    print $foltia_header;
+    print @$foltia_header;
 
     // print "<title>foltia:放映予定</title>
     print $title;

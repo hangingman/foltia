@@ -18,6 +18,7 @@
 */
 
 include("./foltialib.php");
+include("./sqlite_accessor.php");
 $con = m_connect();
 
 if ($useenvironmentpolicy == 1) {
@@ -31,11 +32,7 @@ if ($useenvironmentpolicy == 1) {
     }
 }//end if login
 
-?>
-
-<?php
-
-    printtitle("<title>foltia</title>", false);
+printtitle("<title>foltia</title>", false);
 
 $tid = getgetnumform(tid);
 if ($tid == "") {
@@ -59,142 +56,94 @@ if ($bitrate == "") {
 $now = date("YmdHi");   
 
 //タイトル取得
-$query = "select title from foltia_program where tid = ? ";
-$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
-$rowdata = $rs->fetch();
-if (! $rowdata) {
-    $title = "(未登録)";
-} else {
-    $title = htmlspecialchars($rowdata[0]);
-}
+$title = get_title_with_tid($con, $tid);
 
 ?>
+
+
 <body>
+  <div id="wrapper">
 
-  <?php 
-    printhtmlpageheader();
-  ?>
-  <p align="left"><font color="#494949" size="6">予約完了</font></p>
-  <hr size="4">
+    <?php
+       
+       printhtmlpageheader();
 
-    「<?php print "$title"; ?>」を番組予約モードで予約しました。 <br>
-    <br>
-      予約スケジュール <BR>
+    ?>
 
-      <?php
+    <!-- 表示するページ FIXME: テンプレートが有効に使える場面であるためあとで重複コードは排除する -->
+    <div id="page-wrapper">
+      <div id="container-fluid">
 
-    if ($station != 0) {
-	//局限定
-	$query = "
-SELECT 
-foltia_subtitle.pid ,  
-stationname,
-foltia_subtitle.countno,
-foltia_subtitle.subtitle,
-foltia_subtitle.startdatetime ,
-foltia_subtitle.lengthmin ,
-foltia_subtitle.startoffset 
-FROM foltia_subtitle , foltia_program ,foltia_station  
-WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
- AND foltia_station.stationid = $station 
- AND foltia_subtitle.startdatetime >=  '$now'  AND foltia_program.tid ='$tid' 
-ORDER BY foltia_subtitle.startdatetime  ASC
-";
 
-    } else {
-	//全局
-	$query = "
-SELECT 
-foltia_subtitle.pid ,  
-stationname,
-foltia_subtitle.countno,
-foltia_subtitle.subtitle,
-foltia_subtitle.startdatetime ,
-foltia_subtitle.lengthmin ,
-foltia_subtitle.startoffset 
-FROM foltia_subtitle , foltia_program ,foltia_station  
-WHERE foltia_program.tid = foltia_subtitle.tid AND foltia_station.stationid = foltia_subtitle.stationid 
- AND foltia_subtitle.startdatetime >=  '$now'  AND foltia_program.tid ='$tid' 
-ORDER BY foltia_subtitle.startdatetime  ASC
-";
+	<!-- ページタイトル -->
+	<div class="row">
+          <div class="col-lg-12">
+            <h1 class="page-header">
+              &nbsp;予約完了
+	    </h1>
 
-    }
-$rs = m_query($con, $query, "DBクエリに失敗しました");
-$rowdata = $rs->fetch();
+	    「<?php print "$title"; ?>」を番組予約モードで予約しました。 <br>
+	    <br>
+	      予約スケジュール 
+	      <br>
+	      </div>
+	    </div>
+	    <!-- /.row -->
+
+
+	    <!-- ページのコンテンツ -->
+	    <div class="row">
+	      <div class="col-lg-6">
+
+		<?php
+
+       list($rowdata, $rs) = get_schedule_of_reserve($con, $now, $station, $tid);
 if (! $rowdata) {
     echo("放映予定はいまのところありません<BR>");
-}
-else{
+} else {
     $maxcols = $rs->columnCount();
+    
       ?>
-      <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%" BGCOLOR="#bcf1be">
-	<thead>
-	  <tr>
-	    <th align="left">PID</th>
-	    <th align="left">放映局</th>
-	    <th align="left">話数</th>
-	    <th align="left">サブタイトル</th>
-	    <th align="left">開始時刻</th>
-	    <th align="left">総尺</th>
-	    <th align="left">時刻ずれ</th>
 
-	  </tr>
-	</thead>
+		<div class="table-responsive">
+		  <table class="table table-bordered table-hover">
+		    <thead>
+		      <tr>
+			<th align="left">PID</th>
+			<th align="left">放映局</th>
+			<th align="left">話数</th>
+			<th align="left">サブタイトル</th>
+			<th align="left">開始時刻</th>
+			<th align="left">総尺</th>
+			<th align="left">時刻ずれ</th>
 
-	<tbody>
-	  <?php
-		   /* テーブルのデータを出力 */
-		   do {
-		       echo("<tr>\n");
-		       for ($col = 0; $col < $maxcols; $col++) { /* 列に対応 */
-			   echo("<td>".htmlspecialchars($rowdata[$col])."<br></td>\n");
-		       }
-		       echo("</tr>\n");
-		   } while ($rowdata = $rs->fetch());
+		      </tr>
+		    </thead>
+
+		    <tbody>
+		      <?php
+			  /* テーブルのデータを出力 */
+			  do {
+			      echo("<tr>\n");
+			      for ($col = 0; $col < $maxcols; $col++) { /* 列に対応 */
+				  echo("<td>".htmlspecialchars($rowdata[$col])."<br></td>\n");
+			      }
+			      echo("</tr>\n");
+			  } while ($rowdata = $rs->fetch());
 }//end if
-	  ?>
-	</tbody>
-      </table>
 
+// 録画のキューを入れる
+set_queue_from_php($con, $demomode, $station, $tid, $bitrate, $usedigital);
 
-      <?php
-	    if ($demomode) {
-	    } else {
-		//foltia_tvrecord　書き込み
-		//既存が予約あって、新着が全局予約だったら
-		if ($station ==0) {
-		    //既存局を消す
-		    $query = "DELETE 
-FROM foltia_tvrecord  
-WHERE tid = ? 
-";
-		    $rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
-		}//endif
+		      ?>
+		    </tbody>
+		  </table>
+		</div>
 
-		$query = "
-SELECT 
-count(*) 
-FROM foltia_tvrecord  
-WHERE tid = ?  AND stationid = ? 
-";
-		$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid,$station));
-		$maxrows = $rs->fetchColumn(0);
-		if ($maxrows == 0) { //新規追加
-		    $query = "INSERT INTO  foltia_tvrecord  values (?,?,?,?)";
-		    $rs = sql_query($con, $query, "DB書き込みに失敗しました",array($tid,$station,$bitrate,$usedigital));
-		} else {//修正　(ビットレート)
-		    $query = "UPDATE  foltia_tvrecord  SET 
-  bitrate = ? , digital = ? WHERE tid = ? AND stationid = ? ";
-		    $rs = sql_query($con, $query, "DB書き込みに失敗しました",array( $bitrate, $usedigital , $tid , $station ));
-		}
-		
-		//キュー入れプログラムをキック
-		//引数　TID チャンネルID
-		//echo("$toolpath/perl/addatq.pl $tid $station");
-		$oserr = system("$toolpath/perl/addatq.pl $tid $station");
-	    }//end if demomode
-      ?>
-
-
+	      </div>
+	    </div>
+	  </div>
+	</div>
+      </div>
     </body>
   </html>
