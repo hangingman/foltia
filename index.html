@@ -1,0 +1,112 @@
+<!doctype html>
+<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
+<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on https://github.com/jonrohan -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen">
+  <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="javascripts/script.js"></script>
+
+  <title>foltia</title>
+  <meta name="description" content="foltia - Linuxによるアニメ自動録画システム">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <header>
+      <h1 class="title">foltia</h1>
+    </header>
+    <div id="container">
+      <p class="tagline">foltia - Linuxによるアニメ自動録画システム</p>
+      <div id="main" role="main">
+        <div class="download-bar">
+        <div class="inner">
+          <a href="https://github.com/Hiroyuki-Nagata/foltia/tarball/master" class="download-button tar"><span>Download</span></a>
+          <a href="https://github.com/Hiroyuki-Nagata/foltia/zipball/master" class="download-button zip"><span>Download</span></a>
+          <a href="https://github.com/Hiroyuki-Nagata/foltia" class="code">View foltia on GitHub</a>
+        </div>
+        <span class="blc"></span><span class="trc"></span>
+        </div>
+        <article class="markdown-body">
+          <h1>
+<a id="foltialinux向け-アニメ録画システム--" class="anchor" href="#foltialinux%E5%90%91%E3%81%91-%E3%82%A2%E3%83%8B%E3%83%A1%E9%8C%B2%E7%94%BB%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0--" aria-hidden="true"><span class="octicon octicon-link"></span></a>foltia:Linux向け アニメ録画システム  </h1>
+
+<h3>
+<a id="概要" class="anchor" href="#%E6%A6%82%E8%A6%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>概要</h3>
+
+<p>アニメをらくちんに録画する、Linux上で動くシステムです。<br>
+番組名と放映局を指定しておけばあとはなにもせずに毎回録画されます。
+野球で時間がずれても毎回期待通り録画されます。<br>
+録画したアニメは自動的にH.264/AVCに変換されてiTunesに降ってくるのでそのままiPodで持ち出せます。<br>
+アナログ放送もデジタルハイビジョンも混在して録画することができます。<br>
+iPhoneならどこからでもストリーミングで楽しめます。アニメ以外の番組はEPGでらくらく録画できます。<br>
+<a href="http://www.dcc-jpl.com/soft/foltia/" title="foltia公式ページ">foltia公式ページ</a>  </p>
+
+<p>公式との違い  </p>
+
+<ul>
+<li>文字コードをEUC-JPからUTF-8に変更<br>
+</li>
+<li>使用するデータベースからPostgresqlを外す<br>
+(自宅サーバにPostgresqlを使うのはちょっと大げさなので)<br>
+</li>
+</ul>
+
+<h2>
+<a id="ライセンス--" class="anchor" href="#%E3%83%A9%E3%82%A4%E3%82%BB%E3%83%B3%E3%82%B9--" aria-hidden="true"><span class="octicon octicon-link"></span></a>ライセンス  </h2>
+
+<p>GNU General Public License version 2  </p>
+
+<h2>
+<a id="インストール--" class="anchor" href="#%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB--" aria-hidden="true"><span class="octicon octicon-link"></span></a>インストール  </h2>
+
+<ul>
+<li><p>オリジナルのChef cookbookがありますのでそれを使ってインストールしてください
+<a href="https://github.com/Hiroyuki-Nagata/chef-foltia">chef-foltia</a>  </p></li>
+<li><p>手動でインストールした場合、nodejsとbowerをインストールした上で以下のようなコマンドを実行。</p></li>
+</ul>
+
+<pre><code>$ cd foltia/install
+$ bower install
+</code></pre>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="owner">
+      <p><a href="https://github.com/Hiroyuki-Nagata" class="avatar"><img src="https://avatars2.githubusercontent.com/u/1238507?v=3&amp;s=60" width="48" height="48"></a> <a href="https://github.com/Hiroyuki-Nagata">Hiroyuki-Nagata</a> maintains <a href="https://github.com/Hiroyuki-Nagata/foltia">foltia</a></p>
+
+
+      </div>
+      <div class="creds">
+        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br>theme by <a href="https://twitter.com/jonrohan/">Jon Rohan</a></small>
+      </div>
+    </footer>
+  </div>
+  <div class="current-section">
+    <a href="#top">Scroll to top</a>
+    <a href="https://github.com/Hiroyuki-Nagata/foltia/tarball/master" class="tar">tar</a><a href="https://github.com/Hiroyuki-Nagata/foltia/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
+    <p class="name"></p>
+  </div>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-62781834-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+</body>
+</html>
