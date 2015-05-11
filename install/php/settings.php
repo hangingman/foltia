@@ -34,6 +34,14 @@ if ($useenvironmentpolicy == 1) {
 // receive request
 $method = $_SERVER['REQUEST_METHOD'];
 
+if (isset($_POST['func'])) {
+    switch ($_POST['func']) {
+    case 'syobo':
+            system("{$toolpath}/perl/getxml2db.pl long");
+            break;
+    }
+}
+
 switch ($method) {
 case 'PUT':
     parse_str(file_get_contents("php://input"), $post_vars);
@@ -93,6 +101,17 @@ printhtmlpageheader();
 	<!-- /.row -->
 
 
+
+	<!-- ページのコンテンツ -->
+	<div class="row">
+	  <div class="col-lg-6">
+	    <h2>&nbsp;しょぼかるからデータを取得</h2>
+	    <input id="syobo" class="btn btn-primary btn-lg" type="button" value="しょぼかるからデータを取得 »"></input>
+	    <!-- system("$toolpath/perl/deletemovie.pl $fName"); -->
+	  </div>
+	</div>
+	<!-- /.row -->
+	
 	<!-- ページのコンテンツ -->
 	<div class="row">
 	  <div class="col-lg-6">
@@ -185,16 +204,19 @@ $(function() {
 		});
 	});
 
-	$("button").click(function() {
-		var num = $(this).attr('id');
-		if ( num ) {
-			if ( $(this).hasClass("btn btn-sm btn-success") ) {
-				$(this).attr('class', 'btn btn-sm btn-default');
-				$(this).html('録画に使用しない');
-			} else {
-				$(this).attr('class', 'btn btn-sm btn-success');
-				$(this).html('録画に使用する');
-			}
+	$(":input").click(function() {
+		var id = $(this).attr('id');
+		if ( id === "syobo" ) {
+			$.ajax({
+				type: "POST",
+				url: "settings.php",
+				data: {
+					"func": id
+				},
+				timeout:10000
+			}).done(function(data) {
+				window.location.reload(true);
+			});
 		}
 	});
 });

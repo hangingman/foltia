@@ -23,8 +23,7 @@ GNU General Public License version 2
 インストール  
 -------------------------------------------------------------------------------
 * オリジナルのChef cookbookがありますのでそれを使ってインストールしてください
-[chef-foltia](https://github.com/Hiroyuki-Nagata/chef-foltia)  
-  
+[chef-foltia](https://github.com/Hiroyuki-Nagata/chef-foltia)    
 * 手動でインストールした場合、nodejsとbowerをインストールした上で以下のようなコマンドを実行。
 ```
 $ cd foltia/install

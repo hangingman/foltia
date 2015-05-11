@@ -484,4 +484,108 @@ EOF
     return array($rs, $rowdata);
 }
 
+// 今後の放送予定取得
+function get_schedule_of_reserve($con, $now, $station, $tid) {
+
+    if ($station != 0) {
+	//局限定
+	$query = <<<EOF
+SELECT 
+    foltia_subtitle.pid ,  
+    stationname,
+    foltia_subtitle.countno,
+    foltia_subtitle.subtitle,
+    foltia_subtitle.startdatetime ,
+    foltia_subtitle.lengthmin ,
+    foltia_subtitle.startoffset 
+FROM foltia_subtitle , foltia_program ,foltia_station  
+WHERE foltia_program.tid = foltia_subtitle.tid
+    AND foltia_station.stationid = foltia_subtitle.stationid 
+    AND foltia_station.stationid = ?
+    AND foltia_subtitle.startdatetime >= ?
+    AND foltia_program.tid = ?
+ORDER BY foltia_subtitle.startdatetime  ASC
+
+EOF
+;
+
+	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($station, $now, $tid));
+	return array($rs->fetch(), $rs);
+
+    } else {
+	//全局
+	$query = <<<EOF
+SELECT 
+    foltia_subtitle.pid ,  
+    stationname,
+    foltia_subtitle.countno,
+    foltia_subtitle.subtitle,
+    foltia_subtitle.startdatetime ,
+    foltia_subtitle.lengthmin ,
+    foltia_subtitle.startoffset 
+FROM foltia_subtitle , foltia_program , foltia_station  
+WHERE foltia_program.tid = foltia_subtitle.tid
+    AND foltia_station.stationid = foltia_subtitle.stationid 
+    AND foltia_subtitle.startdatetime >= ?
+    AND foltia_program.tid = ?
+ORDER BY foltia_subtitle.startdatetime  ASC
+
+EOF
+;
+
+	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($now, $tid));
+	return array($rs->fetch(), $rs);
+    }
+}
+
+// tidからタイトルを取得する
+function get_title_with_tid($con, $tid) {
+
+    $title = "(未登録)";
+
+    $query = "SELECT title FROM foltia_program WHERE tid = ? ";
+    $rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
+    $rowdata = $rs->fetch();
+
+    if ($rowdata) {
+	$title = htmlspecialchars($rowdata[0]);
+    }
+
+    return $title;
+}
+
+// 録画のキューを入れる
+function set_queue_from_php($con, $demomode, $station, $tid, $bitrate, $usedigital) {
+
+    include("./foltia_config2.php");
+
+    if ($demomode) {
+    } else {
+	//foltia_tvrecord　書き込み
+	//既存が予約あって、新着が全局予約だったら
+	if ($station ==0) {
+	    //既存局を消す
+	    $query = "DELETE FROM foltia_tvrecord WHERE tid = ? ";
+	    $rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid));
+	}//endif
+
+	$query = "SELECT count(*) FROM foltia_tvrecord WHERE tid = ?  AND stationid = ? ";
+	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($tid,$station));
+	$maxrows = $rs->fetchColumn(0);
+
+	if ($maxrows == 0) { //新規追加
+	    $query = "INSERT INTO  foltia_tvrecord  values (?,?,?,?)";
+	    $rs = sql_query($con, $query, "DB書き込みに失敗しました",array($tid,$station,$bitrate,$usedigital));
+	} else {//修正　(ビットレート)
+	    $query = "UPDATE foltia_tvrecord SET bitrate = ? , digital = ? WHERE tid = ? AND stationid = ? ";
+	    $rs = sql_query($con, $query, "DB書き込みに失敗しました",array( $bitrate, $usedigital , $tid , $station ));
+	}
+	
+	//キュー入れプログラムをキック
+	//引数　TID チャンネルID
+	logging("{$toolpath}/perl/addatq.pl {$tid} {$station}");
+	$oserr = system("{$toolpath}/perl/addatq.pl $tid $station");
+    }//end if demomode
+}
+
 ?>
