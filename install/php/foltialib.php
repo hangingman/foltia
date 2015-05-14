@@ -333,7 +333,7 @@ function sql_debug($sql_string, array $params = null) {
             }
         }
     }
-    return $sql_string;
+    return $sql_string . "\n";
 }
 
 function pdo_debug($query, $paramarray) {

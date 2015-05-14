@@ -34,11 +34,12 @@ if ($useenvironmentpolicy == 1) {
 $userclass = getuserclass($con);
 $mymemberid = getmymemberid($con);
 $now = getgetnumform(startdate);
+
 if ($now == "") {
     $now = getgetnumform(date);
 }
 
-if (! $now > 200501010000) {
+if ($now < 200501010000) {
     $now = date("YmdHi");   
 }
 
@@ -57,15 +58,40 @@ printtitle("<title>foltia:record plan</title>", false);
 ?>
 
 <body>
-  <div align="center">
-    <?php 
-    printhtmlpageheader();
-    ?>
-    <p align="left"><font color="#494949" size="6">予約一覧</font></p>
-    <hr size="4">
-      <p align="left">録画予約番組放映予定と予約番組名を表示します。</p>
+  <div id="wrapper">
 
-      <?php
+    <div align="center">
+      <?php printhtmlpageheader(); ?>
+    </div>
+
+    <!-- 表示するページ FIXME: テンプレートが有効に使える場面であるためあとで重複コードは排除する -->
+    <div id="page-wrapper">
+      <div id="container-fluid">
+
+
+	<!-- ページタイトル -->
+	<div class="row">
+          <div class="col-lg-12">
+            <h1 class="page-header">
+              &nbsp;予約一覧
+            </h1>
+
+	    <p align="left">録画予約番組放映予定と予約番組名を表示します。</p>
+
+            <ol class="breadcrumb">
+              <li>
+		<i class="fa fa-fw fa-table"></i>  <a href="./index.php"> 放映予定</a>
+              </li>
+              <li class="active">
+		<i class="fa fa-fw fa-dashboard"></i>  <a href="./listreserve.php"> 予約一覧</a>
+              </li>
+            </ol>
+          </div>
+	</div>
+	<!-- /.row -->
+
+	<?php
+
     $rowdata = $rs->fetch();
 
 if (! $rowdata) {
@@ -74,114 +100,121 @@ if (! $rowdata) {
     /* フィールド数 */
     $maxcols = $rs->columnCount();
       ?>
-      <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
-	<thead>
-	  <tr>
-	    <th align="left">TID</th>
-	    <th align="left">放映局</th>
-	    <th align="left">タイトル</th>
-	    <th align="left">話数</th>
-	    <th align="left">サブタイトル</th>
-	    <th align="left">開始時刻(ズレ)</th>
-	    <th align="left">総尺</th>
-	    <th align="left">画質</th>
-	    <th align="left">デジタル優先</th>
 
-	  </tr>
-	</thead>
 
-	<tbody>
-	  <?php
-		   /* テーブルのデータを出力 */
-		   do {
-		       echo("<tr>\n");
+	<!-- ページのコンテンツ -->
+	<div class="row">
+	  <div class="col-lg-12">
 
-		       $pid = htmlspecialchars($rowdata[9]);
-		       $tid = htmlspecialchars($rowdata[0]);
-		       $title = htmlspecialchars($rowdata[2]);
-		       $subtitle = htmlspecialchars($rowdata[4]);
-		       $dbepgaddedby = htmlspecialchars($rowdata[10]);
-		       //重複検出
-		       //開始時刻 $rowdata[5]
-		       //終了時刻
-		       $endtime = calcendtime($rowdata[5],$rowdata[6]);
-		       $rclass = "";
-		       $overlap = get_overlap_recording($con, $rowdata, $endtime);
-		       $owrowall = $overlap->fetchAll();
-		       $overlapmaxrows = count($owrowall);
 
-		       if ($overlapmaxrows > ($recunits) ) {
+	    <table class="table table-bordered table-hover">
+	      <thead>
+		<tr>
+		  <th align="left">TID</th>
+		  <th align="left">放映局</th>
+		  <th align="left">タイトル</th>
+		  <th align="left">話数</th>
+		  <th align="left">サブタイトル</th>
+		  <th align="left">開始時刻(ズレ)</th>
+		  <th align="left">総尺</th>
+		  <th align="left">画質</th>
+		  <th align="left">デジタル優先</th>
 
-			   $owtimeline = array();
+		</tr>
+	      </thead>
 
-			   for ($rrow = 0; $rrow < $overlapmaxrows ; $rrow++) {
-			       $owrowdata = $owrowall[$rrow];
-			       $owtimeline[ $owrowdata['startdatetime'] ] = $owtimeline[ $owrowdata['startdatetime'] ] +1;
+	      <tbody>
+		<?php
+	     /* テーブルのデータを出力 */
+	     do {
+		 echo("<tr>\n");
 
-			       $owrend = calcendtime( $owrowdata['startdatetime'], $owrowdata['lengthmin'] );
-			       $owtimeline[ $owrend ] = $owtimeline[ $owrend ] -1;
-			       //注意: NULL に減算子を適用しても何も起こりませんが、NULL に加算子を 適用すると 1 となります。
-			   }
+		 $pid = htmlspecialchars($rowdata[9]);
+		 $tid = htmlspecialchars($rowdata[0]);
+		 $title = htmlspecialchars($rowdata[2]);
+		 $subtitle = htmlspecialchars($rowdata[4]);
+		 $dbepgaddedby = htmlspecialchars($rowdata[10]);
+		 //重複検出
+		 //開始時刻 $rowdata[5]
+		 //終了時刻
+		 $endtime = calcendtime($rowdata[5],$rowdata[6]);
+		 $rclass = "";
+		 $overlap = get_overlap_recording($con, $rowdata, $endtime);
+		 $owrowall = $overlap->fetchAll();
+		 $overlapmaxrows = count($owrowall);
 
-			   ksort ( $owtimeline );
+		 if ($overlapmaxrows > ($recunits) ) {
 
-			   $owcount = 0;
-			   foreach ( $owtimeline as $key => $val ) {
-			       $owcount += $val;
+		     $owtimeline = array();
 
-			       if ( $owcount > $recunits ) {
-				   $rclass = "overwraped";
-				   break;
-			       }
-			   }
-		       }
+		     for ($rrow = 0; $rrow < $overlapmaxrows ; $rrow++) {
+			 $owrowdata = $owrowall[$rrow];
+			 $owtimeline[ $owrowdata['startdatetime'] ] = $owtimeline[ $owrowdata['startdatetime'] ] +1;
 
-		       //外部チューナー録画
-		       $externalinputs = 1; //現状一系統のみ
-		       $eoverlap = get_eoverlap_recording($con, $rowdata, $endtime);
-		       $eowrowall = $eoverlap->fetchAll();
-		       $eoverlapmaxrows = count($eowrowall);
-		       if ($eoverlapmaxrows > ($externalinputs) ) {
+			 $owrend = calcendtime( $owrowdata['startdatetime'], $owrowdata['lengthmin'] );
+			 $owtimeline[ $owrend ] = $owtimeline[ $owrend ] -1;
+			 //注意: NULL に減算子を適用しても何も起こりませんが、NULL に加算子を 適用すると 1 となります。
+		     }
 
-			   $eowtimeline = array();
+		     ksort ( $owtimeline );
 
-			   for ($erow = 0; $erow < $eoverlapmaxrows ; $erow++) {
-			       $eowrowdata = $eowrowall[$erow];
-			       $eowtimeline[ $eowrowdata['startdatetime'] ] = $eowtimeline[ $eowrowdata['startdatetime'] ] +1;
-			       $eowrend = calcendtime( $eowrowdata['startdatetime'], $eowrowdata['lengthmin'] );
-			       $eowtimeline[ $eowrend ] = $eowtimeline[ $eowrend ] -1;
-			   }
+		     $owcount = 0;
+		     foreach ( $owtimeline as $key => $val ) {
+			 $owcount += $val;
 
-			   ksort ( $eowtimeline );
+			 if ( $owcount > $recunits ) {
+			     $rclass = "overwraped";
+			     break;
+			 }
+		     }
+		 }
 
-			   $eowcount = 0;
-			   foreach ( $eowtimeline as $key => $val ) {
-			       $eowcount += $val;
+		 //外部チューナー録画
+		 $externalinputs = 1; //現状一系統のみ
+		 $eoverlap = get_eoverlap_recording($con, $rowdata, $endtime);
+		 $eowrowall = $eoverlap->fetchAll();
+		 $eoverlapmaxrows = count($eowrowall);
+		 if ($eoverlapmaxrows > ($externalinputs) ) {
 
-			       if ( $eowcount > $externalinputs ) {
-				   $rclass = "exoverwraped";
-				   break;
-			       }
-			   }
+		     $eowtimeline = array();
 
-		       }
-		       echo("<tr class=\"$rclass\">\n");
-		       // TID
-		       print "<td>";
-		       if ($tid == 0 ) {
-			   print "$tid";
-		       } else {
-			   print "<a href=\"reserveprogram.php?tid=$tid\">$tid</a>";
-		       }
-		       print "</td>\n";
-		       // 放映局
-		       echo("<td>".htmlspecialchars($rowdata[1])."<br></td>\n");
-		       // タイトル
-		       print "<td>";
-		       if ($tid == 0 ) {
-			   print "$title";
-		       } else {
-			   print "<a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a>";
+		     for ($erow = 0; $erow < $eoverlapmaxrows ; $erow++) {
+			 $eowrowdata = $eowrowall[$erow];
+			 $eowtimeline[ $eowrowdata['startdatetime'] ] = $eowtimeline[ $eowrowdata['startdatetime'] ] +1;
+			 $eowrend = calcendtime( $eowrowdata['startdatetime'], $eowrowdata['lengthmin'] );
+			 $eowtimeline[ $eowrend ] = $eowtimeline[ $eowrend ] -1;
+		     }
+
+		     ksort ( $eowtimeline );
+
+		     $eowcount = 0;
+		     foreach ( $eowtimeline as $key => $val ) {
+			 $eowcount += $val;
+
+			 if ( $eowcount > $externalinputs ) {
+			     $rclass = "exoverwraped";
+			     break;
+			 }
+		     }
+
+		 }
+		 echo("<tr class=\"$rclass\">\n");
+		 // TID
+		 print "<td>";
+		 if ($tid == 0 ) {
+		     print "$tid";
+		 } else {
+		     print "<a href=\"reserveprogram.php?tid=$tid\">$tid</a>";
+		 }
+		 print "</td>\n";
+		 // 放映局
+		 echo("<td>".htmlspecialchars($rowdata[1])."<br></td>\n");
+		 // タイトル
+		 print "<td>";
+		 if ($tid == 0 ) {
+		     print "$title";
+		 } else {
+		     print "<a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a>";
                        }
 
 		       print "</td>\n";
@@ -225,55 +258,75 @@ if (! $rowdata) {
 </tbody>
 </table>
 
+</div>
+</div>
+<!-- /.row -->
 
-<table>
-  <tr><td>アナログ重複表示</td><td><br /></td></tr>
-  <tr><td>エンコーダ数</td><td><?php print "$recunits"; ?></td></tr>
-  <tr class="overwraped"><td>チューナー重複</td><td><br /></td></tr>
-  <tr class="exoverwraped"><td>外部入力重複</td><td><br /></td></tr>
-</table>
 
+
+<!-- ページのコンテンツ -->
+<div class="row">
+  <div class="col-lg-12">
+
+    <table class="table table-bordered table-hover">
+      <tr><td>アナログ重複表示</td><td><br /></td></tr>
+      <tr><td>エンコーダ数</td><td><?php print "$recunits"; ?></td></tr>
+      <tr class="overwraped"><td>チューナー重複</td><td><br /></td></tr>
+      <tr class="exoverwraped"><td>外部入力重複</td><td><br /></td></tr>
+    </table>
+
+  </div>
+</div>
+<!-- /.row -->
 
 <?php
-								set_maxcols_for_update($con, $maxcols);
+
+								    set_maxcols_for_update($con, $maxcols);
+
 ?>
 
-<p align="left">録画予約番組タイトルを表示します。</p>
-<table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
-  <thead>
-    <tr>
-      <th align="left">予約解除</th>
-      <th align="left">TID</th>
-      <th align="left">放映局</th>
-      <th align="left">タイトル</th>
-      <th align="left">録画リスト</th>
-      <th align="left">画質</th>
-      <th align="left">デジタル優先</th>
 
-    </tr>
-  </thead>
+<!-- ページのコンテンツ -->
+<div class="row">
+  <div class="col-lg-12">
 
-  <tbody>
-    <?php
-	/* テーブルのデータを出力 */
-	do {
-	    $tid = htmlspecialchars($rowdata[0]);
-	    
-	    if ($tid > 0) {
-		echo("<tr>\n");
-		//予約解除
-		if ( $userclass <= 1) {
-		    echo("<td><a href=\"delreserve.php?tid=$tid&sid=" .
+
+    <p align="left">録画予約番組タイトルを表示します。</p>
+    <table class="table table-bordered table-hover">
+      <thead>
+	<tr>
+	  <th align="left">予約解除</th>
+	  <th align="left">TID</th>
+	  <th align="left">放映局</th>
+	  <th align="left">タイトル</th>
+	  <th align="left">録画リスト</th>
+	  <th align="left">画質</th>
+	  <th align="left">デジタル優先</th>
+
+	</tr>
+      </thead>
+
+      <tbody>
+	<?php
+     /* テーブルのデータを出力 */
+     do {
+	 $tid = htmlspecialchars($rowdata[0]);
+	 
+	 if ($tid > 0) {
+	     echo("<tr>\n");
+	     //予約解除
+	     if ( $userclass <= 1) {
+		 echo("<td><a href=\"delreserve.php?tid=$tid&sid=" .
 			 htmlspecialchars($rowdata[4])  . "\">解除</a></td>\n");
-		} else {
-		    echo("<td>−</td>");		
-		}
-		//TID
-		echo("<td><a href=\"reserveprogram.php?tid=$tid\">$tid</a></td>\n");
-		//放映局
-		echo("<td>".htmlspecialchars($rowdata[1])."<br></td>\n");
-		//タイトル
-		echo("<td><a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">" .
+	     } else {
+		 echo("<td>−</td>");		
+	     }
+	     //TID
+	     echo("<td><a href=\"reserveprogram.php?tid=$tid\">$tid</a></td>\n");
+	     //放映局
+	     echo("<td>".htmlspecialchars($rowdata[1])."<br></td>\n");
+	     //タイトル
+	     echo("<td><a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">" .
 		     htmlspecialchars($rowdata[2]) . "</a></td>\n");
 
 		//MP4
@@ -310,6 +363,12 @@ if (! $rowdata) {
   </tbody>
 </table>
 
+</div>
+</div>
+<!-- /.row -->
 
+</div>
+</div>
+</div>
 </body>
 </html>
