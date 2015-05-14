@@ -312,12 +312,45 @@ function m_close($dbh) {
     return null;
 }
 
+function sql_debug($sql_string, array $params = null) {
+    if (!empty($params)) {
+        $indexed = $params == array_values($params);
+        foreach($params as $k=>$v) {
+            if (is_object($v)) {
+                if ($v instanceof \DateTime) $v = $v->format('Y-m-d H:i:s');
+                else continue;
+            }
+            elseif (is_string($v)) $v="'$v'";
+            elseif ($v === null) $v='NULL';
+            elseif (is_array($v)) $v = implode(',', $v);
+
+            if ($indexed) {
+                $sql_string = preg_replace('/\?/', $v, $sql_string, 1);
+            }
+            else {
+                if ($k[0] != ':') $k = ':'.$k; //add leading colon if it was left out
+                $sql_string = str_replace($k,$v,$sql_string);
+            }
+        }
+    }
+    return $sql_string;
+}
+
+function pdo_debug($query, $paramarray) {
+    logging(sql_debug($query, $paramarray));
+}
+
 /* SQL 文を実行 */
 function sql_query($dbh, $query, $errmessage, $paramarray = null) {
     try {
 	$rtn = $dbh->prepare("$query");
 	$rtn->execute($paramarray);
+
+        /* to debuglog */
+	pdo_debug($query, $paramarray);
+
 	return($rtn);
+
     } catch (PDOException $e) {
         /* to debuglog */
         $msg = $errmessage                   . "\n" .
