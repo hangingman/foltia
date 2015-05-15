@@ -40,22 +40,21 @@ if (isset($_POST['func'])) {
             system("{$toolpath}/perl/getxml2db.pl long");
             break;
     }
-}
+    
+} else {
 
-switch ($method) {
-case 'PUT':
-    parse_str(file_get_contents("php://input"), $post_vars);
-    logging("Change setting for stationid: " . $post_vars['stationid'] . ", stationrecch: " . $post_vars['stationrecch']);
-    set_foltia_station_recch($con, $post_vars);
-    break;
-case 'POST':
-    logging("Delete setting for stationid: " . $_POST['stationid'] . ", stationrecch: " . $_POST['stationrecch']);
-    delete_foltia_station_recch($con, $_POST);
-    break;
-default:
-    break;
+    switch ($method) {
+        case 'PUT':
+        parse_str(file_get_contents("php://input"), $post_vars);
+        logging("Change setting for stationid: " . $post_vars['stationid'] . ", stationrecch: " . $post_vars['stationrecch']);
+        set_foltia_station_recch($con, $post_vars);
+        break;
+        case 'POST':
+        logging("Delete setting for stationid: " . $_POST['stationid'] . ", stationrecch: " . $_POST['stationrecch']);
+        delete_foltia_station_recch($con, $_POST);
+        break;
+    }
 }
-
 ?>
 
 <?php

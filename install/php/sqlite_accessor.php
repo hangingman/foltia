@@ -334,6 +334,9 @@ WHERE foltia_tvrecord.stationid = 0
 EOF
 	   ;
 
+// WHERE foltia_tvrecord.stationid = 0 
+//     AND foltia_subtitle.enddatetime >= ? ORDER BY x ASC
+
     $rs = sql_query($con, $query, "DBクエリに失敗しました",array($now,$now));
 
     return $rs;
