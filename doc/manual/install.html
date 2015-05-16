@@ -1,0 +1,297 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=euc_jp">
+<meta http-equiv="content-style-type" content="text/css">
+<link rel="stylesheet" type="text/css" href="default.css">
+<title>おまかせ!! フォルティア!</title>
+</head>
+
+<h1><A HREF="index.html" title="おまかせ!! フォルティア! インストールマニュアル" target="_blank">おまかせ!! フォルティア! インストールマニュアル</A></h1>
+
+<div class="menu">
+<ol>
+<li><A HREF="start.html" title="フォルティアとは">フォルティアとは</A>
+<li><A HREF="fcinstall.html" title="Fedora Core 5 インストール編">Fedora Core 5 インストール編</A>
+<li><A HREF="ivtv.html" title="おまかせ!! フォルティア! ivtvドライバインストール編">おまかせ!! フォルティア! ivtvドライバインストール編</A>
+<li><A HREF="install.html" title="おまかせ!! フォルティア! インストール編">おまかせ!! フォルティア! インストール編</A>
+<li><A HREF="operation.html" title="おまかせ!! フォルティア! 操作編">おまかせ!! フォルティア! 操作編</A>
+</ol>
+</div>
+
+<div class="main">
+
+<h2>おまかせ!! フォルティア! インストール編</h2>
+
+<h3>フォルティア</h3>
+<p>
+</p>
+
+<h4>必要パッケージのインストールを行う</h4>
+<p>
+apache「httpd」,PostgreSQL「postgresql」「postgresql-server」「postgresql-devel」, PHP「php」「php-pgsql」のインストールを行う
+</p>
+<div class="command">
+# yum install httpd postgresql postgresql-server postgresql-devel php php-pgsql
+</div>
+
+
+<h4>メディアからフォルティア本体をコピーする</h4>
+<p>
+ホームディレクトリ配下にperlとphpの設置を行います。
+</p>
+<div class="command">
+# su - foltia<br>
+$ cp /media/cdrom/foltia.tar.gz ~/<br>
+$ tar zxvf foltia.tar.gz
+</div>
+
+
+<h4>httpdの設定を行う</h4>
+<p>
+apacheの文字コードの設定と、foltiaにパスを通す設定をします。
+</p>
+<div class="command">
+# vi /etc/httpd/conf/httpd.conf<br>
+<br>
+　----------------------------------------<br>
+　User apache<br>
+　AddDefaultCharset UTF-8<br>
+　　　↓<br>
+　User foltia<br>
+　AddDefaultCharset off<br>
+　----------------------------------------<br>
+<br>
+# vi /etc/httpd/conf.d/foltia.conf<br>
+<br>
+　----------------------------------------<br>
+　Alias /foltia/ "/home/foltia/php/"<br>
+　 &lt;Directory "/home/foltia/php/"&gt;<br>
+<br>
+　 &lt;/Directory&gt;<br>
+　----------------------------------------
+</div>
+<div class="command">
+# /etc/init.d/httpd start<br>
+# chkconfig httpd on
+</div>
+
+
+<h4>フォルティアデータベースを作成する</h4>
+<p>
+ユーザ名[foltia]データベース名[foltia]で作成します。
+</p>
+<div class="command">
+# su - postgres<br>
+$ initdb --encoding=EUC_JP<br>
+$ exit<br>
+# /etc/init.d/postgresql start<br>
+# chkconfig postgresql on<br>
+# su - postgres<br>
+$ createuser --no-adduser --no-createdb --password foltia<br>
+　Shall the new role be allowed to create more new roles? (y/n) "Enter"<br>
+　Password:"パスワードを入力する"<br>
+$ createdb --owner foltia foltia<br>
+$ exit<br>
+# vi /var/lib/pgsql/data/postgresql.conf<br>
+<br>
+　---------------------------------------<br>
+　#listen_addresses = 'localhost'<br>
+　　↓<br>
+　listen_addresses = 'localhost'<br>
+　---------------------------------------<br>
+# /etc/init.d/postgresql restart<br>
+$ su - foltia<br>
+$ cd foltia<br>
+$ psql -f mktable.txt foltia
+</div>
+
+
+<h4>perlディレクトリのfoltia_conf1.plの設定を行う</h4>
+<p>
+環境に合わせて設定してください
+</p>
+<div class="command">
+$ vi /home/foltia/perl/foltia_config1.pl
+</div>
+
+
+<h4>phpディレクトリのfoltia_config2.phpの設定を行う</h4>
+<p>
+環境に合わせて設定してください
+</p>
+<div class="command">
+$ vi /home/foltia/php/foltia_config2.php
+</div>
+
+
+<h4>必要なperlモジュールをインストールする</h4>
+<p>
+CPAN初回起動時の場合は、いろいろ聞かれると思うのでご自分の環境に合わせて設定をしてください
+</p>
+<div class="command">
+# perl -MCPAN -e 'install LWP::Simple'<br>
+# perl -MCPAN -e 'install Jcode'<br>
+# perl -MCPAN -e 'install DBI'<br>
+# perl -MCPAN -e 'install DBD::Pg'<br>
+# perl -MCPAN -e 'install Schedule::At'
+</div>
+
+
+<h4>しょぼかるから、番組表をダウンロードする</h4>
+<p>
+このコマンドを実行する事で、しょぼかるから番組表のダウンロードを行います。終了後は『http://foltia IP/foltia/』にアクセスし、番組表が取得できたことを確認します。
+</p>
+<div class="command">
+# su - foltia<br>
+$ /home/foltia/perl/getxml2db.pl long
+</div>
+
+
+<h4>しょぼかるの番組表をチェックするスケジュールをまわす設定をする</h4>
+<p>
+一時間に一回、しょぼかるから番組情報の取得を行うようにcronに登録します。
+</p>
+<div class="command">
+$ crontab -e<br>
+<br>
+　-----------------------------------<br>
+　7 * * * * /home/foltia/perl/schedulecheck.pl > /dev/null 2>&1<br>
+　-----------------------------------
+</div>
+
+
+<h3>EPG録画</h3>
+<h4>XMLTV日本対応版のインストールを行う</h4>
+<p>
+EPG録画用の番組データの取得を行います。
+</p>
+<div class="command">
+#  yum --enablerepo=atrpms install xmltv xmltv-grabbers kakasi kakasi-devel kakasi-dict<br>
+# su - foltia<br>
+$ tv_grab_jp --configure<br>
+　地域ごとの番組設定を行う<br>
+# tv_grab_jp<br>
+　実際にEPGが取得できるか確認を行う<br>
+# perl -MCPAN -e 'install Time::Local'<br>
+# su - foltia<br>
+$ /home/foltia/perl/cron_foltia_dayly.sh
+</div>
+
+
+<h4>EPG番組表をダウンロードするスケジュールをまわす設定をする</h4>
+<p>
+一日一回、番組データの取得を行うようにcronに登録します。
+</p>
+<div class="command">
+$ crontab -e<br>
+　-----------------------------------<br>
+　1 0 * * * /home/foltia/perl/cron_foltia_dayly.sh > /dev/null 2>&1<br>
+　-----------------------------------
+</div>
+
+
+<h3>トラコン</h3>
+<h4>ffmpeg設定</h4>
+<p>
+トラコン機能を使う為にffmpegのインストールを行います。
+</p>
+<div class="command">
+# yum install --enablerepo=atrpms faad2 faad2-devel faac faac-devel lame lame-devel xvidcore xvidcore-devel x264 x264-devel<br>
+# cd foltia_tool<br>
+# tar zxvf ffmpeg.tar.gz<br>
+# unzip 26204-600.zip<br>
+# unzip 26204-600_ANSI-C_source_code.zip<br>
+# mv c-code ffmpeg/libavcodec/amrwb_float<br>
+# unzip 26104-610.zip<br>
+# unzip 26104-610_ANSI_C_source_code.zip<br>
+# mv c-code ffmpeg/libavcodec/amr_float<br>
+# cd ffmpeg<br>
+# ./configure --enable-mp3lame --enable-x264 --enable-gpl --enable-a52 --enable-xvid --enable-faac --enable-faad --enable-amr_nb --enable-amr_wb --enable-pthreads<br>
+# make<br>
+# make install
+</div>
+
+<h4>mp4pspインストール</h4>
+<p>
+
+</p>
+<div class="command">
+# cd foltia_tool<br>
+# tar zxvf mp4psp-fol.tar.gz<br>
+# cd mp4psp<br>
+# cp mp4psp /usr/local/bin/
+</div>
+
+
+<h3>Starlight Breaker</h3>
+<h4>必要なパッケージをインストールする</h4>
+<p>
+<div class="command">
+# yum --enablerepo=atrpms install mplayer<br>
+# yum install ImageMagick
+</div>
+</p>
+
+<h3>チューナー制御</h3>
+<h4>Tira-2設定</h4>
+<p>
+通常のインストールだとエラーでコンパイルできないため、forceを加えてインストールします。
+<div class="command">
+# perl -MCPAN -e shell<br>
+　cpan> force install Device::SerialPort<br>
+# chmod 666 /dev/ttyUSB0
+</div>
+</p>
+
+<h4>信号学習方法</h4>
+<p>
+<div class="command">
+$ perl /home/foltia/perl/irda/capture.pl /home/foltia/perl/irda/0.dat<br>
+<br>
+　-----------------------------------------<br>
+　Checking Tira...OK<br>
+　Switch to Timing Mode...OK<br>
+　Caputuring IR-CODE.<br>
+　Please Push Remote Button(10 times or more)<br>
+　-----------------------------------------<br>
+<br>
+このメッセージ後にリモコンをTira-2に向けて、信号を送信して学習させる。<br>
+<br>
+$ perl /home/foltia/perl/irda/transfer.pl 1.dat
+</div>
+実際、Tira-2から信号を送信して、チューナーを操作できるか確認する。<br>
+以下、全数字ボタンの信号を登録する。<br>
+1.dat,2.dat,3.dat,4.dat,5.dat,6.dat,7.dat,8.dat,9.dat,0.dat,X.dat(チャンネル設定ボタン)<br>
+<div class="command">
+$ vi /home/foltia/perl/foltia_conf1.pl<br>
+　-----------------------------------------<br>
+　$haveirdaunit = 1;<br>
+　-----------------------------------------<br>
+</div>
+Tira-2を使用する場合、1にする。
+</p>
+
+<h4>phpPgAdminインストール</h4>
+<p>
+Tira-2の設定を変更する場合、データベースの操作が必要になってくる場合が有ります。<br>
+ラクチンに操作を行う為に、phpPgAdminのインストールを行います
+<div class="command">
+# wget http://ftp.icdevgroup.org/phpPgAdmin/phpPgAdmin-4.0.1-1.noarch.rpm<br>
+# rpm -ivh phpPgAdmin-4.0.1-1.noarch.rpm<br>
+# /etc/init.d/httpd restart
+</div>
+</p>
+
+<h4>データベース設定</h4>
+<p>
+Tira-2を使用する設定になっている場合、標準でデータベースに信号を送信する設定がされているが<br>
+設定の変更が必要な場合は、データベースの変更が必要になります。
+
+以下スクリーンショットを使用しての、変更箇所説明
+
+チューナー制御の部分は、『foltia_station』の『tunerch』部分になります。
+ここに入れる数字を、ご自分の環境に合わせてください。
+</p>
+
+</div>
+</html>
