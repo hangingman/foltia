@@ -591,4 +591,46 @@ function set_queue_from_php($con, $demomode, $station, $tid, $bitrate, $usedigit
     }//end if demomode
 }
 
+// tidからタイトル情報を取得する
+function get_foltia_program_with_tid($con, $filesplit) {
+
+    if ($filesplit[1] == "") {
+	$query = "
+SELECT 
+foltia_program.tid,foltia_program.title,foltia_subtitle.subtitle  
+FROM foltia_subtitle , foltia_program   
+WHERE foltia_program.tid = foltia_subtitle.tid  
+ AND foltia_subtitle.tid = ? 
+";
+	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0]));
+	$rall = $rs->fetchAll();
+	$rowdata = $rall[0];
+	$tid = $rowdata[0];
+	$title = $rowdata[1];
+	$subtitle = "";
+	$count = "";
+	return array($tid, $title, $subtitle, $count);
+
+    } else {
+
+	$query = "
+SELECT 
+foltia_program.tid,foltia_program.title,foltia_subtitle.countno,foltia_subtitle.subtitle  
+FROM foltia_subtitle , foltia_program   
+WHERE foltia_program.tid = foltia_subtitle.tid  
+ AND foltia_subtitle.tid = ? 
+ AND foltia_subtitle.countno = ? 
+";
+	$rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0],$filesplit[1]));
+	$rall = $rs->fetchAll();
+	$rowdata = $rall[0];
+	$tid = $rowdata[0];
+	$title = $rowdata[1];
+	$count = $rowdata[2];
+	$subtitle = $rowdata[3];
+	return array($tid, $title, $subtitle, $count);
+
+    }//if 話数あるかどうか
+}
+
 ?>

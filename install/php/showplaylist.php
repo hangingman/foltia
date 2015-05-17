@@ -20,6 +20,7 @@
 */
 
 include("./foltialib.php");
+include("./sqlite_accessor.php");
 $con = m_connect();
 
 if ($useenvironmentpolicy == 1) {
@@ -54,24 +55,45 @@ list($st,$p,$p2) = number_page($p,$lim);
 
 $now = date("YmdHi");   
 ?>
+
 <body>
-  <div align="center">
+  <div id="wrapper">
+    <div align="center">
 
     <?php 
      printhtmlpageheader();
     ?>
+    </div>
 
-    <p align="left"><font color="#494949" size="6">録画一覧表示</font></p>
-    <hr size="4">
-      <p align="left">再生可能番組リストを表示します。<br>
+    <!-- 表示するページ FIXME: テンプレートが有効に使える場面であるためあとで重複コードは排除する -->
+    <div id="page-wrapper">
+      <div id="container-fluid">
 
-      <?php
+
+	<!-- ページタイトル -->
+	<div class="row">
+          <div class="col-lg-12">
+            <h1 class="page-header">
+	      &nbsp;録画一覧表示
+	    </h1>
+
+	    <p align="left">再生可能番組リストを表示します。<br>
+
+            <ol class="breadcrumb">
+              <li>
+		<i class="fa fa-fw fa-table"></i>  <a href="./index.php"> 放映予定</a>
+              </li>
+              <li class="active">
+		<i class="fa fa-fw fa-bell"></i>  <a href="./index.php?mode=new"> 新番組 </li>
+              </ol>
+
+
+	      <?php
      if ($demomode) {
      } else {
 	 printdiskusage();
 	 printtrcnprocesses();
      }
-
 
 //////////////////////////////////////////
 //クエリ取得
@@ -82,92 +104,62 @@ echo "<div id=contents class=autopagerize_page_element />";
 
 
       ?>
-      <form name="deletemovie" method="POST" action="./deletemovie.php"> 
-	<p align="left"><input type="submit" value="項目削除" ></p>
 
-	<table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
-	  <thead> 
-	    <tr> 
-	      <th align="left">削除</th>
-	      <th align="left"><A HREF="./showplaylist.php">ファイル名</A></th>
-	      <th align="left"><A HREF="./showplaylist.php?list=title">タイトル</A></th>
-	      <th align="left">話数</th>
-	      <th align="left">サブタイ</th>
+    </div>
+  </div>
+  <!-- /.row -->
 
-	      <?php
+  <form name="deletemovie" method="POST" action="./deletemovie.php"> 
+    <p align="left"><input type="submit" value="項目削除" ></p>
+
+    <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
+      <thead> 
+	<tr> 
+	  <th align="left">削除</th>
+	  <th align="left"><A HREF="./showplaylist.php">ファイル名</A></th>
+	  <th align="left"><A HREF="./showplaylist.php?list=title">タイトル</A></th>
+	  <th align="left">話数</th>
+	  <th align="left">サブタイ</th>
+
+	  <?php
     if (file_exists("./selectcaptureimage.php") ) {
 	print "			<th align=\"left\">キャプ</th>\n";
     }
-	      ?>
-	    </tr>
-	  </thead> 
+	  ?>
+	</tr>
+      </thead> 
 
-	  <tbody>
-
-
-
-	    <?php
-
-		//$list = getgetform('list');
-
-		//旧仕様
-		if($list == "raw") {
-		    exec ("ls -t  $recfolderpath/*.???", $m2pfiles);
+      <tbody>
 
 
-		    foreach($m2pfiles as $pathfName) {
 
-			$fNametmp = split("/",$pathfName);
-			$fName = array_pop($fNametmp);
-			//print "FILENAME:$fName<BR>\n";
+	<?php
 
-			if(($fName == ".") or ($fName == "..") ) { continue; }
-			if ((ereg(".m2.+", $fName))|| (ereg(".aac", $fName))) {
-			    $filesplit = split("-",$fName);
+	    //旧仕様
+	    if($list == "raw") {
+		exec ("ls -t  $recfolderpath/*.???", $m2pfiles);
 
-			    if (preg_match("/^\d+$/", $filesplit[0])) {//	print "File is looks like good:preg<br>\n";
-				if ($filesplit[1] == "") {
-				    $query = "
-SELECT 
-foltia_program.tid,foltia_program.title,foltia_subtitle.subtitle  
-FROM foltia_subtitle , foltia_program   
-WHERE foltia_program.tid = foltia_subtitle.tid  
- AND foltia_subtitle.tid = ? 
-";
-				    $rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0]));
-				    $rall = $rs->fetchAll();
-				    $rowdata = $rall[0];
-				    //print" $fName./$rowdata[1]//$rowdata[2]<BR>\n";
-				    $title = $rowdata[1];
-				    $subtitle = "";
-				    $count = "";
 
-				} else {
+		foreach($m2pfiles as $pathfName) {
 
-				    $query = "
-SELECT 
-foltia_program.tid,foltia_program.title,foltia_subtitle.countno,foltia_subtitle.subtitle  
-FROM foltia_subtitle , foltia_program   
-WHERE foltia_program.tid = foltia_subtitle.tid  
- AND foltia_subtitle.tid = ? 
- AND foltia_subtitle.countno = ? 
-";
-				    $rs = sql_query($con, $query, "DBクエリに失敗しました",array($filesplit[0],$filesplit[1]));
-				    $rall = $rs->fetchAll();
-				    $rowdata = $rall[0];
-				    //print" $fName./$rowdata[1]/$rowdata[2]/$rowdata[3]<BR>\n";
-				    $title = $rowdata[1];
-				    $count = $rowdata[2];
-				    $subtitle = $rowdata[3];
-				}//if 話数あるかどうか
+		    $fNametmp = split("/",$pathfName);
+		    $fName = array_pop($fNametmp);
 
-				$tid = htmlspecialchars($rowdata[0]);
-				$title = htmlspecialchars($title);
-				$count = htmlspecialchars($count);
-				$subtitle = htmlspecialchars($subtitle);
+		    if(($fName == ".") or ($fName == "..") ) { continue; }
+		    if ((ereg(".m2.+", $fName))|| (ereg(".aac", $fName))) {
+			$filesplit = split("-",$fName);
 
-				//--
-				print "
+			if (preg_match("/^\d+$/", $filesplit[0])) {
+
+			    list($tid, $title, $subtitle, $count) = get_foltia_program_with_tid($con, $filesplit);
+
+			    $tid = htmlspecialchars($tid);
+			    $title = htmlspecialchars($title);
+			    $count = htmlspecialchars($count);
+			    $subtitle = htmlspecialchars($subtitle);
+
+			    //--
+			    print "
 <tr>
 <td><INPUT TYPE='checkbox' NAME='delete[]' VALUE='$fName'><br></td>
 <td><A HREF=\"$httpmediamappath/$fName\">$fName</A><br></td>
@@ -175,15 +167,12 @@ WHERE foltia_program.tid = foltia_subtitle.tid
 <td>$count<br></td>
 <td>$subtitle<br></td>";
 				if (file_exists("./selectcaptureimage.php") ) {
-				    //	$capimgpath = preg_replace("/.m2p/", "", $fName);
 				    print "			<td align=\"left\"> N/A </td>\n";
 				}
 
 				print "</tr>\n
 ";
-			    } else {
-				//print "File is looks like BAD:preg<br>\n";
-			    }//
+			    }
 
 			}//ereg 
 		    }//foreach
@@ -352,5 +341,9 @@ ORDER BY foltia_program.tid DESC
 
 	    ?>
 
+
+</div>
+</div>
+</div>
 </body>
 </html>
