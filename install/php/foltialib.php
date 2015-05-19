@@ -21,6 +21,9 @@ $foltia_header = "
 
 ";
 
+// sb_adminのパス
+const SB_ADMIN_PATH = "bower_components/startbootstrap-sb-admin";
+
 // infoログ出力
 function logging($message) {
 
@@ -76,7 +79,7 @@ function printtitle_and_die($title, $element) {
 // css情報を取得して出力する
 function printcssinfo() {
 
-    $sb_admin = "bower_components/startbootstrap-sb-admin";
+    $sb_admin = SB_ADMIN_PATH;
 
     $css = <<<EOF
 
@@ -564,14 +567,70 @@ function getserverfqdn() {//戻り値　サーバアドレス Ex.www.dcc-jpl.com
 
 
 function printdiskusage() {//戻り値　なし
+
+    // [,全体容量, 使用容量 , 空き容量, 利用割合]
     list (, $all, $use , $free, $usepercent) =  getdiskusage();
 
-    print "
-<div style=\"width:100%;border:1px solid black;text-align:left;\"><span style=\"float:right;\">$free</span>
-<div style=\"width:$usepercent;border:1px solid black;background:white;\">$use/$all($usepercent)</div>
+    $sb_admin = SB_ADMIN_PATH;
+
+$disk_usage_element = <<<EOF
+
+
+
+<div class="row">
+<div class="col-lg-6">
+  <div class="panel panel-yellow">
+    <div class="panel-heading">
+    <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> ディスク使用量</h3>
+  </div>
+
+  <div class="panel-body">
+    <div id="annual"></div>
+    <div class="text-right">
+      <a href="#">詳細を見る <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
 </div>
-";
-    //exec('ps ax | grep ffmpeg |grep MP4 ' ,$ffmpegprocesses);
+</div>
+
+EOF
+;
+
+// 使用容量
+$int_usepercent = intval(rtrim($usepercent, '%'));
+$int_freepercent = 100 - $int_usepercent;
+
+$scripts = <<<EOF
+
+<!-- jQuery Version 1.11.0 -->
+<script src="{$sb_admin}/js/jquery.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="{$sb_admin}/js/bootstrap.min.js"></script>
+
+<!-- Morris Charts JavaScript -->
+<script src="{$sb_admin}/js/plugins/morris/raphael.min.js"></script>
+<script src="{$sb_admin}/js/plugins/morris/morris.min.js"></script>
+
+<script type="text/javascript">
+Morris.Donut({
+  element: 'annual',
+  data: [
+    {label: '空き容量'  , value: {$int_freepercent}, formatted: "{$free}B   {$int_freepercent}%" },
+    {label: '使用量'	, value: {$int_usepercent} , formatted: "{$use}B    {$int_usepercent}%"  }
+  ],
+  formatter: function (x, data) { return data.formatted; },
+  resize: true
+ });
+
+</script>
+
+EOF
+;
+
+print $disk_usage_element;
+print $scripts;
+
 }//end sub
 
 
@@ -579,8 +638,6 @@ function getdiskusage() {//戻り値　配列　[,全体容量, 使用容量 , �
 
     global $recfolderpath,$recfolderpath;
 
-    //	exec ( "df -h  $recfolderpath | grep $recfolderpath", $hdfreearea);
-    //	$freearea = preg_split ("/[\s,]+/", $hdfreearea[0]);
     exec ( "df -hP  $recfolderpath", $hdfreearea);
     $freearea = preg_split ("/[\s,]+/", $hdfreearea[count($hdfreearea)-1]);
 
