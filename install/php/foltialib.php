@@ -575,8 +575,6 @@ function printdiskusage() {//戻り値　なし
 
 $disk_usage_element = <<<EOF
 
-
-
 <div class="row">
 <div class="col-lg-6">
   <div class="panel panel-yellow">
@@ -651,10 +649,26 @@ function printtrcnprocesses() {
     $ffmpegprocesses = `ps ax | grep ffmpeg | grep -v grep |  wc -l `;
     $uptime = exec('uptime');
 
-    print "<div style=\"text-align:left;\">";
-    print "$uptime<br>\n";
-    print "トラコン稼働数:$ffmpegprocesses<br>\n";
-    print "</div>";
+$trcn_processes_element = <<<EOF
+
+<div class="row">
+<div class="col-lg-4">
+  <div class="panel panel-red">
+    <div class="panel-heading">
+    <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> トラコン稼働数</h3>
+  </div>
+
+  <div class="panel-body">
+    連続稼働時間:{$uptime}<br>
+    トラコン稼働数:{$ffmpegprocesses}<br>
+  </div>
+</div>
+</div>
+
+EOF
+;
+
+    print $trcn_processes_element;
 
 }//endsub
 
