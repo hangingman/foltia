@@ -56,13 +56,15 @@ list($st,$p,$p2) = number_page($p,$lim);
 $now = date("YmdHi");   
 ?>
 
+
 <body>
   <div id="wrapper">
+    
     <div align="center">
 
-    <?php 
+      <?php 
      printhtmlpageheader();
-    ?>
+      ?>
     </div>
 
     <!-- 表示するページ FIXME: テンプレートが有効に使える場面であるためあとで重複コードは排除する -->
@@ -87,6 +89,9 @@ $now = date("YmdHi");
 		<i class="fa fa-fw fa-bell"></i>  <a href="./index.php?mode=new"> 新番組 </li>
               </ol>
 
+	    </div>
+	  </div>
+	  <!-- /.row -->
 
 	      <?php
      if ($demomode) {
@@ -99,87 +104,50 @@ $now = date("YmdHi");
 //クエリ取得
 $list = getgetform('list');
 //Autopager
-echo "<div id=contents class=autopagerize_page_element />";
+echo "<div id=contents class=autopagerize_page_element></div>";
 //////////////////////////////////////////
 
 
       ?>
 
-    </div>
-  </div>
-  <!-- /.row -->
+	    <!-- ページのコンテンツ -->
+	    <div class="row">
+	      <div class="col-lg-12">
 
-  <form name="deletemovie" method="POST" action="./deletemovie.php"> 
-    <p align="left"><input type="submit" value="項目削除" ></p>
+		<div class="table-responsive">
+		  <table class="table table-bordered table-hover">
 
-    <table BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
-      <thead> 
-	<tr> 
-	  <th align="left">削除</th>
-	  <th align="left"><A HREF="./showplaylist.php">ファイル名</A></th>
-	  <th align="left"><A HREF="./showplaylist.php?list=title">タイトル</A></th>
-	  <th align="left">話数</th>
-	  <th align="left">サブタイ</th>
+		    <form name="deletemovie" method="POST" action="./deletemovie.php"> 
+		      <p align="left"><input type="submit" value="項目削除" ></p>
 
-	  <?php
+		      <thead> 
+			<tr>
+			  <th align="left">削除</th>
+			  <th align="left"><A HREF="./showplaylist.php">ファイル名</A></th>
+			  <th align="left"><A HREF="./showplaylist.php?list=title">タイトル</A></th>
+			  <th align="left">話数</th>
+			  <th align="left">サブタイ</th>
+	
+		      <?php
+    
     if (file_exists("./selectcaptureimage.php") ) {
 	print "			<th align=\"left\">キャプ</th>\n";
     }
-	  ?>
-	</tr>
-      </thead> 
+		      ?>
 
-      <tbody>
+			</tr>
+		      </thead>
+		      <tbody>
 
+		<?php
 
+			// 全部表示
+			if($list == "raw") {
 
-	<?php
+			    print show_playlist_raw($con);
+			    exit; // </body></html>
 
-	    //旧仕様
-	    if($list == "raw") {
-		exec ("ls -t  $recfolderpath/*.???", $m2pfiles);
-
-
-		foreach($m2pfiles as $pathfName) {
-
-		    $fNametmp = split("/",$pathfName);
-		    $fName = array_pop($fNametmp);
-
-		    if(($fName == ".") or ($fName == "..") ) { continue; }
-		    if ((ereg(".m2.+", $fName))|| (ereg(".aac", $fName))) {
-			$filesplit = split("-",$fName);
-
-			if (preg_match("/^\d+$/", $filesplit[0])) {
-
-			    list($tid, $title, $subtitle, $count) = get_foltia_program_with_tid($con, $filesplit);
-
-			    $tid = htmlspecialchars($tid);
-			    $title = htmlspecialchars($title);
-			    $count = htmlspecialchars($count);
-			    $subtitle = htmlspecialchars($subtitle);
-
-			    //--
-			    print "
-<tr>
-<td><INPUT TYPE='checkbox' NAME='delete[]' VALUE='$fName'><br></td>
-<td><A HREF=\"$httpmediamappath/$fName\">$fName</A><br></td>
-<td><a href=\"http://cal.syoboi.jp/tid/$tid\" target=\"_blank\">$title</a></td>
-<td>$count<br></td>
-<td>$subtitle<br></td>";
-				if (file_exists("./selectcaptureimage.php") ) {
-				    print "			<td align=\"left\"> N/A </td>\n";
-				}
-
-				print "</tr>\n
-";
-			    }
-
-			}//ereg 
-		    }//foreach
-		    print "	</tbody>\n</table>\n</FORM>\n</body>\n</html>\n";
-		    exit;
-
-		} elseif ($list== "title") {//新仕様
+			} elseif ($list== "title") {//新仕様
     $query = "
 SELECT 
 foltia_program.tid,
@@ -288,7 +256,7 @@ if ($rowdata) {
 
 print "</tbody>
 </table>
-</FORM>\n";
+</form>\n";
 
 //////////////////////////////////////////////////////////////////////
 //クエリ代入

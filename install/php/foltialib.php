@@ -575,11 +575,12 @@ function printdiskusage() {//戻り値　なし
 
 $disk_usage_element = <<<EOF
 
-<div class="row">
+<div class="col">
 <div class="col-lg-6">
-  <div class="panel panel-yellow">
+  <div class="panel panel-primary">
     <div class="panel-heading">
-    <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> ディスク使用量</h3>
+      <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> ディスク使用量</h3>
+    </div>
   </div>
 
   <div class="panel-body">
@@ -651,8 +652,8 @@ function printtrcnprocesses() {
 
 $trcn_processes_element = <<<EOF
 
-<div class="row">
-<div class="col-lg-4">
+<div class="col">
+<div class="col-lg-6">
   <div class="panel panel-red">
     <div class="panel-heading">
     <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> トラコン稼働数</h3>
@@ -1022,5 +1023,76 @@ function getnextstationid($con) {
     }
     return ($sid);
 }//end getnextstationid
+
+// 全部の録画済みファイルを表示するテーブルを返す
+function show_playlist_raw($con) {
+
+    exec ("ls -t  $recfolderpath/*.???", $m2pfiles);
+
+    $dom = "";
+
+    foreach($m2pfiles as $pathfName) {
+	logging("pathfName: {$pathfName}");
+
+	$fNametmp = split("/",$pathfName);
+	$fName = array_pop($fNametmp);
+
+	if(($fName == ".") or ($fName == "..") ) { continue; }
+	if ((ereg(".m2.+", $fName))|| (ereg(".aac", $fName))) {
+	    $filesplit = split("-",$fName);
+
+	    if (preg_match("/^\d+$/", $filesplit[0])) {
+
+		list($tid, $title, $subtitle, $count) = get_foltia_program_with_tid($con, $filesplit);
+		logging("tid: {$tid}, title: {$title}, subtitle: {$subtitle}, count: {$count}");
+
+		$tid = htmlspecialchars($tid);
+		$title = htmlspecialchars($title);
+		$count = htmlspecialchars($count);
+		$subtitle = htmlspecialchars($subtitle);
+
+		
+		$el .= <<<EOF
+                <tr>
+		<td><INPUT TYPE='checkbox' NAME='delete[]' VALUE='{$fName}'><br></td>
+		<td><A HREF="{$httpmediamappath}/{$fName}">{$fName}</A><br></td>
+		<td><a href="http://cal.syoboi.jp/tid/{$tid}" target="_blank">{$title}</a></td>
+		<td>$count<br></td><td>{$subtitle}<br></td>
+EOF
+;
+
+		$dom .= $el;
+
+		if (file_exists("./selectcaptureimage.php") ) {
+		    $dom .= "<td align=\"left\"> N/A </td>\n";
+		}
+
+		$dom .= "</tr>\n";
+	    }
+	    
+	}//ereg 
+    }//foreach
+
+    logging("{$dom} End foreach");
+
+    $dom .= "</tbody>";
+    $dom .= "</form>";
+    $dom .= "</table><!-- class=\"table table-bordered table-hover\" -->";
+    $dom .= "</div>  <!-- class=\"table-responsive\" -->";
+    $dom .= "</div>  <!-- class=\"row\" -->";
+    $dom .= "</div>  <!-- class=\"col-lg-12\"-->";
+
+    $dom .= "</div>  <!-- id=\"container-fluid\" -->";
+    $dom .= "</div>  <!-- id=\"page-wrapper\" -->";
+
+    $dom .= "</body></html>";
+
+    return $dom;
+}
+
+// タイトルでソートした録画済みファイルを表示するテーブルを返す
+function show_playlist_title() {
+
+}
 
 ?>
