@@ -24,8 +24,10 @@
 # 初期インストール時に受信可能局をスキャンします
 #
 
-my $recpt1path = "/home/foltia/perl/tool/recpt1"; #ほかのキャプチャデバイス作ってる人はココを変更
-my $epgdumppath = "/home/foltia/perl/tool";       #epgdumpのあるディレクトリ
+require "foltialib.pl";
+
+my $recpt1path  = $foltia_recpt1path;
+my $epgdumppath = $foltia_epgdumppath;
 my $recfolderpath = "/home/foltia/php/tv";        #tsを出力するディレクトリ
 my $xmloutpath = "/tmp";
 my $channel = 13 ;		                  #地デジチャンネルは13-62

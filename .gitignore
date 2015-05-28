@@ -21,3 +21,6 @@ nytprof.out
 *.o
 *.bs
 /_eumm/
+
+# artifact
+epgdump

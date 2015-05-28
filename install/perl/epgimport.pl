@@ -44,9 +44,9 @@ require "foltialib.pl";
 my $ontvcode = "";
 my $channel = "";
 my @date = ();
-my $recpt1path = $toolpath . "/perl/tool/recpt1"; #ほかのキャプチャデバイス作ってる人はココを変更
-my $epgdumppath = $toolpath ."/perl/tool"; #epgdumpのあるディレクトリ
-my $xmloutpath = "/tmp";
+my $recpt1path  = $foltia_recpt1path;
+my $epgdumppath = $foltia_epgdumppath;
+my $xmloutpath  = "/tmp";
 my %stations;
 my $uset = "";
 my $usebs = "";

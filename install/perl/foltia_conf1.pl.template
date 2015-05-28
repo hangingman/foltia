@@ -22,6 +22,8 @@
 
 #config section
 $toolpath = '/home/foltia';                     #「perl」ディレクトリがあるPATH
+$foltia_recpt1path  = "/usr/local/bin/recpt1";  # foltiaが使用するrecpt1のパス
+$foltia_epgdumppath = "/usr/local/bin/epgdump"; # foltiaが使用するepgdumpのパス
 $recunits = 0;                                  # アナログキャプチャカード搭載エンコーダの数
 $recfolderpath = '/home/foltia/php/tv';         # 録画ファイルを置くPATH
 $uhfbandtype = 1;                               # CATVなら1 UHF帯なら0 : 0=ntsc-bcast-jp 1=ntsc-cable-jp
